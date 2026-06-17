@@ -1,15 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Heart } from "lucide-react";
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
 
-export function RsvpForm() {
-  const [rsvpData, setRsvpData] = useState({ name: "", attend: "yes", guests: "1", message: "" });
+interface RsvpFormProps {
+  weddingSlug: string;
+  prefilledName?: string;
+}
+
+export function RsvpForm({ weddingSlug, prefilledName }: RsvpFormProps) {
+  const [rsvpData, setRsvpData] = useState({ name: prefilledName || "", attend: "yes", guests: "1", message: "" });
   const [rsvpSent, setRsvpSent] = useState(false);
 
-  function submitRsvp(e: React.FormEvent) {
+  useEffect(() => {
+    if (prefilledName) {
+      setRsvpData(prev => ({ ...prev, name: prefilledName }));
+    }
+  }, [prefilledName]);
+
+  async function submitRsvp(e: React.FormEvent) {
     e.preventDefault();
-    setRsvpSent(true);
+    try {
+      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/rsvp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: rsvpData.name,
+          attend: rsvpData.attend,
+          guests: rsvpData.attend === "yes" ? Number(rsvpData.guests.replace('+', '')) : 0,
+          message: rsvpData.message,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setRsvpSent(true);
+      } else {
+        alert(data.message || "Gửi xác nhận tham dự thất bại!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Đã xảy ra lỗi kết nối mạng!");
+    }
   }
 
   return (

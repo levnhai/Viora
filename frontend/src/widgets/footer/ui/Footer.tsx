@@ -19,7 +19,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-sm opacity-50 leading-relaxed">
-              Thiệp mời cưới kỹ thuật số đẹp nhất Việt Nam.
+              Thiệp mời kỹ thuật số đẹp nhất Việt Nam.
             </p>
             <div className="flex gap-2.5">
               {[Facebook, Instagram, Youtube].map((Icon, i) => (
