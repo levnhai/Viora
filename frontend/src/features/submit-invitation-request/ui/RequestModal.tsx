@@ -12,7 +12,7 @@ export function RequestModal({
   isOpen,
   onClose,
   preSelectedTemplateId = 1,
-  preSelectedPlanName = "Cặp đôi",
+  preSelectedPlanName = "Phổ biến",
 }: RequestModalProps) {
   if (!isOpen) return null;
 

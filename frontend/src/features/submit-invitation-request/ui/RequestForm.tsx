@@ -11,7 +11,7 @@ interface RequestFormProps {
 
 export function RequestForm({
   preSelectedTemplateId = 1,
-  preSelectedPlanName = "Cặp đôi",
+  preSelectedPlanName = "Phổ biến",
   onSuccessSubmitted,
 }: RequestFormProps) {
   const [selectedTemplateId, setSelectedTemplateId] = useState<number>(preSelectedTemplateId);
@@ -196,9 +196,8 @@ export function RequestForm({
             onChange={(e) => setSelectedPlanName(e.target.value)}
             className="w-full px-4 py-3 rounded-xl text-sm outline-none border border-border bg-background focus:border-primary transition-colors"
           >
-            <option value="Miễn phí">Miễn phí (0đ)</option>
-            <option value="Cặp đôi">Cặp đôi (199.000đ)</option>
-            <option value="Đặc biệt">Đặc biệt (349.000đ)</option>
+            <option value="Phổ biến">Phổ biến (199.000đ)</option>
+            <option value="Cao cấp">Cao cấp (349.000đ)</option>
           </select>
         </div>
       </div>

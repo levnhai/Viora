@@ -26,4 +26,30 @@ export class AuthController {
     };
   }
 
+  @Post('send-otp')
+  async sendOtp(@Body('email') email: string) {
+    return this.authService.sendOtp(email);
+  }
+
+  @Post('verify-otp')
+  async verifyOtp(@Body('email') email: string, @Body('code') code: string) {
+    const data = await this.authService.verifyOtp(email, code);
+    return {
+      success: true,
+      message: 'Đăng nhập bằng mã OTP thành công!',
+      data,
+    };
+  }
+
+  @Post('google')
+  async googleLogin(
+    @Body('token') token: string,
+  ) {
+    const data = await this.authService.googleLogin(token);
+    return {
+      success: true,
+      message: 'Đăng nhập bằng Google thành công!',
+      data,
+    };
+  }
 }

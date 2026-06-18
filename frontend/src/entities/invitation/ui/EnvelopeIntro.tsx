@@ -25,7 +25,7 @@ export function EnvelopeIntro({ guestName, groomName, brideName, onOpen }: Envel
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-[#2c1810] transition-opacity duration-1000 ${
+      className={`absolute inset-0 z-50 flex items-center justify-center bg-[#2c1810] transition-opacity duration-1000 ${
         isOpen ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
       style={{ fontFamily: "'DM Sans', sans-serif" }}

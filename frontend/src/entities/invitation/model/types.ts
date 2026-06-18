@@ -47,4 +47,10 @@ export interface WeddingData {
   galleryImages: string[];
   giftInfo?: GiftRegistryInfo;
   contactInfo?: ContactInfo;
+  groomShortName?: string;
+  brideShortName?: string;
+  groomTitle?: string;
+  brideTitle?: string;
+  displayOrder?: "groom_first" | "bride_first";
+  isCoverImageVisible?: boolean;
 }

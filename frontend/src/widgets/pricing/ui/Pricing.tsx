@@ -7,45 +7,34 @@ interface PricingProps {
 export function Pricing({ onSelectPlan }: PricingProps) {
   const PLANS = [
     {
-      name: "Miễn phí",
-      price: "0đ",
-      note: "Dùng thử mãi mãi",
-      highlight: false,
-      cta: "Bắt đầu miễn phí",
-      features: [
-        "1 mẫu thiệp cơ bản",
-        "Link chia sẻ cố định",
-        "Đếm ngược ngày cưới",
-        "Tối đa 50 lượt xem",
-      ],
-    },
-    {
-      name: "Cặp đôi",
+      name: "Phổ biến",
       price: "199.000đ",
-      note: "Trọn đời, không gia hạn",
-      highlight: true,
-      cta: "Chọn ngay",
+      note: "Trọn đời, không phát sinh phí",
+      highlight: false,
+      cta: "Bắt đầu ngay",
       features: [
-        "Tất cả mẫu thiệp cao cấp",
-        "RSVP & quản lý khách mời",
-        "Nhạc nền tùy chỉnh",
-        "Bản đồ & chỉ đường",
-        "Lượt xem không giới hạn",
-        "Thư viện ảnh cưới",
+        "Sử dụng mẫu thiệp phổ biến",
+        "RSVP & Quản lý phản hồi khách mời",
+        "Album ảnh cưới (Tối đa 3 ảnh)",
+        "Bản đồ & Chỉ đường chi tiết",
+        "Không giới hạn lượt xem",
+        "Hỗ trợ trọn đời",
       ],
     },
     {
-      name: "Đặc biệt",
+      name: "Cao cấp",
       price: "349.000đ",
-      note: "Trọn gói + tùy chỉnh nâng cao",
-      highlight: false,
-      cta: "Liên hệ tư vấn",
+      note: "Trọn đời, đầy đủ tính năng VIP",
+      highlight: true,
+      cta: "Chọn gói Cao cấp",
       features: [
-        "Tất cả tính năng Cặp đôi",
-        "Tên miền riêng (vd: anhvaem.vn)",
-        "Giao diện tùy chỉnh hoàn toàn",
-        "Video nhúng trực tiếp",
-        "Hỗ trợ thiết kế 1-1",
+        "Mở khóa toàn bộ mẫu thiệp VIP",
+        "Album ảnh mở rộng (Lên tới 6 ảnh)",
+        "Nhạc nền tùy chọn tự động phát",
+        "Đường dẫn thiệp đẹp tự chọn (Custom Slug)",
+        "Không hiển thị quảng cáo thương hiệu",
+        "RSVP & Quản lý phản hồi khách mời",
+        "Bản đồ & Chỉ đường chi tiết",
       ],
     },
   ];
@@ -67,7 +56,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
             Không thuê bao hàng tháng. Không ẩn phí.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 max-w-4xl mx-auto text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto text-left">
           {PLANS.map((plan) => (
             <div
               key={plan.name}
