@@ -1,8 +1,8 @@
 import { Monitor } from "lucide-react";
-import { Template } from "../model/templates";
+import { TemplateConfig } from "../model/schema";
 
 interface TemplateCardProps {
-  tpl: Template;
+  tpl: TemplateConfig;
   onPreviewDemo: (tplId: number) => void;
   onUseTemplate: (tplId: number) => void;
 }
@@ -46,8 +46,12 @@ export function TemplateCard({ tpl, onPreviewDemo, onUseTemplate }: TemplateCard
           >
             {tpl.name}
           </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {tpl.style}
+          <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
+            <span>{tpl.style}</span>
+            <span>•</span>
+            <span className={`font-semibold ${tpl.tier === 'premium' ? 'text-amber-600' : tpl.tier === 'basic' ? 'text-blue-600' : 'text-green-600'}`}>
+              {tpl.tier === 'premium' ? 'Gói Cao Cấp' : tpl.tier === 'basic' ? 'Gói Cơ Bản' : 'Gói Miễn Phí'}
+            </span>
           </p>
         </div>
         <div

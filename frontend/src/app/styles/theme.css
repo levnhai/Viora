@@ -69,6 +69,52 @@
   font-family: 'Cinzel', serif;
 }
 
+.theme-red {
+  --background: #fffbeb;
+  --foreground: #450a0a;
+  --card: #fef3c7;
+  --card-foreground: #450a0a;
+  --popover: #fef3c7;
+  --popover-foreground: #450a0a;
+  --primary: #b91c1c;
+  --primary-foreground: #fffbeb;
+  --secondary: #fef2f2;
+  --secondary-foreground: #450a0a;
+  --muted: #fca5a5;
+  --muted-foreground: #991b1b;
+  --accent: #d97706;
+  --accent-foreground: #fffbeb;
+  --border: rgba(185, 28, 28, 0.15);
+  --ring: #d97706;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-red h1, .theme-red h2, .theme-red h3, .theme-red h4 {
+  font-family: 'EB Garamond', serif;
+}
+
+.theme-modern {
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #f9fafb;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  --primary: #1f2937;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  --muted: #e5e7eb;
+  --muted-foreground: #4b5563;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --border: rgba(31, 41, 55, 0.15);
+  --ring: #1f2937;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-modern h1, .theme-modern h2, .theme-modern h3, .theme-modern h4 {
+  font-family: 'DM Sans', sans-serif;
+}
+
 :root {
   --font-size: 16px;
   --background: #fdf6ef;

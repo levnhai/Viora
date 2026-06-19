@@ -1,8 +1,8 @@
 import { X, Clock, MapPin, Music } from "lucide-react";
-import { Template } from "../model/templates";
+import { TemplateConfig } from "../model/schema";
 
 interface PreviewModalProps {
-  tpl: Template;
+  tpl: TemplateConfig;
   onClose: () => void;
   onRequestDesign: () => void;
 }
@@ -14,7 +14,7 @@ export function PreviewModal({ tpl, onClose, onRequestDesign }: PreviewModalProp
       onClick={onClose}
     >
       <div
-        className="relative bg-card rounded-2xl overflow-hidden shadow-2xl w-full max-w-sm"
+        className={`relative bg-card rounded-2xl overflow-hidden shadow-2xl w-full max-w-sm ${tpl.themeClass}`}
         style={{ maxHeight: "90vh" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -26,7 +26,7 @@ export function PreviewModal({ tpl, onClose, onRequestDesign }: PreviewModalProp
         </button>
         <div
           className="overflow-y-auto"
-          style={{ maxHeight: "90vh", backgroundColor: tpl.bgColor }}
+          style={{ maxHeight: "90vh", backgroundColor: "var(--background)" }}
         >
           <div className="relative h-52 overflow-hidden">
             <img
@@ -37,7 +37,7 @@ export function PreviewModal({ tpl, onClose, onRequestDesign }: PreviewModalProp
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(to bottom, transparent 40%, ${tpl.bgColor})`,
+                background: `linear-gradient(to bottom, transparent 40%, var(--background))`,
               }}
             />
           </div>

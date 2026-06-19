@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { TEMPLATES, Template } from "@/entities/template/model/templates";
+import { TEMPLATES } from "@/entities/template/model/templates";
+import { TemplateConfig } from "@/entities/template/model/schema";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 
@@ -8,19 +9,22 @@ interface TemplatesListProps {
   onUseTemplate: (tplId: number) => void;
 }
 
-export function TemplatesList({ onPreviewDemo, onUseTemplate }: TemplatesListProps) {
-  const [activeStyle, setActiveStyle] = useState("Tất cả");
-  const [previewTpl, setPreviewTpl] = useState<Template | null>(null);
+const TIER_LABELS: Record<string, string> = {
+  free: "Miễn phí",
+  basic: "Cơ bản",
+  premium: "Cao cấp",
+};
 
-  const styles = [
-    "Tất cả",
-    ...Array.from(new Set(TEMPLATES.map((t) => t.style))),
-  ];
+export function TemplatesList({ onPreviewDemo, onUseTemplate }: TemplatesListProps) {
+  const [activeTier, setActiveTier] = useState("Tất cả");
+  const [previewTpl, setPreviewTpl] = useState<TemplateConfig | null>(null);
+
+  const tiers = ["Tất cả", "Miễn phí", "Cơ bản", "Cao cấp"];
 
   const filtered =
-    activeStyle === "Tất cả"
+    activeTier === "Tất cả"
       ? TEMPLATES
-      : TEMPLATES.filter((t) => t.style === activeStyle);
+      : TEMPLATES.filter((t) => TIER_LABELS[t.tier] === activeTier);
 
   return (
     <section id="mau-thiep" className="py-24 bg-secondary/30">
@@ -38,13 +42,13 @@ export function TemplatesList({ onPreviewDemo, onUseTemplate }: TemplatesListPro
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
-            {styles.map((s) => (
+            {tiers.map((t) => (
               <button
-                key={s}
-                onClick={() => setActiveStyle(s)}
-                className={`px-4 py-2 rounded-xl text-sm transition-all cursor-pointer ${activeStyle === s ? "bg-primary text-primary-foreground" : "bg-card border border-border text-muted-foreground hover:text-foreground"}`}
+                key={t}
+                onClick={() => setActiveTier(t)}
+                className={`px-4 py-2 rounded-xl text-sm transition-all cursor-pointer ${activeTier === t ? "bg-primary text-primary-foreground" : "bg-card border border-border text-muted-foreground hover:text-foreground"}`}
               >
-                {s}
+                {t}
               </button>
             ))}
           </div>

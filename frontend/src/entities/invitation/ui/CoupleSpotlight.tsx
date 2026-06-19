@@ -19,7 +19,7 @@ export function CoupleSpotlight({
       <div className="max-w-4xl mx-auto">
         <FadeIn>
           <div className="text-center mb-16 space-y-2">
-            <span className="text-[#8b3a52] text-xs uppercase tracking-[0.25em] font-semibold">Gặp gỡ cặp đôi</span>
+            <span className="text-primary text-xs uppercase tracking-[0.25em] font-semibold">Gặp gỡ cặp đôi</span>
             <h2 className="text-3xl font-light text-foreground" style={{ fontFamily: "'EB Garamond', serif" }}>
               Chú Rể & Cô Dâu
             </h2>

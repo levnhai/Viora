@@ -225,7 +225,7 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
 
     // Kiểm tra giới hạn gói cước SaaS
     const selectedTemplate = TEMPLATES.find(t => t.id === weddingData.templateId) || TEMPLATES[0];
-    if (selectedTemplate.planRequired === "premium" && userPlan === "standard") {
+    if (selectedTemplate.tier === "premium" && userPlan === "standard") {
       setShowUpgradeModal(true);
       return;
     }
@@ -327,11 +327,9 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
     }
   };
 
-  const getThemeClass = (id: number) => {
-    if (id === 2) return "theme-green";
-    return "theme-pink";
-  };
-  const currentTheme = getThemeClass(weddingData.templateId);
+  const selectedTemplate = TEMPLATES.find(t => t.id === weddingData.templateId) || TEMPLATES[0];
+  const currentTheme = selectedTemplate.themeClass;
+  const templateSchema = selectedTemplate.schema;
 
   return (
     <div className="min-h-screen bg-[#0c0a09] text-slate-100 flex flex-col font-sans select-none antialiased">
@@ -361,8 +359,8 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
           </div>
         </div>
 
-        {/* Edit / Preview Tabs */}
-        <div className="flex bg-[#1c1917] p-1 rounded-full border border-[#292524]">
+        {/* Edit / Preview Tabs (Mobile Only) */}
+        <div className="flex lg:hidden bg-[#1c1917] p-1 rounded-full border border-[#292524]">
           <button
             onClick={() => setEditorView("edit")}
             className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all border-0 cursor-pointer ${
@@ -411,50 +409,51 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
       </header>
 
       {/* ── MAIN WORKSPACE ─────────────────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto bg-[#0c0a09]">
-        {editorView === "edit" ? (
-          /* EDIT MODE: Expandable Accordion Forms */
-          <div className="max-w-3xl w-full mx-auto px-4 py-8 space-y-6">
+      <div className="flex-1 overflow-hidden bg-[#0c0a09] flex flex-col lg:flex-row">
+        
+        {/* EDIT PANEL */}
+        <div className={`w-full lg:w-[450px] xl:w-[550px] lg:flex-shrink-0 lg:border-r border-[#292524] overflow-y-auto h-full ${editorView === "edit" ? "block" : "hidden lg:block"}`}>
+          <div className="w-full mx-auto px-4 py-8 space-y-6">
             
             {/* ACCORDION 1: THÔNG TIN CƠ BẢN */}
-            <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
+            <div className="bg-[#151515] rounded-xl overflow-hidden shadow-xs border border-transparent hover:border-[#2a2a2a] transition-all">
               <div 
                 onClick={() => toggleSection("basic")}
-                className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#292524]/30 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Heart size={18} className="text-[#db2777]" />
-                  <span className="text-sm font-semibold tracking-wide" style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.1rem" }}>
+                  <span className="text-xs text-slate-500 w-3 text-center">{openSections.basic ? "v" : ">"}</span>
+                  <Heart size={14} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-200">
                     Thông tin cơ bản
                   </span>
                 </div>
-                <span className="text-xs text-slate-500">{openSections.basic ? "▲" : "▼"}</span>
               </div>
 
               {openSections.basic && (
-                <div className="p-6 border-t border-[#292524] space-y-5 bg-[#1c1917]/50 text-left">
+                <div className="p-5 border-t border-[#222] space-y-5 bg-[#151515] text-left">
                   {/* Họ tên chú rể & cô dâu */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Họ tên chú rể *</label>
+                      <label className="block text-xs font-medium text-slate-300">Họ tên chú rể</label>
                       <input 
                         type="text" 
                         required
                         value={weddingData.groomName} 
                         onChange={(e) => updateField(["groomName"], e.target.value)}
-                        placeholder="VD: Nguyễn Thế Bảo"
-                        className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-[#db2777] focus:ring-1 focus:ring-[#db2777]/30 transition-colors"
+                        placeholder="VD. Nguyễn Thế Bảo"
+                        className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors placeholder:text-slate-600"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Họ tên cô dâu *</label>
+                      <label className="block text-xs font-medium text-slate-300">Họ tên cô dâu</label>
                       <input 
                         type="text" 
                         required
                         value={weddingData.brideName} 
                         onChange={(e) => updateField(["brideName"], e.target.value)}
-                        placeholder="VD: Trần Ngọc Ánh"
-                        className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-[#db2777] focus:ring-1 focus:ring-[#db2777]/30 transition-colors"
+                        placeholder="VD. Trần Ngọc Ánh"
+                        className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors placeholder:text-slate-600"
                       />
                     </div>
                   </div>
@@ -462,41 +461,25 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                   {/* Tên ngắn chú rể & cô dâu */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Tên ngắn chú rể</label>
+                      <label className="block text-xs font-medium text-slate-300">Tên ngắn chú rể</label>
                       <div className="relative">
                         <input 
                           type="text" 
                           value={weddingData.groomShortName || ""} 
                           onChange={(e) => updateField(["groomShortName"], e.target.value)}
-                          placeholder="Thế Bảo"
-                          className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl pl-4 pr-10 py-3 text-xs text-white outline-none focus:border-[#db2777] transition-colors"
+                          className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors"
                         />
-                        <button 
-                          type="button"
-                          onClick={() => updateField(["groomShortName"], "")}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-transparent border-0 cursor-pointer text-xs"
-                        >
-                          ✕
-                        </button>
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Tên ngắn cô dâu</label>
+                      <label className="block text-xs font-medium text-slate-300">Tên ngắn cô dâu</label>
                       <div className="relative">
                         <input 
                           type="text" 
                           value={weddingData.brideShortName || ""} 
                           onChange={(e) => updateField(["brideShortName"], e.target.value)}
-                          placeholder="Ngọc Ánh"
-                          className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl pl-4 pr-10 py-3 text-xs text-white outline-none focus:border-[#db2777] transition-colors"
+                          className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors"
                         />
-                        <button 
-                          type="button"
-                          onClick={() => updateField(["brideShortName"], "")}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-transparent border-0 cursor-pointer text-xs"
-                        >
-                          ✕
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -504,55 +487,55 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                   {/* Danh xưng chú rể & cô dâu */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Danh xưng chú rể (VD: Trưởng Nam...)</label>
+                      <label className="block text-xs font-medium text-slate-300">Danh xưng chú rể</label>
                       <input 
                         type="text" 
                         value={weddingData.groomTitle || ""} 
                         onChange={(e) => updateField(["groomTitle"], e.target.value)}
                         placeholder="Trưởng Nam"
-                        className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-[#db2777] transition-colors"
+                        className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors placeholder:text-slate-600"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Danh xưng cô dâu (VD: Út Nữ...)</label>
+                      <label className="block text-xs font-medium text-slate-300">Danh xưng cô dâu</label>
                       <input 
                         type="text" 
                         value={weddingData.brideTitle || ""} 
                         onChange={(e) => updateField(["brideTitle"], e.target.value)}
                         placeholder="Út Nữ"
-                        className="w-full bg-[#0c0a09] border border-[#292524] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-[#db2777] transition-colors"
+                        className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-slate-500 transition-colors placeholder:text-slate-600"
                       />
                     </div>
                   </div>
 
                   {/* Thứ tự hiển thị */}
                   <div className="space-y-2 pt-2">
-                    <label className="block text-2xs uppercase tracking-wider text-slate-400 font-semibold">Thứ tự hiển thị</label>
-                    <div className="grid grid-cols-2 gap-4">
+                    <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-3">Thứ tự hiển thị</label>
+                    <div className="grid grid-cols-2 gap-4 bg-[#111] p-1 rounded-xl border border-[#222]">
                       <button
                         type="button"
                         onClick={() => updateField(["displayOrder"], "groom_first")}
-                        className={`py-3 rounded-xl text-xs font-semibold cursor-pointer border transition-all ${
+                        className={`py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
                           weddingData.displayOrder !== "bride_first"
-                            ? "bg-[#292524] text-white border-[#db2777] shadow-sm"
-                            : "bg-[#0c0a09] text-slate-400 border-[#292524] hover:bg-[#1c1917]"
-                        }`}
+                            ? "bg-[#222] text-white shadow-sm"
+                            : "bg-transparent text-slate-500 hover:text-slate-300 border-transparent"
+                        } border-0`}
                       >
                         Nhà trai trước
                       </button>
                       <button
                         type="button"
                         onClick={() => updateField(["displayOrder"], "bride_first")}
-                        className={`py-3 rounded-xl text-xs font-semibold cursor-pointer border transition-all ${
+                        className={`py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
                           weddingData.displayOrder === "bride_first"
-                            ? "bg-[#292524] text-white border-[#db2777] shadow-sm"
-                            : "bg-[#0c0a09] text-slate-400 border-[#292524] hover:bg-[#1c1917]"
-                        }`}
+                            ? "bg-[#222] text-white shadow-sm"
+                            : "bg-transparent text-slate-500 hover:text-slate-300 border-transparent"
+                        } border-0`}
                       >
                         Nhà gái trước
                       </button>
                     </div>
-                    <p className="text-[10px] text-slate-500 italic mt-1.5">Hiển thị thông tin bên nhà trai hay bên nhà gái trước trên thiệp mời</p>
+                    <p className="text-[10px] text-slate-600 italic mt-2 text-center">Hiển thị tên chú rể và nhà trai trước trên thiệp</p>
                   </div>
 
                   {/* Thông tin bố mẹ hai bên */}
@@ -634,15 +617,17 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
             </div>
 
             {/* ACCORDION 2: ẢNH ĐẦU THIỆP */}
-            <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
+            {templateSchema.cover.hasCoverImage && (
+              <div className="bg-[#151515] rounded-xl overflow-hidden shadow-xs border border-transparent hover:border-[#2a2a2a] transition-all">
               <div 
                 onClick={() => toggleSection("cover")}
-                className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#292524]/30 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <ImageIcon size={18} className="text-[#db2777]" />
-                  <span className="text-sm font-semibold tracking-wide" style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.1rem" }}>
-                    Ảnh đầu thiệp (Bìa thiệp)
+                  <span className="text-xs text-slate-500 w-3 text-center">{openSections.cover ? "v" : ">"}</span>
+                  <ImageIcon size={14} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-200">
+                    Ảnh đầu thiệp
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
@@ -660,23 +645,22 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                       }`} />
                     </button>
                   </div>
-                  <span className="text-xs text-slate-500">{openSections.cover ? "▲" : "▼"}</span>
                 </div>
               </div>
 
               {openSections.cover && (
-                <div className="p-6 border-t border-[#292524] bg-[#1c1917]/50 text-center">
-                  <div className="flex flex-col items-center justify-center p-6 border border-dashed border-[#292524] rounded-2xl bg-[#0c0a09] space-y-4">
-                    <div className="relative w-40 aspect-[3/4] bg-[#1c1917] rounded-xl border border-[#292524] flex items-center justify-center overflow-hidden shadow-md">
+                <div className="p-6 border-t border-[#222] bg-[#151515] text-center">
+                  <span className="text-xs font-medium text-slate-400 block mb-4">Ảnh đầu thiệp</span>
+                  <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-[#111] space-y-4">
+                    <div className="relative w-32 aspect-[3/4] bg-[#0a0a0a] rounded-xl border border-[#222] flex items-center justify-center overflow-hidden shadow-inner">
                       {weddingData.galleryImages?.[0] ? (
                         <img src={weddingData.galleryImages[0]} alt="Cover" className="w-full h-full object-cover" />
                       ) : (
-                        <ImageIcon size={32} className="text-slate-600 animate-pulse" />
+                        <ImageIcon size={24} className="text-[#333]" />
                       )}
                     </div>
                     
                     <div className="w-full max-w-sm space-y-1.5 text-left">
-                      <label className="block text-2xs text-slate-400 font-semibold uppercase tracking-wider text-center">Liên kết ảnh bìa thiệp</label>
                       <input
                         type="text"
                         value={weddingData.galleryImages?.[0] || ""}
@@ -685,8 +669,8 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                           updated[0] = e.target.value;
                           updateField(["galleryImages"], updated);
                         }}
-                        placeholder="Dán link hình ảnh vào đây..."
-                        className="w-full bg-[#1c1917] border border-[#292524] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-[#db2777] text-center"
+                        placeholder="Link ảnh bìa thiệp..."
+                        className="w-full bg-[#151515] border border-[#333] rounded-lg px-3 py-2 text-xs text-center text-white outline-none focus:border-slate-500 placeholder:text-[#555]"
                       />
                     </div>
 
@@ -710,6 +694,7 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                 </div>
               )}
             </div>
+            )}
 
             {/* ACCORDION 3: THIẾT KẾ & CHỌN MẪU */}
             <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
@@ -730,7 +715,7 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                 <div className="p-6 border-t border-[#292524] space-y-6 bg-[#1c1917]/50 text-left">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {TEMPLATES.map((t) => {
-                      const isLocked = t.planRequired === "premium" && userPlan === "standard";
+                      const isLocked = t.tier === "premium" && userPlan === "standard";
                       return (
                         <button
                           key={t.id}
@@ -743,11 +728,11 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                         >
                           {/* Plan Badge */}
                           <span className={`absolute top-3 right-3 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider z-10 ${
-                            t.planRequired === "premium"
+                            t.tier === "premium"
                               ? "bg-amber-600 text-white"
                               : "bg-slate-700 text-white"
                           }`}>
-                            {t.planRequired === "premium" ? "Cao cấp" : "Phổ biến"}
+                            {t.tier === "premium" ? "Cao cấp" : "Phổ biến"}
                           </span>
 
                           <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm border border-[#292524]/50">
@@ -911,7 +896,8 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
             </div>
 
             {/* ACCORDION 5: ALBUM ẢNH CƯỚI */}
-            <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
+            {templateSchema.gallery.maxImages > 0 && (
+              <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
               <div 
                 onClick={() => toggleSection("gallery")}
                 className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#292524]/30 transition-colors"
@@ -968,6 +954,164 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
                 </div>
               )}
             </div>
+            )}
+
+            {/* ACCORDION 5.5: CHUYỆN TÌNH YÊU (TIMELINE) */}
+            {templateSchema.timeline.enabled && (
+              <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
+                <div 
+                  onClick={() => toggleSection("timeline")}
+                  className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#292524]/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <FileText size={18} className="text-[#db2777]" />
+                    <span className="text-sm font-semibold tracking-wide" style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.1rem" }}>
+                      Chuyện tình yêu (Timeline)
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500">{openSections.timeline ? "▲" : "▼"}</span>
+                </div>
+
+                {openSections.timeline && (
+                  <div className="p-6 border-t border-[#292524] space-y-4 bg-[#1c1917]/50 text-left">
+                    <p className="text-2xs text-slate-400">Thiết lập các mốc thời gian đáng nhớ của hai bạn.</p>
+                    {weddingData.timeline?.map((item, index) => (
+                      <div key={index} className="p-4 rounded-xl border border-[#292524] bg-[#0c0a09]/40 space-y-3 relative">
+                        <div className="font-semibold text-2xs text-[#db2777] uppercase border-b border-[#292524] pb-1.5 flex justify-between">
+                          <span>Mốc thời gian {index + 1}</span>
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              const updated = [...weddingData.timeline];
+                              updated.splice(index, 1);
+                              updateField(["timeline"], updated);
+                            }}
+                            className="text-red-500 hover:text-red-400 border-0 bg-transparent cursor-pointer text-3xs uppercase"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1.5">
+                            <label className="block text-3xs uppercase tracking-wider text-slate-500 font-medium">Năm / Thời gian</label>
+                            <input 
+                              type="text" 
+                              value={item.year} 
+                              onChange={(e) => {
+                                const updated = [...weddingData.timeline];
+                                updated[index].year = e.target.value;
+                                updateField(["timeline"], updated);
+                              }}
+                              className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777]"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="block text-3xs uppercase tracking-wider text-slate-500 font-medium">Tiêu đề</label>
+                            <input 
+                              type="text" 
+                              value={item.title} 
+                              onChange={(e) => {
+                                const updated = [...weddingData.timeline];
+                                updated[index].title = e.target.value;
+                                updateField(["timeline"], updated);
+                              }}
+                              className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777]"
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block text-3xs uppercase tracking-wider text-slate-500 font-medium">Mô tả chi tiết</label>
+                          <textarea 
+                            value={item.description} 
+                            onChange={(e) => {
+                              const updated = [...weddingData.timeline];
+                              updated[index].description = e.target.value;
+                              updateField(["timeline"], updated);
+                            }}
+                            className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777] min-h-[60px]"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block text-3xs uppercase tracking-wider text-slate-500 font-medium">Link hình ảnh</label>
+                          <input 
+                            type="text" 
+                            value={item.imageUrl || ""} 
+                            onChange={(e) => {
+                              const updated = [...weddingData.timeline];
+                              updated[index].imageUrl = e.target.value;
+                              updateField(["timeline"], updated);
+                            }}
+                            className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777]"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <button 
+                      type="button"
+                      onClick={() => updateField(["timeline"], [...(weddingData.timeline || []), { year: "", title: "", description: "", imageUrl: "" }])}
+                      className="w-full py-2 border border-dashed border-[#db2777]/50 text-[#db2777] rounded-xl text-xs font-semibold bg-transparent hover:bg-[#db2777]/10 cursor-pointer transition-colors"
+                    >
+                      + Thêm mốc thời gian
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ACCORDION 5.6: TUỲ CHỈNH THÊM (CUSTOM FIELDS) */}
+            {templateSchema.customFields && templateSchema.customFields.length > 0 && (
+              <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
+                <div 
+                  onClick={() => toggleSection("custom")}
+                  className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#292524]/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Music size={18} className="text-[#db2777]" />
+                    <span className="text-sm font-semibold tracking-wide" style={{ fontFamily: "'EB Garamond', serif", fontSize: "1.1rem" }}>
+                      Tuỳ chỉnh thêm
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500">{openSections.custom ? "▲" : "▼"}</span>
+                </div>
+
+                {openSections.custom && (
+                  <div className="p-6 border-t border-[#292524] space-y-4 bg-[#1c1917]/50 text-left">
+                    <p className="text-2xs text-slate-400">Các tuỳ chỉnh đặc biệt dành riêng cho mẫu thiệp này.</p>
+                    {templateSchema.customFields.map((field) => (
+                      <div key={field.key} className="space-y-1.5">
+                        <label className="block text-3xs uppercase tracking-wider text-slate-500 font-medium">{field.label}</label>
+                        {field.type === "textarea" ? (
+                          <textarea
+                            placeholder={field.placeholder}
+                            value={(weddingData as any)[field.key] || ""}
+                            onChange={(e) => updateField([field.key], e.target.value)}
+                            className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777] min-h-[80px]"
+                          />
+                        ) : field.type === "select" && field.options ? (
+                          <select
+                            value={(weddingData as any)[field.key] || field.options[0].value}
+                            onChange={(e) => updateField([field.key], e.target.value)}
+                            className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777]"
+                          >
+                            {field.options.map(opt => (
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            type={field.type === "date" ? "date" : "text"}
+                            placeholder={field.placeholder}
+                            value={(weddingData as any)[field.key] || ""}
+                            onChange={(e) => updateField([field.key], e.target.value)}
+                            className="w-full bg-[#0c0a09] border border-[#292524] rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-[#db2777]"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ACCORDION 6: MỪNG CƯỚI & VIETQR */}
             <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
@@ -1070,9 +1214,11 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
             </div>
 
           </div>
-        ) : (
-          /* PREVIEW MODE: Centered Mobile Device Mockup or Desktop Mockup */
-          <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 relative min-h-[calc(100vh-64px)] overflow-y-auto">
+        </div>
+
+        {/* PREVIEW PANEL */}
+        <div className={`flex-1 overflow-y-auto bg-[#0c0a09] relative ${editorView === "preview" ? "block" : "hidden lg:block"}`}>
+          <div className="flex flex-col items-center justify-center p-4 sm:p-8 min-h-full">
             {/* Top controls to toggle preview style & device */}
             <div className="flex flex-wrap items-center justify-center gap-4 bg-[#1c1917] p-2 rounded-2xl sm:rounded-full border border-[#292524] mb-6 shadow-lg z-10">
               {/* Envelope vs Invitation view mode */}
@@ -1267,7 +1413,7 @@ export function WeddingEditorPage({ isEditMode = false }: WeddingEditorPageProps
               )}
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* ── SUCCESS MODAL ─────────────────────────────────────────────────── */}
