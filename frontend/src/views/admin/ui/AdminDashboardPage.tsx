@@ -17,7 +17,7 @@ export function AdminDashboardPage() {
     const savedToken = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
 
-    if (!savedToken || savedRole !== "admin") {
+    if (!savedToken || (savedRole !== "admin" && savedRole !== "staff")) {
       localStorage.clear();
       navigate("/login");
       return;

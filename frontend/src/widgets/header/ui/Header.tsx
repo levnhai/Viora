@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { Heart, Menu, X, Sun, Check } from "lucide-react";
@@ -11,7 +11,11 @@ interface HeaderProps {
 export function Header({ onOpenRequest }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState<{ name: string; email: string; picture?: string }>({ name: "", email: "" });
+  const [userProfile, setUserProfile] = useState<{
+    name: string;
+    email: string;
+    picture?: string;
+  }>({ name: "", email: "" });
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ export function Header({ onOpenRequest }: HeaderProps) {
     const name = localStorage.getItem("name") || "";
     const email = localStorage.getItem("username") || "";
     const picture = localStorage.getItem("picture") || undefined;
-    
+
     if (token) {
       setIsLoggedIn(true);
       setUserProfile({ name, email, picture });
@@ -59,8 +63,8 @@ export function Header({ onOpenRequest }: HeaderProps) {
           </div>
           <div className="hidden md:flex items-center gap-8">
             {[
-              ["Tính năng", "#tinh-nang"],
               ["Mẫu thiệp", "#mau-thiep"],
+              ["Tính năng", "#tinh-nang"],
               ["Đăng ký", "#dang-ky-tu-van"],
               ["Bảng giá", "#bang-gia"],
               ["FAQ", "#faq"],
@@ -78,19 +82,29 @@ export function Header({ onOpenRequest }: HeaderProps) {
             {isLoggedIn ? (
               <div className="flex items-center gap-4 relative">
                 {/* Theme Toggle Button */}
-                <button className="text-slate-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-1.5 rounded-lg flex items-center justify-center">
+                {/* <button className="text-slate-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-1.5 rounded-lg flex items-center justify-center">
                   <Sun size={20} />
+                </button> */}
+                <button
+                  onClick={onOpenRequest}
+                  className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
+                >
+                  Tạo thiệp ngay
                 </button>
-                
+
                 {/* Profile Avatar Button */}
-                <button 
+                <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#db2777] to-red-500 flex items-center justify-center text-white font-bold text-sm shadow-md border-0 cursor-pointer overflow-hidden active:scale-95 transition-transform"
                 >
                   {userProfile.picture ? (
-                     <img src={userProfile.picture} alt={userProfile.name} className="w-full h-full object-cover" />
+                    <img
+                      src={userProfile.picture}
+                      alt={userProfile.name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                     userProfile.name.charAt(0).toUpperCase() || 'U'
+                    userProfile.name.charAt(0).toUpperCase() || "U"
                   )}
                 </button>
 
@@ -99,23 +113,27 @@ export function Header({ onOpenRequest }: HeaderProps) {
                   <div className="absolute right-0 top-12 w-64 bg-[#1c1917] border border-[#292524] rounded-2xl p-4 shadow-2xl z-50 text-left text-slate-200 animate-fade-in space-y-3">
                     {/* User Info */}
                     <div className="space-y-1 py-1">
-                      <h4 className="text-sm font-semibold text-white truncate">{userProfile.name}</h4>
-                      <p className="text-2xs text-slate-400 truncate">{userProfile.email}</p>
+                      <h4 className="text-sm font-semibold text-white truncate">
+                        {userProfile.name}
+                      </h4>
+                      <p className="text-2xs text-slate-400 truncate">
+                        {userProfile.email}
+                      </p>
                     </div>
 
                     <hr className="border-t border-[#292524] my-1" />
 
                     {/* Main Links */}
                     <div className="space-y-1">
-                      <Link 
-                        href="/dashboard" 
+                      <Link
+                        href="/account"
                         onClick={() => setDropdownOpen(false)}
                         className="block text-xs font-semibold py-2 px-2.5 rounded-lg hover:bg-[#292524]/50 hover:text-white text-slate-300 no-underline"
                       >
                         Tài khoản
                       </Link>
-                      <a 
-                        href="#blog" 
+                      <a
+                        href="#blog"
                         onClick={() => setDropdownOpen(false)}
                         className="block text-xs font-semibold py-2 px-2.5 rounded-lg hover:bg-[#292524]/50 hover:text-white text-slate-300 no-underline"
                       >
@@ -135,8 +153,8 @@ export function Header({ onOpenRequest }: HeaderProps) {
                         <Check size={14} className="text-[#db2777]" />
                       </button>
                       {["English", "繁體中文 (台灣)", "العربية"].map((lang) => (
-                        <button 
-                          key={lang} 
+                        <button
+                          key={lang}
                           className="w-full py-1.5 px-2.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-[#292524]/40 bg-transparent border-0 cursor-pointer text-left"
                         >
                           {lang}

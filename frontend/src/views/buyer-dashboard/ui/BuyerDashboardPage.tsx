@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Heart, LogOut, Edit3, Users, BookOpen, Save, Loader2, Calendar, MapPin, CreditCard, Copy, Check, Plus, Trash2, UserPlus, Phone, Tag } from "lucide-react";
+import { Heart, LogOut, Edit3, Users, BookOpen, Save, Loader2, Calendar, MapPin, CreditCard, Copy, Check, Plus, Trash2, UserPlus, Phone, Tag, Settings } from "lucide-react";
 
 export function BuyerDashboardPage() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export function BuyerDashboardPage() {
     const savedRole = localStorage.getItem("role");
     const savedSlug = localStorage.getItem("weddingSlug");
 
-    if (!savedToken || savedRole !== "buyer") {
+    if (!savedToken || (savedRole !== "user" && savedRole !== "staff" && savedRole !== "admin")) {
       localStorage.clear();
       navigate("/login");
       return;
@@ -403,6 +403,12 @@ export function BuyerDashboardPage() {
               <span className={`ml-auto text-2xs px-2 py-0.5 rounded-full ${activeTab === "guestbook" ? "bg-white/20 text-white" : "bg-[#8b3a52]/10 text-[#8b3a52]"}`}>
                 {guestbookList.length}
               </span>
+            </button>
+            <button
+              onClick={() => navigate("/account")}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
+            >
+              <Settings size={16} /> Cài đặt tài khoản
             </button>
           </div>
         </aside>

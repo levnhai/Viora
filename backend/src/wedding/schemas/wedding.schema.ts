@@ -124,6 +124,9 @@ export class Wedding {
 
   @Prop({ type: ContactInfo })
   contactInfo?: ContactInfo;
+
+  @Prop({ default: 0 })
+  views: number;
 }
 
 export const WeddingSchema = SchemaFactory.createForClass(Wedding);

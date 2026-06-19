@@ -268,7 +268,11 @@ export class WeddingService implements OnModuleInit {
   }
 
   async findBySlug(slug: string): Promise<Wedding> {
-    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    const wedding = await this.weddingModel.findOneAndUpdate(
+      { slug },
+      { $inc: { views: 1 } },
+      { new: true }
+    ).exec();
     if (!wedding) {
       throw new NotFoundException(`Wedding with slug "${slug}" not found`);
     }

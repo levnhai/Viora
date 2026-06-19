@@ -33,7 +33,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async update(@Param('slug') slug: string, @Body() updateDto: any, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền chỉnh sửa thiệp cưới này!');
     }
     const data = await this.weddingService.update(slug, updateDto);
@@ -59,7 +59,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async getRsvps(@Param('slug') slug: string, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền xem danh sách khách mời của thiệp cưới này!');
     }
     const data = await this.weddingService.findRsvps(slug);
@@ -94,7 +94,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async createGuest(@Param('slug') slug: string, @Body() guestData: any, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền quản lý danh sách khách mời của thiệp cưới này!');
     }
     const data = await this.weddingService.createGuest(slug, guestData);
@@ -109,7 +109,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async getGuests(@Param('slug') slug: string, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền xem danh sách khách mời của thiệp cưới này!');
     }
     const data = await this.weddingService.findGuests(slug);
@@ -123,7 +123,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async updateGuest(@Param('slug') slug: string, @Param('id') id: string, @Body() guestData: any, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền cập nhật khách mời của thiệp cưới này!');
     }
     const data = await this.weddingService.updateGuest(slug, id, guestData);
@@ -138,7 +138,7 @@ export class WeddingController {
   @UseGuards(AuthGuard)
   async deleteGuest(@Param('slug') slug: string, @Param('id') id: string, @Req() req: any) {
     const user = req.user;
-    if (user.role !== 'admin' && user.weddingSlug !== slug) {
+    if (user.role !== 'admin' && user.role !== 'staff' && user.weddingSlug !== slug) {
       throw new ForbiddenException('Bạn không có quyền xóa khách mời của thiệp cưới này!');
     }
     await this.weddingService.deleteGuest(slug, id);

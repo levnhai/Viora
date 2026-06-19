@@ -20,8 +20,8 @@ export class RequestController {
   @Get()
   @UseGuards(AuthGuard)
   async findAll(@Req() req: any) {
-    if (req.user.role !== 'admin') {
-      throw new ForbiddenException('Chỉ có tài khoản admin mới xem được danh sách yêu cầu!');
+    if (req.user.role !== 'admin' && req.user.role !== 'staff') {
+      throw new ForbiddenException('Chỉ có tài khoản admin hoặc staff mới xem được danh sách yêu cầu!');
     }
     const data = await this.requestService.findAll();
     return {
