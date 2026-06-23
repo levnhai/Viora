@@ -115,6 +115,29 @@
   font-family: 'DM Sans', sans-serif;
 }
 
+.theme-purple {
+  --background: #faf8fd;
+  --foreground: #251b2b;
+  --card: #f5f0fa;
+  --card-foreground: #251b2b;
+  --popover: #f5f0fa;
+  --popover-foreground: #251b2b;
+  --primary: #7c4d90;
+  --primary-foreground: #faf8fd;
+  --secondary: #eee4f3;
+  --secondary-foreground: #251b2b;
+  --muted: #e1d2e9;
+  --muted-foreground: #705d7b;
+  --accent: #ac81bd;
+  --accent-foreground: #faf8fd;
+  --border: rgba(124, 77, 144, 0.15);
+  --ring: #ac81bd;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-purple h1, .theme-purple h2, .theme-purple h3, .theme-purple h4 {
+  font-family: 'Playfair Display', serif;
+}
+
 :root {
   --font-size: 16px;
   --background: #fdf6ef;
@@ -293,4 +316,8 @@
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
+}
+
+.mockup-screen-content section.min-h-screen {
+  min-height: 100% !important;
 }

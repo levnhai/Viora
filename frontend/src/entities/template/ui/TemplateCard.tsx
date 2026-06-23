@@ -49,8 +49,8 @@ export function TemplateCard({ tpl, onPreviewDemo, onUseTemplate }: TemplateCard
           <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
             <span>{tpl.style}</span>
             <span>•</span>
-            <span className={`font-semibold ${tpl.tier === 'premium' ? 'text-amber-600' : tpl.tier === 'basic' ? 'text-blue-600' : 'text-green-600'}`}>
-              {tpl.tier === 'premium' ? 'Gói Cao Cấp' : tpl.tier === 'basic' ? 'Gói Cơ Bản' : 'Gói Miễn Phí'}
+            <span className={`font-semibold ${tpl.price === 0 ? 'text-green-600' : tpl.price === 299000 ? 'text-amber-600' : 'text-[#db2777]'}`}>
+              {tpl.price === 0 ? 'Miễn phí' : `${tpl.price.toLocaleString('vi-VN')}đ`}
             </span>
           </p>
         </div>

@@ -33,6 +33,7 @@ export interface TemplateConfig {
   preview: string;
   themeClass: string; // CSS class chứa định nghĩa màu sắc (VD: theme-pink)
   tier: TemplateTier;
+  price: number; // Giá bán lẻ của template (0đ là miễn phí)
   popular?: boolean;
   accentColor: string;
   schema: TemplateSchema;
