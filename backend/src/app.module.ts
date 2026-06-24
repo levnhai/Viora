@@ -8,6 +8,10 @@ import { WeddingModule } from './wedding/wedding.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AffiliateModule } from './affiliate/affiliate.module';
+import { TemplateModule } from './template/template.module';
+import { MediaModule } from './media/media.module';
+import { PaymentModule } from './payment/payment.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -29,6 +33,10 @@ import { AffiliateModule } from './affiliate/affiliate.module';
     AuthModule,
     UserModule,
     AffiliateModule,
+    TemplateModule,
+    MediaModule,
+    PaymentModule,
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],

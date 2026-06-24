@@ -1,43 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type WeddingDocument = Wedding & Document;
-
-@Schema()
-class WeddingEvent {
-  @Prop({ required: true })
-  title: string; // e.g. "Lễ Vu Quy", "Tiệc Chiêu Đãi"
-
-  @Prop({ required: true })
-  time: string; // e.g. "18:00"
-
-  @Prop({ required: true })
-  date: string; // e.g. "15/11/2025" or ISO string
-
-  @Prop({ required: true })
-  locationName: string; // e.g. "Nhà hàng tiệc cưới Đại Dương"
-
-  @Prop({ required: true })
-  address: string; // e.g. "123 Đường Nguyễn Huệ, Quận 1, TP. HCM"
-
-  @Prop()
-  mapUrl?: string; // Google Maps embed/redirect link
-}
-
-@Schema()
-class LoveStoryTimeline {
-  @Prop({ required: true })
-  year: string;
-
-  @Prop({ required: true })
-  title: string;
-
-  @Prop({ required: true })
-  description: string;
-
-  @Prop()
-  imageUrl?: string;
-}
 
 @Schema()
 class GiftRegistryInfo {
@@ -78,13 +42,43 @@ class ContactInfo {
   email?: string;
 }
 
+@Schema()
+class WeddingSettings {
+  @Prop({ default: true })
+  showRSVP: boolean;
+
+  @Prop({ default: true })
+  showGuestbook: boolean;
+
+  @Prop({ default: true })
+  musicEnabled: boolean;
+
+  @Prop()
+  musicUrl?: string;
+}
+
+@Schema()
+class WeddingSEO {
+  @Prop()
+  title?: string;
+
+  @Prop()
+  description?: string;
+
+  @Prop()
+  ogImage?: string;
+}
+
 @Schema({ timestamps: true, collection: 'weddings' })
 export class Wedding {
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
+  ownerId: Types.ObjectId; // Đổi liên kết chủ sở hữu thành ownerId (ref: User)
+
   @Prop({ required: true, unique: true, index: true })
   slug: string; // e.g. "minh-lan"
 
-  @Prop({ required: true, default: 1 })
-  templateId: number;
+  @Prop({ type: Types.ObjectId, ref: 'Template', required: true })
+  templateId: Types.ObjectId; // Liên kết tới Template schema
 
   @Prop({ required: true })
   groomName: string;
@@ -110,12 +104,6 @@ export class Wedding {
   @Prop()
   weddingTime?: string;
 
-  @Prop({ type: [WeddingEvent], default: [] })
-  events: WeddingEvent[];
-
-  @Prop({ type: [LoveStoryTimeline], default: [] })
-  timeline: LoveStoryTimeline[];
-
   @Prop({ type: [String], default: [] })
   galleryImages: string[];
 
@@ -124,6 +112,15 @@ export class Wedding {
 
   @Prop({ type: ContactInfo })
   contactInfo?: ContactInfo;
+
+  @Prop({ type: WeddingSettings, default: () => ({}) })
+  settings?: WeddingSettings;
+
+  @Prop({ type: WeddingSEO, default: () => ({}) })
+  seo?: WeddingSEO;
+
+  @Prop({ required: true, default: 'draft', index: true })
+  status: string; // 'draft' | 'published' | 'hidden'
 
   @Prop({ default: 0 })
   views: number;

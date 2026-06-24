@@ -4,7 +4,6 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { User, UserSchema } from './schemas/user.schema';
 import { Wedding, WeddingSchema } from '../wedding/schemas/wedding.schema';
-import { Rsvp, RsvpSchema } from '../wedding/schemas/rsvp.schema';
 import { Guestbook, GuestbookSchema } from '../wedding/schemas/guestbook.schema';
 import { Guest, GuestSchema } from '../wedding/schemas/guest.schema';
 
@@ -13,7 +12,6 @@ import { Guest, GuestSchema } from '../wedding/schemas/guest.schema';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Wedding.name, schema: WeddingSchema },
-      { name: Rsvp.name, schema: RsvpSchema },
       { name: Guestbook.name, schema: GuestbookSchema },
       { name: Guest.name, schema: GuestSchema },
     ]),

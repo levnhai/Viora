@@ -49,21 +49,18 @@ export class AuthService implements OnModuleInit {
     const emailValue = username.includes('@') ? username : '';
     
     // Determine default account type based on role
-    let defaultAccountType = 'user';
+    let defaultAccountType = 'customer';
     if (role === 'admin') defaultAccountType = 'admin';
-    if (role === 'staff') defaultAccountType = 'collaborator';
+    if (role === 'staff') defaultAccountType = 'affiliate';
 
     const user = new this.userModel({
       username,
       passwordHash,
       role,
       weddingSlug,
-      name: displayName,
+      fullName: displayName,
       email: emailValue,
-      emailNotification: true,
-      showOnHomepage: true,
       accountType: defaultAccountType,
-      securityType: 'Magic link',
     });
     return user.save();
   }
@@ -110,7 +107,7 @@ export class AuthService implements OnModuleInit {
     const displayName = username.split('@')[0];
     return {
       ...tokenData,
-      name: user.name || displayName,
+      name: user.fullName || displayName,
       email: user.email || (username.includes('@') ? username : undefined),
     };
   }
@@ -218,7 +215,7 @@ export class AuthService implements OnModuleInit {
     const displayName = email.split('@')[0];
     return {
       ...tokenData,
-      name: user?.name || displayName,
+      name: user?.fullName || displayName,
       email,
     };
   }
@@ -280,7 +277,7 @@ export class AuthService implements OnModuleInit {
     const tokenData = this.generateToken(user);
     return {
       ...tokenData,
-      name: user?.name || name,
+      name: user?.fullName || name,
       picture,
       email,
     };

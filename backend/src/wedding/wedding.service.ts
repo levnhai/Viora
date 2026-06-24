@@ -1,11 +1,13 @@
 import { Injectable, OnModuleInit, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Wedding, WeddingDocument } from './schemas/wedding.schema';
-import { Rsvp, RsvpDocument } from './schemas/rsvp.schema';
+import { WeddingEvent, WeddingEventDocument } from './schemas/wedding-event.schema';
+import { WeddingTimeline, WeddingTimelineDocument } from './schemas/wedding-timeline.schema';
 import { Guestbook, GuestbookDocument } from './schemas/guestbook.schema';
 import { Guest, GuestDocument } from './schemas/guest.schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
+import { Template, TemplateDocument } from '../template/schemas/template.schema';
 import { CreateWeddingDto } from './dto/create-wedding.dto';
 
 @Injectable()
@@ -13,28 +15,96 @@ export class WeddingService implements OnModuleInit {
   constructor(
     @InjectModel(Wedding.name)
     private readonly weddingModel: Model<WeddingDocument>,
-    @InjectModel(Rsvp.name)
-    private readonly rsvpModel: Model<RsvpDocument>,
+    @InjectModel(WeddingEvent.name)
+    private readonly weddingEventModel: Model<WeddingEventDocument>,
+    @InjectModel(WeddingTimeline.name)
+    private readonly weddingTimelineModel: Model<WeddingTimelineDocument>,
     @InjectModel(Guestbook.name)
     private readonly guestbookModel: Model<GuestbookDocument>,
     @InjectModel(Guest.name)
     private readonly guestModel: Model<GuestDocument>,
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
+    @InjectModel(Template.name)
+    private readonly templateModel: Model<TemplateDocument>,
   ) {}
 
   async onModuleInit() {
     // Luôn dọn dẹp và nạp lại dữ liệu mẫu chuẩn cho chạy thử nghiệm
     await this.weddingModel.deleteMany({}).exec();
-    await this.rsvpModel.deleteMany({}).exec();
+    await this.weddingEventModel.deleteMany({}).exec();
+    await this.weddingTimelineModel.deleteMany({}).exec();
     await this.guestbookModel.deleteMany({}).exec();
     await this.guestModel.deleteMany({}).exec();
+    await this.templateModel.deleteMany({}).exec();
     console.log('--- Cleaning and seeding default wedding data ---');
 
-    // 1. Seed 'vanan-thibinh' (Giao diện Hồng Sương Mai - templateId: 1)
+    // 0. Seed templates
+    const t1 = await new this.templateModel({
+      code: 'classic-pink',
+      name: 'Hồng Sương Mai',
+      description: 'Mẫu thiết kế truyền thống, ấm cúng',
+      price: 0,
+      status: 'active',
+      category: 'Truyền thống',
+    }).save();
+
+    const t2 = await new this.templateModel({
+      code: 'modern-blue',
+      name: 'Xanh Tối Giản',
+      description: 'Phong cách tối giản hiện đại thanh lịch',
+      price: 199000,
+      status: 'active',
+      category: 'Hiện đại',
+    }).save();
+
+    const t3 = await new this.templateModel({
+      code: 'royal-gold',
+      name: 'Vàng Hoàng Gia',
+      description: 'Thiết kế sang trọng phong cách hoàng gia',
+      price: 299000,
+      status: 'active',
+      category: 'Sang trọng',
+    }).save();
+
+    // Tìm hoặc tạo users để gán ownerId
+    let userMinhLan = await this.userModel.findOne({ username: 'minh-lan' }).exec();
+    if (!userMinhLan) {
+      userMinhLan = await new this.userModel({
+        username: 'minh-lan',
+        passwordHash: '123456', // Sẽ được hash thực tế khi chạy qua AuthService
+        role: 'user',
+        fullName: 'Quang Minh',
+        accountType: 'customer',
+      }).save();
+    }
+
+    let userVanAn = await this.userModel.findOne({ username: 'vanan' }).exec();
+    if (!userVanAn) {
+      userVanAn = await new this.userModel({
+        username: 'vanan',
+        passwordHash: '123456',
+        role: 'user',
+        fullName: 'Văn An',
+        accountType: 'customer',
+      }).save();
+    }
+
+    let userHoangYen = await this.userModel.findOne({ username: 'hoang-yen' }).exec();
+    if (!userHoangYen) {
+      userHoangYen = await new this.userModel({
+        username: 'hoang-yen',
+        passwordHash: '123456',
+        role: 'user',
+        fullName: 'Hoàng Nam',
+        accountType: 'customer',
+      }).save();
+    }
+
+    // 1. Seed 'vanan-thibinh'
     await this.create({
       slug: 'vanan-thibinh',
-      templateId: 1,
+      templateId: 1, // Sẽ map sang t1._id trong hàm create
       groomName: 'Văn An',
       groomFatherName: 'Nguyễn Văn Hùng',
       groomMotherName: 'Lê Thị Lan',
@@ -96,9 +166,9 @@ export class WeddingService implements OnModuleInit {
         bridePhone: '0907654321',
         email: 'vanan.thibinh@gmail.com',
       },
-    });
+    }, userVanAn._id.toString());
 
-    // 2. Seed 'minh-lan' (Giao diện Xanh Tối Giản - templateId: 2)
+    // 2. Seed 'minh-lan'
     await this.create({
       slug: 'minh-lan',
       templateId: 2,
@@ -163,9 +233,9 @@ export class WeddingService implements OnModuleInit {
         bridePhone: '0977777777',
         email: 'minh.lan@gmail.com',
       },
-    });
+    }, userMinhLan._id.toString());
 
-    // 3. Seed 'hoang-yen' (Giao diện Vàng Hoàng Gia - templateId: 3)
+    // 3. Seed 'hoang-yen'
     await this.create({
       slug: 'hoang-yen',
       templateId: 3,
@@ -230,18 +300,18 @@ export class WeddingService implements OnModuleInit {
         bridePhone: '0955555555',
         email: 'nam.chi@gmail.com',
       },
-    });
+    }, userHoangYen._id.toString());
 
     console.log('--- Seeding completed! ---');
 
-    // Seed guest list
+    // Seed guest list, rsvps và guestbooks dựa trên slug
     await this.createGuest('minh-lan', { name: 'Chú Tiến & Cô Hương', phone: '0901112222', relationship: 'Họ hàng nhà trai' });
     await this.createGuest('minh-lan', { name: 'Anh Sơn (bạn thân)', phone: '0903334444', relationship: 'Bạn chú rể' });
     await this.createGuest('minh-lan', { name: 'Chị Hạnh', phone: '0905556666', relationship: 'Bạn cô dâu' });
     await this.createGuest('minh-lan', { name: 'Anh Đức (Bạn thân)', phone: '0907778888', relationship: 'Bạn chú rể' });
     await this.createGuest('minh-lan', { name: 'Chị Lan Vy', phone: '0909990000', relationship: 'Bạn cô dâu' });
 
-    // Seed some sample RSVPs and guestbook entries
+    // Seed RSVP bằng cách gọi hàm createRsvp (lưu trực tiếp vào guests)
     await this.createRsvp('minh-lan', { name: 'Chú Tiến & Cô Hương', attend: 'yes', guests: 2, message: 'Chúc hai con trăm năm hạnh phúc, sớm có cháu bồng bế!' });
     await this.createRsvp('minh-lan', { name: 'Anh Sơn (bạn thân)', attend: 'yes', guests: 1, message: 'Chúc mừng hai bạn! Nhất định mình sẽ có mặt uống rượu mừng.' });
     await this.createRsvp('minh-lan', { name: 'Chị Hạnh', attend: 'no', guests: 0, message: 'Tiếc quá hôm đó chị bận lịch công tác, chúc hai em luôn hạnh phúc nha!' });
@@ -253,114 +323,211 @@ export class WeddingService implements OnModuleInit {
     await this.createGuestbook('vanan-thibinh', { name: 'Anh Minh Đức', message: 'Tụi mày xứng đôi quá 💕 Chúc mừng nhé!' });
   }
 
-  async create(createDto: CreateWeddingDto, userId?: string): Promise<Wedding> {
+  async create(createDto: CreateWeddingDto, userId?: string): Promise<any> {
+    const { events, timeline, templateId, ...restDto } = createDto;
+
+    // Tìm template tương ứng để lấy ObjectId
+    let targetTemplateId: Types.ObjectId;
+    if (typeof templateId === 'number') {
+      const codes = ['classic-pink', 'modern-blue', 'royal-gold'];
+      const code = codes[templateId - 1] || 'classic-pink';
+      const tmp = await this.templateModel.findOne({ code }).exec();
+      targetTemplateId = tmp ? (tmp._id as Types.ObjectId) : new Types.ObjectId();
+    } else {
+      targetTemplateId = new Types.ObjectId(templateId as any);
+    }
+
+    const ownerObjectId = userId ? new Types.ObjectId(userId) : new Types.ObjectId();
+
     const created = new this.weddingModel({
-      ...createDto,
+      ...restDto,
+      ownerId: ownerObjectId,
+      templateId: targetTemplateId,
       weddingDate: new Date(createDto.weddingDate),
+      status: 'published',
     });
     const saved = await created.save();
-    
+
+    // Lưu các sự kiện liên quan
+    if (events && events.length > 0) {
+      for (const evt of events) {
+        await new this.weddingEventModel({
+          weddingId: saved._id,
+          title: evt.title,
+          time: evt.time,
+          date: new Date(evt.date.split('/').reverse().join('-')), // convert dd/mm/yyyy to Date
+          locationName: evt.locationName,
+          address: evt.address,
+          mapUrl: evt.mapUrl,
+        }).save();
+      }
+    }
+
+    // Lưu dòng lịch sử liên quan
+    if (timeline && timeline.length > 0) {
+      for (const tl of timeline) {
+        await new this.weddingTimelineModel({
+          weddingId: saved._id,
+          year: tl.year,
+          title: tl.title,
+          description: tl.description,
+          imageUrl: tl.imageUrl,
+        }).save();
+      }
+    }
+
     if (userId) {
       await this.userModel.findByIdAndUpdate(userId, { weddingSlug: saved.slug }).exec();
     }
-    
-    return saved;
+
+    return this.findBySlug(saved.slug);
   }
 
-  async findBySlug(slug: string): Promise<Wedding> {
+  async findBySlug(slug: string): Promise<any> {
     const wedding = await this.weddingModel.findOneAndUpdate(
       { slug },
       { $inc: { views: 1 } },
       { new: true }
-    ).exec();
+    ).lean().exec();
     if (!wedding) {
       throw new NotFoundException(`Wedding with slug "${slug}" not found`);
     }
-    return wedding;
+
+    const events = await this.weddingEventModel.find({ weddingId: wedding._id }).exec();
+    const timeline = await this.weddingTimelineModel.find({ weddingId: wedding._id }).exec();
+
+    return {
+      ...wedding,
+      events,
+      timeline,
+    };
   }
 
-  async update(slug: string, updateDto: any): Promise<Wedding> {
-    const wedding = await this.weddingModel.findOneAndUpdate(
-      { slug },
-      {
-        ...updateDto,
-        weddingDate: updateDto.weddingDate ? new Date(updateDto.weddingDate) : undefined,
-      },
-      { new: true }
-    ).exec();
-    
+  async update(slug: string, updateDto: any): Promise<any> {
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
     if (!wedding) {
       throw new NotFoundException(`Wedding with slug "${slug}" not found`);
     }
-    return wedding;
-  }
 
-  // RSVP methods
-  async createRsvp(slug: string, rsvpData: any): Promise<Rsvp> {
-    await this.findBySlug(slug);
-    const rsvp = new this.rsvpModel({
-      ...rsvpData,
-      weddingSlug: slug,
-    });
-    
-    // Tự động tìm kiếm trong guest list để cập nhật rsvpStatus
-    const normalizedRsvpName = rsvpData.name.trim().toLowerCase();
-    const guests = await this.guestModel.find({ weddingSlug: slug }).exec();
-    const matchedGuest = guests.find(g => g.name.trim().toLowerCase() === normalizedRsvpName);
-    
-    if (matchedGuest) {
-      matchedGuest.rsvpStatus = rsvpData.attend === 'yes' ? 'confirmed' : 'declined';
-      matchedGuest.guestsCount = rsvpData.attend === 'yes' ? Number(rsvpData.guests || 1) : 0;
-      await matchedGuest.save();
+    const { events, timeline, ...restDto } = updateDto;
+
+    // Cập nhật thông tin cơ bản
+    Object.assign(wedding, restDto);
+    if (updateDto.weddingDate) {
+      wedding.weddingDate = new Date(updateDto.weddingDate);
+    }
+    const saved = await wedding.save();
+
+    // Cập nhật events
+    if (events) {
+      await this.weddingEventModel.deleteMany({ weddingId: saved._id }).exec();
+      for (const evt of events) {
+        await new this.weddingEventModel({
+          ...evt,
+          weddingId: saved._id,
+          date: evt.date ? new Date(evt.date) : new Date(),
+        }).save();
+      }
     }
 
-    return rsvp.save();
+    // Cập nhật timeline
+    if (timeline) {
+      await this.weddingTimelineModel.deleteMany({ weddingId: saved._id }).exec();
+      for (const tl of timeline) {
+        await new this.weddingTimelineModel({
+          ...tl,
+          weddingId: saved._id,
+        }).save();
+      }
+    }
+
+    return this.findBySlug(slug);
   }
 
-  async findRsvps(slug: string): Promise<Rsvp[]> {
-    return this.rsvpModel.find({ weddingSlug: slug }).sort({ createdAt: -1 }).exec();
+  // RSVP methods (Lưu trực tiếp vào bảng Guest)
+  async createRsvp(slug: string, rsvpData: any): Promise<Guest> {
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) {
+      throw new NotFoundException(`Wedding with slug "${slug}" not found`);
+    }
+
+    const normalizedName = rsvpData.name.trim().toLowerCase();
+    let guest = await this.guestModel.findOne({ 
+      weddingId: wedding._id, 
+      name: new RegExp(`^${normalizedName}$`, 'i') 
+    }).exec();
+
+    if (guest) {
+      guest.rsvpStatus = rsvpData.attend === 'yes' ? 'confirmed' : 'declined';
+      guest.guestsCount = rsvpData.attend === 'yes' ? Number(rsvpData.guests || 1) : 0;
+      guest.note = rsvpData.message;
+      return guest.save();
+    } else {
+      const newGuest = new this.guestModel({
+        weddingId: wedding._id,
+        name: rsvpData.name,
+        rsvpStatus: rsvpData.attend === 'yes' ? 'confirmed' : 'declined',
+        guestsCount: rsvpData.attend === 'yes' ? Number(rsvpData.guests || 1) : 0,
+        note: rsvpData.message,
+      });
+      return newGuest.save();
+    }
+  }
+
+  async findRsvps(slug: string): Promise<Guest[]> {
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) return [];
+    return this.guestModel.find({ 
+      weddingId: wedding._id, 
+      rsvpStatus: { $ne: 'pending' } 
+    }).sort({ updatedAt: -1 }).exec();
   }
 
   // Guestbook methods
   async createGuestbook(slug: string, guestbookData: any): Promise<Guestbook> {
-    await this.findBySlug(slug);
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) {
+      throw new NotFoundException(`Wedding with slug "${slug}" not found`);
+    }
     const gb = new this.guestbookModel({
       ...guestbookData,
-      weddingSlug: slug,
+      weddingId: wedding._id,
     });
     return gb.save();
   }
 
   async findGuestbook(slug: string): Promise<Guestbook[]> {
-    return this.guestbookModel.find({ weddingSlug: slug }).sort({ createdAt: -1 }).exec();
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) return [];
+    return this.guestbookModel.find({ weddingId: wedding._id, isApproved: true }).sort({ createdAt: -1 }).exec();
   }
 
   // GUEST LIST CRUD
   async createGuest(slug: string, guestData: any): Promise<Guest> {
-    await this.findBySlug(slug);
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) {
+      throw new NotFoundException(`Wedding with slug "${slug}" not found`);
+    }
     const guest = new this.guestModel({
       ...guestData,
-      weddingSlug: slug,
+      weddingId: wedding._id,
     });
-    
-    // Check if RSVP exists for this guest
-    const normalizedName = guest.name.trim().toLowerCase();
-    const rsvp = await this.rsvpModel.findOne({ weddingSlug: slug, name: new RegExp(`^${normalizedName}$`, 'i') }).exec();
-    if (rsvp) {
-      guest.rsvpStatus = rsvp.attend === 'yes' ? 'confirmed' : 'declined';
-      guest.guestsCount = rsvp.attend === 'yes' ? Number(rsvp.guests || 1) : 0;
-    }
-
     return guest.save();
   }
 
   async findGuests(slug: string): Promise<Guest[]> {
-    return this.guestModel.find({ weddingSlug: slug }).sort({ createdAt: -1 }).exec();
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) return [];
+    return this.guestModel.find({ weddingId: wedding._id }).sort({ createdAt: -1 }).exec();
   }
 
   async updateGuest(slug: string, id: string, guestData: any): Promise<Guest> {
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) {
+      throw new NotFoundException(`Wedding with slug "${slug}" not found`);
+    }
     const guest = await this.guestModel.findOneAndUpdate(
-      { _id: id, weddingSlug: slug },
+      { _id: id, weddingId: wedding._id },
       guestData,
       { new: true }
     ).exec();
@@ -371,7 +538,11 @@ export class WeddingService implements OnModuleInit {
   }
 
   async deleteGuest(slug: string, id: string): Promise<any> {
-    const result = await this.guestModel.deleteOne({ _id: id, weddingSlug: slug }).exec();
+    const wedding = await this.weddingModel.findOne({ slug }).exec();
+    if (!wedding) {
+      throw new NotFoundException(`Wedding with slug "${slug}" not found`);
+    }
+    const result = await this.guestModel.deleteOne({ _id: id, weddingId: wedding._id }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(`Guest with ID "${id}" not found for wedding "${slug}"`);
     }

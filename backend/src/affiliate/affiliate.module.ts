@@ -5,12 +5,14 @@ import {
   PayoutRequest,
   PayoutRequestSchema,
 } from "./schemas/payout-request.schema";
+import { AffiliateLink, AffiliateLinkSchema } from "./schemas/affiliate-link.schema";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Commission.name, schema: CommissionSchema },
       { name: PayoutRequest.name, schema: PayoutRequestSchema },
+      { name: AffiliateLink.name, schema: AffiliateLinkSchema },
     ]),
   ],
   exports: [MongooseModule],
