@@ -6,7 +6,7 @@ import { ArrowLeft, Loader2, Save } from "lucide-react";
 
 export function AccountSettingsPage() {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Profile and Stats States
   const [profile, setProfile] = useState<any>(null);
@@ -31,11 +31,10 @@ export function AccountSettingsPage() {
 
   // Authenticate user
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
 
     if (
-      !savedToken ||
+      !savedRole ||
       (savedRole !== "user" && savedRole !== "staff" && savedRole !== "admin")
     ) {
       localStorage.clear();
@@ -43,19 +42,17 @@ export function AccountSettingsPage() {
       return;
     }
 
-    setToken(savedToken);
+    setIsLoggedIn(true);
   }, [router]);
 
-  // Fetch profile on token load
+  // Fetch profile on logged in load
   useEffect(() => {
-    if (!token) return;
+    if (!isLoggedIn) return;
 
     const fetchProfile = async () => {
       try {
         const res = await fetch("http://localhost:8080/api/users/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -82,11 +79,11 @@ export function AccountSettingsPage() {
     };
 
     fetchProfile();
-  }, [token]);
+  }, [isLoggedIn]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) return;
+    if (!isLoggedIn) return;
 
     setSaving(true);
     setError(null);
@@ -97,8 +94,8 @@ export function AccountSettingsPage() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({
           name,
           phone,
@@ -150,7 +147,7 @@ export function AccountSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0e0d] text-slate-200 font-sans p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-[#0f0e0d] text-slate-200 font-sans p-4 sm:p-6 md:p-8 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header section */}
         <div className="flex items-center justify-between border-b border-stone-800/80 pb-4">
@@ -381,13 +378,13 @@ export function AccountSettingsPage() {
                 <span className="text-white font-bold">
                   {(
                     {
-                      free: "Thường",
-                      premium: "Premium",
-                      business: "Business",
+                      user: "Khách hàng",
+                      collaborator: "Cộng tác viên",
+                      admin: "Quản trị viên",
                     } as any
                   )[profile?.accountType?.toLowerCase()] ||
                     profile?.accountType ||
-                    "Thường"}
+                    "Khách hàng"}
                 </span>
               </div>
 

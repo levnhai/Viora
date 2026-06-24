@@ -12,6 +12,7 @@ import {
   Monitor,
   Check,
   Copy,
+  Share2,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -33,8 +34,12 @@ export function WeddingEditorPage({
   const searchParams = useSearchParams();
   const initialTemplateId = Number(searchParams?.get("templateId")) || 1;
 
-  // View state cho mobile (Chỉnh sửa vs Xem trước)
+  // View state (Chỉnh sửa vs Xem trước)
   const [editorView, setEditorView] = useState<"edit" | "preview">("edit");
+
+  // Dropdown states
+  const [showTemplateDropdown, setShowTemplateDropdown] = useState(false);
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
 
   // Chế độ xem trước (Phong bì vs Thiệp mời)
   const [previewMode, setPreviewMode] = useState<"envelope" | "invitation">(
@@ -45,8 +50,8 @@ export function WeddingEditorPage({
   );
 
   // Trạng thái Xác thực & Tài khoản
-  const [token, setToken] = useState<string | null>(
-    typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    typeof window !== "undefined" ? !!localStorage.getItem("role") : false,
   );
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
@@ -140,7 +145,9 @@ export function WeddingEditorPage({
   // Quản lý danh sách template đã mua lẻ
   const [purchasedTemplates, setPurchasedTemplates] = useState<number[]>([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [upgradeTemplateId, setUpgradeTemplateId] = useState<number | null>(null);
+  const [upgradeTemplateId, setUpgradeTemplateId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -176,7 +183,9 @@ export function WeddingEditorPage({
   useEffect(() => {
     if (isEditMode && weddingSlug) {
       setLoading(true);
-      fetch(`http://localhost:8080/api/weddings/${weddingSlug}`)
+      fetch(`http://localhost:8080/api/weddings/${weddingSlug}`, {
+        credentials: "include"
+      })
         .then((res) => {
           if (!res.ok) throw new Error("Không thể tải thông tin thiệp cưới!");
           return res.json();
@@ -254,7 +263,9 @@ export function WeddingEditorPage({
 
     const selectedTemplate =
       TEMPLATES.find((t) => t.id === weddingData.templateId) || TEMPLATES[0];
-    const isOwned = selectedTemplate.price === 0 || purchasedTemplates.includes(selectedTemplate.id);
+    const isOwned =
+      selectedTemplate.price === 0 ||
+      purchasedTemplates.includes(selectedTemplate.id);
     if (!isOwned) {
       setUpgradeTemplateId(selectedTemplate.id);
       setShowUpgradeModal(true);
@@ -276,7 +287,7 @@ export function WeddingEditorPage({
       slug = `${normalizedGroom}-${normalizedBride}`;
     }
 
-    if (!token) {
+    if (!isLoggedIn) {
       setShowAuthModal(true);
       return;
     }
@@ -293,9 +304,9 @@ export function WeddingEditorPage({
       const response = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({ ...weddingData, slug }),
       });
 
@@ -354,13 +365,12 @@ export function WeddingEditorPage({
         throw new Error(resData.message || "Xác thực thất bại!");
       }
 
-      const { token: userToken, role, weddingSlug: userSlug } = resData.data;
-      localStorage.setItem("token", userToken);
+      const { role, weddingSlug: userSlug } = resData.data;
       localStorage.setItem("role", role);
       localStorage.setItem("username", authForm.username);
       if (userSlug) localStorage.setItem("weddingSlug", userSlug);
 
-      setToken(userToken);
+      setIsLoggedIn(true);
       setShowAuthModal(false);
 
       setTimeout(() => {
@@ -394,9 +404,10 @@ export function WeddingEditorPage({
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-[#0c0a09] text-slate-100 flex flex-col font-sans select-none antialiased">
+    <div className="h-screen overflow-hidden bg-[#0c0a09] text-slate-100 flex flex-col font-sans select-none antialiased pb-16 md:pb-0">
       {/* ── HEADER ─────────────────────────────────────────────────────────── */}
       <header className="bg-[#0c0a09]/95 border-b border-[#292524] backdrop-blur-md sticky top-0 z-40 px-4 h-16 flex items-center justify-between shadow-md">
+        {/* BÊN TRÁI: Back + Dropdown mẫu thiệp + Dropdown Ngôn ngữ */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/")}
@@ -405,66 +416,176 @@ export function WeddingEditorPage({
             <ArrowLeft size={18} />
           </button>
 
-          <div className="h-4 w-px bg-[#292524] hidden sm:block" />
+          {/* Template Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowTemplateDropdown(!showTemplateDropdown)}
+              className="bg-white/95 hover:bg-white text-slate-800 border border-slate-200 shadow-xs flex items-center gap-2 pl-1 pr-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer select-none"
+            >
+              <div className="w-6 h-6 rounded-full overflow-hidden border border-slate-100 flex-shrink-0 relative">
+                <img
+                  src={selectedTemplate.preview}
+                  alt={selectedTemplate.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="truncate max-w-[100px] sm:max-w-[150px]">
+                {selectedTemplate.name}
+              </span>
+              <span className="text-[8px] text-slate-500 font-bold">▼</span>
+            </button>
 
-          {/* Template Badge */}
-          <div className="flex items-center gap-2 bg-gradient-to-r from-red-950 to-red-900 border border-red-800/40 px-3 py-1.5 rounded-full text-xs font-semibold text-red-100 shadow-inner">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            <span>
-              {TEMPLATES.find((t) => t.id === weddingData.templateId)?.name ||
-                "Mẫu thiệp"}
-            </span>
-            <span className="hidden xs:inline text-[10px] text-red-300/80 font-normal">
-              / {weddingData.groomShortName || "Chú rể"} -{" "}
-              {weddingData.brideShortName || "Cô dâu"}
-            </span>
+            {showTemplateDropdown && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-transparent"
+                  onClick={() => setShowTemplateDropdown(false)}
+                />
+                <div className="absolute top-10 left-0 bg-[#1c1917] border border-[#292524] rounded-2xl p-2 w-64 shadow-2xl z-50 animate-fade-in flex flex-col gap-1">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 py-1.5 border-b border-[#292524]">
+                    Chọn mẫu thiệp cưới
+                  </p>
+                  {TEMPLATES.map((tpl) => {
+                    const isOwned =
+                      tpl.price === 0 || purchasedTemplates.includes(tpl.id);
+                    const isCurrent = tpl.id === weddingData.templateId;
+                    return (
+                      <button
+                        key={tpl.id}
+                        onClick={() => {
+                          const isOwned =
+                            tpl.price === 0 ||
+                            purchasedTemplates.includes(tpl.id);
+                          if (!isOwned) {
+                            setUpgradeTemplateId(tpl.id);
+                            setShowUpgradeModal(true);
+                          } else {
+                            updateField(["templateId"], tpl.id);
+                          }
+                          setShowTemplateDropdown(false);
+                        }}
+                        className={`flex items-center gap-3 p-2 rounded-xl cursor-pointer transition-colors border-0 text-left bg-transparent w-full ${
+                          isCurrent
+                            ? "bg-[#292524] text-white"
+                            : "hover:bg-[#292524]/50 text-slate-300 hover:text-white"
+                        }`}
+                      >
+                        <div className="w-10 h-12 rounded-lg overflow-hidden border border-[#292524] flex-shrink-0 relative">
+                          <img
+                            src={tpl.preview}
+                            alt={tpl.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold truncate">
+                            {tpl.name}
+                          </p>
+                          <p className="text-[10px] text-slate-500 truncate">
+                            {tpl.style}
+                          </p>
+                        </div>
+                        {isOwned ? (
+                          <span className="text-[9px] text-green-400 bg-green-950/40 px-1.5 py-0.5 rounded border border-green-900/40 flex-shrink-0">
+                            Sở hữu
+                          </span>
+                        ) : (
+                          <span className="text-[9px] text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-900/40 flex-shrink-0">
+                            {tpl.price.toLocaleString("vi-VN")}đ
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Ngôn ngữ */}
-          <div className="hidden md:flex items-center gap-1 bg-[#1c1917] border border-[#292524] px-3 py-1.5 rounded-full text-[11px] text-slate-300 font-medium">
-            <span>Tiếng Việt</span>
-            <span className="text-[8px] text-slate-500">▼</span>
+          <div className="relative">
+            <button
+              onClick={() => setShowLangDropdown(!showLangDropdown)}
+              className="bg-[#1c1917]/85 hover:bg-[#292524] border border-[#292524] px-4 py-1.5 rounded-full text-xs text-slate-300 font-medium cursor-pointer transition-all flex items-center gap-1.5 select-none"
+            >
+              <span>Tiếng Việt</span>
+              <span className="text-[8px] text-slate-500">▼</span>
+            </button>
+            {showLangDropdown && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-transparent"
+                  onClick={() => setShowLangDropdown(false)}
+                />
+                <div className="absolute top-10 left-0 bg-[#1c1917] border border-[#292524] rounded-xl p-1 w-32 shadow-xl z-50 flex flex-col gap-1">
+                  {["Tiếng Việt", "English"].map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setShowLangDropdown(false)}
+                      className="px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-[#292524]/60 rounded-lg text-left border-0 bg-transparent w-full cursor-pointer"
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Tab chuyển đổi Edit / Preview trên Mobile */}
-        <div className="flex lg:hidden bg-[#1c1917] p-1 rounded-full border border-[#292524]">
+        {/* Ở GIỮA: Tab chuyển đổi Chỉnh sửa / Xem trước */}
+        <div className="flex bg-[#1c1917] p-1 rounded-full border border-[#292524] items-center">
           <button
             onClick={() => setEditorView("edit")}
-            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all border-0 cursor-pointer ${
+            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all border-0 cursor-pointer flex items-center gap-1.5 ${
               editorView === "edit"
                 ? "bg-[#292524] text-white shadow-xs"
                 : "bg-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
-            Chỉnh sửa
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-3.5 h-3.5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+              />
+            </svg>
+            <span>Chỉnh sửa</span>
           </button>
           <button
             onClick={() => setEditorView("preview")}
-            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all border-0 cursor-pointer ${
+            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all border-0 cursor-pointer flex items-center gap-1.5 ${
               editorView === "preview"
                 ? "bg-[#292524] text-white shadow-xs"
                 : "bg-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
-            Xem trước
+            <Eye size={13} />
+            <span>Xem trước</span>
           </button>
         </div>
 
-        {/* Trạng thái Gói & Nút Xuất bản */}
+        {/* BÊN PHẢI: Nút Chia sẻ */}
         <div className="flex items-center gap-3">
           {(() => {
-            const isOwned = selectedTemplate.price === 0 || purchasedTemplates.includes(selectedTemplate.id);
+            const isOwned =
+              selectedTemplate.price === 0 ||
+              purchasedTemplates.includes(selectedTemplate.id);
             return (
               <span
-                className={`hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                className={`hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold border ${
                   isOwned
-                    ? "bg-green-950/40 text-green-400 border-green-800/50"
-                    : "bg-amber-950/40 text-amber-400 border-amber-800/50"
+                    ? "bg-emerald-950/20 text-emerald-400 border-emerald-800/45"
+                    : "bg-amber-950/20 text-amber-400 border-amber-800/45"
                 }`}
-              >
-                {isOwned ? "Đã sở hữu" : "Chưa mở khóa"}
-              </span>
+              ></span>
             );
           })()}
 
@@ -476,29 +597,31 @@ export function WeddingEditorPage({
             {publishing ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Save size={14} />
+              <Share2 size={13} />
             )}
-            <span>Xuất bản</span>
+            <span>Chia sẻ</span>
           </button>
         </div>
       </header>
 
       {/* ── WORKSPACE ──────────────────────────────────────────────────────── */}
-      <div className="flex-1 overflow-hidden bg-[#0c0a09] flex flex-col lg:flex-row">
-        {/* EDIT PANEL (TRÁI) */}
+      <div className="flex-1 overflow-hidden bg-[#0c0a09] flex flex-col">
+        {/* EDIT PANEL (GIỮA) */}
         <div
-          className={`w-full lg:w-[450px] xl:w-[550px] lg:flex-shrink-0 lg:border-r border-[#292524] overflow-y-auto h-full ${
-            editorView === "edit" ? "block" : "hidden lg:block"
+          className={`w-full overflow-y-auto h-full ${
+            editorView === "edit" ? "block" : "hidden"
           }`}
         >
-          {/* Tải Form chỉnh sửa động của từng template package */}
-          <EditView weddingData={weddingData} updateField={updateField} />
+          <div className="max-w-3xl mx-auto px-4 py-8">
+            {/* Tải Form chỉnh sửa động của từng template package */}
+            <EditView weddingData={weddingData} updateField={updateField} />
+          </div>
         </div>
 
-        {/* PREVIEW PANEL (PHẢI) */}
+        {/* PREVIEW PANEL (FULL SCREEN) */}
         <div
           className={`flex-1 overflow-y-auto bg-[#0c0a09] relative ${
-            editorView === "preview" ? "block" : "hidden lg:block"
+            editorView === "preview" ? "block" : "hidden"
           }`}
         >
           <div className="flex flex-col items-center justify-start p-4 sm:p-8 min-h-full">
@@ -563,7 +686,8 @@ export function WeddingEditorPage({
               <div className="relative bg-black rounded-[52px] p-4 shadow-2xl border-4 border-[#292524] overflow-hidden flex flex-col mb-4 transition-all duration-300">
                 {/* Dynamic Island */}
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-40 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#111] absolute right-6" /> {/* Camera */}
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#111] absolute right-6" />{" "}
+                  {/* Camera */}
                 </div>
 
                 <div className="overflow-y-auto w-[393px] h-[852px] rounded-[38px] relative scroll-smooth bg-[#fdf6ef] mockup-screen-content">
@@ -646,7 +770,8 @@ export function WeddingEditorPage({
               </p>
               <div className="flex items-center justify-between gap-2 bg-[#1c1917] px-3.5 py-2.5 rounded-lg border border-[#292524]">
                 <span className="font-mono text-[#db2777] font-semibold text-[11px] truncate">
-                  {typeof window !== "undefined" ? window.location.origin : ""}/w/{publishedSlug}
+                  {typeof window !== "undefined" ? window.location.origin : ""}
+                  /w/{publishedSlug}
                 </span>
                 <button
                   onClick={() => {
@@ -815,73 +940,93 @@ export function WeddingEditorPage({
       )}
 
       {/* ── BUY TEMPLATE MODAL ───────────────────────────────────────────── */}
-      {showUpgradeModal && (() => {
-        const targetTpl = TEMPLATES.find(t => t.id === (upgradeTemplateId || weddingData.templateId)) || selectedTemplate;
-        return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 animate-fade-in">
-            <div className="bg-[#1c1917] border border-[#292524] rounded-3xl p-8 max-w-md w-full shadow-2xl text-center space-y-6">
-              <div className="w-16 h-16 bg-[#db2777]/10 border border-[#db2777]/30 text-[#db2777] rounded-full flex items-center justify-center mx-auto text-2xl">
-                💝
-              </div>
+      {showUpgradeModal &&
+        (() => {
+          const targetTpl =
+            TEMPLATES.find(
+              (t) => t.id === (upgradeTemplateId || weddingData.templateId),
+            ) || selectedTemplate;
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 animate-fade-in">
+              <div className="bg-[#1c1917] border border-[#292524] rounded-3xl p-8 max-w-md w-full shadow-2xl text-center space-y-6">
+                <div className="w-16 h-16 bg-[#db2777]/10 border border-[#db2777]/30 text-[#db2777] rounded-full flex items-center justify-center mx-auto text-2xl">
+                  💝
+                </div>
 
-              <div className="space-y-2">
-                <h3
-                  className="text-2xl font-semibold text-white font-sans"
-                  style={{ fontFamily: "'EB Garamond', serif" }}
-                >
-                  Mở khóa mẫu thiệp cưới
-                </h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                  Mẫu thiệp cưới <strong className="text-[#db2777]">{targetTpl.name}</strong> là mẫu trả phí. Bạn vui lòng thanh toán một lần để sở hữu trọn đời và xuất bản thiệp mời này.
-                </p>
-              </div>
+                <div className="space-y-2">
+                  <h3
+                    className="text-2xl font-semibold text-white font-sans"
+                    style={{ fontFamily: "'EB Garamond', serif" }}
+                  >
+                    Mở khóa mẫu thiệp cưới
+                  </h3>
+                  <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                    Mẫu thiệp cưới{" "}
+                    <strong className="text-[#db2777]">{targetTpl.name}</strong>{" "}
+                    là mẫu trả phí. Bạn vui lòng thanh toán một lần để sở hữu
+                    trọn đời và xuất bản thiệp mời này.
+                  </p>
+                </div>
 
-              <div className="bg-[#0c0a09]/50 border border-[#292524] p-4 rounded-2xl text-left text-xs space-y-2 text-slate-300">
-                <p className="flex items-center gap-2 font-semibold text-[#db2777]">
-                  ✨ Quyền lợi khi sở hữu mẫu {targetTpl.name}:
-                </p>
-                <ul className="space-y-1.5 list-disc list-inside pl-1">
-                  <li>Sử dụng toàn bộ tính năng và bố cục của mẫu thiệp này</li>
-                  <li>Tải lên album ảnh chất lượng HD không giới hạn</li>
-                  <li>Không giới hạn số lượt khách truy cập và phản hồi RSVP</li>
-                  <li>Hỗ trợ nhạc nền lãng mạn, hiệu ứng mở phong bì độc quyền</li>
-                  <li>Mở khóa vĩnh viễn, không phát sinh chi phí duy trì</li>
-                </ul>
-              </div>
+                <div className="bg-[#0c0a09]/50 border border-[#292524] p-4 rounded-2xl text-left text-xs space-y-2 text-slate-300">
+                  <p className="flex items-center gap-2 font-semibold text-[#db2777]">
+                    ✨ Quyền lợi khi sở hữu mẫu {targetTpl.name}:
+                  </p>
+                  <ul className="space-y-1.5 list-disc list-inside pl-1">
+                    <li>
+                      Sử dụng toàn bộ tính năng và bố cục của mẫu thiệp này
+                    </li>
+                    <li>Tải lên album ảnh chất lượng HD không giới hạn</li>
+                    <li>
+                      Không giới hạn số lượt khách truy cập và phản hồi RSVP
+                    </li>
+                    <li>
+                      Hỗ trợ nhạc nền lãng mạn, hiệu ứng mở phong bì độc quyền
+                    </li>
+                    <li>Mở khóa vĩnh viễn, không phát sinh chi phí duy trì</li>
+                  </ul>
+                </div>
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    const updated = [...purchasedTemplates, targetTpl.id];
-                    setPurchasedTemplates(updated);
-                    localStorage.setItem("purchasedTemplates", JSON.stringify(updated));
-                    setShowUpgradeModal(false);
-                    confetti({
-                      particleCount: 100,
-                      spread: 70,
-                      origin: { y: 0.6 },
-                    });
-                    setTimeout(() => {
-                      alert(
-                        `Mở khóa mẫu thiệp "${targetTpl.name}" thành công! Bạn có thể chỉnh sửa và xuất bản mẫu thiệp này.`
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      const updated = [...purchasedTemplates, targetTpl.id];
+                      setPurchasedTemplates(updated);
+                      localStorage.setItem(
+                        "purchasedTemplates",
+                        JSON.stringify(updated),
                       );
-                    }, 100);
-                  }}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-[#db2777] to-pink-600 hover:opacity-95 text-white rounded-xl text-xs font-semibold active:scale-95 transition-all cursor-pointer border-0 shadow-md flex items-center justify-center gap-1.5 font-sans"
-                >
-                  <span>Thanh toán mở khóa: {targetTpl.price.toLocaleString("vi-VN")}đ</span>
-                </button>
-                <button
-                  onClick={() => setShowUpgradeModal(false)}
-                  className="px-4 py-3.5 bg-[#292524] hover:bg-[#3f3935] text-slate-200 rounded-xl text-xs font-semibold active:scale-95 transition-all cursor-pointer border-0 font-sans"
-                >
-                  Đóng
-                </button>
+                      updateField(["templateId"], targetTpl.id);
+                      setShowUpgradeModal(false);
+                      confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                      });
+                      setTimeout(() => {
+                        alert(
+                          `Mở khóa mẫu thiệp "${targetTpl.name}" thành công! Bạn có thể chỉnh sửa và xuất bản mẫu thiệp này.`,
+                        );
+                      }, 100);
+                    }}
+                    className="flex-1 py-3.5 bg-gradient-to-r from-[#db2777] to-pink-600 hover:opacity-95 text-white rounded-xl text-xs font-semibold active:scale-95 transition-all cursor-pointer border-0 shadow-md flex items-center justify-center gap-1.5 font-sans"
+                  >
+                    <span>
+                      Thanh toán mở khóa:{" "}
+                      {targetTpl.price.toLocaleString("vi-VN")}đ
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setShowUpgradeModal(false)}
+                    className="px-4 py-3.5 bg-[#292524] hover:bg-[#3f3935] text-slate-200 rounded-xl text-xs font-semibold active:scale-95 transition-all cursor-pointer border-0 font-sans"
+                  >
+                    Đóng
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })()}
+          );
+        })()}
     </div>
   );
 }

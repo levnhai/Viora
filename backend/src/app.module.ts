@@ -7,6 +7,7 @@ import { RequestModule } from './request/request.module';
 import { WeddingModule } from './wedding/wedding.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { AffiliateModule } from './affiliate/affiliate.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UserModule } from './user/user.module';
     WeddingModule,
     AuthModule,
     UserModule,
+    AffiliateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

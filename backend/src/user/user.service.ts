@@ -59,7 +59,7 @@ export class UserService {
         email: user.email || (user.username.includes('@') ? user.username : ''),
         emailNotification: user.emailNotification !== false,
         showOnHomepage: user.showOnHomepage !== false,
-        accountType: user.accountType || 'Thường',
+        accountType: user.accountType || 'user',
         securityType: user.securityType || 'Magic link',
         createdAt: user['createdAt'] || new Date(),
       },

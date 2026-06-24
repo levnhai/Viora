@@ -162,6 +162,7 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
       <WeddingNavigation
         groomName={weddingData.groomName}
         brideName={weddingData.brideName}
+        isFixed={!previewMode}
       />
 
       {/* Audio player */}

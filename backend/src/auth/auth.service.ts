@@ -48,10 +48,10 @@ export class AuthService implements OnModuleInit {
     const displayName = username.split('@')[0];
     const emailValue = username.includes('@') ? username : '';
     
-    // Determine default account type based on role (standard users default to 'free')
-    let defaultAccountType = 'free';
-    if (role === 'admin') defaultAccountType = 'business';
-    if (role === 'staff') defaultAccountType = 'premium';
+    // Determine default account type based on role
+    let defaultAccountType = 'user';
+    if (role === 'admin') defaultAccountType = 'admin';
+    if (role === 'staff') defaultAccountType = 'collaborator';
 
     const user = new this.userModel({
       username,

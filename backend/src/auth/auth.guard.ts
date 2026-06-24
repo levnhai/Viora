@@ -8,13 +8,18 @@ export class AuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authorization;
+    let token = request.cookies?.token;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Thiếu mã token xác thực');
+    if (!token) {
+      const authHeader = request.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
+      }
     }
 
-    const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('Thiếu mã token xác thực');
+    }
     const secret = this.configService.get<string>('JWT_SECRET') || 'viora_wedding_secret_key';
 
     try {

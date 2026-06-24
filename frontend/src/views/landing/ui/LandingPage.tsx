@@ -25,7 +25,7 @@ export function LandingPage({ onPreviewDemo }: LandingPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen bg-background text-foreground pb-16 md:pb-0" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Header onOpenRequest={() => handleStartCreating(1)} />
       
       <Hero 

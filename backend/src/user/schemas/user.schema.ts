@@ -32,8 +32,8 @@ export class User {
   @Prop({ default: true })
   showOnHomepage: boolean;
 
-  @Prop({ default: 'free' })
-  accountType: string;
+  @Prop({ default: 'user' })
+  accountType: string; // 'user' | 'collaborator' | 'admin'
 
   @Prop({ default: 'Magic link' })
   securityType: string;

@@ -60,16 +60,6 @@ export function EditView({ weddingData, updateField }: EditViewProps) {
 
   return (
     <div className="w-full mx-auto px-4 py-8 space-y-6">
-      {/* Khối Header nhỏ giới thiệu template đang chỉnh sửa */}
-      <div className="bg-[#1c1917] border border-[#292524] rounded-2xl p-4 text-center">
-        <h3 className="text-sm font-semibold text-slate-200">
-          Mẫu đang sửa: Tinh Giản (Minimal)
-        </h3>
-        <p className="text-[10px] text-slate-400 mt-1">
-          Mẫu thiệp cưới tối giản, hiện đại và hoàn toàn miễn phí.
-        </p>
-      </div>
-
       {/* ACCORDION 0: THIẾT KẾ & CHỌN MẪU */}
       <div className="bg-[#1c1917] border border-[#292524] rounded-2xl overflow-hidden shadow-xs">
         <div

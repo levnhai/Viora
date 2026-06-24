@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Heart, Menu, X, Sun, Check } from "lucide-react";
 import Link from "next/link";
+import { authService } from "@/features/auth/api/authService";
 
 interface HeaderProps {
   onOpenRequest: () => void;
@@ -19,19 +20,23 @@ export function Header({ onOpenRequest }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
     const name = localStorage.getItem("name") || "";
     const email = localStorage.getItem("username") || "";
     const picture = localStorage.getItem("picture") || undefined;
 
-    if (token) {
+    if (role) {
       setIsLoggedIn(true);
       setUserProfile({ name, email, picture });
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.error("Lỗi đăng xuất:", err);
+    }
     localStorage.removeItem("role");
     localStorage.removeItem("username");
     localStorage.removeItem("name");
