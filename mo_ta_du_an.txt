@@ -90,10 +90,16 @@ Dự án sử dụng cấu trúc Monorepo đơn giản với hai thư mục chí
   └── shared/                # UI dùng chung (FadeIn), hooks (useCountdown), các kiểu dữ liệu chung
 
 * CHI TIẾT BACKEND (backend/src/)
-  ├── auth/                  # Xử lý đăng ký, đăng nhập và phân quyền Token (JWT)
-  ├── wedding/               # Xử lý CRUD dữ liệu đám cưới, lưu bút, phản hồi RSVP khách mời
-  ├── user/                  # Quản lý người dùng và mở khóa các mẫu thiệp
-  └── main.ts                # Khởi chạy ứng dụng Server NestJS (Cổng 8080)
+  ├── auth/                  # Đăng ký, đăng nhập, OTP, Refresh Token, Password Reset
+  ├── user/                  # Quản lý hồ sơ cá nhân và vai trò người dùng (customer, affiliate, admin)
+  ├── wedding/               # CRUD thiệp cưới, lưu bút (guestbook), danh sách khách mời (guest)
+  │   ├── schemas/           # Chứa wedding, guest, guestbook, wedding-event, wedding-timeline schemas
+  ├── template/              # Quản lý danh mục mẫu thiệp và nhật ký mua mẫu thiệp lẻ (template, template-purchase)
+  ├── payment/               # Ghi nhận hóa đơn giao dịch thanh toán (payment)
+  ├── media/                 # Quản lý tải lên tệp tin ảnh cưới, cover, avatar (media)
+  ├── affiliate/             # Quản lý link giới thiệu CTV, tính toán hoa hồng và rút tiền (affiliate-link, commission, payout-request)
+  ├── audit/                 # Nhật ký kiểm toán và ghi nhận hoạt động hệ thống (audit-log)
+  └── main.ts                # Khởi chạy ứng dụng Server NestJS (Cổng 3000 hoặc 8080)
 
 
 4. CẤU TRÚC BIỂU PHÍ & MÔ HÌNH BÁN TEMPLATE (PAY-PER-TEMPLATE MODEL)
@@ -133,8 +139,10 @@ Người dùng thanh toán một lần để mở khóa vĩnh viễn mẫu thi�
    - Nếu template đã chọn có giá lớn hơn 0 và người dùng chưa mua mẫu thiệp này trước đó, 
      hộp thoại Mở khóa mẫu thiệp cưới sẽ hiện ra.
    - Hệ thống hiển thị QR chuyển khoản tương ứng với giá bán lẻ của template (199.000đ hoặc 299.000đ).
-   - Sau khi thanh toán thành công (hoặc giả lập thành công tại client), ID của template sẽ 
-     được thêm vào danh sách `purchasedTemplates` (đã mua) trong tài khoản.
+   - Sau khi thanh toán thành công (hoặc giả lập thành công tại client), một bản ghi giao dịch 
+     thanh toán sẽ được lưu vào `payments`, đồng thời tạo quyền sở hữu trong `template_purchases` 
+     để mở khóa mẫu thiệp tương ứng cho tài khoản người dùng. Nếu thông qua link CTV, hoa hồng 
+     sẽ được tự động tính toán và ghi nhận vào bảng `commissions`.
 5. Xuất bản thiệp chính thức:
    - Thiệp cưới chính thức hoạt động tại địa chỉ `thieponline.vn/w/[weddingSlug]`.
    - Cặp đôi copy đường dẫn để chia sẻ tới bạn bè, người thân qua Zalo, Messenger, SMS...
@@ -165,12 +173,38 @@ Người dùng thanh toán một lần để mở khóa vĩnh viễn mẫu thi�
   Mở tệp `src/entities/template/model/registry.ts`, import package mới tạo và ánh xạ theo `templateId`.
 
 
-7. ĐỊNH HƯỚNG PHÁT TRIỂN & MỞ RỘNG (FUTURE ROADMAP)
+8. HỆ THỐNG CƠ SỞ DỮ LIỆU (DATABASE SCHEMAS)
 ------------------------------------------------------------------------
-a. Đa dạng hóa loại hình thiệp mời (Multi-Event Types):
-   - Mở rộng thêm các loại thiệp sự kiện khác như: Thiệp thôi nôi/Sinh nhật, Thiệp tân gia, Thiệp khai trương.
+Hệ thống sử dụng MongoDB làm cơ sở dữ liệu chính với 18 Collections chính được thiết kế chuẩn hóa và phân rã các mảng nhúng phức tạp để tối ưu hiệu năng:
 
-b. Hệ thống Phân quyền Đa người dùng & Marketplace:
-   - Freelancer (Designer/Creator): Có cổng portal riêng để tải lên các mẫu thiệp tự thiết kế và hưởng phần trăm hoa hồng từ doanh thu bán lẻ mẫu thiệp đó.
-   - Admin: Phê duyệt hoặc từ chối các mẫu thiệp do cộng đồng đóng góp và quản lý báo cáo tài chính.
+a. Nhóm Auth & Người dùng:
+   - `users`: Quản lý tài khoản, thông tin liên hệ, phân quyền vai trò (user, staff, admin) và loại tài khoản (customer, affiliate, admin).
+   - `refresh_tokens`: Lưu trữ Refresh Token băm bảo mật kèm TTL index tự động hết hạn.
+   - `password_resets`: Mã khôi phục mật khẩu gửi qua email kèm TTL index.
+   - `otps`: Mã OTP xác thực đăng nhập nhanh không mật khẩu.
+
+b. Nhóm Thiết kế & Giao diện (Templates):
+   - `templates`: Chứa thông tin cấu hình giao diện, mã code, danh mục, phiên bản và giá bán lẻ.
+   - `template_purchases`: Nhật ký ghi nhận các giao dịch mua lẻ thành công mẫu thiệp của khách hàng.
+
+c. Nhóm Nội dung thiệp & Khách mời:
+   - `weddings`: Chứa thông tin cơ bản cô dâu chú rể, cấu hình SEO, cấu hình nhạc nền/ẩn hiện tính năng và trạng thái xuất bản thiệp.
+   - `wedding_events`: Các buổi lễ chi tiết (Lễ Vu Quy, Thành Hôn, Tiệc Cưới...) liên kết qua `weddingId`.
+   - `wedding_timelines`: Câu chuyện tình yêu dạng dòng sự kiện liên kết qua `weddingId`.
+   - `guests`: Danh sách khách mời, mã QR Check-in điểm danh, số bàn tiệc, và phản hồi tham dự RSVP kèm lời nhắn (gộp từ bảng rsvps cũ).
+   - `guestbooks`: Lời chúc lưu bút từ khách mời gửi tới thiệp cưới, hỗ trợ kiểm duyệt hiển thị qua `isApproved`.
+   - `media`: Quản lý siêu dữ liệu các ảnh cưới, ảnh bìa, avatar tải lên hệ thống.
+
+d. Nhóm Thanh toán & Affiliate (CTV):
+   - `payments`: Nhật ký hóa đơn chi tiết giao dịch (userId, templateId, transactionId từ ngân hàng, amount, status).
+   - `affiliate_links`: Thống kê click link giới thiệu và số lượt chuyển đổi thành công của CTV.
+   - `commissions`: Lịch sử ghi nhận hoa hồng tương ứng cho CTV khi có đơn thanh toán thành công qua link giới thiệu.
+   - `payout_requests`: Yêu cầu rút số dư hoa hồng tích lũy của CTV gửi tới Admin duyệt chi.
+
+e. Nhóm Quản trị & Tin tức:
+   - `news`: Quản lý bài viết blog, tin tức cập nhật trên trang chủ do staff/admin soạn thảo.
+   - `audit_logs`: Nhật ký kiểm toán hệ thống ghi lại vết hành động (log login, log edit wedding, IP, UserAgent) phục vụ bảo mật.
+
 ========================================================================
+
+
