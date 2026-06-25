@@ -3,15 +3,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RequestModule } from './request/request.module';
-import { WeddingModule } from './wedding/wedding.module';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { AffiliateModule } from './affiliate/affiliate.module';
-import { TemplateModule } from './template/template.module';
-import { MediaModule } from './media/media.module';
-import { PaymentModule } from './payment/payment.module';
-import { AuditModule } from './audit/audit.module';
+import { SystemModule } from './modules/system/system.module';
+import { WeddingsModule } from './modules/weddings/weddings.module';
+import { GuestsModule } from './modules/guests/guests.module';
+import { GuestbooksModule } from './modules/guestbooks/guestbooks.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { AffiliatesModule } from './modules/affiliates/affiliates.module';
+import { TemplatesModule } from './modules/templates/templates.module';
+import { MediaModule } from './modules/media/media.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { NewsModule } from './modules/news/news.module';
 
 @Module({
   imports: [
@@ -28,15 +30,17 @@ import { AuditModule } from './audit/audit.module';
       }),
       inject: [ConfigService],
     }),
-    RequestModule,
-    WeddingModule,
+    SystemModule,
+    WeddingsModule,
+    GuestsModule,
+    GuestbooksModule,
     AuthModule,
-    UserModule,
-    AffiliateModule,
-    TemplateModule,
+    UsersModule,
+    AffiliatesModule,
+    TemplatesModule,
     MediaModule,
-    PaymentModule,
-    AuditModule,
+    PaymentsModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
