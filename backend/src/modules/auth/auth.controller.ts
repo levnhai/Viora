@@ -42,16 +42,30 @@ export class AuthController {
   @Post('register')
   async register(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: express.Response,
   ) {
     const data = await this.authService.register(
       loginDto.username,
       loginDto.password,
+      loginDto.fullName,
+      loginDto.phone,
     );
+    return {
+      success: true,
+      message: data.message,
+    };
+  }
+
+  @Post('register-verify-otp')
+  async registerVerifyOtp(
+    @Body('email') email: string,
+    @Body('code') code: string,
+    @Res({ passthrough: true }) res: express.Response,
+  ) {
+    const data = await this.authService.registerVerifyOtp(email, code);
     this.setTokenCookie(res, data.token);
     return {
       success: true,
-      message: 'Đăng ký tài khoản thành công!',
+      message: 'Kích hoạt tài khoản và đăng nhập thành công!',
       data: {
         role: data.role,
         weddingSlug: data.weddingSlug,
@@ -59,6 +73,28 @@ export class AuthController {
         email: data.email,
       },
     };
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('verify-forgot-password-otp')
+  async verifyForgotPasswordOtp(
+    @Body('email') email: string,
+    @Body('code') code: string,
+  ) {
+    return this.authService.verifyForgotPasswordOtp(email, code);
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    @Body('email') email: string,
+    @Body('code') code: string,
+    @Body('passwordNew') passwordNew: string,
+  ) {
+    return this.authService.resetPassword(email, code, passwordNew);
   }
 
   @Post('send-otp')

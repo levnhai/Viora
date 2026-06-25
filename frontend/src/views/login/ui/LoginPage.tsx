@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast, Toaster } from "sonner";
 
 import { authService } from "@/features/auth/api/authService";
-import { LeftPanel } from "./components/LeftPanel";
-import { LoginHeader } from "./components/LoginHeader";
-import { LoginOptions } from "./components/LoginOptions";
-import { EmailForm } from "./components/EmailForm";
-import { OtpForm } from "./components/OtpForm";
-
-const otpResendDelay = 60;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { LoginBanner } from "./components/LoginBanner";
+import { LoginForm } from "./components/LoginForm";
+import { RegisterForm } from "./components/RegisterForm";
+import { RegisterOtpForm } from "./components/RegisterOtpForm";
+import { ForgotPasswordForm } from "./components/ForgotPasswordForm";
+import { ForgotPasswordOtpForm } from "./components/ForgotPasswordOtpForm";
+import { ResetPasswordForm } from "./components/ResetPasswordForm";
+import { FaAngleLeft } from "react-icons/fa";
 
 interface UserSessionData {
   role: string;
@@ -45,10 +45,18 @@ export function LoginPage() {
   const navigate = (path: string) => router.push(path);
 
   // States
+  const [mode, setMode] = useState<
+    | "login"
+    | "register"
+    | "register-otp"
+    | "register-success"
+    | "forgot-password"
+    | "forgot-password-otp"
+    | "reset-password"
+    | "check-email"
+  >("login");
   const [email, setEmail] = useState("");
-  const [step, setStep] = useState<"options" | "email" | "otp">("options");
   const [otpCode, setOtpCode] = useState("");
-  const [timer, setTimer] = useState(0);
   const [loading, setLoading] = useState(false);
 
   // Social loading states
@@ -57,126 +65,17 @@ export function LoginPage() {
     "Google" | "Facebook" | null
   >(null);
 
-  // Timer logic for OTP resend
-  useEffect(() => {
-    if (timer <= 0) return;
-
-    const timeout = setTimeout(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, [timer]);
-
-  // Reset OTP values when step changes away from OTP
-  const [otpValues, setOtpValues] = useState<string[]>(Array(6).fill(""));
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  useEffect(() => {
-    if (step !== "otp") {
-      setOtpValues(Array(6).fill(""));
-      setOtpCode("");
-    }
-  }, [step]);
-
-  // Handle individual input changes
-  const handleOtpChange = (index: number, value: string) => {
-    const cleanVal = value.replace(/[^0-9]/g, "");
-    if (!cleanVal) {
-      const newVals = [...otpValues];
-      newVals[index] = "";
-      setOtpValues(newVals);
-      setOtpCode(newVals.join(""));
-      return;
-    }
-
-    const char = cleanVal[cleanVal.length - 1];
-    const newVals = [...otpValues];
-    newVals[index] = char;
-    setOtpValues(newVals);
-    setOtpCode(newVals.join(""));
-
-    if (index < 5 && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  // Handle backspace navigation
-  const handleOtpKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    if (e.key === "Backspace") {
-      if (!otpValues[index] && index > 0 && inputRefs.current[index - 1]) {
-        const newVals = [...otpValues];
-        newVals[index - 1] = "";
-        setOtpValues(newVals);
-        setOtpCode(newVals.join(""));
-        inputRefs.current[index - 1]?.focus();
-      }
-    }
-  };
-
-  // Handle pasting full OTP code
-  const handleOtpPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData
-      .getData("text")
-      .replace(/[^0-9]/g, "")
-      .slice(0, 6);
-    if (pastedData.length === 6) {
-      const newVals = pastedData.split("");
-      setOtpValues(newVals);
-      setOtpCode(pastedData);
-      inputRefs.current[5]?.focus();
-    }
-  };
-
-  // Send OTP trigger
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) {
-      toast.error("Vui lòng nhập địa chỉ Email!");
-      return;
-    }
-
-    if (!emailRegex.test(email.trim())) {
-      toast.error("Email không đúng định dạng!");
-      return;
-    }
-
+  // 1. ĐĂNG NHẬP
+  const handleLoginSubmit = async (emailInput: string, passInput: string) => {
     setLoading(true);
-
     try {
-      await authService.sendOtp(email.trim());
-      setStep("otp");
-      setTimer(otpResendDelay);
-      toast.success("Mã xác thực OTP đã được gửi về Email của bạn!");
-    } catch (err: any) {
-      toast.error(err.message || "Đã xảy ra lỗi khi gửi mã xác thực!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Verify OTP trigger
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!otpCode.trim() || otpCode.length < 6) {
-      toast.error("Vui lòng nhập đầy đủ mã xác thực OTP 6 số!");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const data = await authService.verifyOtp(email.trim(), otpCode.trim());
-      const { role, weddingSlug, name, email: responseEmail } = data;
+      const data = await authService.login(emailInput, passInput);
+      const { role, weddingSlug, name, email: resEmail } = data;
 
       saveUserSession({
         role,
-        username: responseEmail || email.trim(),
-        name: name || (responseEmail || email.trim()).split("@")[0],
+        username: resEmail || emailInput,
+        name: name || (resEmail || emailInput).split("@")[0],
         weddingSlug,
       });
 
@@ -184,45 +83,123 @@ export function LoginPage() {
       toast.success("Đăng nhập thành công!");
       navigate("/");
     } catch (err: any) {
-      toast.error(err.message || "Đã xảy ra lỗi trong quá trình xác thực!");
+      toast.error(err.message || "Đăng nhập thất bại!");
     } finally {
       setLoading(false);
     }
   };
 
-  // Resend OTP trigger
-  const handleResendOtp = async () => {
-    if (timer > 0) return;
-
+  // 2. ĐĂNG KÝ
+  const handleRegisterSubmit = async (
+    emailInput: string,
+    passInput: string,
+    nameInput: string,
+    phoneInput?: string,
+  ) => {
     setLoading(true);
-    setOtpCode("");
-    setOtpValues(Array(6).fill(""));
-
+    setEmail(emailInput);
     try {
-      await authService.sendOtp(email.trim());
-      setTimer(otpResendDelay);
-      toast.success("Đã gửi lại mã xác thực OTP mới!");
-
-      setTimeout(() => {
-        inputRefs.current[0]?.focus();
-      }, 50);
+      await authService.register(emailInput, passInput, nameInput, phoneInput);
+      toast.success("Mã xác thực OTP đã được gửi về Email của bạn!");
+      setMode("register-otp");
     } catch (err: any) {
-      toast.error(err.message || "Đã xảy ra lỗi khi gửi lại mã xác thực!");
+      toast.error(err.message || "Đăng ký thất bại!");
     } finally {
       setLoading(false);
     }
   };
 
-  // Google verify callback
-  const verifyGoogleWithBackend = async (token: string) => {
+  // 3. XÁC THỰC OTP ĐĂNG KÝ
+  const handleVerifyOtpSubmit = async (code: string) => {
+    setLoading(true);
     try {
-      const data = await authService.loginWithGoogle(token);
-      const { role, weddingSlug, name, picture, email } = data;
+      const data = await authService.registerVerifyOtp(email, code);
+      const { role, weddingSlug, name, email: resEmail } = data;
 
       saveUserSession({
         role,
-        username: email || "google_user",
-        name: name || (email || "google_user").split("@")[0],
+        username: resEmail || email,
+        name: name || (resEmail || email).split("@")[0],
+        weddingSlug,
+      });
+
+      setMode("register-success");
+      confetti({ particleCount: 100, spread: 60 });
+      toast.success("Kích hoạt tài khoản thành công!");
+    } catch (err: any) {
+      toast.error(err.message || "Mã xác thực không chính xác!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 4. GỬI LẠI OTP
+  const handleResendOtp = async () => {
+    setLoading(true);
+    try {
+      await authService.register(email, "secured_otp_resend", "resend"); // Chỉ trigger gửi lại OTP
+      toast.success("Đã gửi lại mã xác thực OTP mới!");
+    } catch (err: any) {
+      toast.error(err.message || "Gửi lại OTP thất bại!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 5. QUÊN MẬT KHẨU
+  const handleForgotPasswordSubmit = async (emailInput: string) => {
+    setLoading(true);
+    setEmail(emailInput);
+    try {
+      await authService.forgotPassword(emailInput);
+      toast.success("Mã OTP khôi phục mật khẩu đã được gửi về Email của bạn!");
+      setMode("forgot-password-otp");
+    } catch (err: any) {
+      toast.error(err.message || "Gửi yêu cầu thất bại!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 5.1 XÁC THỰC OTP QUÊN MẬT KHẨU
+  const handleVerifyForgotPasswordOtpSubmit = async (code: string) => {
+    setLoading(true);
+    try {
+      await authService.verifyForgotPasswordOtp(email, code);
+      setOtpCode(code);
+      toast.success("Mã xác thực chính xác!");
+      setMode("reset-password");
+    } catch (err: any) {
+      toast.error(err.message || "Mã xác thực không chính xác!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 5.2 ĐẶT LẠI MẬT KHẨU MỚI
+  const handleResetPasswordSubmit = async (passwordNew: string) => {
+    setLoading(true);
+    try {
+      await authService.resetPassword(email, otpCode, passwordNew);
+      toast.success("Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.");
+      setMode("login");
+    } catch (err: any) {
+      toast.error(err.message || "Đặt lại mật khẩu thất bại!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 6. ĐĂNG NHẬP GOOGLE
+  const verifyGoogleWithBackend = async (token: string) => {
+    try {
+      const data = await authService.loginWithGoogle(token);
+      const { role, weddingSlug, name, picture, email: resEmail } = data;
+
+      saveUserSession({
+        role,
+        username: resEmail || "google_user",
+        name: name || (resEmail || "google_user").split("@")[0],
         picture,
         weddingSlug,
       });
@@ -231,7 +208,7 @@ export function LoginPage() {
       toast.success("Đăng nhập bằng Google thành công!");
       navigate("/");
     } catch (err: any) {
-      toast.error(err.message || "Đã xảy ra lỗi khi đăng nhập bằng Google!");
+      toast.error(err.message || "Đăng nhập Google thất bại!");
     } finally {
       setSocialLoading(false);
       setSocialProvider(null);
@@ -243,13 +220,12 @@ export function LoginPage() {
       if (tokenResponse.access_token) {
         await verifyGoogleWithBackend(tokenResponse.access_token);
       } else {
-        toast.error("Đăng nhập bằng Google thất bại (không có access token)!");
+        toast.error("Đăng nhập bằng Google thất bại!");
         setSocialLoading(false);
         setSocialProvider(null);
       }
     },
-    onError: (error) => {
-      console.error("Lỗi đăng nhập Google:", error);
+    onError: () => {
       toast.error("Đăng nhập bằng Google thất bại!");
       setSocialLoading(false);
       setSocialProvider(null);
@@ -259,60 +235,48 @@ export function LoginPage() {
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!clientId) {
-      toast.error(
-        "Chưa cấu hình Google Client ID cho ứng dụng! Không thể đăng nhập bằng Google.",
-      );
+      toast.error("Chưa cấu hình Google Client ID cho ứng dụng!");
       return;
     }
-
     setSocialLoading(true);
     setSocialProvider("Google");
     loginWithGoogle();
   };
 
-  // Facebook simulated flow using real authService endpoints
-  const handleSocialLogin = async (provider: "Facebook") => {
+  // 7. ĐĂNG NHẬP FACEBOOK (Mô phỏng)
+  const handleFacebookLogin = async () => {
     setSocialLoading(true);
-    setSocialProvider(provider);
+    setSocialProvider("Facebook");
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    const simulatedEmail = "facebook.demo.viora@facebook.com";
+    const simulatedEmail = "facebook.demo@viora.vn";
     const simulatedPassword = "oauth_secured_pass_123456";
 
     try {
       let data;
       try {
-        data = await authService.registerFacebook(
+        data = await authService.register(
           simulatedEmail,
           simulatedPassword,
+          "FB User",
         );
       } catch (err: any) {
-        if (err.message?.toLowerCase().includes("tồn tại")) {
-          data = await authService.loginWithFacebook(
-            simulatedEmail,
-            simulatedPassword,
-          );
-        } else {
-          throw err;
-        }
+        data = await authService.login(simulatedEmail, simulatedPassword);
       }
 
-      const { role, weddingSlug, name, email } = data;
+      const { role, weddingSlug, name, email: resEmail } = data;
 
       saveUserSession({
         role,
-        username: email || simulatedEmail,
-        name: name || (email || simulatedEmail).split("@")[0],
+        username: resEmail || simulatedEmail,
+        name: name || (resEmail || simulatedEmail).split("@")[0],
         weddingSlug,
       });
 
       toast.success("Đăng nhập bằng Facebook thành công!");
       navigate("/");
     } catch (err: any) {
-      toast.error(
-        err.message || "Đã xảy ra lỗi trong quá trình liên kết tài khoản!",
-      );
+      toast.error(err.message || "Lỗi liên kết tài khoản Facebook!");
     } finally {
       setSocialLoading(false);
       setSocialProvider(null);
@@ -320,71 +284,176 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf5f0] flex select-none antialiased font-sans">
-      {/* ── LEFT PANEL: DECORATION & MOCKUP CARD ────────── */}
-      <LeftPanel />
+    <div
+      className="theme-pink min-h-screen bg-[#faf5f0] flex select-none antialiased"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      {/* ── BANNER TRÁI (ẨN TRÊN MOBILE) ────────── */}
+      <LoginBanner />
 
-      {/* ── RIGHT PANEL: LOGIN FORM ──────────────────────── */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-between items-center p-8 sm:p-16 relative bg-[#faf5f0] min-h-screen">
-        {/* Top element for alignment */}
-        <div className="w-full max-w-md flex flex-col mt-8">
-          <LoginHeader
-            step={step}
-            onBack={() => {
-              if (step === "otp") setStep("email");
-              else setStep("options");
-            }}
-          />
-
-          <div className="w-full space-y-6 mt-20">
-            {step === "options" && (
-              <LoginOptions
-                onGoogleLogin={handleGoogleLogin}
-                onFacebookLogin={() => handleSocialLogin("Facebook")}
-                onEmailContinue={() => setStep("email")}
-                socialLoading={socialLoading}
-                socialProvider={socialProvider}
-                loading={loading}
-              />
-            )}
-
-            {step === "email" && (
-              <EmailForm
-                email={email}
-                setEmail={setEmail}
-                onSubmit={handleSendOtp}
-                loading={loading}
-              />
-            )}
-
-            {step === "otp" && (
-              <OtpForm
-                email={email}
-                otpValues={otpValues}
-                otpCode={otpCode}
-                timer={timer}
-                loading={loading}
-                inputRefs={inputRefs}
-                handleOtpChange={handleOtpChange}
-                handleOtpKeyDown={handleOtpKeyDown}
-                handleOtpPaste={handleOtpPaste}
-                onSubmit={handleVerifyOtp}
-                onResendOtp={handleResendOtp}
-              />
-            )}
-          </div>
+      {/* ── FORM BÊN PHẢI (CHỨA MỌI TRẠNG THÁI FORM) ────────── */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-between items-center p-6 sm:p-12 md:p-16 bg-[#faf5f0] min-h-screen relative">
+        {/* Nút Back quay lại trên Header khi ở các mode OTP/Success/Forgot */}
+        <div className="w-full flex items-center justify-between">
+          {mode !== "login" ? (
+            <button
+              onClick={() => {
+                if (mode === "register-otp") setMode("register");
+                else if (mode === "register-success") setMode("login");
+                else if (mode === "forgot-password-otp")
+                  setMode("forgot-password");
+                else if (mode === "reset-password")
+                  setMode("forgot-password-otp");
+                else if (mode === "check-email") setMode("forgot-password");
+                else setMode("login");
+              }}
+              className="text-xs text-gray-500 hover:text-[#db2777] font-semibold flex items-center gap-1 transition-colors"
+            >
+              <FaAngleLeft /> Quay lại
+            </button>
+          ) : (
+            <div />
+          )}
         </div>
 
-        {/* Footer info text at bottom of page */}
-        <p className="text-center text-[10px] text-[#7a5c4f]/50 leading-relaxed max-w-xs mt-8">
+        {/* Khung chứa các form */}
+        <div className="w-full max-w-md my-auto pt-6">
+          {/* Màn hình 1: LOGIN FORM */}
+          {mode === "login" && (
+            <LoginForm
+              onLogin={handleLoginSubmit}
+              onSwitchRegister={() => setMode("register")}
+              onSwitchForgotPassword={() => setMode("forgot-password")}
+              onGoogleLogin={handleGoogleLogin}
+              onFacebookLogin={handleFacebookLogin}
+              loading={loading}
+              socialLoading={socialLoading}
+              socialProvider={socialProvider}
+            />
+          )}
+
+          {/* Màn hình 2: REGISTER FORM */}
+          {mode === "register" && (
+            <RegisterForm
+              onRegister={handleRegisterSubmit}
+              onSwitchLogin={() => setMode("login")}
+              onGoogleLogin={handleGoogleLogin}
+              onFacebookLogin={handleFacebookLogin}
+              loading={loading}
+              socialLoading={socialLoading}
+            />
+          )}
+
+          {/* Màn hình 3: OTP REGISTER VERIFY */}
+          {mode === "register-otp" && (
+            <RegisterOtpForm
+              email={email}
+              onVerifyOtp={handleVerifyOtpSubmit}
+              onResendOtp={handleResendOtp}
+              loading={loading}
+            />
+          )}
+
+          {/* Màn hình 4: REGISTER SUCCESS */}
+          {mode === "register-success" && (
+            <div className="w-full max-w-md mx-auto text-center space-y-6">
+              <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center text-3xl mx-auto shadow-inner text-green-500 border border-green-200">
+                ✓
+              </div>
+              <div className="space-y-2">
+                <h2
+                  className="text-2xl font-serif font-bold text-[#2c1810]"
+                  style={{ fontFamily: "'EB Garamond', serif" }}
+                >
+                  Đăng ký thành công!
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Chào mừng bạn đến với Viora. Tài khoản của bạn đã được kích
+                  hoạt.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate("/")}
+                className="w-full py-2.5 bg-[#db2777] hover:bg-[#c2185b] text-white font-medium rounded-xl text-sm transition-colors shadow-md shadow-pink-600/10 focus:outline-none"
+              >
+                Bắt đầu ngay
+              </button>
+            </div>
+          )}
+
+          {/* Màn hình 5: FORGOT PASSWORD */}
+          {mode === "forgot-password" && (
+            <ForgotPasswordForm
+              onForgotPassword={handleForgotPasswordSubmit}
+              onSwitchLogin={() => setMode("login")}
+              loading={loading}
+            />
+          )}
+
+          {/* Màn hình 5.1: OTP FORGOT PASSWORD */}
+          {mode === "forgot-password-otp" && (
+            <ForgotPasswordOtpForm
+              email={email}
+              onVerifyOtp={handleVerifyForgotPasswordOtpSubmit}
+              onResendOtp={() => authService.forgotPassword(email)}
+              loading={loading}
+            />
+          )}
+
+          {/* Màn hình 5.2: RESET PASSWORD */}
+          {mode === "reset-password" && (
+            <ResetPasswordForm
+              onResetPassword={handleResetPasswordSubmit}
+              loading={loading}
+            />
+          )}
+
+          {/* Màn hình 6: CHECK EMAIL REPORT */}
+          {mode === "check-email" && (
+            <div className="w-full max-w-md mx-auto text-center space-y-6">
+              <div className="w-20 h-20 rounded-full bg-pink-50 flex items-center justify-center text-3xl mx-auto shadow-inner text-[#db2777] border border-pink-100">
+                ✉️
+              </div>
+              <div className="space-y-2">
+                <h2
+                  className="text-2xl font-serif font-bold text-[#2c1810]"
+                  style={{ fontFamily: "'EB Garamond', serif" }}
+                >
+                  Kiểm tra Email của bạn
+                </h2>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Chúng tôi đã gửi liên kết đặt lại mật khẩu tới hòm thư <br />
+                  <span className="font-semibold text-[#db2777]">{email}</span>
+                </p>
+              </div>
+              <a
+                href="https://mail.google.com"
+                target="_blank"
+                rel="noreferrer"
+                className="block w-full py-2.5 bg-[#db2777] hover:bg-[#c2185b] text-white font-medium rounded-xl text-sm transition-colors text-center shadow-md shadow-pink-600/10"
+              >
+                Mở Gmail
+              </a>
+              <button
+                onClick={() => setMode("login")}
+                className="text-xs text-gray-500 hover:text-[#db2777] font-semibold hover:underline"
+              >
+                Quay lại đăng nhập
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Footer copyright */}
+        <p className="text-center text-[13px] text-[#7a5c4f]/50 leading-relaxed max-w-xs mt-8">
           Bằng cách tiếp tục, bạn đồng ý với{" "}
           <span className="underline hover:text-[#2c1810] cursor-pointer">
             Điều khoản dịch vụ
           </span>{" "}
           của chúng tôi.
         </p>
-        <Toaster richColors closeButton position="top-right" />
       </div>
+      <Toaster richColors closeButton position="top-right" />
     </div>
   );
 }

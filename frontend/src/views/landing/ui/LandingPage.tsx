@@ -32,23 +32,13 @@ export function LandingPage({ onPreviewDemo }: LandingPageProps) {
         onOpenRequest={() => handleStartCreating(1)}
         onOpenDemo={() => onPreviewDemo(1)}
       />
-      
-      <div className="border-y border-border bg-secondary/30 py-4 text-center">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground/60 font-medium">
-          {["Zalo", "Facebook Messenger", "Gmail", "Viber", "WhatsApp"].map((p) => (
-            <span key={p} className="flex items-center gap-1.5">
-              🔗 {p}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <FeaturesList />
 
       <TemplatesList 
         onPreviewDemo={onPreviewDemo}
         onUseTemplate={(tplId) => handleStartCreating(tplId)}
       />
+
+      <FeaturesList />
 
       <HowItWorks onOpenRequest={() => handleStartCreating(1)} />
 

@@ -51,33 +51,37 @@ export function Header({ onOpenRequest }: HeaderProps) {
     <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <Heart
-                size={14}
-                className="text-primary-foreground"
-                fill="currentColor"
-              />
+          <div className="flex items-center gap-2">
+            <span className="text-2xl text-[#db2777]">🌸</span>
+            <div className="flex flex-col text-left">
+              <span
+                className="text-lg font-bold tracking-widest text-[#2c1810] leading-none"
+                style={{ fontFamily: "'Cinzel', serif" }}
+              >
+                VIORA
+              </span>
+              <span className="text-[7px] text-[#7a5c4f]/60 tracking-wider font-semibold">
+                WEDDING INVITATIONS
+              </span>
             </div>
-            <span
-              className="text-lg text-foreground font-medium"
-              style={{ fontFamily: "'EB Garamond', serif" }}
-            >
-              Thiệp Online
-            </span>
           </div>
           <div className="hidden md:flex items-center gap-8">
             {[
+              ["Trang chủ", "/"],
               ["Mẫu thiệp", "#mau-thiep"],
               ["Tính năng", "#tinh-nang"],
-              ["Đăng ký", "#dang-ky-tu-van"],
               ["Bảng giá", "#bang-gia"],
-              ["FAQ", "#faq"],
+              ["Hướng dẫn", "#how-it-works"],
+              ["Blog", "#dang-ky-tu-van"],
             ].map(([label, href]) => (
               <a
                 key={label}
                 href={href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className={`text-[13px] font-semibold transition-colors ${
+                  label === "Trang chủ"
+                    ? "text-[#db2777] border-b-2 border-[#db2777] pb-1"
+                    : "text-[#7a5c4f]/70 hover:text-[#db2777]"
+                }`}
               >
                 {label}
               </a>
@@ -86,13 +90,9 @@ export function Header({ onOpenRequest }: HeaderProps) {
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
               <div className="flex items-center gap-4 relative">
-                {/* Theme Toggle Button */}
-                {/* <button className="text-slate-400 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-1.5 rounded-lg flex items-center justify-center">
-                  <Sun size={20} />
-                </button> */}
                 <button
                   onClick={onOpenRequest}
-                  className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
+                  className="bg-[#db2777] hover:bg-[#c2185b] text-white px-5 py-2.5 rounded-full text-xs font-semibold hover:opacity-90 active:scale-95 transition-all cursor-pointer border-0"
                 >
                   Tạo thiệp ngay
                 </button>
@@ -180,18 +180,18 @@ export function Header({ onOpenRequest }: HeaderProps) {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <Link
                   href="/login"
-                  className="hidden sm:block text-sm text-muted-foreground hover:text-foreground transition-colors no-underline"
+                  className="px-4 py-2 border border-[#db2777]/30 hover:border-[#db2777] rounded-full text-xs font-semibold text-[#db2777] hover:bg-[#db2777]/5 transition-all no-underline"
                 >
                   Đăng nhập
                 </Link>
                 <button
                   onClick={onOpenRequest}
-                  className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
+                  className="bg-[#db2777] hover:bg-[#c2185b] text-white px-5 py-2.5 rounded-full text-xs font-semibold hover:opacity-90 active:scale-95 transition-all cursor-pointer border-0 shadow-sm shadow-pink-600/10"
                 >
-                  Tạo thiệp ngay
+                  Tạo thiệp miễn phí
                 </button>
               </div>
             )}

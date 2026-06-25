@@ -1,74 +1,66 @@
-import { Link2, Users, Clock, Music, MapPin, Smartphone } from "lucide-react";
+import { Layers, Settings, Smartphone, Share2, HeartHandshake } from "lucide-react";
 
 export function FeaturesList() {
   const FEATURES = [
     {
-      icon: Link2,
-      title: "Link chia sẻ duy nhất",
-      desc: "Mỗi thiệp có một đường link riêng — gửi qua Zalo, Facebook, Messenger chỉ trong vài giây.",
+      icon: Layers,
+      title: "1000+ mẫu thiệp",
+      desc: "Đa dạng phong cách",
     },
     {
-      icon: Users,
-      title: "RSVP trực tuyến",
-      desc: "Khách mời xác nhận tham dự ngay trên trang thiệp. Bạn nhận thông báo và theo dõi danh sách theo thời gian thực.",
-    },
-    {
-      icon: Clock,
-      title: "Đồng hồ đếm ngược",
-      desc: "Hiển thị thời gian còn lại đến ngày cưới để khách mời cảm nhận sự háo hức cùng bạn.",
-    },
-    {
-      icon: Music,
-      title: "Nhạc nền lãng mạn",
-      desc: "Chọn bài nhạc yêu thích hoặc dùng thư viện nhạc cưới có sẵn — tự động phát khi khách mở thiệp.",
-    },
-    {
-      icon: MapPin,
-      title: "Bản đồ & chỉ đường",
-      desc: "Tích hợp Google Maps trực tiếp. Khách mời nhấn một cái là có chỉ đường đến địa điểm tổ chức.",
+      icon: Settings,
+      title: "Chỉnh sửa dễ dàng",
+      desc: "Kéo thả, tùy chỉnh linh hoạt",
     },
     {
       icon: Smartphone,
-      title: "Hiển thị mọi thiết bị",
-      desc: "Thiệp tự điều chỉnh đẹp trên điện thoại, máy tính bảng và máy tính. Không cần cài ứng dụng.",
+      title: "Tối ưu mọi thiết bị",
+      desc: "Hiển thị đẹp trên mọi màn hình",
+    },
+    {
+      icon: Share2,
+      title: "Chia sẻ một chạm",
+      desc: "Gửi thiệp qua link, mạng xã hội",
+    },
+    {
+      icon: HeartHandshake,
+      title: "Hỗ trợ tận tâm",
+      desc: "Đội ngũ hỗ trợ 24/7",
     },
   ];
 
   return (
-    <section id="tinh-nang" className="py-24">
+    <section id="tinh-nang" className="py-16 bg-[#faf6f0]/40 border-t border-b border-[#e2d8cf]/40">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <p className="text-xs text-accent uppercase tracking-widest mb-2">
-            Tính năng
+        <div className="text-left mb-10 space-y-1">
+          <p className="text-[10px] text-[#db2777] uppercase tracking-widest font-bold flex items-center gap-1">
+            <span>🌸</span> TẠI SAO CHỌN VIORA?
           </p>
-          <h2
-            className="text-4xl text-foreground"
-            style={{ fontFamily: "'EB Garamond', serif" }}
-          >
-            Mọi thứ bạn cần cho một trang thiệp hoàn hảo
-          </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 text-left">
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className="p-7 bg-card border border-border rounded-2xl hover:shadow-md transition-shadow group"
+              className="flex items-center gap-3.5 p-3 rounded-2xl group transition-all"
             >
-              <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center mb-5 group-hover:bg-primary/10 transition-colors">
+              <div className="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-[#db2777]/10">
                 <f.icon
-                  size={20}
-                  className="text-accent group-hover:text-primary transition-colors"
+                  size={16}
+                  className="text-[#db2777] transition-colors"
                 />
               </div>
-              <h3
-                className="text-lg text-foreground mb-2"
-                style={{ fontFamily: "'EB Garamond', serif" }}
-              >
-                {f.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {f.desc}
-              </p>
+              <div className="space-y-0.5">
+                <h3
+                  className="text-[13px] font-bold text-[#2c1810]"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  {f.title}
+                </h3>
+                <p className="text-[11px] text-[#7a5c4f]/70 font-light leading-relaxed">
+                  {f.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>

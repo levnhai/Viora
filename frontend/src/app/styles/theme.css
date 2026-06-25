@@ -321,3 +321,20 @@
 .mockup-screen-content section.min-h-screen {
   min-height: 100% !important;
 }
+
+/* Ngăn trình duyệt đè màu nền xanh dương nhạt khi tự động điền (autofill) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px #ffffff inset !important;
+  -webkit-text-fill-color: #2c1810 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Custom focus ring & transition cho inputs */
+.auth-input-focus:focus {
+  border-color: #db2777 !important;
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1) !important;
+}
+

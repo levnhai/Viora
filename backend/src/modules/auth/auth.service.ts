@@ -52,9 +52,12 @@ export class AuthService implements OnModuleInit {
     passwordPlain: string,
     role: string,
     weddingSlug?: string,
+    fullName?: string,
+    phone?: string,
+    status = 'active',
   ): Promise<User> {
     const passwordHash = this.hashPassword(passwordPlain);
-    const displayName = username.split('@')[0];
+    const displayName = fullName || username.split('@')[0];
     const emailValue = username.includes('@') ? username : '';
 
     // Determine default account type based on role
@@ -68,8 +71,10 @@ export class AuthService implements OnModuleInit {
       role,
       weddingSlug,
       fullName: displayName,
+      phone: phone || '',
       email: emailValue,
       accountType: defaultAccountType,
+      status,
     });
     return user.save();
   }
@@ -139,6 +144,36 @@ export class AuthService implements OnModuleInit {
   async register(
     username: string,
     passwordPlain: string,
+    fullName?: string,
+    phone?: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const existingUser = await this.userModel.findOne({ username }).exec();
+    if (existingUser) {
+      if (existingUser.status === 'active') {
+        throw new UnauthorizedException('Tên đăng nhập đã tồn tại!');
+      }
+      // Nếu chưa kích hoạt, cho phép cập nhật thông tin mới
+      existingUser.passwordHash = this.hashPassword(passwordPlain);
+      existingUser.fullName = fullName || existingUser.fullName;
+      existingUser.phone = phone || existingUser.phone;
+      await existingUser.save();
+    } else {
+      await this.createUser(
+        username,
+        passwordPlain,
+        'user',
+        undefined,
+        fullName,
+        phone,
+        'pending_verification',
+      );
+    }
+    return this.sendOtp(username);
+  }
+
+  async registerVerifyOtp(
+    email: string,
+    code: string,
   ): Promise<{
     token: string;
     role: string;
@@ -146,12 +181,157 @@ export class AuthService implements OnModuleInit {
     name?: string;
     email?: string;
   }> {
-    const existingUser = await this.userModel.findOne({ username }).exec();
-    if (existingUser) {
-      throw new UnauthorizedException('Tên đăng nhập đã tồn tại!');
+    const otpRecord = await this.otpModel.findOne({ email }).exec();
+    if (!otpRecord) {
+      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
     }
-    await this.createUser(username, passwordPlain, 'user');
-    return this.login(username, passwordPlain);
+
+    if (otpRecord.code !== code) {
+      throw new UnauthorizedException('Mã xác thực không chính xác!');
+    }
+
+    // Xóa mã OTP sau khi xác thực thành công
+    await this.otpModel.deleteOne({ email }).exec();
+
+    const user = await this.userModel.findOne({ username: email }).exec();
+    if (!user) {
+      throw new UnauthorizedException('Tài khoản không tồn tại!');
+    }
+
+    user.status = 'active';
+    await user.save();
+
+    const tokenData = this.generateToken(user);
+    return {
+      ...tokenData,
+      name: user.fullName,
+      email: user.email,
+    };
+  }
+
+  async sendForgotPasswordOtp(email: string, otpCode: string) {
+    const smtpHost = this.configService.get<string>('SMTP_HOST');
+    const smtpPort = this.configService.get<number>('SMTP_PORT');
+    const smtpUser = this.configService.get<string>('SMTP_USER');
+    const smtpPass = this.configService.get<string>('SMTP_PASS');
+
+    if (smtpHost && smtpPort && smtpUser && smtpPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: smtpHost,
+          port: Number(smtpPort),
+          secure: Number(smtpPort) === 465,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        });
+
+        const mailOptions = {
+          from: `"Viora Wedding" <${smtpUser}>`,
+          to: email,
+          subject: 'Mã khôi phục mật khẩu - Viora Wedding',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff; color: #333333;">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #db2777; margin: 0;">Viora Wedding</h2>
+                <p style="font-size: 14px; color: #777777; margin: 5px 0 0 0;">Nền tảng thiệp cưới trực tuyến sang trọng</p>
+              </div>
+              <hr style="border: 0; border-top: 1px solid #eeeeee; margin-bottom: 20px;" />
+              <p style="font-size: 16px; line-height: 1.5;">Chào bạn,</p>
+              <p style="font-size: 16px; line-height: 1.5;">Bạn vừa yêu cầu mã khôi phục mật khẩu cho tài khoản tại <strong>Viora Wedding</strong>.</p>
+              <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #fdf2f8; border-radius: 5px; font-weight: bold; font-size: 28px; letter-spacing: 5px; color: #db2777; border: 1px dashed #f472b6;">
+                ${otpCode}
+              </div>
+              <p style="font-size: 14px; color: #ff5722; font-style: italic; line-height: 1.5;">Lưu ý: Mã xác thực này có hiệu lực trong vòng 5 phút và chỉ sử dụng một lần. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+              <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;" />
+              <p style="font-size: 12px; color: #999999; text-align: center; margin: 0;">
+                Email này được gửi tự động từ hệ thống Viora Wedding. Vui lòng không phản hồi email này.
+              </p>
+            </div>
+          `,
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`[SMTP] Đã gửi mã OTP quên mật khẩu (${otpCode}) thành công tới: ${email}`);
+      } catch (error) {
+        console.error('[SMTP Error] Gửi mail khôi phục mật khẩu thất bại:', error);
+      }
+    } else {
+      console.log(`[SMTP Config Missing] Chưa cấu hình SMTP. Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+    }
+  }
+
+  async forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
+    const user = await this.userModel.findOne({ username: email }).exec();
+    if (!user) {
+      throw new UnauthorizedException('Địa chỉ Email không tồn tại trong hệ thống!');
+    }
+
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    await this.otpModel.findOneAndUpdate(
+      { email },
+      { code: otpCode, createdAt: new Date() },
+      { upsert: true, new: true },
+    ).exec();
+
+    await this.sendForgotPasswordOtp(email, otpCode);
+
+    return {
+      success: true,
+      message: 'Mã OTP khôi phục mật khẩu đã được gửi tới Email của bạn!',
+    };
+  }
+
+  async verifyForgotPasswordOtp(
+    email: string,
+    code: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const otpRecord = await this.otpModel.findOne({ email }).exec();
+    if (!otpRecord) {
+      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
+    }
+
+    if (otpRecord.code !== code) {
+      throw new UnauthorizedException('Mã xác thực không chính xác!');
+    }
+
+    return {
+      success: true,
+      message: 'Mã xác thực OTP chính xác!',
+    };
+  }
+
+  async resetPassword(
+    email: string,
+    code: string,
+    passwordNew: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const otpRecord = await this.otpModel.findOne({ email }).exec();
+    if (!otpRecord) {
+      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
+    }
+
+    if (otpRecord.code !== code) {
+      throw new UnauthorizedException('Mã xác thực không chính xác!');
+    }
+
+    const user = await this.userModel.findOne({ username: email }).exec();
+    if (!user) {
+      throw new UnauthorizedException('Tài khoản không tồn tại!');
+    }
+
+    // Cập nhật mật khẩu mới
+    user.passwordHash = this.hashPassword(passwordNew);
+    await user.save();
+
+    // Xóa mã OTP sau khi đổi mật khẩu thành công
+    await this.otpModel.deleteOne({ email }).exec();
+
+    return {
+      success: true,
+      message: 'Mật khẩu đã được thay đổi thành công!',
+    };
   }
 
   async sendOtp(email: string): Promise<{ success: boolean; message: string }> {
