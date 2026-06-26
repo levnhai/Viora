@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
@@ -58,22 +59,23 @@ export function TemplatesList({ onPreviewDemo, onUseTemplate }: TemplatesListPro
               <span>🌸</span> MẪU THIỆP NỔI BẬT
             </p>
             <h2
-              className="text-4xl text-[#2c1810] font-bold"
+              className="text-4xl text-[#2c1810] font-bold flex flex-wrap items-baseline gap-x-2"
               style={{ fontFamily: "'EB Garamond', serif" }}
             >
-              Kho mẫu thiệp <span className="text-[#db2777] italic">đa dạng &amp; ấn tượng</span>
+              <span>Kho mẫu thiệp</span>
+              <span className="text-[#db2777] font-normal text-4xl sm:text-5xl" style={{ fontFamily: "'Great Vibes', cursive" }}>da dạng &amp; ấn tượng</span>
             </h2>
             <p className="text-sm text-[#7a5c4f]/70 font-light max-w-xl">
               Lựa chọn từ hàng ngàn mẫu thiệp cưới được thiết kế bởi các nhà thiết kế chuyên nghiệp.
             </p>
           </div>
           <div>
-            <button
-              onClick={() => setActiveTier("Tất cả")}
-              className="border border-[#db2777]/30 bg-white text-[#db2777] hover:bg-[#db2777]/5 px-6 py-2.5 rounded-full font-semibold text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95 shadow-sm"
+            <Link
+              href="/templates"
+              className="border border-[#db2777]/30 bg-white text-[#db2777] hover:bg-[#db2777]/5 px-6 py-2.5 rounded-full font-semibold text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95 shadow-sm no-underline"
             >
               Xem tất cả mẫu thiệp <ArrowRight size={14} />
-            </button>
+            </Link>
           </div>
         </div>
 

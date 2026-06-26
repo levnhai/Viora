@@ -25,8 +25,8 @@ export function BottomNav() {
   if (!isLoggedIn) return null;
 
   // Detect active tab based on URL path/query
-  let activeTab = "templates";
-  if (pathname === "/") {
+  let activeTab = "";
+  if (pathname === "/" || pathname === "/templates") {
     activeTab = "templates";
   } else if (pathname.includes("/dashboard")) {
     if (tabParam === "guests") {
@@ -40,7 +40,7 @@ export function BottomNav() {
 
   const handleNav = (tab: string) => {
     if (tab === "templates") {
-      router.push("/");
+      router.push("/templates");
     } else if (tab === "wedding") {
       if (weddingSlug) {
         router.push(`/edit/${weddingSlug}`);

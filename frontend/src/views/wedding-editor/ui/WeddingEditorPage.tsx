@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import iphone15ProFrame from "@/shared/assets/image/frame/iphone15_pro.png";
 import { useSearchParams, useParams, useRouter } from "next/navigation";
 import {
   Heart,
@@ -682,15 +683,20 @@ export function WeddingEditorPage({
 
             {/* Khung giả lập Mockup */}
             {previewDevice === "mobile" ? (
-              /* MOBILE MOCKUP: Chuẩn iPhone 14 Pro (Viewport: 393px x 852px) */
-              <div className="relative bg-black rounded-[52px] p-4 shadow-2xl border-4 border-[#292524] overflow-hidden flex flex-col mb-4 transition-all duration-300">
-                {/* Dynamic Island */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-40 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#111] absolute right-6" />{" "}
-                  {/* Camera */}
-                </div>
+              /* MOBILE MOCKUP: Chuẩn iPhone 15 Pro (Viewport: 393px x 852px) */
+              <div className="relative w-[415px] h-[876px] mx-auto shadow-2xl transition-all duration-300 flex flex-col mb-4">
+                {/* Ảnh Frame iPhone 15 Pro nằm ở lớp dưới */}
+                <img 
+                  src={iphone15ProFrame.src} 
+                  alt="iPhone 15 Pro Frame" 
+                  className="absolute inset-0 w-full h-full object-fill pointer-events-none z-10"
+                />
 
-                <div className="overflow-y-auto w-[393px] h-[852px] rounded-[38px] relative scroll-smooth bg-[#fdf6ef] mockup-screen-content">
+                <div className="absolute top-[20px] left-[19px] w-[377px] h-[836px] rounded-[38px] overflow-y-auto scroll-smooth bg-[#fdf6ef] mockup-screen-content z-20">
+                  {/* Dynamic Island tự vẽ đè lên trên cùng màn hình trong */}
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-40 flex items-center justify-center pointer-events-none scale-90">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#111] absolute right-6" />
+                  </div>
                   <div
                     className={`w-full h-full ${currentTheme} bg-background text-foreground transition-colors duration-500`}
                   >

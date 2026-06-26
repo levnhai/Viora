@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Heart, Menu, X, Sun, Check } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import { authService } from "@/features/auth/api/authService";
 
 interface HeaderProps {
@@ -10,6 +12,7 @@ interface HeaderProps {
 }
 
 export function Header({ onOpenRequest }: HeaderProps) {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState<{
@@ -68,26 +71,40 @@ export function Header({ onOpenRequest }: HeaderProps) {
           <div className="hidden md:flex items-center gap-8">
             {[
               ["Trang chủ", "/"],
-              ["Mẫu thiệp", "#mau-thiep"],
-              ["Tính năng", "#tinh-nang"],
-              ["Bảng giá", "#bang-gia"],
-              ["Hướng dẫn", "#how-it-works"],
-              ["Blog", "#dang-ky-tu-van"],
-            ].map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                className={`text-[13px] font-semibold transition-colors ${
-                  label === "Trang chủ"
-                    ? "text-[#db2777] border-b-2 border-[#db2777] pb-1"
-                    : "text-[#7a5c4f]/70 hover:text-[#db2777]"
-                }`}
-              >
-                {label}
-              </a>
-            ))}
+              ["Mẫu thiệp", "/templates"],
+              ["Tính năng", "/#tinh-nang"],
+              ["Bảng giá", "/#bang-gia"],
+              ["Hướng dẫn", "/#how-it-works"],
+              ["Blog", "/#blog"],
+              ["Liên hệ", "/#dang-ky-tu-van"],
+            ].map(([label, href]) => {
+              const isActive =
+                (href === "/" && pathname === "/") ||
+                (href === "/templates" && pathname === "/templates");
+
+              return (
+                <Link
+                  key={label}
+                  href={href}
+                  className={`text-[13px] font-semibold transition-colors no-underline pb-1 ${
+                    isActive
+                      ? "text-[#db2777] border-b-2 border-[#db2777]"
+                      : "text-[#7a5c4f]/70 hover:text-[#db2777]"
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
           <div className="flex items-center gap-3">
+            {/* Language Selector */}
+            <div className="hidden sm:flex items-center gap-1 text-[12px] font-medium text-[#7a5c4f]/70 hover:text-[#db2777] cursor-pointer mr-2">
+              <span>🌐</span>
+              <span>VI</span>
+              <span className="text-[9px] opacity-60">▼</span>
+            </div>
+
             {isLoggedIn ? (
               <div className="flex items-center gap-4 relative">
                 <button
@@ -183,7 +200,7 @@ export function Header({ onOpenRequest }: HeaderProps) {
               <div className="flex items-center gap-2.5">
                 <Link
                   href="/login"
-                  className="px-4 py-2 border border-[#db2777]/30 hover:border-[#db2777] rounded-full text-xs font-semibold text-[#db2777] hover:bg-[#db2777]/5 transition-all no-underline"
+                  className="px-4 py-2 text-xs font-semibold text-[#7a5c4f]/80 hover:text-[#db2777] transition-all no-underline"
                 >
                   Đăng nhập
                 </Link>
@@ -213,21 +230,21 @@ export function Header({ onOpenRequest }: HeaderProps) {
           {["Tính năng", "Mẫu thiệp", "Đăng ký", "Bảng giá", "FAQ"].map(
             (item) => {
               const hrefs: Record<string, string> = {
-                "Tính năng": "#tinh-nang",
-                "Mẫu thiệp": "#mau-thiep",
-                "Đăng ký": "#dang-ky-tu-van",
-                "Bảng giá": "#bang-gia",
-                FAQ: "#faq",
+                "Tính năng": "/#tinh-nang",
+                "Mẫu thiệp": "/templates",
+                "Đăng ký": "/#dang-ky-tu-van",
+                "Bảng giá": "/#bang-gia",
+                FAQ: "/#faq",
               };
               return (
-                <a
+                <Link
                   key={item}
                   href={hrefs[item] || "#"}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm text-muted-foreground py-1"
+                  className="block text-sm text-muted-foreground py-1 no-underline"
                 >
                   {item}
-                </a>
+                </Link>
               );
             },
           )}
