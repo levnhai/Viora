@@ -7,6 +7,7 @@ import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
 import { GuestbookForm } from "@/features/write-guestbook/ui/GuestbookForm";
 import { GuestbookList, GuestMessage } from "@/entities/invitation/ui/GuestbookList";
 import { FadeIn } from "@/shared/ui/FadeIn";
+import { API_URL } from "@/shared/lib/config";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -48,7 +49,7 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
   const countdown = useCountdown(targetTime);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/weddings/${weddingData.slug}/guestbook`)
+    fetch(`${API_URL}/api/weddings/${weddingData.slug}/guestbook`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
@@ -76,7 +77,7 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
   const handleSendMessage = async (name: string, msg: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/weddings/${weddingData.slug}/guestbook`,
+        `${API_URL}/api/weddings/${weddingData.slug}/guestbook`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

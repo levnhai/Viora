@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
+import { API_URL } from "@/shared/lib/config";
 
 export function AccountSettingsPage() {
   const router = useRouter();
@@ -51,7 +52,7 @@ export function AccountSettingsPage() {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/users/profile", {
+        const res = await fetch(`${API_URL}/api/users/profile`, {
           credentials: "include",
         });
 
@@ -90,7 +91,7 @@ export function AccountSettingsPage() {
     setSuccessMsg(null);
 
     try {
-      const res = await fetch("http://localhost:8080/api/users/profile", {
+      const res = await fetch(`${API_URL}/api/users/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

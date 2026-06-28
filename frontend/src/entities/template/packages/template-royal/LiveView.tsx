@@ -20,6 +20,7 @@ import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { WeddingNavigation } from "@/entities/invitation/ui/WeddingNavigation";
+import { API_URL } from "@/shared/lib/config";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -62,7 +63,7 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
 
   useEffect(() => {
     // Tải lời chúc lưu bút
-    fetch(`http://localhost:8080/api/weddings/${weddingData.slug}/guestbook`)
+    fetch(`${API_URL}/api/weddings/${weddingData.slug}/guestbook`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
@@ -92,7 +93,7 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
   const handleSendMessage = async (name: string, msg: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/weddings/${weddingData.slug}/guestbook`,
+        `${API_URL}/api/weddings/${weddingData.slug}/guestbook`,
         {
           method: "POST",
           headers: {

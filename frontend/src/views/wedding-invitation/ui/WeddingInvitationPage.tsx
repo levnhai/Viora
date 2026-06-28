@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { getTemplatePackage } from "@/entities/template/model/registry";
+import { API_URL } from "@/shared/lib/config";
 
 export function WeddingInvitationPage() {
   const params = useParams();
@@ -26,7 +27,7 @@ export function WeddingInvitationPage() {
     setError(null);
 
     // Fetch wedding details
-    fetch(`http://localhost:8080/api/weddings/${weddingSlug}`)
+    fetch(`${API_URL}/api/weddings/${weddingSlug}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Không tìm thấy thiệp cưới hoặc lỗi máy chủ!");

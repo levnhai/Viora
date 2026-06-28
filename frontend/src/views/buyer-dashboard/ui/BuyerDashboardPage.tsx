@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Heart, LogOut, Edit3, Users, BookOpen, Save, Loader2, Calendar, MapPin, CreditCard, Copy, Check, Plus, Trash2, UserPlus, Phone, Tag, Settings } from "lucide-react";
 import { authService } from "@/features/auth/api/authService";
+import { API_URL } from "@/shared/lib/config";
 
 export function BuyerDashboardPage() {
   const router = useRouter();
@@ -55,7 +56,7 @@ export function BuyerDashboardPage() {
     if (!weddingSlug) return;
     try {
       // 1. Fetch wedding details
-      const weddingRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}`, {
+      const weddingRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}`, {
         credentials: "include"
       });
       if (!weddingRes.ok) throw new Error("Không thể tải thông tin thiệp cưới!");
@@ -63,7 +64,7 @@ export function BuyerDashboardPage() {
       setWeddingData(weddingJson.data);
 
       // 2. Fetch Guests
-      const guestRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests`, {
+      const guestRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests`, {
         credentials: "include"
       });
       if (guestRes.ok) {
@@ -72,7 +73,7 @@ export function BuyerDashboardPage() {
       }
 
       // 3. Fetch RSVPs
-      const rsvpRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/rsvp`, {
+      const rsvpRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/rsvp`, {
         credentials: "include"
       });
       if (rsvpRes.ok) {
@@ -81,7 +82,7 @@ export function BuyerDashboardPage() {
       }
 
       // 4. Fetch Guestbook
-      const gbRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guestbook`, {
+      const gbRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guestbook`, {
         credentials: "include"
       });
       if (gbRes.ok) {
@@ -124,7 +125,7 @@ export function BuyerDashboardPage() {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -155,7 +156,7 @@ export function BuyerDashboardPage() {
     setGuestSubmitting(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -186,7 +187,7 @@ export function BuyerDashboardPage() {
 
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests/${id}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests/${id}`, {
         method: "DELETE",
         credentials: "include"
       });
@@ -208,7 +209,7 @@ export function BuyerDashboardPage() {
     if (!weddingSlug) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests/${id}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

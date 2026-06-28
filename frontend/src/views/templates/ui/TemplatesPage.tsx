@@ -9,6 +9,7 @@ import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
+import tempBanner from "@/shared/assets/image/banner/temp_banner.png";
 
 const CATEGORIES = [
   "Tất cả mẫu thiệp",
@@ -22,13 +23,12 @@ const CATEGORIES = [
 ];
 
 const COLORS = [
-  { id: "pink", value: "#db2777", label: "Hồng" },
-  { id: "red", value: "#b91c1c", label: "Đỏ" },
-  { id: "gold", value: "#c6925c", label: "Vàng kim" },
-  { id: "green", value: "#2d5a27", label: "Xanh lá" },
-  { id: "navy", value: "#1e293b", label: "Xanh hải quân" },
-  { id: "purple", value: "#7c4d90", label: "Tím" },
-  { id: "classic", value: "#7a5c4f", label: "Nâu" }
+  { id: "pink", value: "#f472b6", label: "Hồng" },
+  { id: "orange", value: "#fb923c", label: "Cam" },
+  { id: "gold", value: "#fcd34d", label: "Vàng" },
+  { id: "green", value: "#86efac", label: "Xanh lá" },
+  { id: "blue", value: "#60a5fa", label: "Xanh dương" },
+  { id: "purple", value: "#c084fc", label: "Tím" }
 ];
 
 const PRICE_RANGES = [
@@ -135,12 +135,11 @@ export function TemplatesPage() {
     if (selectedColors.length > 0) {
       const matchColor = selectedColors.some((colorId) => {
         if (colorId === "pink" && (tpl.accentColor === "#db2777" || tpl.themeClass === "theme-pink")) return true;
-        if (colorId === "red" && (tpl.accentColor === "#b91c1c" || tpl.themeClass === "theme-red")) return true;
+        if (colorId === "orange" && (tpl.accentColor === "#fb923c" || tpl.accentColor === "#c6925c")) return true;
+        if (colorId === "gold" && (tpl.accentColor === "#c6925c" || tpl.accentColor === "#fcd34d")) return true;
         if (colorId === "green" && (tpl.accentColor === "#2d5a27" || tpl.themeClass === "theme-green")) return true;
-        if (colorId === "navy" && (tpl.accentColor === "#1e293b" || tpl.themeClass === "theme-navy")) return true;
+        if (colorId === "blue" && (tpl.accentColor === "#1e293b" || tpl.themeClass === "theme-navy" || tpl.accentColor === "#60a5fa")) return true;
         if (colorId === "purple" && (tpl.accentColor === "#ac81bd" || tpl.accentColor === "#7c4d90" || tpl.themeClass === "theme-purple")) return true;
-        if (colorId === "gold" && (tpl.accentColor === "#c6925c")) return true;
-        if (colorId === "classic" && (tpl.accentColor === "#7a5c4f" || tpl.themeClass === "theme-modern")) return true;
         return false;
       });
       if (!matchColor) return false;
@@ -215,33 +214,51 @@ export function TemplatesPage() {
     <div className="space-y-8 text-left">
       {/* Danh mục */}
       <div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4">Danh mục</h3>
-        <ul className="space-y-2.5">
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat;
+        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4 font-sans">Danh mục</h3>
+        <div className="space-y-2.5">
+          {[
+            { name: "Tất cả mẫu thiệp", count: 1024 },
+            { name: "Thiệp hiện đại", count: 324 },
+            { name: "Thiệp sang trọng", count: 286 },
+            { name: "Thiệp cổ điển", count: 168 },
+            { name: "Thiệp tối giản", count: 156 },
+            { name: "Thiệp hoa lá", count: 234 },
+            { name: "Thiệp phong cách Hàn Quốc", count: 198 },
+            { name: "Thiệp theo chủ đề", count: 98 }
+          ].map((cat) => {
+            const isSelected = selectedCategory === cat.name;
             return (
-              <li key={cat}>
-                <button
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`w-full text-left text-xs py-1 transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-between font-sans ${
-                    isSelected ? "text-[#db2777] font-semibold" : "text-[#7a5c4f]/80 hover:text-[#db2777]"
-                  }`}
-                >
-                  <span>{cat}</span>
-                  {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#db2777]" />}
-                </button>
-              </li>
+              <button
+                key={cat.name}
+                onClick={() => setSelectedCategory(cat.name)}
+                className={`w-full text-left text-xs py-1 cursor-pointer border-0 bg-transparent flex items-center justify-between font-sans transition-colors ${
+                  isSelected ? "text-[#db2777] font-semibold" : "text-[#7a5c4f]/80 hover:text-[#db2777]"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => {}} // Tránh warning của React
+                    className="w-3.5 h-3.5 accent-[#db2777] rounded border-gray-300 cursor-pointer pointer-events-none"
+                  />
+                  <span>{cat.name}</span>
+                </div>
+                <span className={`text-[11px] ${isSelected ? "text-[#db2777] font-semibold" : "text-[#7a5c4f]/60"}`}>
+                  {cat.count}
+                </span>
+              </button>
             );
           })}
-        </ul>
+        </div>
       </div>
 
       <hr className="border-t border-[#e2d8cf]/30" />
 
       {/* Màu sắc */}
       <div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4">Màu sắc</h3>
-        <div className="flex flex-wrap gap-2.5">
+        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4 font-sans">Màu sắc</h3>
+        <div className="flex flex-wrap gap-3">
           {COLORS.map((c) => {
             const isSelected = selectedColors.includes(c.id);
             return (
@@ -249,101 +266,39 @@ export function TemplatesPage() {
                 key={c.id}
                 onClick={() => toggleColor(c.id)}
                 title={c.label}
-                className="w-7 h-7 rounded-full cursor-pointer relative border transition-all hover:scale-110 active:scale-95 flex items-center justify-center"
+                className={`w-6 h-6 rounded-full cursor-pointer relative border border-black/5 transition-all hover:scale-110 active:scale-95 ${
+                  isSelected ? "ring-2 ring-[#db2777] ring-offset-2 scale-110" : ""
+                }`}
                 style={{
-                  backgroundColor: c.value,
-                  borderColor: isSelected ? "#db2777" : "rgba(0,0,0,0.1)",
-                  boxShadow: isSelected ? "0 0 0 2px white, 0 0 0 4px #db2777" : "none"
+                  backgroundColor: c.value
                 }}
-              >
-                {isSelected && (
-                  <Check size={12} className={c.id === "gold" || c.id === "pink" ? "text-white" : "text-white"} />
-                )}
-              </button>
+              />
             );
           })}
           {/* Nút mảng màu đa sắc */}
           <button
             onClick={() => setSelectedColors([])}
             title="Tất cả màu"
-            className="w-7 h-7 rounded-full cursor-pointer relative border border-gray-200 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+            className={`w-6 h-6 rounded-full cursor-pointer relative border border-gray-200 flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${
+              selectedColors.length === 0 ? "ring-2 ring-[#db2777] ring-offset-2 scale-110" : ""
+            }`}
             style={{
               background: "linear-gradient(135deg, #f43f5e, #3b82f6, #10b981, #eab308)"
             }}
-          >
-            {selectedColors.length === 0 && <Check size={12} className="text-white" />}
-          </button>
-        </div>
-      </div>
-
-      <hr className="border-t border-[#e2d8cf]/30" />
-
-      {/* Khoảng giá */}
-      <div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4">Khoảng giá</h3>
-        <div className="space-y-3">
-          {PRICE_RANGES.map((range) => (
-            <label key={range.id} className="flex items-center gap-2.5 text-xs text-[#7a5c4f]/85 cursor-pointer font-sans select-none">
-              <input
-                type="checkbox"
-                checked={priceRanges.includes(range.id)}
-                onChange={() => togglePriceRange(range.id)}
-                className="w-4 h-4 accent-[#db2777] rounded border-gray-300"
-              />
-              <span>{range.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-t border-[#e2d8cf]/30" />
-
-      {/* Phong cách */}
-      <div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4">Phong cách</h3>
-        <div className="space-y-3">
-          {STYLES.map((st) => (
-            <label key={st.id} className="flex items-center gap-2.5 text-xs text-[#7a5c4f]/85 cursor-pointer font-sans select-none">
-              <input
-                type="checkbox"
-                checked={selectedStyles.includes(st.id)}
-                onChange={() => toggleStyle(st.id)}
-                className="w-4 h-4 accent-[#db2777] rounded border-gray-300"
-              />
-              <span>{st.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-t border-[#e2d8cf]/30" />
-
-      {/* Tính năng nổi bật */}
-      <div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wider text-[#2c1810] mb-4">Tính năng nổi bật</h3>
-        <div className="space-y-3">
-          {FEATURES.map((feat) => (
-            <label key={feat.id} className="flex items-center gap-2.5 text-xs text-[#7a5c4f]/85 cursor-pointer font-sans select-none">
-              <input
-                type="checkbox"
-                checked={selectedFeatures.includes(feat.id)}
-                onChange={() => toggleFeature(feat.id)}
-                className="w-4 h-4 accent-[#db2777] rounded border-gray-300"
-              />
-              <span>{feat.label}</span>
-            </label>
-          ))}
+          />
         </div>
       </div>
 
       {/* Nút xóa bộ lọc */}
-      <button
-        onClick={clearFilters}
-        className="w-full flex items-center justify-center gap-2 border border-[#e2d8cf] hover:border-[#db2777]/30 hover:bg-[#db2777]/5 text-xs text-[#7a5c4f] hover:text-[#db2777] font-semibold py-3 rounded-full cursor-pointer transition-all active:scale-95"
-      >
-        <RefreshCw size={12} />
-        Xóa bộ lọc
-      </button>
+      {(selectedCategory !== "Tất cả mẫu thiệp" || selectedColors.length > 0 || searchQuery !== "") && (
+        <button
+          onClick={clearFilters}
+          className="w-full flex items-center justify-center gap-2 border border-[#e2d8cf] hover:border-[#db2777]/30 hover:bg-[#db2777]/5 text-xs text-[#7a5c4f] hover:text-[#db2777] font-semibold py-2.5 rounded-lg cursor-pointer transition-all active:scale-95 mt-4"
+        >
+          <RefreshCw size={12} />
+          Xóa bộ lọc
+        </button>
+      )}
     </div>
   );
 
@@ -352,65 +307,107 @@ export function TemplatesPage() {
       <Header onOpenRequest={() => handleStartCreating(1)} />
 
       {/* Search & Hero Banner */}
-      <section className="relative overflow-hidden pt-12 pb-16 bg-[#fdf6ef]">
-        <div className="absolute inset-0 pointer-events-none opacity-30">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-cover bg-no-repeat bg-right" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800')" }}></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-cover bg-no-repeat bg-left rotate-180" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800')" }}></div>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 text-center space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl md:text-5xl font-bold text-[#2c1810] tracking-tight leading-tight" style={{ fontFamily: "'EB Garamond', serif" }}>
-              Kho mẫu thiệp cưới{" "}
-              <span className="text-[#db2777] font-normal italic block sm:inline mt-1" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "3rem" }}>
-                đa dạng &amp; ấn tượng
-              </span>
-            </h1>
-            <p className="text-xs md:text-sm text-[#7a5c4f]/70 font-light max-w-xl mx-auto">
-              Hơn 1000+ mẫu thiệp cưới được thiết kế bởi các nhà thiết kế chuyên nghiệp.
-            </p>
-          </div>
-
-          {/* Search Box */}
-          <div className="max-w-xl mx-auto relative group">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm kiếm mẫu thiệp..."
-              className="w-full pl-6 pr-12 py-3.5 sm:py-4 rounded-full border border-[#e2d8cf] focus:border-[#db2777]/50 bg-white text-[#2c1810] text-sm shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-[#db2777]/5 font-sans"
-            />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#db2777] hover:bg-[#c2185b] flex items-center justify-center text-white cursor-pointer transition-colors shadow-sm">
-              <Search size={16} />
+      <section 
+        className="relative overflow-hidden pt-14 pb-20 bg-cover bg-center bg-no-repeat border-b border-[#e2d8cf]/20"
+        style={{ backgroundImage: `url(${tempBanner.src})` }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 md:gap-12">
+            {/* Cột trái: Tiêu đề */}
+            <div className="space-y-3.5 text-left max-w-xl">
+              <h1 className="text-3xl md:text-5xl font-bold text-[#2c1810] tracking-tight leading-tight" style={{ fontFamily: "'EB Garamond', serif" }}>
+                Kho mẫu thiệp cưới <br />
+                <span className="text-[#db2777]">đa dạng &amp; ấn tượng</span>
+              </h1>
+              <p className="text-xs md:text-sm text-[#7a5c4f]/80 font-normal leading-relaxed max-w-lg">
+                Hơn 1000+ mẫu thiệp cưới được thiết kế bởi các nhà thiết kế chuyên nghiệp.
+              </p>
             </div>
-          </div>
 
-          {/* Highlights */}
-          <div className="max-w-4xl mx-auto bg-white/60 backdrop-blur-sm border border-[#e2d8cf]/40 rounded-2xl p-4 md:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 shadow-sm text-left">
-            {[
-              { icon: "🌸", title: "1000+", desc: "Mẫu thiệp đẹp" },
-              { icon: "🎁", title: "Cập nhật", desc: "Hàng tuần" },
-              { icon: "✏️", title: "Dễ dàng", desc: "Tùy chỉnh" },
-              { icon: "📱", title: "Tối ưu", desc: "Trên mọi thiết bị" }
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-3">
-                <span className="text-2xl bg-pink-100/50 w-11 h-11 rounded-xl flex items-center justify-center">{item.icon}</span>
-                <div>
-                  <h4 className="text-xs font-bold text-[#2c1810] leading-none">{item.title}</h4>
-                  <p className="text-[10px] text-[#7a5c4f]/80 font-medium mt-1 leading-none">{item.desc}</p>
+            {/* Cột phải: Ô tìm kiếm */}
+            <div className="w-full md:w-[320px] lg:w-[380px] relative text-left">
+              <div className="relative group">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Tìm kiếm mẫu thiệp..."
+                  className="w-full pl-5 pr-14 py-3 rounded-lg border border-[#e2d8cf] focus:border-[#db2777]/50 bg-white text-[#2c1810] text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#db2777]/10 font-sans"
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center text-[#db2777] border border-[#e2d8cf]/50 hover:bg-pink-50/50 cursor-pointer transition-all active:scale-95">
+                  <Search size={15} />
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Highlights Bar */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-8 relative z-20">
+        <div className="bg-white border border-[#e2d8cf]/40 rounded-2xl md:rounded-3xl p-5 md:p-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 shadow-sm text-left">
+          {[
+            { 
+              icon: (
+                <svg className="w-4 h-4 text-[#db2777]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              ), 
+              title: "1000+", 
+              desc: "Mẫu thiệp đẹp" 
+            },
+            { 
+              icon: (
+                <svg className="w-4 h-4 text-[#db2777]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+              ), 
+              title: "Cập nhật", 
+              desc: "Hàng tuần" 
+            },
+            { 
+              icon: (
+                <svg className="w-4 h-4 text-[#db2777]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+              ), 
+              title: "Dễ dàng", 
+              desc: "Tùy chỉnh" 
+            },
+            { 
+              icon: (
+                <svg className="w-4 h-4 text-[#db2777]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" />
+                </svg>
+              ), 
+              title: "Tối ưu", 
+              desc: "Trên mọi thiết bị" 
+            }
+          ].map((item, idx) => (
+            <div key={idx} className={`flex items-center gap-3.5 ${idx > 0 ? 'md:border-l md:border-[#e2d8cf]/40 md:pl-6' : ''}`}>
+              <span className="w-9 h-9 rounded-full bg-pink-50 flex items-center justify-center flex-shrink-0">
+                {item.icon}
+              </span>
+              <div>
+                <h4 className="text-sm font-bold text-[#2c1810] leading-none">{item.title}</h4>
+                <p className="text-[11px] text-[#7a5c4f]/80 mt-1 leading-none font-sans font-medium">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Main Content Area */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-16 bg-[#fffdfb]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex gap-8">
             {/* Sidebar filter cho Desktop */}
-            <aside className="w-64 flex-shrink-0 hidden md:block border-r border-[#e2d8cf]/30 pr-8">
+            <aside className="w-56 flex-shrink-0 hidden md:block border-r border-[#e2d8cf]/20 pr-6">
               <FilterSidebarContent />
             </aside>
 
@@ -418,9 +415,9 @@ export function TemplatesPage() {
             <div className="flex-1">
               <div className="flex items-center justify-between gap-4 mb-8">
                 <div className="text-left">
-                  <h2 className="text-lg font-bold text-[#2c1810]">
-                    Tất cả mẫu thiệp{" "}
-                    <span className="text-xs font-normal text-[#7a5c4f]/70 ml-1.5 font-sans">
+                  <h2 className="text-base font-bold text-[#2c1810] font-sans">
+                    Tất cả mẫu thiệp
+                    <span className="text-[11px] font-normal text-[#7a5c4f]/60 ml-2 font-sans">
                       ({sortedTemplates.length} mẫu thiệp)
                     </span>
                   </h2>
@@ -436,18 +433,23 @@ export function TemplatesPage() {
                   </button>
 
                   {/* Sắp xếp */}
-                  <div className="flex items-center gap-1.5 border border-[#e2d8cf] rounded-full px-3.5 py-1.5 bg-white">
+                  <div className="flex items-center gap-2">
                     <span className="text-[11px] text-[#7a5c4f]/60 font-semibold uppercase tracking-wider font-sans">Sắp xếp:</span>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-transparent border-none text-xs font-semibold text-[#2c1810] focus:outline-none cursor-pointer pr-1 font-sans"
-                    >
-                      <option value="newest">Mới nhất</option>
-                      <option value="popular">Phổ biến nhất</option>
-                      <option value="price-asc">Giá tăng dần</option>
-                      <option value="price-desc">Giá giảm dần</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="appearance-none bg-white border border-[#e2d8cf] hover:border-[#db2777]/30 rounded-lg px-3 py-1.5 pr-8 text-xs font-semibold text-[#2c1810] focus:outline-none cursor-pointer font-sans shadow-sm"
+                      >
+                        <option value="newest">Mới nhất</option>
+                        <option value="popular">Phổ biến nhất</option>
+                        <option value="price-asc">Giá tăng dần</option>
+                        <option value="price-desc">Giá giảm dần</option>
+                      </select>
+                      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#7a5c4f]">
+                        <ChevronDown size={14} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -471,7 +473,7 @@ export function TemplatesPage() {
                     <div className="mt-12 text-center">
                       <button
                         onClick={() => setVisibleCount((prev) => prev + 12)}
-                        className="bg-white hover:bg-pink-50 text-[#db2777] border border-[#db2777]/25 px-8 py-3.5 rounded-full font-semibold text-xs transition-all active:scale-95 shadow-sm inline-flex items-center gap-2 cursor-pointer"
+                        className="bg-white hover:bg-pink-50/50 text-[#db2777] border border-[#db2777]/25 px-8 py-3 rounded-full font-semibold text-xs transition-all active:scale-95 shadow-sm inline-flex items-center gap-2 cursor-pointer"
                       >
                         Xem thêm mẫu thiệp <ChevronDown size={14} />
                       </button>
@@ -499,9 +501,9 @@ export function TemplatesPage() {
       </section>
 
       {/* Banner CTA ở chân trang */}
-      <section className="py-20 bg-[#fdf6ef]">
+      <section className="py-20 bg-[#fdf6ef]/60 border-t border-[#e2d8cf]/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="relative overflow-hidden rounded-3xl bg-pink-50 border border-[#e2d8cf]/40 shadow-sm flex flex-col md:flex-row items-center justify-between p-8 md:p-14 text-left">
+          <div className="relative overflow-hidden rounded-3xl bg-pink-50/40 border border-[#e2d8cf]/40 shadow-sm flex flex-col md:flex-row items-center justify-between p-8 md:p-14 text-left">
             <div
               className="absolute inset-0 opacity-10 pointer-events-none"
               style={{
@@ -512,11 +514,11 @@ export function TemplatesPage() {
 
             <div className="space-y-6 max-w-xl z-10">
               <h2
-                className="text-4xl sm:text-5xl text-[#2c1810] font-bold leading-tight flex flex-col items-start gap-y-1"
+                className="text-3xl sm:text-4xl text-[#2c1810] font-bold leading-tight flex flex-col items-start gap-y-1"
                 style={{ fontFamily: "'EB Garamond', serif" }}
               >
                 <span>Không tìm thấy mẫu yêu thích?</span>
-                <span className="text-[#db2777] font-normal text-4xl sm:text-5xl" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                <span className="text-[#db2777] font-normal text-3xl sm:text-4xl" style={{ fontFamily: "'Great Vibes', cursive" }}>
                   Thiết kế thiệp cưới riêng theo phong cách của bạn.
                 </span>
               </h2>
@@ -552,7 +554,7 @@ export function TemplatesPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-sm font-bold text-[#2c1810]">Bộ lọc tìm kiếm</h2>
+              <h2 className="text-sm font-bold text-[#2c1810] font-sans">Bộ lọc tìm kiếm</h2>
               <button onClick={() => setMobileFilterOpen(false)} className="w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#db2777]">
                 <X size={16} />
               </button>

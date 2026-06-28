@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+import { API_URL } from "@/shared/lib/config";
 
 export const authService = {
   // 1. Đăng nhập bằng Email & Mật khẩu

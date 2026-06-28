@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, LogOut, Loader2, Sparkles, Phone, Mail, Calendar, Layers, Clock, MessageSquare } from "lucide-react";
 import { authService } from "@/features/auth/api/authService";
+import { API_URL } from "@/shared/lib/config";
 
 export function AdminDashboardPage() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export function AdminDashboardPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:8080/api/invitation-requests", {
+        const response = await fetch(`${API_URL}/api/invitation-requests`, {
           credentials: "include"
         });
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Send, Heart } from "lucide-react";
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
+import { API_URL } from "@/shared/lib/config";
 
 interface RsvpFormProps {
   weddingSlug: string;
@@ -21,7 +22,7 @@ export function RsvpForm({ weddingSlug, prefilledName }: RsvpFormProps) {
   async function submitRsvp(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/rsvp`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/rsvp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

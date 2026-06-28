@@ -20,6 +20,8 @@ import { FadeIn } from "@/shared/ui/FadeIn";
 import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { API_URL } from "@/shared/lib/config";
+
 
 interface WeddingInvitationDemoPageProps {
   onBack: () => void;
@@ -61,7 +63,7 @@ export function WeddingInvitationDemoPage({
   useEffect(() => {
     setLoading(true);
     // Fetch wedding details for 'vanan-thibinh'
-    fetch("http://localhost:8080/api/weddings/vanan-thibinh")
+    fetch(`${API_URL}/api/weddings/vanan-thibinh`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
@@ -72,7 +74,7 @@ export function WeddingInvitationDemoPage({
       .finally(() => setLoading(false));
 
     // Fetch guestbook messages
-    fetch("http://localhost:8080/api/weddings/vanan-thibinh/guestbook")
+    fetch(`${API_URL}/api/weddings/vanan-thibinh/guestbook`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
@@ -85,12 +87,13 @@ export function WeddingInvitationDemoPage({
         }
       })
       .catch((err) => console.error(err));
+
   }, []);
 
   const handleSendMessage = async (name: string, msg: string) => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/weddings/vanan-thibinh/guestbook",
+        `${API_URL}/api/weddings/vanan-thibinh/guestbook`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

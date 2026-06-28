@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heart, Menu, X, Sun, Check } from "lucide-react";
+import { Menu, X, Check } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
