@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, LogOut, Loader2, Sparkles, Phone, Mail, Calendar, Layers, Clock, MessageSquare } from "lucide-react";
+import { authService } from "@/features/auth/api/authService";
+import { API_URL } from "@/shared/lib/config";
 
 export function AdminDashboardPage() {
   const router = useRouter();
@@ -10,34 +12,31 @@ export function AdminDashboardPage() {
   const [requestsList, setRequestsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Authentication check
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
 
-    if (!savedToken || savedRole !== "admin") {
+    if (!savedRole || (savedRole !== "admin" && savedRole !== "staff")) {
       localStorage.clear();
       navigate("/login");
       return;
     }
 
-    setToken(savedToken);
+    setIsLoggedIn(true);
   }, [navigate]);
 
   // Fetch invitation requests
   useEffect(() => {
-    if (!token) return;
+    if (!isLoggedIn) return;
 
     const fetchRequests = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:8080/api/invitation-requests", {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+        const response = await fetch(`${API_URL}/api/invitation-requests`, {
+          credentials: "include"
         });
 
         const resData = await response.json();
@@ -54,9 +53,14 @@ export function AdminDashboardPage() {
     };
 
     fetchRequests();
-  }, [token]);
+  }, [isLoggedIn]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.error("Lỗi đăng xuất:", err);
+    }
     localStorage.clear();
     navigate("/login");
   };

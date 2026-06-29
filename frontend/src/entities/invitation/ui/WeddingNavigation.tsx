@@ -4,9 +4,10 @@ import { Menu, X } from "lucide-react";
 interface WeddingNavigationProps {
   groomName: string;
   brideName: string;
+  isFixed?: boolean;
 }
 
-export function WeddingNavigation({ groomName, brideName }: WeddingNavigationProps) {
+export function WeddingNavigation({ groomName, brideName, isFixed = true }: WeddingNavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,7 +47,7 @@ export function WeddingNavigation({ groomName, brideName }: WeddingNavigationPro
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`${isFixed ? "fixed" : "absolute"} top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "bg-background/80 backdrop-blur-md shadow-sm border-b border-border py-3"
           : "bg-transparent py-5"

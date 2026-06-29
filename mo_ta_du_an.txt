@@ -1,0 +1,210 @@
+========================================================================
+                      MÔ TẢ CHI TIẾT DỰ ÁN VIORA
+             NỀN TẢNG THIỆP CƯỚI TRỰC TUYẾN (E-INVITATION)
+========================================================================
+
+1. GIỚI THIỆU CHUNG
+------------------------------------------------------------------------
+Viora (thieponline.vn) là một nền tảng Web thông minh cho phép các cặp đôi 
+tự thiết kế, tùy chỉnh và xuất bản thiệp cưới trực tuyến (E-Invitation). 
+Dự án cung cấp một bộ công cụ chỉnh sửa trực quan (Visual Editor) giúp người 
+dùng tạo ra các thiệp cưới hiện đại, chia sẻ dễ dàng qua mạng xã hội (Zalo, 
+Facebook Messenger, Email, v.v...) và quản lý phản hồi từ khách mời.
+
+
+2. KIẾN TRÚC & ĐẶC TẢ KỸ THUẬT (TECHNICAL ARCHITECTURE)
+------------------------------------------------------------------------
+Dự án được xây dựng theo mô hình Client-Server độc lập:
+
+* Kiến trúc phân tầng và giao tiếp API:
+  - Frontend Next.js hoạt động độc lập, giao tiếp với RESTful API do Backend 
+    NestJS cung cấp thông qua giao thức HTTP (mặc định chạy ở http://localhost:8080).
+  - Tích hợp xác thực phân quyền dựa trên JSON Web Token (JWT). Token được lưu 
+    ở LocalStorage phía Client và gửi kèm header Authorization Bearer trong mỗi request.
+
+* Cơ chế Theme động (Dynamic Theme Custom Properties):
+  - Dự án sử dụng hệ thống màu sắc động thông qua Biến CSS (CSS Variables) thay vì 
+    code cứng màu sắc cho từng mẫu thiệp.
+  - Trong file styles/theme.css, mỗi mẫu thiệp cưới được gán một class CSS đại diện 
+    (ví dụ: .theme-pink, .theme-green, .theme-navy, .theme-red, .theme-modern, .theme-purple). 
+    Mỗi class này sẽ tái định nghĩa các biến màu cốt lõi:
+      + `--background` (Màu nền chủ đạo)
+      + `--foreground` (Màu chữ chính)
+      + `--primary` & `--primary-foreground` (Màu thương hiệu/nút nhấn)
+      + `--accent` (Màu nhấn hoa văn/đường viền)
+      + `--border` (Màu phân cách)
+  - Khi xem trước hoặc truy cập thiệp live, thẻ div cha ngoài cùng sẽ nhận class theme 
+    tương ứng (ví dụ: `<div className={`min-h-screen ${currentTheme}`}>`). 
+    Tailwind CSS v4 sẽ tự động biên dịch các class tiện ích như `bg-background` thành 
+    `var(--background)`, `text-primary` thành `var(--primary)`, giúp giao diện tự động 
+    đổi màu sắc và font chữ một cách mượt mà.
+
+* Hệ thống Schema tùy biến tính năng (Schema-Driven Config):
+  - Mỗi template được gán một Schema định nghĩa các quyền lợi và trường tùy chỉnh riêng 
+    (ví dụ: được phép bật câu chuyện tình yêu, giới hạn số lượng ảnh tải lên tối đa, 
+    hay thêm các trường nhập liệu tự do customFields).
+  - Giao diện Editor tự động đọc schema này để ẩn/hiện các tab cấu hình phù hợp, 
+    trong khi giao diện thiệp live cũng đọc schema để dựng các thành phần tương ứng.
+
+* Kiến trúc Template độc lập (Pluggable Template Architecture):
+  - Các template được phát triển hoàn toàn khép kín dưới dạng các package độc lập
+    trong thư mục `frontend/src/entities/template/packages/`.
+  - Mỗi package bao gồm tệp `LiveView.tsx` (giao diện hiển thị trực tiếp cho khách mời)
+    và `EditView.tsx` (bảng form chỉnh sửa trực quan riêng biệt của template đó).
+  - Registry động `src/entities/template/model/registry.ts` chịu trách nhiệm định tuyến
+    và trả về các component chính xác dựa trên `templateId` được chọn.
+
+
+3. CẤU TRÚC THƯ MỤC DỰ ÁN (PROJECT DIRECTORY STRUCTURE)
+------------------------------------------------------------------------
+Dự án sử dụng cấu trúc Monorepo đơn giản với hai thư mục chính:
+
+* THƯ MỤC GỐC (WORKSPACE ROOT)
+  ├── backend/               # Thư mục dịch vụ API Server (NestJS)
+  ├── frontend/              # Thư mục ứng dụng giao diện khách hàng (Next.js)
+  └── pnpm-workspace.yaml    # Cấu hình workspace nếu chạy pnpm
+
+* CHI TIẾT FRONTEND (frontend/src/)
+  ├── app/                   # Next.js App Router (Định tuyến các trang chính)
+  │   ├── account/           # Trang thiết lập tài khoản
+  │   ├── admin/             # Dashboard dành cho Quản trị viên
+  │   ├── create/            # Luồng bắt đầu chọn mẫu & tạo thiệp mới
+  │   ├── dashboard/         # Trang cá nhân quản lý danh sách thiệp cưới đã tạo
+  │   ├── edit/[weddingSlug] # Trình chỉnh sửa thiệp cưới trực quan (Editor)
+  │   ├── login/             # Trang đăng nhập / đăng ký
+  │   ├── w/[weddingSlug]/   # Trang xem thiệp cưới trực tiếp (Live page của khách mời)
+  │   └── styles/            # Chứa index.css, theme.css (Biến màu), tailwind.css v4
+  ├── entities/              # Các thực thể dữ liệu cốt lõi (Domain Entities)
+  │   ├── invitation/        # Giao diện thành phần thiệp cũ
+  │   └── template/          # Định nghĩa cấu trúc mảng TEMPLATES và Schema
+  │       ├── model/         # Chứa schema, registry động và danh sách templates
+  │       └── packages/      # Thư mục chứa các template độc lập (scrolling, lavender...)
+  ├── features/              # Xử lý logic nghiệp vụ có tương tác cụ thể
+  │   ├── submit-rsvp/       # Form thu thập phản hồi sự tham dự của khách
+  │   └── write-guestbook/   # Form viết lời chúc gửi vào sổ lưu bút
+  ├── views/                 # Các trang giao diện tổng hợp lớn
+  │   ├── wedding-editor/    # Logic & giao diện của màn hình soạn thảo thiệp
+  │   ├── wedding-invitation/# Logic & giao diện của màn hình xem thiệp mời live
+  │   └── landing/           # Giao diện Trang chủ giới thiệu dịch vụ
+  ├── widgets/               # Các component khối lớn dùng ở Trang chủ (Hero, FAQ, Pricing...)
+  └── shared/                # UI dùng chung (FadeIn), hooks (useCountdown), các kiểu dữ liệu chung
+
+* CHI TIẾT BACKEND (backend/src/)
+  ├── auth/                  # Đăng ký, đăng nhập, OTP, Refresh Token, Password Reset
+  ├── user/                  # Quản lý hồ sơ cá nhân và vai trò người dùng (customer, affiliate, admin)
+  ├── wedding/               # CRUD thiệp cưới, lưu bút (guestbook), danh sách khách mời (guest)
+  │   ├── schemas/           # Chứa wedding, guest, guestbook, wedding-event, wedding-timeline schemas
+  ├── template/              # Quản lý danh mục mẫu thiệp và nhật ký mua mẫu thiệp lẻ (template, template-purchase)
+  ├── payment/               # Ghi nhận hóa đơn giao dịch thanh toán (payment)
+  ├── media/                 # Quản lý tải lên tệp tin ảnh cưới, cover, avatar (media)
+  ├── affiliate/             # Quản lý link giới thiệu CTV, tính toán hoa hồng và rút tiền (affiliate-link, commission, payout-request)
+  ├── audit/                 # Nhật ký kiểm toán và ghi nhận hoạt động hệ thống (audit-log)
+  └── main.ts                # Khởi chạy ứng dụng Server NestJS (Cổng 3000 hoặc 8080)
+
+
+4. CẤU TRÚC BIỂU PHÍ & MÔ HÌNH BÁN TEMPLATE (PAY-PER-TEMPLATE MODEL)
+------------------------------------------------------------------------
+Viora áp dụng mô hình kinh doanh **Mua đứt lẻ từng mẫu thiệp (Pay-per-Template)**. 
+Người dùng thanh toán một lần để mở khóa vĩnh viễn mẫu thiệp đó cho đám cưới của mình:
+
+* Phân loại biểu phí sản phẩm:
+  - Nhóm Mẫu Miễn Phí (0đ) (VD. Mẫu Tinh Giản - ID 1):
+    + Người dùng có thể sử dụng và xuất bản hoàn toàn miễn phí.
+    + Thích hợp cho nhu cầu tối giản.
+  - Nhóm Mẫu Cơ Bản (199.000đ) (VD. Mẫu Hồng Sương Mai - ID 2, Tím Oải Hương - ID 6):
+    + Mẫu thiệp lãng mạn, truyền thống trung cấp, album ảnh lớn (10 - 20 ảnh).
+    + Hiệu ứng hoạt họa nhẹ nhàng, có đếm ngược ngày cưới và form RSVP/lưu bút đầy đủ.
+  - Nhóm Mẫu Cao Cấp/VIP (299.000đ) (VD. Mẫu Đêm Hoàng Gia - ID 5, Ngà Cổ Điển - ID 4):
+    + Hỗ trợ giao diện bìa động bằng video hoặc các hiệu ứng chuyển động cao cấp.
+    + Nhạc nền đám cưới tự động phát lãng mạn, hiệu ứng phong bì sáp sang trọng.
+    + Không giới hạn ảnh cưới trong album (lên đến 30 ảnh HD).
+    + Cho phép cấu hình các tính năng đặc biệt của riêng mẫu đó.
+
+
+5. LUỒNG HOẠT ĐỘNG CỦA NGƯỜI DÙNG (USER FLOW)
+------------------------------------------------------------------------
+1. Chọn mẫu yêu thích:
+   - Người dùng truy cập trang chủ, xem danh sách mẫu thiệp cưới hiển thị kèm giá bán lẻ cụ thể 
+     (0đ, 199.000đ hoặc 299.000đ) và bấm "Dùng mẫu này" để bắt đầu chỉnh sửa.
+2. Soạn thảo trực quan (Real-time Customization):
+   - Người dùng nhập các thông tin lễ cưới của mình trên khung chỉnh sửa bên trái (thông tin 
+     cô dâu chú rể, cha mẹ, ngày giờ, địa điểm tổ chức kèm link Google Maps).
+   - Thiết lập album ảnh cưới và số tài khoản ngân hàng để tự động tạo mã VietQR mừng cưới.
+   - Khung xem trước (Real-time Preview) bên phải cập nhật tức thì trên thiết bị giả lập.
+3. Đồng bộ & Lưu trữ (Khi nhấn Xuất bản):
+   - Khi người dùng nhấn nút "Xuất bản" (Publish) ở góc phải, nếu tài khoản chưa đăng nhập, 
+     hệ thống yêu cầu Đăng ký hoặc Đăng nhập nhanh.
+   - Dữ liệu thiệp được đồng bộ và lưu trữ vào tài khoản người dùng dưới dạng bản nháp.
+4. Mở khóa Template (Nếu chọn mẫu trả phí):
+   - Nếu template đã chọn có giá lớn hơn 0 và người dùng chưa mua mẫu thiệp này trước đó, 
+     hộp thoại Mở khóa mẫu thiệp cưới sẽ hiện ra.
+   - Hệ thống hiển thị QR chuyển khoản tương ứng với giá bán lẻ của template (199.000đ hoặc 299.000đ).
+   - Sau khi thanh toán thành công (hoặc giả lập thành công tại client), một bản ghi giao dịch 
+     thanh toán sẽ được lưu vào `payments`, đồng thời tạo quyền sở hữu trong `template_purchases` 
+     để mở khóa mẫu thiệp tương ứng cho tài khoản người dùng. Nếu thông qua link CTV, hoa hồng 
+     sẽ được tự động tính toán và ghi nhận vào bảng `commissions`.
+5. Xuất bản thiệp chính thức:
+   - Thiệp cưới chính thức hoạt động tại địa chỉ `thieponline.vn/w/[weddingSlug]`.
+   - Cặp đôi copy đường dẫn để chia sẻ tới bạn bè, người thân qua Zalo, Messenger, SMS...
+6. Khách mời tương tác:
+   - Người thân, bạn bè mở link thiệp, xem thông tin và ảnh cưới, nghe nhạc nền lãng mạn.
+   - Khách mời nhập lời chúc chúc mừng (Sổ lưu bút) và gửi thông tin xác nhận tham dự tiệc (RSVP).
+7. Theo dõi & Quản lý phản hồi (Dashboard):
+   - Cặp đôi đăng nhập vào Dashboard cá nhân của mình để theo dõi danh sách khách mời xác nhận RSVP.
+
+
+6. HƯỚNG DẪN CHI TIẾT THÊM MỘT MẪU THIỆP (TEMPLATE) MỚI
+------------------------------------------------------------------------
+Để thêm một mẫu thiệp mới vào hệ thống Pluggable Template, bạn cần thực hiện các bước sau:
+
+* BƯỚC 1: Thêm lớp Class Theme mới
+  Mở tệp `frontend/src/app/styles/theme.css` và định nghĩa các biến CSS màu sắc của theme mới.
+
+* BƯỚC 2: Khai báo cấu hình Template & Giá bán lẻ
+  Mở tệp `frontend/src/entities/template/model/templates.ts`, thêm cấu hình mới vào mảng `TEMPLATES`. 
+  Cần chỉ rõ giá tiền của template thông qua trường `price` (ví dụ: `price: 199000` hoặc `price: 0`).
+
+* BƯỚC 3: Tạo thư mục Template Package độc lập
+  - Tạo thư mục mới tại `src/entities/template/packages/template-[tên-mẫu]/`.
+  - Tạo `LiveView.tsx` để render giao diện hiển thị cho khách và `EditView.tsx` chứa form chỉnh sửa riêng.
+  - Tạo `index.ts` để xuất bản package.
+
+* BƯỚC 4: Đăng ký với Registry
+  Mở tệp `src/entities/template/model/registry.ts`, import package mới tạo và ánh xạ theo `templateId`.
+
+
+8. HỆ THỐNG CƠ SỞ DỮ LIỆU (DATABASE SCHEMAS)
+------------------------------------------------------------------------
+Hệ thống sử dụng MongoDB làm cơ sở dữ liệu chính với 18 Collections chính được thiết kế chuẩn hóa và phân rã các mảng nhúng phức tạp để tối ưu hiệu năng:
+
+a. Nhóm Auth & Người dùng:
+   - `users`: Quản lý tài khoản, thông tin liên hệ, phân quyền vai trò (user, staff, admin) và loại tài khoản (customer, affiliate, admin).
+   - `refresh_tokens`: Lưu trữ Refresh Token băm bảo mật kèm TTL index tự động hết hạn.
+   - `password_resets`: Mã khôi phục mật khẩu gửi qua email kèm TTL index.
+   - `otps`: Mã OTP xác thực đăng nhập nhanh không mật khẩu.
+
+b. Nhóm Thiết kế & Giao diện (Templates):
+   - `templates`: Chứa thông tin cấu hình giao diện, mã code, danh mục, phiên bản và giá bán lẻ.
+   - `template_purchases`: Nhật ký ghi nhận các giao dịch mua lẻ thành công mẫu thiệp của khách hàng.
+
+c. Nhóm Nội dung thiệp & Khách mời:
+   - `weddings`: Chứa thông tin cơ bản cô dâu chú rể, cấu hình SEO, cấu hình nhạc nền/ẩn hiện tính năng và trạng thái xuất bản thiệp.
+   - `wedding_events`: Các buổi lễ chi tiết (Lễ Vu Quy, Thành Hôn, Tiệc Cưới...) liên kết qua `weddingId`.
+   - `wedding_timelines`: Câu chuyện tình yêu dạng dòng sự kiện liên kết qua `weddingId`.
+   - `guests`: Danh sách khách mời, mã QR Check-in điểm danh, số bàn tiệc, và phản hồi tham dự RSVP kèm lời nhắn (gộp từ bảng rsvps cũ).
+   - `guestbooks`: Lời chúc lưu bút từ khách mời gửi tới thiệp cưới, hỗ trợ kiểm duyệt hiển thị qua `isApproved`.
+   - `media`: Quản lý siêu dữ liệu các ảnh cưới, ảnh bìa, avatar tải lên hệ thống.
+
+d. Nhóm Thanh toán & Affiliate (CTV):
+   - `payments`: Nhật ký hóa đơn chi tiết giao dịch (userId, templateId, transactionId từ ngân hàng, amount, status).
+   - `affiliate_links`: Thống kê click link giới thiệu và số lượt chuyển đổi thành công của CTV.
+   - `commissions`: Lịch sử ghi nhận hoa hồng tương ứng cho CTV khi có đơn thanh toán thành công qua link giới thiệu.
+   - `payout_requests`: Yêu cầu rút số dư hoa hồng tích lũy của CTV gửi tới Admin duyệt chi.
+
+e. Nhóm Quản trị & Tin tức:
+   - `news`: Quản lý bài viết blog, tin tức cập nhật trên trang chủ do staff/admin soạn thảo.
+   - `audit_logs`: Nhật ký kiểm toán hệ thống ghi lại vết hành động (log login, log edit wedding, IP, UserAgent) phục vụ bảo mật.
+
+========================================================================
+
+

@@ -1,147 +1,224 @@
-import { X, Clock, MapPin, Music } from "lucide-react";
-import { Template } from "../model/templates";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  X,
+  Edit3,
+  Smartphone,
+  Heart,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { TemplateConfig } from "../model/schema";
+import { TEMPLATES } from "../model/templates";
 
 interface PreviewModalProps {
-  tpl: Template;
+  tpl: TemplateConfig;
   onClose: () => void;
   onRequestDesign: () => void;
+  onSelectTemplate?: (tpl: TemplateConfig) => void;
 }
 
-export function PreviewModal({ tpl, onClose, onRequestDesign }: PreviewModalProps) {
+// Helper to get custom descriptive text for each template
+const getDetailedDesc = (tpl: TemplateConfig) => {
+  switch (tpl.id) {
+    case 1:
+      return "Màu hồng pastel ngọt ngào, viền vàng kim sang trọng kiểu Pháp";
+    case 2:
+      return "Lá khuynh diệp thanh mát, tối giản phong cách Botanical gần gũi thiên nhiên";
+    case 3:
+      return "Chữ lồng cổ điển, họa tiết hoàng gia Baroque quý phái trang nhã";
+    case 4:
+      return "Khung ảnh đôi hiện đại, kiểu chữ phóng khoáng, trẻ trung";
+    case 5:
+      return "Họa tiết hoa lavender thơ mộng, mang lại sự lãng mạn nhẹ nhàng";
+    case 6:
+      return "Nền tối huyền bí, chữ ép kim nhũ vàng phong cách luxury đẳng cấp";
+    default:
+      return `Mẫu thiết kế phong cách ${tpl.style.toLowerCase()} tinh tế với tông màu đặc trưng.`;
+  }
+};
+
+// Helper to get custom tags for each template
+const getTemplateTags = (tpl: TemplateConfig) => {
+  switch (tpl.id) {
+    case 1:
+      return ["Lãng mạn", "Hoa Lá"];
+    case 2:
+      return ["Tinh giản", "Màu Xanh"];
+    case 3:
+      return ["Cổ điển", "Sang trọng"];
+    case 4:
+      return ["Hiện đại", "Khung Ảnh"];
+    case 5:
+      return ["Thơ mộng", "Tím Nhẹ"];
+    case 6:
+      return ["Đẳng cấp", "Nền Tối"];
+    default:
+      return [tpl.style, "Thiệp cưới"];
+  }
+};
+
+export function PreviewModal({
+  tpl,
+  onClose,
+  onRequestDesign,
+  onSelectTemplate,
+}: PreviewModalProps) {
+  const router = useRouter();
+
+  const handlePreviewDemo = () => {
+    onClose();
+    router.push("/wedding-demo");
+  };
+
+  const similarTpls = TEMPLATES.filter((t) => t.id !== tpl.id).slice(0, 6);
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative bg-card rounded-2xl overflow-hidden shadow-2xl w-full max-w-sm"
-        style={{ maxHeight: "90vh" }}
+        className="relative bg-[#121110] border border-stone-850 rounded-[2.2rem] overflow-y-auto shadow-2xl w-full max-w-[420px] max-h-[92vh] flex flex-col p-6 text-white select-none text-left transition-all duration-300 scrollbar-none"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-card/80 backdrop-blur flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <X size={16} />
-        </button>
-        <div
-          className="overflow-y-auto"
-          style={{ maxHeight: "90vh", backgroundColor: tpl.bgColor }}
-        >
-          <div className="relative h-52 overflow-hidden">
-            <img
-              src={tpl.preview}
-              alt={tpl.name}
-              className="w-full h-full object-cover"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(to bottom, transparent 40%, ${tpl.bgColor})`,
-              }}
-            />
+        {/* Navigation Bar */}
+        <div className="flex items-center justify-between mb-5 shrink-0">
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-stone-900/50 hover:bg-stone-800 border border-stone-850 flex items-center justify-center text-stone-300 hover:text-white transition-colors cursor-pointer"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <span className="text-[11px] font-bold text-stone-400 tracking-wider uppercase font-sans">
+            Chi tiết mẫu thiệp
+          </span>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-stone-900/50 hover:bg-stone-800 border border-stone-850 flex items-center justify-center text-stone-300 hover:text-white transition-colors cursor-pointer"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Tiêu đề & Mô tả */}
+        <div className="space-y-1.5 mb-4 shrink-0">
+          <div className="flex items-center">
+            <h2 className="text-xl font-extrabold tracking-tight text-white font-sans">
+              {tpl.name}
+            </h2>
+            <span className="ml-2.5 px-2.5 py-0.5 rounded-full bg-[#ff007f]/10 border border-[#ff007f]/20 text-[#ff007f] text-[9px] font-bold tracking-wider uppercase">
+              {tpl.popular ? "Đẹp nhất" : "Mới nhất"}
+            </span>
           </div>
-          <div className="px-8 pb-8 text-center -mt-6 relative">
-            <p
-              className="text-xs uppercase tracking-widest mb-3"
-              style={{
-                color: tpl.accentColor,
-                fontFamily: "'DM Sans', sans-serif",
-              }}
+          <p className="text-xs text-stone-400 font-sans leading-relaxed">
+            {getDetailedDesc(tpl)}
+          </p>
+          {/* Hàng Tags */}
+          <div className="flex gap-2 pt-1">
+            {getTemplateTags(tpl).map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 py-0.5 rounded-full bg-stone-900 text-stone-400 text-[10px] font-semibold font-sans border border-stone-850"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Live Wedding Preview (No Phone Mockup) */}
+        <div className="relative w-full aspect-[9/16.5] rounded-3xl overflow-hidden shadow-2xl border border-stone-850 bg-[#121110] shrink-0 my-4">
+          <iframe
+            src={`/wedding-demo?embed=true&templateId=${tpl.id}`}
+            className="w-full h-full border-0"
+            title="Wedding Invitation Demo"
+          />
+        </div>
+
+        {/* 3 Tính Năng Nằm Ngang */}
+        <div className="grid grid-cols-3 gap-1.5 py-3.5 border-y border-stone-850/80 my-2 text-[9px] font-sans shrink-0">
+          <div className="flex items-center gap-1.5 pr-1 border-r border-stone-850/80">
+            <Edit3 size={14} className="text-stone-300 shrink-0" />
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-stone-200 leading-tight">Tùy chỉnh dễ dàng</span>
+              <span className="text-[7.5px] text-stone-500 leading-tight mt-0.5">Chỉ thay đổi nội dung</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 px-1 border-r border-stone-850/80">
+            <Smartphone size={14} className="text-stone-300 shrink-0" />
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-stone-200 leading-tight">Hiển thị đẹp mắt</span>
+              <span className="text-[7.5px] text-stone-500 leading-tight mt-0.5">Tối ưu mọi thiết bị</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 pl-1">
+            <Heart size={14} className="text-stone-300 shrink-0" />
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-stone-200 leading-tight">Phù hợp mọi gu</span>
+              <span className="text-[7.5px] text-stone-500 leading-tight mt-0.5">Truyền thống & hiện đại</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Nút hành động */}
+        <div className="flex gap-3 mt-3 mb-6 shrink-0">
+          <button
+            onClick={() => {
+              onClose();
+              onRequestDesign();
+            }}
+            className="flex-1 py-3 px-6 rounded-2xl bg-[#ff007f] hover:bg-[#e60072] active:scale-95 text-white font-bold text-xs tracking-wider transition-all flex items-center justify-center gap-1 cursor-pointer border-0 shadow-lg shadow-pink-900/10"
+          >
+            <span>+</span> Tạo thiệp này
+          </button>
+          <button
+            onClick={handlePreviewDemo}
+            className="flex-1 py-3 px-6 rounded-2xl border border-stone-800 bg-transparent hover:bg-stone-850 active:scale-95 text-stone-300 hover:text-white font-bold text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <Eye size={14} /> Xem demo
+          </button>
+        </div>
+
+        {/* Các mẫu tương tự */}
+        <div className="space-y-3 pt-3 border-t border-stone-850/80 shrink-0">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold text-stone-200 font-sans">Các mẫu tương tự</h3>
+            <button
+              onClick={onClose}
+              className="text-[10px] text-stone-400 hover:text-white font-medium border-0 bg-transparent cursor-pointer flex items-center gap-0.5"
             >
-              Trân trọng kính mời
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Great Vibes', cursive",
-                fontSize: "2.2rem",
-                color: tpl.accentColor,
-                lineHeight: 1.2,
-              }}
-            >
-              Nguyễn Văn An
-            </h2>
-            <p className="my-1 text-muted-foreground text-xs">&amp;</p>
-            <h2
-              style={{
-                fontFamily: "'Great Vibes', cursive",
-                fontSize: "2.2rem",
-                color: tpl.accentColor,
-                lineHeight: 1.2,
-              }}
-            >
-              Trần Thị Bình
-            </h2>
-            <p
-              className="mt-4 text-xs text-muted-foreground leading-relaxed"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              Trân trọng kính mời quý vị đến dự lễ thành hôn của chúng tôi
-            </p>
-            <div className="mt-5 grid grid-cols-4 gap-2">
-              {[
-                ["142", "Ngày"],
-                ["08", "Giờ"],
-                ["34", "Phút"],
-                ["22", "Giây"],
-              ].map(([v, l]) => (
-                <div
-                  key={l}
-                  className="rounded-lg py-2"
-                  style={{ backgroundColor: `${tpl.accentColor}15` }}
-                >
-                  <p
-                    className="text-lg font-medium"
-                    style={{
-                      color: tpl.accentColor,
-                      fontFamily: "'EB Garamond', serif",
-                    }}
-                  >
-                    {v}
-                  </p>
-                  <p className="text-[9px] text-muted-foreground">{l}</p>
+              Xem tất cả <ChevronRight size={10} />
+            </button>
+          </div>
+
+          {/* Danh sách trượt ngang */}
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none scroll-smooth">
+            {similarTpls.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  if (onSelectTemplate) {
+                    onSelectTemplate(item);
+                  }
+                }}
+                className="w-[72px] flex-shrink-0 cursor-pointer text-center group"
+              >
+                <div className="w-[72px] h-[98px] rounded-xl overflow-hidden border border-stone-850 relative shadow-md group-hover:border-stone-600 transition-colors bg-stone-900">
+                  <img
+                    src={item.preview}
+                    alt={item.name}
+                    className="w-full h-full object-cover select-none pointer-events-none group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-              ))}
-            </div>
-            <div
-              className="mt-4 p-4 rounded-xl border border-border/50 space-y-2"
-              style={{ backgroundColor: `${tpl.accentColor}08` }}
-            >
-              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <Clock size={11} style={{ color: tpl.accentColor }} /> 18:00 ·
-                Thứ Bảy, 15/11/2025
+                <span className="block text-[9px] text-stone-400 mt-1 truncate max-w-full font-sans group-hover:text-white transition-colors">
+                  {item.name}
+                </span>
               </div>
-              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <MapPin size={11} style={{ color: tpl.accentColor }} /> Nhà hàng
-                Đại Dương, Hà Nội
-              </div>
-            </div>
-            <button
-              className="mt-5 w-full py-3 rounded-xl text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{
-                backgroundColor: tpl.accentColor,
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
-              Xác nhận tham dự
-            </button>
-            <button
-              onClick={() => {
-                onClose();
-                onRequestDesign();
-              }}
-              className="mt-3 w-full py-3 rounded-xl text-sm font-medium border transition-all hover:opacity-85 flex items-center justify-center gap-1.5 bg-background"
-              style={{
-                borderColor: tpl.accentColor,
-                color: tpl.accentColor,
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
-              ✨ Đăng ký thiết kế mẫu này
-            </button>
-            <div className="mt-3.5 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-              <Music size={10} /> <span>Đang phát: A Thousand Years</span>
-            </div>
+            ))}
           </div>
         </div>
       </div>

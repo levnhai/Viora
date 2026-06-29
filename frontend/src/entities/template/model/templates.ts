@@ -1,49 +1,101 @@
-export interface Template {
-  id: number;
-  name: string;
-  style: string;
-  preview: string;
-  accentColor: string;
-  bgColor: string;
-  popular?: boolean;
-  planRequired: "standard" | "premium";
-  features: {
-    hasMusic: boolean;
-    maxGalleryImages: number;
-    hasRsvp: boolean;
-  };
-}
+import { TemplateConfig } from "./schema";
 
-export const TEMPLATES: Template[] = [
+export const TEMPLATES: TemplateConfig[] = [
   {
     id: 1,
-    name: "Hồng Sương Mai",
+    name: "Rose Gold",
     style: "Lãng mạn",
-    preview:
-      "https://images.unsplash.com/photo-1764423805989-ec426dfb8de8?w=600&h=800&fit=crop&auto=format",
-    accentColor: "#c9828e",
-    bgColor: "#fff5f6",
-    popular: true,
-    planRequired: "standard",
-    features: {
-      hasMusic: false,
-      maxGalleryImages: 3,
-      hasRsvp: true,
+    preview: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-pink",
+    tier: "basic",
+    price: 460000,
+    accentColor: "#db2777",
+    schema: {
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: false, showTitles: false },
+      timeline: { enabled: false },
+      gallery: { maxImages: 10 },
     },
   },
   {
     id: 2,
-    name: "Ngà Cổ Điển",
-    style: "Cổ điển",
-    preview:
-      "https://images.unsplash.com/photo-1593043927112-08289c3f1b64?w=600&h=800&fit=crop&auto=format",
-    accentColor: "#b8945a",
-    bgColor: "#fdf8f0",
-    planRequired: "premium",
-    features: {
-      hasMusic: true,
-      maxGalleryImages: 6,
-      hasRsvp: true,
+    name: "Minimal Green",
+    style: "Tinh giản",
+    preview: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-green",
+    tier: "basic",
+    price: 460000,
+    accentColor: "#2d5a27",
+    schema: {
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
     },
   },
+  {
+    id: 3,
+    name: "Classic White",
+    style: "Cổ điển",
+    preview: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-modern",
+    tier: "basic",
+    price: 460000,
+    accentColor: "#7a5c4f",
+    schema: {
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+    },
+  },
+  {
+    id: 4,
+    name: "Love Story",
+    style: "Hiện đại",
+    preview: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-pink",
+    tier: "basic",
+    price: 460000,
+    accentColor: "#c6925c",
+    schema: {
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+    },
+  },
+  {
+    id: 5,
+    name: "Eternal Flower",
+    style: "Thơ mộng",
+    preview: "https://images.unsplash.com/photo-1507504038482-76210378664a?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-purple",
+    tier: "basic",
+    price: 460000,
+    accentColor: "#ac81bd",
+    schema: {
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+    },
+  },
+  {
+    id: 6,
+    name: "Black Elegant",
+    style: "Sang trọng",
+    preview: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop&auto=format",
+    themeClass: "theme-navy",
+    tier: "premium",
+    price: 560000,
+    popular: true,
+    accentColor: "#1e293b",
+    schema: {
+      cover: { hasBackgroundVideo: true, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 30 },
+    },
+  }
 ];

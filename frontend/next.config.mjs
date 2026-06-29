@@ -13,8 +13,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.resolve.alias['figma:asset'] = path.resolve(__dirname, 'src/assets');
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
     return config;
   },
 };

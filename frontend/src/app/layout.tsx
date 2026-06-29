@@ -1,6 +1,8 @@
 import './styles/index.css';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import GoogleOAuthProviderWrapper from './GoogleOAuthProviderWrapper';
+import { BottomNav } from '@/widgets/bottom-nav/ui/BottomNav';
 
 export const metadata: Metadata = {
   title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
@@ -22,6 +24,9 @@ export default function RootLayout({
         <div id="root" style={{ height: '100%' }}>
           <GoogleOAuthProviderWrapper>
             {children}
+            <Suspense fallback={null}>
+              <BottomNav />
+            </Suspense>
           </GoogleOAuthProviderWrapper>
         </div>
       </body>

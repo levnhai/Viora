@@ -69,6 +69,75 @@
   font-family: 'Cinzel', serif;
 }
 
+.theme-red {
+  --background: #fffbeb;
+  --foreground: #450a0a;
+  --card: #fef3c7;
+  --card-foreground: #450a0a;
+  --popover: #fef3c7;
+  --popover-foreground: #450a0a;
+  --primary: #b91c1c;
+  --primary-foreground: #fffbeb;
+  --secondary: #fef2f2;
+  --secondary-foreground: #450a0a;
+  --muted: #fca5a5;
+  --muted-foreground: #991b1b;
+  --accent: #d97706;
+  --accent-foreground: #fffbeb;
+  --border: rgba(185, 28, 28, 0.15);
+  --ring: #d97706;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-red h1, .theme-red h2, .theme-red h3, .theme-red h4 {
+  font-family: 'EB Garamond', serif;
+}
+
+.theme-modern {
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #f9fafb;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  --primary: #1f2937;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  --muted: #e5e7eb;
+  --muted-foreground: #4b5563;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --border: rgba(31, 41, 55, 0.15);
+  --ring: #1f2937;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-modern h1, .theme-modern h2, .theme-modern h3, .theme-modern h4 {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.theme-purple {
+  --background: #faf8fd;
+  --foreground: #251b2b;
+  --card: #f5f0fa;
+  --card-foreground: #251b2b;
+  --popover: #f5f0fa;
+  --popover-foreground: #251b2b;
+  --primary: #7c4d90;
+  --primary-foreground: #faf8fd;
+  --secondary: #eee4f3;
+  --secondary-foreground: #251b2b;
+  --muted: #e1d2e9;
+  --muted-foreground: #705d7b;
+  --accent: #ac81bd;
+  --accent-foreground: #faf8fd;
+  --border: rgba(124, 77, 144, 0.15);
+  --ring: #ac81bd;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-purple h1, .theme-purple h2, .theme-purple h3, .theme-purple h4 {
+  font-family: 'Playfair Display', serif;
+}
+
 :root {
   --font-size: 16px;
   --background: #fdf6ef;
@@ -248,3 +317,24 @@
     line-height: 1.5;
   }
 }
+
+.mockup-screen-content section.min-h-screen {
+  min-height: 100% !important;
+}
+
+/* Ngăn trình duyệt đè màu nền xanh dương nhạt khi tự động điền (autofill) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px #ffffff inset !important;
+  -webkit-text-fill-color: #2c1810 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Custom focus ring & transition cho inputs */
+.auth-input-focus:focus {
+  border-color: #db2777 !important;
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1) !important;
+}
+

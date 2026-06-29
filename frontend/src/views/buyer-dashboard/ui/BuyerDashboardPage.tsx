@@ -1,15 +1,24 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Heart, LogOut, Edit3, Users, BookOpen, Save, Loader2, Calendar, MapPin, CreditCard, Copy, Check, Plus, Trash2, UserPlus, Phone, Tag } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Heart, LogOut, Edit3, Users, BookOpen, Save, Loader2, Calendar, MapPin, CreditCard, Copy, Check, Plus, Trash2, UserPlus, Phone, Tag, Settings } from "lucide-react";
+import { authService } from "@/features/auth/api/authService";
+import { API_URL } from "@/shared/lib/config";
 
 export function BuyerDashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
   const navigate = (path: string) => router.push(path);
   const [activeTab, setActiveTab] = useState<"guests" | "rsvp" | "guestbook">("guests");
+
+  useEffect(() => {
+    if (tabParam === "guests" || tabParam === "rsvp" || tabParam === "guestbook") {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
   const [weddingSlug, setWeddingSlug] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   
   // Data States
   const [weddingData, setWeddingData] = useState<any>(null);
@@ -30,33 +39,33 @@ export function BuyerDashboardPage() {
 
   // Authentication Check
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
     const savedSlug = localStorage.getItem("weddingSlug");
 
-    if (!savedToken || savedRole !== "buyer") {
+    if (!savedRole || (savedRole !== "user" && savedRole !== "staff" && savedRole !== "admin")) {
       localStorage.clear();
       navigate("/login");
       return;
     }
 
-    setToken(savedToken);
     setWeddingSlug(savedSlug || null);
   }, [navigate]);
 
   // Fetch initial data
   const fetchData = async () => {
-    if (!weddingSlug || !token) return;
+    if (!weddingSlug) return;
     try {
       // 1. Fetch wedding details
-      const weddingRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}`);
+      const weddingRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}`, {
+        credentials: "include"
+      });
       if (!weddingRes.ok) throw new Error("Không thể tải thông tin thiệp cưới!");
       const weddingJson = await weddingRes.json();
       setWeddingData(weddingJson.data);
 
       // 2. Fetch Guests
-      const guestRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests`, {
-        headers: { "Authorization": `Bearer ${token}` }
+      const guestRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests`, {
+        credentials: "include"
       });
       if (guestRes.ok) {
         const guestJson = await guestRes.json();
@@ -64,8 +73,8 @@ export function BuyerDashboardPage() {
       }
 
       // 3. Fetch RSVPs
-      const rsvpRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/rsvp`, {
-        headers: { "Authorization": `Bearer ${token}` }
+      const rsvpRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/rsvp`, {
+        credentials: "include"
       });
       if (rsvpRes.ok) {
         const rsvpJson = await rsvpRes.json();
@@ -73,7 +82,9 @@ export function BuyerDashboardPage() {
       }
 
       // 4. Fetch Guestbook
-      const gbRes = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guestbook`);
+      const gbRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guestbook`, {
+        credentials: "include"
+      });
       if (gbRes.ok) {
         const gbJson = await gbRes.json();
         setGuestbookList(gbJson.data || []);
@@ -86,34 +97,40 @@ export function BuyerDashboardPage() {
   };
 
   useEffect(() => {
-    if (weddingSlug && token) {
+    const savedRole = localStorage.getItem("role");
+    if (weddingSlug) {
       setLoading(true);
       fetchData();
-    } else if (token) {
+    } else if (savedRole) {
       setLoading(false);
     }
-  }, [weddingSlug, token]);
+  }, [weddingSlug]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.error("Lỗi đăng xuất:", err);
+    }
     localStorage.clear();
     navigate("/login");
   };
 
   const handleUpdateWedding = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!weddingSlug || !token) return;
+    if (!weddingSlug) return;
 
     setSaving(true);
     setSuccessMsg(null);
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(weddingData)
       });
 
@@ -134,17 +151,17 @@ export function BuyerDashboardPage() {
   // Guest Operations
   const handleAddGuest = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!weddingSlug || !token || !newGuest.name.trim()) return;
+    if (!weddingSlug || !newGuest.name.trim()) return;
 
     setGuestSubmitting(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(newGuest)
       });
 
@@ -165,16 +182,14 @@ export function BuyerDashboardPage() {
   };
 
   const handleDeleteGuest = async (id: string) => {
-    if (!weddingSlug || !token) return;
+    if (!weddingSlug) return;
     if (!window.confirm("Bạn có chắc chắn muốn xóa khách mời này khỏi danh sách?")) return;
 
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests/${id}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests/${id}`, {
         method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
+        credentials: "include"
       });
 
       if (!response.ok) {
@@ -191,15 +206,15 @@ export function BuyerDashboardPage() {
   };
 
   const handleUpdateGuestStatus = async (id: string, newStatus: string) => {
-    if (!weddingSlug || !token) return;
+    if (!weddingSlug) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/api/weddings/${weddingSlug}/guests/${id}`, {
+      const response = await fetch(`${API_URL}/api/weddings/${weddingSlug}/guests/${id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({ rsvpStatus: newStatus })
       });
 
@@ -254,7 +269,7 @@ export function BuyerDashboardPage() {
   // Welcome Empty State for new buyers without a wedding yet
   if (!weddingSlug) {
     return (
-      <div className="min-h-screen bg-[#faf5f0] flex flex-col font-sans" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+      <div className="min-h-screen bg-[#faf5f0] flex flex-col font-sans pb-24 md:pb-0" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* Header */}
         <header className="bg-white border-b border-[#c9828e]/15 sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -354,10 +369,10 @@ export function BuyerDashboardPage() {
       </header>
 
       {/* Main Container */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8 pb-24 md:pb-8">
         
         {/* Navigation Sidebar */}
-        <aside className="w-full md:w-64 shrink-0">
+        <aside className="w-full md:w-64 shrink-0 hidden md:block">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#c9828e]/15 p-4 space-y-2">
             <button
               onClick={() => navigate(`/edit/${weddingSlug}`)}
@@ -403,6 +418,12 @@ export function BuyerDashboardPage() {
               <span className={`ml-auto text-2xs px-2 py-0.5 rounded-full ${activeTab === "guestbook" ? "bg-white/20 text-white" : "bg-[#8b3a52]/10 text-[#8b3a52]"}`}>
                 {guestbookList.length}
               </span>
+            </button>
+            <button
+              onClick={() => navigate("/account")}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
+            >
+              <Settings size={16} /> Cài đặt tài khoản
             </button>
           </div>
         </aside>

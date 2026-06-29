@@ -53,4 +53,5 @@ export interface WeddingData {
   brideTitle?: string;
   displayOrder?: "groom_first" | "bride_first";
   isCoverImageVisible?: boolean;
+  [key: string]: any;
 }

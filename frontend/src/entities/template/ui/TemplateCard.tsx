@@ -1,59 +1,72 @@
-import { Monitor } from "lucide-react";
-import { Template } from "../model/templates";
+"use client";
+
+import { useState } from "react";
+import { Heart, Eye } from "lucide-react";
+import { TemplateConfig } from "../model/schema";
 
 interface TemplateCardProps {
-  tpl: Template;
+  tpl: TemplateConfig;
   onPreviewDemo: (tplId: number) => void;
   onUseTemplate: (tplId: number) => void;
 }
 
 export function TemplateCard({ tpl, onPreviewDemo, onUseTemplate }: TemplateCardProps) {
+  const [isLiked, setIsLiked] = useState(false);
+
   return (
     <div
-      className="group bg-card rounded-2xl overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+      onClick={() => onPreviewDemo(tpl.id)}
+      className="group bg-white rounded-2xl overflow-hidden border border-[#e2d8cf]/50 hover:shadow-md transition-all duration-300 flex flex-col w-full aspect-[2/3] cursor-pointer shadow-sm relative"
     >
-      <div className="relative overflow-hidden aspect-[3/4] bg-muted">
+      {/* Container ảnh xem trước */}
+      <div className="relative flex-1 overflow-hidden bg-[#fdf6ef]">
         <img
           src={tpl.preview}
           alt={tpl.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {tpl.popular && (
-          <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-medium">
-            Phổ biến
+        
+        {/* Huy hiệu vương miện đỏ ở góc trên bên phải ảnh */}
+        <div className="absolute top-2.5 right-2.5 z-10 bg-[#e11d48] text-white w-6 h-7 rounded-b-md shadow-sm flex items-center justify-center">
+          <svg className="w-3.5 h-3.5 fill-current text-white" viewBox="0 0 24 24">
+            <path d="M2 4l3 6 7-7 7 7 3-6v16h-20v-16z" />
+          </svg>
+        </div>
+
+        {/* Hover overlay để hiện nút xem chi tiết ở giữa */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span className="bg-white/95 backdrop-blur-sm text-[#db2777] px-4 py-2 rounded-full text-xs font-semibold shadow-md flex items-center gap-1.5 transition-all transform scale-90 group-hover:scale-100">
+            <Eye size={12} /> Xem chi tiết
           </span>
-        )}
-        <div className="absolute inset-0 bg-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
-          <button
-            onClick={() => onPreviewDemo(tpl.id)}
-            className="bg-card text-foreground px-5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 hover:bg-secondary transition-colors cursor-pointer"
-          >
-            <Monitor size={14} /> Xem demo thiệp
-          </button>
-          <button 
-            onClick={() => onUseTemplate(tpl.id)}
-            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            Dùng mẫu này
-          </button>
         </div>
       </div>
-      <div className="p-5 flex items-center justify-between">
-        <div>
-          <h3
-            className="text-base text-foreground"
-            style={{ fontFamily: "'EB Garamond', serif" }}
+
+      {/* Thông tin mẫu thiệp nền trắng bên dưới */}
+      <div className="p-4 bg-white flex flex-col text-left">
+        <h3 className="text-[14px] font-bold text-[#2c1810] line-clamp-1 font-sans transition-colors group-hover:text-[#db2777]">
+          {tpl.name}
+        </h3>
+        
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-[13px] font-bold text-[#7a5c4f] font-sans">
+            {tpl.price === 0 ? 'Miễn phí' : `${tpl.price.toLocaleString('vi-VN')}đ`}
+          </span>
+          
+          <button 
+            onClick={(e) => {
+              e.stopPropagation(); // Ngăn mở modal preview
+              setIsLiked(!isLiked);
+            }}
+            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer border border-[#e2d8cf]/80 hover:border-[#db2777]/30 hover:bg-pink-50/50 ${
+              isLiked 
+                ? 'bg-pink-50 border-pink-200 text-[#db2777]' 
+                : 'bg-white text-[#7a5c4f]/60 hover:text-[#db2777]'
+            }`}
+            aria-label={isLiked ? "Unlike template" : "Like template"}
           >
-            {tpl.name}
-          </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {tpl.style}
-          </p>
+            <Heart size={13} className={isLiked ? "fill-current text-[#db2777]" : ""} />
+          </button>
         </div>
-        <div
-          className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
-          style={{ backgroundColor: tpl.accentColor }}
-        />
       </div>
     </div>
   );
