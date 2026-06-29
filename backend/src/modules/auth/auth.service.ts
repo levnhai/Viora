@@ -272,7 +272,7 @@ export class AuthService implements OnModuleInit {
     await this.otpModel.findOneAndUpdate(
       { email },
       { code: otpCode, createdAt: new Date() },
-      { upsert: true, new: true },
+      { upsert: true, returnDocument: 'after' },
     ).exec();
 
     await this.sendForgotPasswordOtp(email, otpCode);
@@ -343,7 +343,7 @@ export class AuthService implements OnModuleInit {
       .findOneAndUpdate(
         { email },
         { code: otpCode, createdAt: new Date() },
-        { upsert: true, new: true },
+        { upsert: true, returnDocument: 'after' },
       )
       .exec();
 

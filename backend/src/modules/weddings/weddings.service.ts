@@ -631,7 +631,7 @@ export class WeddingsService implements OnModuleInit {
       .findOneAndUpdate(
         { slug, deletedAt: null },
         { $inc: { views: 1 } },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .lean()
       .exec();

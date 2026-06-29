@@ -18,8 +18,8 @@ export default function Home() {
 
   return (
     <LandingPage 
-      onPreviewDemo={() => {
-        router.push("/wedding-demo");
+      onPreviewDemo={(tplId) => {
+        router.push(`/wedding-demo?templateId=${tplId}`);
       }}
     />
   );

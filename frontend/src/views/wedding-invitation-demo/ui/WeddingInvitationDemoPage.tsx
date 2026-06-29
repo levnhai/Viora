@@ -35,11 +35,11 @@ export function WeddingInvitationDemoPage({
     const getDemoSlug = (id: string | null) => {
       switch (id) {
         case "1":
-          return "rose-gold-demo";
+          return "vanan-thibinh";
         case "2":
-          return "minimal-green-demo";
+          return "minh-lan";
         case "3":
-          return "classic-white-demo";
+          return "hoang-yen";
         case "4":
           return "love-story-demo";
         case "5":

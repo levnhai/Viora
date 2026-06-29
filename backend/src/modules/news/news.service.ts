@@ -32,7 +32,7 @@ export class NewsService {
 
   async update(slug: string, updateData: any): Promise<News> {
     const post = await this.newsModel
-      .findOneAndUpdate({ slug, deletedAt: null }, updateData, { new: true })
+      .findOneAndUpdate({ slug, deletedAt: null }, updateData, { returnDocument: 'after' })
       .exec();
     if (!post) {
       throw new NotFoundException(`Bài viết với slug "${slug}" không tồn tại`);
@@ -45,7 +45,7 @@ export class NewsService {
       .findOneAndUpdate(
         { slug, deletedAt: null },
         { deletedAt: new Date() },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .exec();
     if (!post) {

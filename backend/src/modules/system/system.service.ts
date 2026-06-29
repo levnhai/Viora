@@ -68,7 +68,7 @@ export class SystemService {
     status: string,
   ): Promise<InvitationRequest> {
     const req = await this.requestModel
-      .findByIdAndUpdate(id, { status }, { new: true })
+      .findByIdAndUpdate(id, { status }, { returnDocument: 'after' })
       .exec();
     if (!req) {
       throw new NotFoundException(`Request with ID "${id}" not found`);
@@ -84,7 +84,7 @@ export class SystemService {
 
   async setSetting(key: string, value: any): Promise<SystemSetting> {
     return this.settingModel
-      .findOneAndUpdate({ key }, { value }, { upsert: true, new: true })
+      .findOneAndUpdate({ key }, { value }, { upsert: true, returnDocument: 'after' })
       .exec();
   }
 }

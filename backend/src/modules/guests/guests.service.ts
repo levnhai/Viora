@@ -91,7 +91,7 @@ export class GuestsService {
     const weddingId = await this.getWeddingIdBySlug(slug);
     const guest = await this.guestModel
       .findOneAndUpdate({ _id: id, weddingId, deletedAt: null }, guestData, {
-        new: true,
+        returnDocument: 'after',
       })
       .exec();
     if (!guest) {
@@ -109,7 +109,7 @@ export class GuestsService {
       .findOneAndUpdate(
         { _id: id, weddingId, deletedAt: null },
         { deletedAt: new Date() },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .exec();
     if (!result) {

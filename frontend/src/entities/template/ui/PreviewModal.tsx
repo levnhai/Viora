@@ -71,7 +71,7 @@ export function PreviewModal({
 
   const handlePreviewDemo = () => {
     onClose();
-    router.push("/wedding-demo");
+    router.push(`/wedding-demo?templateId=${tpl.id}`);
   };
 
   const similarTpls = TEMPLATES.filter((t) => t.id !== tpl.id).slice(0, 6);
