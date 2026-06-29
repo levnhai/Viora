@@ -31,7 +31,10 @@ export function InvitationCover({
   guestName
 }: InvitationCoverProps) {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-8">
+    <section 
+      onClick={onScrollNext}
+      className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-8 cursor-pointer hover:opacity-[0.99] transition-all"
+    >
       <div className="absolute inset-0">
         <img
           src={coverImageUrl}

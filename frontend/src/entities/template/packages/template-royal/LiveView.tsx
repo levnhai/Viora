@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Volume2, VolumeX, Phone, Mail } from "lucide-react";
 
-import { EnvelopeIntro } from "@/entities/invitation/ui/EnvelopeIntro";
-import { InvitationCover } from "@/entities/invitation/ui/InvitationCover";
+import { EnvelopeIntro } from "./EnvelopeIntro";
+import { InvitationCover } from "./InvitationCover";
 import { CoupleSpotlight } from "@/entities/invitation/ui/CoupleSpotlight";
 import { LoveStoryTimeline } from "@/entities/invitation/ui/LoveStoryTimeline";
 import { GalleryGrid } from "@/entities/invitation/ui/GalleryGrid";

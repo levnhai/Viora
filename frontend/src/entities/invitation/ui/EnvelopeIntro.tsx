@@ -32,9 +32,10 @@ export function EnvelopeIntro({
 
   return (
     <div
+      onClick={!isOpen ? handleOpen : undefined}
       className={`${
         isFixed ? "fixed" : "absolute"
-      } inset-0 z-50 flex flex-col items-center justify-center bg-[#faf9f5] transition-all duration-1000 ${
+      } inset-0 z-50 flex flex-col items-center justify-center bg-[#faf9f5] transition-all duration-1000 cursor-pointer ${
         isOpen ? "opacity-0 pointer-events-none scale-95" : "opacity-100 scale-100"
       }`}
       style={{ fontFamily: "'DM Sans', sans-serif" }}

@@ -125,6 +125,7 @@ export function TemplatesList({ onPreviewDemo, onUseTemplate }: TemplatesListPro
           onRequestDesign={() => {
             onUseTemplate(previewTpl.id);
           }}
+          onSelectTemplate={setPreviewTpl}
         />
       )}
     </section>

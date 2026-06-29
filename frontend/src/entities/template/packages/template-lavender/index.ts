@@ -4,7 +4,7 @@ import { LiveView } from "./LiveView";
 import { EditView } from "./EditView";
 
 export const TemplateLavenderPackage: TemplatePackage = {
-  config: TEMPLATES.find((t) => t.id === 6)!,
+  config: TEMPLATES.find((t) => t.id === 5)!,
   LiveView,
   EditView,
 };

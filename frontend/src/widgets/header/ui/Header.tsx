@@ -200,7 +200,7 @@ export function Header({ onOpenRequest }: HeaderProps) {
               <div className="flex items-center gap-2.5">
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-xs font-semibold text-[#7a5c4f]/80 hover:text-[#db2777] transition-all no-underline"
+                  className="hidden md:flex px-4 py-2 text-xs font-semibold text-[#7a5c4f]/80 hover:text-[#db2777] transition-all no-underline"
                 >
                   Đăng nhập
                 </Link>

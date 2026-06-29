@@ -105,7 +105,13 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
 
       {/* ── CUSTOM LAVENDER ENVELOPE ────────────────────────────────────────── */}
       {!envelopeOpen && (
-        <div className={`${previewMode ? "absolute" : "fixed"} inset-0 z-50 flex flex-col items-center justify-center bg-[#251b2b] px-6 text-white transition-all duration-1000`}>
+        <div 
+          onClick={() => {
+            setEnvelopeOpen(true);
+            setPlaying(true);
+          }}
+          className={`${previewMode ? "absolute" : "fixed"} inset-0 z-50 flex flex-col items-center justify-center bg-[#251b2b] px-6 text-white transition-all duration-1000 cursor-pointer`}
+        >
           <div className="w-full max-w-sm bg-[#faf8fd] text-[#251b2b] border border-[#7c4d90]/25 rounded-3xl p-8 shadow-2xl relative space-y-6">
             <div className="absolute inset-2 border border-dashed border-[#7c4d90]/20 rounded-2xl pointer-events-none" />
             <div className="space-y-1">
@@ -158,7 +164,12 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
       `}</style>
 
       {/* ── CUSTOM COVER SECTION ───────────────────────────────────────────── */}
-      <section className="relative h-[600px] flex flex-col items-center justify-center p-6 overflow-hidden">
+      <section 
+        onClick={() => {
+          document.getElementById("countdown")?.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="relative h-[600px] flex flex-col items-center justify-center p-6 overflow-hidden cursor-pointer hover:opacity-[0.99] transition-all"
+      >
         <div className="absolute inset-0 bg-[#eee4f3]/40 z-0" />
         <div className="absolute inset-4 border border-solid border-[#7c4d90]/15 rounded-2xl z-0 pointer-events-none" />
         

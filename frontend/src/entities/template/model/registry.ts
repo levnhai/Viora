@@ -8,9 +8,9 @@ export const getTemplatePackage = (id: number): TemplatePackage => {
     case 1:
       return TemplateMinimalPackage;
     case 6:
-      return TemplateLavenderPackage;
-    case 5:
       return TemplateRoyalPackage;
+    case 5:
+      return TemplateLavenderPackage;
     default:
       return TemplateMinimalPackage;
   }

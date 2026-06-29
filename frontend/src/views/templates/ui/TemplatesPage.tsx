@@ -572,6 +572,7 @@ export function TemplatesPage() {
           tpl={previewTpl}
           onClose={() => setPreviewTpl(null)}
           onRequestDesign={() => handleStartCreating(previewTpl.id)}
+          onSelectTemplate={setPreviewTpl}
         />
       )}
 
