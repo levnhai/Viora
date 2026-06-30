@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart } from "lucide-react";
 
-interface EnvelopeIntroProps {
+interface LavenderEnvelopeProps {
   guestName?: string;
   groomName: string;
   brideName: string;
@@ -9,13 +9,13 @@ interface EnvelopeIntroProps {
   isFixed?: boolean;
 }
 
-export function EnvelopeIntro({
+export function LavenderEnvelope({
   guestName,
   groomName,
   brideName,
   onOpen,
   isFixed = true,
-}: EnvelopeIntroProps) {
+}: LavenderEnvelopeProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMerged, setIsMerged] = useState(false);
 
@@ -51,7 +51,6 @@ export function EnvelopeIntro({
         viewBox="0 0 120 180"
         fill="none"
       >
-        {/* Nhánh cành */}
         <path
           d="M100,160 C80,120 40,70 55,20"
           stroke="#7c3aed"
@@ -64,7 +63,6 @@ export function EnvelopeIntro({
           strokeWidth="1.2"
           strokeLinecap="round"
         />
-        {/* Nụ hoa Lavender tím */}
         <path d="M55,20 C48,15 38,18 45,25 C52,32 58,26 55,20 Z" fill="#8b5cf6" />
         <path d="M35,40 C28,36 20,40 27,46 C34,52 40,46 35,40 Z" fill="#a78bfa" />
         <path d="M60,45 C50,38 42,42 49,50 C56,58 64,52 60,45 Z" fill="#c084fc" />
@@ -72,8 +70,6 @@ export function EnvelopeIntro({
         <path d="M70,75 C60,68 52,72 59,80 C66,88 74,82 70,75 Z" fill="#a78bfa" />
         <path d="M53,95 C45,90 38,94 44,101 C50,108 58,102 53,95 Z" fill="#c084fc" />
         <path d="M80,110 C70,105 65,110 71,117 C77,124 85,118 80,110 Z" fill="#8b5cf6" />
-        
-        {/* Hoa điểm xuyết trắng kem */}
         <circle cx="55" cy="65" r="5" fill="#faf5ff" />
         <circle cx="35" cy="115" r="4" fill="#faf5ff" />
       </svg>
@@ -85,7 +81,6 @@ export function EnvelopeIntro({
         viewBox="0 0 120 180"
         fill="none"
       >
-        {/* Nhánh cành đối xứng */}
         <path
           d="M20,160 C40,120 80,70 65,20"
           stroke="#7c3aed"
@@ -98,7 +93,6 @@ export function EnvelopeIntro({
           strokeWidth="1.2"
           strokeLinecap="round"
         />
-        {/* Nụ hoa Lavender tím */}
         <path d="M65,20 C72,15 82,18 75,25 C68,32 62,26 65,20 Z" fill="#8b5cf6" />
         <path d="M85,40 C92,36 100,40 93,46 C86,52 80,46 85,40 Z" fill="#a78bfa" />
         <path d="M60,45 C70,38 78,42 71,50 C64,58 56,52 60,45 Z" fill="#c084fc" />
@@ -106,8 +100,6 @@ export function EnvelopeIntro({
         <path d="M50,75 C60,68 68,72 61,80 C54,88 46,82 50,75 Z" fill="#a78bfa" />
         <path d="M67,95 C75,90 82,94 76,101 C70,108 62,102 67,95 Z" fill="#c084fc" />
         <path d="M40,110 C50,105 55,110 49,117 C43,124 35,118 40,110 Z" fill="#8b5cf6" />
-        
-        {/* Hoa điểm xuyết trắng kem */}
         <circle cx="65" cy="65" r="5" fill="#faf5ff" />
         <circle cx="85" cy="115" r="4" fill="#faf5ff" />
       </svg>
@@ -131,24 +123,18 @@ export function EnvelopeIntro({
           isOpen ? "scale-90 rotate-2 translate-y-12 opacity-50" : "scale-100"
         }`}
       >
-        {/* Nếp gấp chéo của thân phong bì ở phía dưới */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none rounded-b-lg overflow-hidden"
           viewBox="0 0 100 68"
           preserveAspectRatio="none"
         >
-          {/* Nếp gập trái */}
           <polygon points="0,68 50,28 0,0" fill="#b4a5e8" opacity="0.8" />
-          {/* Nếp gập phải */}
           <polygon points="100,68 50,28 100,0" fill="#b4a5e8" opacity="0.8" />
-          {/* Nếp gập đáy */}
           <polygon points="0,68 100,68 50,28" fill="#beb0f0" />
-          {/* Đường bóng mờ nhẹ */}
           <line x1="0" y1="68" x2="50" y2="28" stroke="#a493e0" strokeWidth="0.3" />
           <line x1="100" y1="68" x2="50" y2="28" stroke="#a493e0" strokeWidth="0.3" />
         </svg>
 
-        {/* Nắp gập tam giác chúc xuống ở phía trên */}
         <svg
           className="absolute top-0 left-0 w-full h-[62%] pointer-events-none overflow-visible filter drop-shadow-[0_4px_6px_rgba(109,40,217,0.15)]"
           viewBox="0 0 100 62"
@@ -165,7 +151,6 @@ export function EnvelopeIntro({
           />
         </svg>
 
-        {/* ── BẢNG TÊN KHÁCH MỜI DÁN TRÊN PHONG BÌ ── */}
         <div className="w-full text-center z-10 my-auto px-10 flex flex-col items-center">
           <p className="text-[10px] text-[#faf5ff] font-light uppercase tracking-widest opacity-80 mb-2">
             Kính mời
@@ -180,7 +165,6 @@ export function EnvelopeIntro({
           </div>
         </div>
 
-        {/* ── CON DẤU SÁP TÍM LAVENDER ĐẬM ── */}
         <div
           className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-1000"
           style={{
@@ -194,10 +178,8 @@ export function EnvelopeIntro({
             onClick={handleOpen}
             className="w-14 h-14 rounded-full bg-gradient-to-br from-[#c084fc] via-[#8b5cf6] to-[#6d28d9] flex items-center justify-center shadow-lg border-2 border-white/60 active:scale-95 transition-all cursor-pointer group relative overflow-hidden"
           >
-            {/* Rìa sáp loang lổ */}
             <div className="absolute inset-0 bg-[#8b5cf6]/70 rounded-full scale-110 opacity-70 filter blur-[1px] transform rotate-12" />
 
-            {/* Tim sáp nổi ở giữa */}
             <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-[#f5f3ff] to-[#8b5cf6] border border-[#ddd6fe] shadow-inner flex flex-col items-center justify-center">
               <Heart
                 size={14}
@@ -207,12 +189,10 @@ export function EnvelopeIntro({
                 Mở
               </span>
             </div>
-            {/* Vòng hào quang pulsing */}
             <span className="absolute inset-0 w-full h-full bg-[#c084fc] rounded-full animate-ping opacity-25 pointer-events-none" />
           </button>
         </div>
 
-        {/* Nhãn hiệu chìm chân thực */}
         <div className="mb-2 z-10 pointer-events-none opacity-40">
           <span className="text-[7px] text-[#faf5ff] font-mono tracking-widest">
             LAVENDER DECOR STUDIO
@@ -220,7 +200,6 @@ export function EnvelopeIntro({
         </div>
       </div>
 
-      {/* ── CHỮ PHÍA DƯỚI PHONG BÌ ── */}
       <div className="text-center mt-6 z-10 select-none">
         <p className="text-[10px] uppercase tracking-[0.25em] text-[#a78bfa] font-light">
           Chạm để mở thiệp

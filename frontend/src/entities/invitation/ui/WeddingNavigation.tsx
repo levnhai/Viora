@@ -7,7 +7,11 @@ interface WeddingNavigationProps {
   isFixed?: boolean;
 }
 
-export function WeddingNavigation({ groomName, brideName, isFixed = true }: WeddingNavigationProps) {
+export function WeddingNavigation({
+  groomName,
+  brideName,
+  isFixed = true,
+}: WeddingNavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +37,10 @@ export function WeddingNavigation({ groomName, brideName, isFixed = true }: Wedd
     { href: "#guestbook", label: "Lưu Bút" },
   ];
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     e.preventDefault();
     setIsOpen(false);
     const target = document.querySelector(href);
@@ -59,7 +66,10 @@ export function WeddingNavigation({ groomName, brideName, isFixed = true }: Wedd
           href="#cover"
           onClick={(e) => handleLinkClick(e, "#cover")}
           className="text-2xl font-semibold hover:opacity-85 transition-opacity"
-          style={{ fontFamily: "'Great Vibes', cursive", color: "var(--primary)" }}
+          style={{
+            fontFamily: "'Great Vibes', cursive",
+            color: "var(--primary)",
+          }}
         >
           {initialGroom} & {initialBride}
         </a>

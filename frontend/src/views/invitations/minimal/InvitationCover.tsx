@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { formatDate } from "@/shared/lib/utils/date";
 
 interface InvitationCoverProps {
   onScrollNext: () => void;
@@ -9,29 +10,16 @@ interface InvitationCoverProps {
   guestName?: string;
 }
 
-const formatDate = (dateStr: string) => {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return dateStr;
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day} · ${month} · ${year}`;
-  } catch (e) {
-    return dateStr;
-  }
-};
-
-export function InvitationCover({ 
+export function InvitationCover({
   onScrollNext,
   groomName,
   brideName,
   weddingDate,
   coverImageUrl = "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=1400&h=900&fit=crop&auto=format",
-  guestName
+  guestName,
 }: InvitationCoverProps) {
   return (
-    <section 
+    <section
       onClick={onScrollNext}
       className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-8 cursor-pointer hover:opacity-[0.99] transition-all"
     >
@@ -51,43 +39,50 @@ export function InvitationCover({
         </p>
 
         <div className="space-y-3 py-6 max-w-md mx-auto">
-          <h1 
-            style={{ 
-              fontFamily: "'DM Sans', sans-serif", 
-              fontSize: "clamp(2rem, 7vw, 3.5rem)", 
-              color: "#292724", 
+          <h1
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "clamp(2rem, 7vw, 3.5rem)",
+              color: "#292724",
               lineHeight: 1.2,
               fontWeight: 300,
-              letterSpacing: "0.05em"
+              letterSpacing: "0.05em",
             }}
           >
             {groomName}
           </h1>
-          <p className="text-xs text-stone-400 font-sans tracking-widest my-1">&amp;</p>
-          <h1 
-            style={{ 
-              fontFamily: "'DM Sans', sans-serif", 
-              fontSize: "clamp(2rem, 7vw, 3.5rem)", 
-              color: "#292724", 
+          <p className="text-xs text-stone-400 font-sans tracking-widest my-1">
+            &amp;
+          </p>
+          <h1
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "clamp(2rem, 7vw, 3.5rem)",
+              color: "#292724",
               lineHeight: 1.2,
               fontWeight: 300,
-              letterSpacing: "0.05em"
+              letterSpacing: "0.05em",
             }}
           >
             {brideName}
           </h1>
         </div>
 
-        <p className="text-xs sm:text-sm text-stone-500 font-sans tracking-[0.25em] font-light">{formatDate(weddingDate)}</p>
-        
+        <p className="text-xs sm:text-sm text-stone-500 font-sans tracking-[0.25em] font-light">
+          {formatDate(weddingDate)}
+        </p>
+
         <p className="text-xs sm:text-sm leading-relaxed text-stone-500 font-sans font-light max-w-xs mx-auto">
-          {guestName 
-            ? `Rất hy vọng được đón tiếp ${guestName} trong sự kiện đặc biệt của chúng tôi.` 
+          {guestName
+            ? `Rất hy vọng được đón tiếp ${guestName} trong sự kiện đặc biệt của chúng tôi.`
             : "Hy vọng được chung vui cùng quý khách trong hôn lễ ấm cúng này."}
         </p>
       </div>
 
-      <button onClick={onScrollNext} className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-stone-600 border-0 bg-transparent cursor-pointer">
+      <button
+        onClick={onScrollNext}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-stone-600 border-0 bg-transparent cursor-pointer"
+      >
         <ChevronDown size={28} />
       </button>
     </section>

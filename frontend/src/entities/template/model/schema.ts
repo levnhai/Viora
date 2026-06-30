@@ -37,4 +37,7 @@ export interface TemplateConfig {
   popular?: boolean;
   accentColor: string;
   schema: TemplateSchema;
+  envelopeKey?: "royal" | "minimal" | "lavender";
+  timelineKey?: "vertical" | "slider" | "simple";
+  galleryKey?: "masonry" | "grid";
 }

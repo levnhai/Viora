@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Volume2, VolumeX, Phone, Mail } from "lucide-react";
 
-import { EnvelopeIntro } from "./EnvelopeIntro";
+import { Envelope } from "@/widgets/envelope";
 import { InvitationCover } from "./InvitationCover";
-import { GalleryGrid } from "@/entities/invitation/ui/GalleryGrid";
+import { CoupleSpotlight } from "@/entities/invitation/ui/CoupleSpotlight";
+import { Timeline } from "@/widgets/timeline";
+import { GalleryGrid } from "@/widgets/gallery";
 import { EventInfo } from "@/entities/invitation/ui/EventInfo";
 import { VenueMap } from "@/entities/invitation/ui/VenueMap";
 import { GiftRegistry } from "@/entities/invitation/ui/GiftRegistry";
@@ -17,8 +19,8 @@ import { FadeIn } from "@/shared/ui/FadeIn";
 import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { WeddingNavigation } from "@/entities/invitation/ui/WeddingNavigation";
 import { API_URL } from "@/shared/lib/config";
+import { formatTimeAgo } from "@/shared/lib/utils/date";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -26,24 +28,11 @@ interface LiveViewProps {
   previewMode?: "envelope" | "invitation";
 }
 
-function formatTimeAgo(dateStr: string | Date) {
-  try {
-    const diffMs = Date.now() - new Date(dateStr).getTime();
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHr = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHr / 24);
-
-    if (diffSec < 60) return "Vừa xong";
-    if (diffMin < 60) return `${diffMin} phút trước`;
-    if (diffHr < 24) return `${diffHr} giờ trước`;
-    return `${diffDay} ngày trước`;
-  } catch {
-    return "Mới đây";
-  }
-}
-
-export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps) {
+export function LiveView({
+  weddingData,
+  guestName,
+  previewMode,
+}: LiveViewProps) {
   const [playing, setPlaying] = useState(false);
   const [messages, setMessages] = useState<GuestMessage[]>([]);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
@@ -60,7 +49,6 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
   }, [previewMode]);
 
   useEffect(() => {
-    // Tải danh sách lưu bút
     fetch(`${API_URL}/api/weddings/${weddingData.slug}/guestbook`)
       .then((res) => res.json())
       .then((data) => {
@@ -142,10 +130,12 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
   };
 
   return (
-    <div className={`w-full text-center relative font-sans ${!envelopeOpen ? "h-screen overflow-hidden" : ""}`}>
-      {/* ── ENVELOPE INTRO ────────────────────────────────────────────────── */}
+    <div
+      className={`w-full text-center relative font-sans ${!envelopeOpen ? "h-screen overflow-hidden" : ""}`}
+    >
       {!envelopeOpen && (
-        <EnvelopeIntro
+        <Envelope
+          variant="royal"
           guestName={guestName}
           groomName={weddingData.groomName}
           brideName={weddingData.brideName}
@@ -156,21 +146,12 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
           }}
         />
       )}
-
-      {/* Sticky Navigation */}
-      <WeddingNavigation
-        groomName={weddingData.groomName}
-        brideName={weddingData.brideName}
-        isFixed={!previewMode}
-      />
-
       {/* Audio player */}
       <audio
         ref={audioRef}
         src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3"
         loop
       />
-
       {/* Music toggle */}
       {envelopeOpen && (
         <button
@@ -185,21 +166,20 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
           {playing ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </button>
       )}
-
       <style>{`
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
       `}</style>
-
-      {/* ── COVER ─────────────────────────────────────────────────────────── */}
+      {/* ── hero ── */}
       <div id="cover">
         <InvitationCover
           groomName={weddingData.groomName}
           brideName={weddingData.brideName}
           weddingDate={weddingData.weddingDate}
           coverImageUrl={weddingData.galleryImages?.[0]}
+          galleryImages={weddingData.galleryImages}
           guestName={guestName}
           onScrollNext={() => {
             document
@@ -208,9 +188,14 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
           }}
         />
       </div>
-
-      {/* ── COUNTDOWN ──────────────────────────────────────────────────────── */}
-      <section id="countdown" className="py-24 px-4 bg-background">
+      {/* Lời trích dẫn hoàng gia */}
+      {/* {weddingData.royalQuote && (
+        <section className="py-12 px-6 bg-background italic text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+          "{weddingData.royalQuote}"
+        </section>
+      )} */}
+      {/* ── COUNTDOWN ── */}
+      {/* <section id="countdown" className="py-24 px-4 bg-background">
         <FadeIn>
           <SectionHeading en="Countdown" vi="Đếm ngược đến ngày vui" />
           <div className="flex justify-center gap-4 sm:gap-8 flex-wrap">
@@ -242,17 +227,34 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
             🔗 {formattedWeddingDateLabel()}
           </div>
         </FadeIn>
-      </section>
-
-      {/* ── GALLERY (Giới hạn tối đa 3 ảnh hiển thị cho Minimal) ────────────────── */}
-      {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
-        <div id="gallery" className="bg-background">
-          <GalleryGrid images={weddingData.galleryImages.slice(0, 3)} />
+      </section> */}
+      {/* ── SPOTLIGHT ── */}
+      {/* <CoupleSpotlight
+        groomName={weddingData.groomName}
+        brideName={weddingData.brideName}
+        groomImage={weddingData.galleryImages?.[1]}
+        brideImage={weddingData.galleryImages?.[2]}
+      /> */}
+      {/* Divider */}
+      {/* <div className="flex items-center justify-center gap-3 py-2 bg-background">
+        <div className="h-px w-24 sm:w-40 bg-border" />
+        <span className="text-accent">❤️</span>
+        <div className="h-px w-24 sm:w-40 bg-border" />
+      </div> */}
+      {/* ── LOVE STORY (Timeline) ── */}
+      {/* {weddingData.timeline && weddingData.timeline.length > 0 && (
+        <div id="love-story" className="bg-background">
+          <Timeline variant="vertical" data={weddingData.timeline} />
         </div>
-      )}
-
-      {/* ── EVENTS ────────────────────────────────────────────────────────── */}
-      <div id="events" className="bg-background">
+      )} */}
+      {/* ── GALLERY (Album ảnh cưới đầy đủ) ── */}
+      {/* {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
+        <div id="gallery" className="bg-background">
+          <GalleryGrid variant="masonry" images={weddingData.galleryImages} />
+        </div>
+      )} */}
+      {/* ── EVENTS ── */}
+      {/* <div id="events" className="bg-background">
         <EventInfo
           events={weddingData.events}
           groomFatherName={weddingData.groomFatherName}
@@ -267,11 +269,13 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
             mapUrl={primaryEvent.mapUrl}
           />
         )}
-      </div>
-
-      {/* ── RSVP & GUESTBOOK ──────────────────────────────────────────────── */}
-      <div id="guestbook" className="bg-background py-10">
-        <RsvpForm weddingSlug={weddingData.slug || ""} prefilledName={guestName} />
+      </div> */}
+      {/* ── RSVP & GUESTBOOK ── */}
+      {/* <div id="guestbook" className="bg-background py-10">
+        <RsvpForm
+          weddingSlug={weddingData.slug || ""}
+          prefilledName={guestName}
+        />
         <section className="py-10 px-4 max-w-lg mx-auto">
           <FadeIn>
             <SectionHeading en="Guestbook" vi="Sổ lưu bút" />
@@ -281,15 +285,13 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
             <GuestbookList messages={messages} />
           </FadeIn>
         </section>
-      </div>
-
-      {/* ── GIFT ──────────────────────────────────────────────────────────── */}
-      <div id="gift" className="bg-background">
+      </div> */}
+      {/* ── GIFT ── */}
+      {/* <div id="gift" className="bg-background">
         <GiftRegistry giftInfo={weddingData.giftInfo} />
-      </div>
-
-      {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
-      <footer
+      </div> */}
+      {/* ── FOOTER ── */}
+      {/* <footer
         className="py-20 px-4 text-center bg-slate-900 text-white"
         style={{
           backgroundColor: "var(--foreground)",
@@ -310,13 +312,39 @@ export function LiveView({ weddingData, guestName, previewMode }: LiveViewProps)
           {formattedWeddingDateLabel().split(" · ")[0]} ·{" "}
           {primaryEvent?.locationName}
         </p>
+        <div className="flex justify-center gap-6 text-sm flex-wrap opacity-75">
+          {weddingData.contactInfo?.groomPhone && (
+            <a
+              href={`tel:${weddingData.contactInfo.groomPhone}`}
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
+              <Phone size={13} /> Chú rể: {weddingData.contactInfo.groomPhone}
+            </a>
+          )}
+          {weddingData.contactInfo?.bridePhone && (
+            <a
+              href={`tel:${weddingData.contactInfo.bridePhone}`}
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
+              <Phone size={13} /> Cô dâu: {weddingData.contactInfo.bridePhone}
+            </a>
+          )}
+          {weddingData.contactInfo?.email && (
+            <a
+              href={`mailto:${weddingData.contactInfo.email}`}
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
+              <Mail size={13} /> Email
+            </a>
+          )}
+        </div>
         <div className="mt-10 pt-8 border-t border-white/10 opacity-30">
           <p className="text-xs">
             Thiệp được tạo tại{" "}
             <span className="text-accent">thieponline.vn</span>
           </p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

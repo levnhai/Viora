@@ -10,6 +10,9 @@ export const TEMPLATES: TemplateConfig[] = [
     tier: "basic",
     price: 460000,
     accentColor: "#db2777",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
     schema: {
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: false, showTitles: false },
@@ -26,6 +29,9 @@ export const TEMPLATES: TemplateConfig[] = [
     tier: "basic",
     price: 460000,
     accentColor: "#2d5a27",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
     schema: {
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
@@ -42,6 +48,9 @@ export const TEMPLATES: TemplateConfig[] = [
     tier: "basic",
     price: 460000,
     accentColor: "#7a5c4f",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
     schema: {
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
@@ -58,6 +67,9 @@ export const TEMPLATES: TemplateConfig[] = [
     tier: "basic",
     price: 460000,
     accentColor: "#c6925c",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
     schema: {
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
@@ -74,6 +86,9 @@ export const TEMPLATES: TemplateConfig[] = [
     tier: "basic",
     price: 460000,
     accentColor: "#ac81bd",
+    envelopeKey: "lavender",
+    timelineKey: "vertical",
+    galleryKey: "grid",
     schema: {
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
@@ -91,6 +106,9 @@ export const TEMPLATES: TemplateConfig[] = [
     price: 560000,
     popular: true,
     accentColor: "#1e293b",
+    envelopeKey: "royal",
+    timelineKey: "vertical",
+    galleryKey: "masonry",
     schema: {
       cover: { hasBackgroundVideo: true, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
