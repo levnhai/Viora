@@ -5,7 +5,7 @@ export interface TemplateCustomField {
   type: "text" | "textarea" | "date" | "select";
   label: string;
   placeholder?: string;
-  options?: { label: string; value: string }[]; // Dành cho dropdown select
+  options?: { label: string; value: string }[];
 }
 
 export interface TemplateSchema {
@@ -31,9 +31,9 @@ export interface TemplateConfig {
   name: string;
   style: string;
   preview: string;
-  themeClass: string; // CSS class chứa định nghĩa màu sắc (VD: theme-pink)
+  themeClass: string;
   tier: TemplateTier;
-  price: number; // Giá bán lẻ của template (0đ là miễn phí)
+  price: number;
   popular?: boolean;
   accentColor: string;
   schema: TemplateSchema;

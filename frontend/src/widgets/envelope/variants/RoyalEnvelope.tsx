@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
+import { cinzel, greatVibes, montserrat } from "@/shared/lib/fonts";
 
 import envelopeImg from "@/shared/assets/image/envelope/img_3.png";
 import { formatName } from "@/shared/lib/utils/string";
@@ -27,6 +28,7 @@ export function RoyalEnvelope({
   const containerRef = useRef<HTMLDivElement>(null);
   const envelopeRef = useRef<HTMLDivElement>(null);
   const floatTweenRef = useRef<gsap.core.Tween | null>(null);
+  const exitTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   // Hiệu ứng loading 1.5 giây
   useEffect(() => {
@@ -50,10 +52,27 @@ export function RoyalEnvelope({
 
       // Chạy timeline xuất hiện (Entrance)
       const tl = gsap.timeline();
-      tl.to(".groom-name", { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" })
-        .to(".bride-name", { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "<")
-        .to(".ampersand", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.8")
-        .to(envelopeRef.current, { y: 0, opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }, "-=0.6")
+      tl.to(".groom-name", {
+        x: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power3.out",
+      })
+        .to(
+          ".bride-name",
+          { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
+          "<",
+        )
+        .to(
+          ".ampersand",
+          { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" },
+          "-=0.8",
+        )
+        .to(
+          envelopeRef.current,
+          { y: 0, opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" },
+          "-=0.6",
+        )
         .to(".invitation-text", { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")
         .add(() => {
           // Sau khi xuất hiện xong, bắt đầu hiệu ứng bập bềnh vô hạn cho phong bì
@@ -76,7 +95,11 @@ export function RoyalEnvelope({
         });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (floatTweenRef.current) floatTweenRef.current.kill();
+      if (exitTimelineRef.current) exitTimelineRef.current.kill();
+    };
   }, [isLoading]);
 
   const displayGroom = formatName(groomName || "Văn Hiếu");
@@ -92,20 +115,21 @@ export function RoyalEnvelope({
     }
 
     // Chạy timeline đóng gói và ẩn màn hình intro
-    const tl = gsap.timeline({
+    exitTimelineRef.current = gsap.timeline({
       onComplete: () => {
         setIsMerged(true);
         onOpen();
       },
     });
 
-    tl.to([".names-wrapper", ".invitation-text"], {
-      opacity: 0,
-      y: -15,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: "power2.in",
-    })
+    exitTimelineRef.current
+      .to([".names-wrapper", ".invitation-text"], {
+        opacity: 0,
+        y: -15,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power2.in",
+      })
       .to(
         envelopeRef.current,
         {
@@ -116,7 +140,7 @@ export function RoyalEnvelope({
           duration: 0.8,
           ease: "back.in(1.5)",
         },
-        "-=0.3"
+        "-=0.3",
       )
       .to(
         containerRef.current,
@@ -125,7 +149,7 @@ export function RoyalEnvelope({
           duration: 0.6,
           ease: "power2.out",
         },
-        "-=0.4"
+        "-=0.4",
       );
   };
 
@@ -136,65 +160,36 @@ export function RoyalEnvelope({
       ref={containerRef}
       className={`${
         isFixed ? "fixed" : "absolute"
-      } inset-0 z-[1000] flex flex-col items-center justify-center bg-[#f4f2eb] select-none overflow-hidden`}
+      } inset-0 z-[1000] flex flex-col items-center justify-center bg-[#f4f2eb] select-none overflow-hidden will-change-opacity`}
     >
-      {/* Dynamic Font and Loader Styles */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@200;400;600&display=swap');
-        
-        .royal-loader-ring {
-          display: inline-block;
-          position: relative;
-          width: 80px;
-          height: 80px;
-        }
-        .royal-loader-ring div {
-          box-sizing: border-box;
-          display: block;
-          position: absolute;
-          width: 64px;
-          height: 64px;
-          margin: 8px;
-          border: 2px solid #b38728;
-          border-radius: 50%;
-          animation: royal-ring-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-          border-color: #b38728 transparent transparent transparent;
-        }
-        .royal-loader-ring div:nth-child(1) {
-          animation-delay: -0.45s;
-        }
-        .royal-loader-ring div:nth-child(2) {
-          animation-delay: -0.3s;
-        }
-        .royal-loader-ring div:nth-child(3) {
-          animation-delay: -0.15s;
-        }
-        @keyframes royal-ring-spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `,
-        }}
-      />
-
       {/* ── SCREEN HIỂN THỊ LOADING ── */}
       {isLoading ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#f4f2eb] z-[1010]">
-          <div className="royal-loader-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+          {/* Tối ưu hóa: SVG Spinner Tailwind CSS gọn nhẹ hơn */}
+          <div className="w-16 h-16 relative">
+            <svg
+              className="animate-spin h-16 w-16 text-[#b38728]"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="3"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
           </div>
           <p
-            style={{ fontFamily: "'Cinzel', serif" }}
-            className="text-[10px] tracking-[0.3em] text-[#b38728] mt-6 uppercase animate-pulse"
+            className={`${cinzel.className} text-[10px] tracking-[0.3em] text-[#b38728] mt-6 uppercase animate-pulse`}
           >
             Đang tải thiệp cưới...
           </p>
@@ -206,23 +201,22 @@ export function RoyalEnvelope({
           className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
         >
           {/* ── TÊN CÔ DÂU & CHÚ RỂ PHÍA TRÊN PHONG BÌ ── */}
-          <div className="names-wrapper text-center mb-6 select-none py-2 overflow-hidden">
+          <div className="names-wrapper text-center mb-6 select-none py-2 overflow-hidden will-change-transform will-change-opacity">
             <h2
+              className={`${greatVibes.className} leading-tight px-4 flex items-center justify-center gap-x-3 sm:gap-x-4 flex-wrap`}
               style={{
-                fontFamily: "'Great Vibes', cursive",
                 fontSize: "calc(2.2rem + 1vw)",
                 color: "#b38728",
                 textShadow: "1px 1px 3px rgba(0, 0, 0, 0.05)",
               }}
-              className="leading-tight px-4 flex items-center justify-center gap-x-3 sm:gap-x-4 flex-wrap"
             >
-              <span className="groom-name inline-block">
+              <span className="groom-name inline-block will-change-transform will-change-opacity">
                 {displayGroom}
               </span>
-              <span className="ampersand inline-block text-[0.85em]">
+              <span className="ampersand inline-block text-[0.85em] will-change-transform will-change-opacity">
                 &
               </span>
-              <span className="bride-name inline-block">
+              <span className="bride-name inline-block will-change-transform will-change-opacity">
                 {displayBride}
               </span>
             </h2>
@@ -231,7 +225,7 @@ export function RoyalEnvelope({
           {/* ── PHONG BÌ Ở GIỮA MÀN HÌNH ── */}
           <div
             ref={envelopeRef}
-            className="relative w-[100%] max-w-[600px] aspect-[1.4]"
+            className="relative w-[100%] max-w-[600px] aspect-[1.4] will-change-transform will-change-opacity"
           >
             <div className="w-full h-full relative rounded-xl overflow-hidden border border-stone-200/20">
               <Image
@@ -247,21 +241,19 @@ export function RoyalEnvelope({
           </div>
 
           {/* Dòng chữ kiểu bay bổng nằm ngay dưới phong bì */}
-          <div className="invitation-text text-center mt-8 select-none">
+          <div className="invitation-text text-center mt-8 select-none will-change-transform will-change-opacity">
             <p
+              className={`${greatVibes.className} touch-hint`}
               style={{
-                fontFamily: "'Great Vibes', cursive",
                 fontSize: "1.5rem",
                 color: "#b38728",
               }}
-              className="touch-hint"
             >
               Chạm để mở
             </p>
             {guestName && (
               <p
-                style={{ fontFamily: "'Montserrat', sans-serif" }}
-                className="text-[9px] uppercase tracking-[0.25em] text-[#7a5c4f] mt-3 font-semibold"
+                className={`${montserrat.className} text-[9px] uppercase tracking-[0.25em] text-[#7a5c4f] mt-3 font-semibold`}
               >
                 Thân mời:{" "}
                 <span className="font-bold text-[#2c1810] tracking-normal">

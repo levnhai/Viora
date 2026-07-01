@@ -4,7 +4,6 @@ import { LiveView as MinimalLiveView } from "@/views/invitations/minimal/LiveVie
 import { LiveView as FloralLiveView } from "@/views/invitations/floral/LiveView";
 import { LiveView as LuxuryLiveView } from "@/views/invitations/luxury/LiveView";
 
-// Bộ EditView cũ không còn được sử dụng ở giao diện biên tập chính
 const LegacyMockEditView = () => null;
 
 export const getTemplatePackage = (id: number): TemplatePackage => {
@@ -12,21 +11,18 @@ export const getTemplatePackage = (id: number): TemplatePackage => {
 
   switch (id) {
     case 1:
-    case 2:
-    case 3:
-    case 4:
       return {
         config,
         LiveView: MinimalLiveView,
         EditView: LegacyMockEditView,
       };
-    case 5:
+    case 2:
       return {
         config,
         LiveView: FloralLiveView,
         EditView: LegacyMockEditView,
       };
-    case 6:
+    case 3:
       return {
         config,
         LiveView: LuxuryLiveView,
