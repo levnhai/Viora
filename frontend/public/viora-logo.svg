@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50" width="160" height="50">
+  <defs>
+    <path id="petal" d="M 25 21 C 22.5 18 21 13 25 8 C 29 13 27.5 18 25 21 Z" fill="#db2777" />
+  </defs>
+  <g>
+    <use href="#petal" transform="rotate(0 25 25)" />
+    <use href="#petal" transform="rotate(72 25 25)" />
+    <use href="#petal" transform="rotate(144 25 25)" />
+    <use href="#petal" transform="rotate(216 25 25)" />
+    <use href="#petal" transform="rotate(288 25 25)" />
+  </g>
+  <text x="60" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Montserrat', 'Outfit', 'Segoe UI', sans-serif" font-weight="900" font-size="19" fill="#db2777" letter-spacing="2.5">VIORA</text>
+  <text x="60" y="35" font-family="-apple-system, BlinkMacSystemFont, 'DM Sans', 'Segoe UI', sans-serif" font-weight="700" font-size="7" fill="#a8a29e" letter-spacing="1">wedding invitation</text>
+</svg>
