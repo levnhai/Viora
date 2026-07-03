@@ -23,6 +23,7 @@ export function BottomNav() {
   }, [pathname, searchParams]);
  
   if (!isLoggedIn) return null;
+  if (!pathname.startsWith("/dashboard")) return null;
  
   // Detect active tab based on URL path/query
   let activeTab = "overview";

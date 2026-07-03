@@ -10,29 +10,215 @@ Dưới đây là sơ đồ mối quan hệ giữa các Collection thông qua c�
 
 ```mermaid
 erDiagram
-    users ||--o{ weddings : "sở hữu (ownerId)"
-    users ||--o{ payments : "thanh toán (userId)"
-    users ||--o{ news : "viết bài (authorId)"
-    users ||--o{ commissions : "nhận hoa hồng (affiliateId)"
-    users ||--o{ payout_requests : "rút tiền (affiliateId)"
-    users ||--o{ affiliate_links : "quản lý link CTV (affiliateId)"
-    users ||--o{ template_purchases : "mua giao diện (userId)"
-    users ||--o{ refresh_tokens : "quản lý phiên (userId)"
-    users ||--o{ password_resets : "quản lý reset mật khẩu (userId)"
-    users ||--o{ audit_logs : "lịch sử hành động (userId)"
+    USERS {
+        ObjectId _id PK
+        String username "UK"
+        String email "UK"
+        String passwordHash
+        String fullName
+        String phone
+        String avatar
+        String role "admin/staff/user"
+        String accountType "customer/affiliate/admin"
+        String affiliateCode "UK"
+        Boolean isEmailVerified
+        String status "active/blocked"
+        Date lastLoginAt
+        Boolean isDeleted
+        Date deletedAt
+        String weddingSlug
+    }
     
-    weddings ||--o{ wedding_events : "sự kiện cưới (weddingId)"
-    weddings ||--o{ wedding_timelines : "dòng lịch sử cưới (weddingId)"
-    weddings ||--o{ guests : "danh sách khách mời (weddingId)"
-    weddings ||--o{ guestbooks : "lời chúc lưu bút (weddingId)"
-    weddings ||--o{ media : "quản lý ảnh cưới (weddingId)"
-    weddings ||--o{ payments : "áp dụng cho (weddingId)"
+    TEMPLATES {
+        ObjectId _id PK
+        String code "UK"
+        String name
+        String description
+        String thumbnail
+        Array previewImages
+        String previewUrl
+        Number price
+        String version
+        String status "active/inactive"
+        String category
+    }
 
-    templates ||--o{ weddings : "áp dụng mẫu (templateId)"
-    templates ||--o{ template_purchases : "áp dụng giao diện bán (templateId)"
+    WEDDINGS {
+        ObjectId _id PK
+        ObjectId ownerId FK
+        ObjectId createdBy FK
+        String slug "UK"
+        ObjectId templateId FK
+        String templateVersion
+        String groomName
+        String groomFatherName
+        String groomMotherName
+        String brideName
+        String brideFatherName
+        String brideMotherName
+        Date weddingDate
+        String weddingTime
+        Array galleryImages
+        Object giftInfo "Embedded"
+        Object contactInfo "Embedded"
+        Object settings "Embedded"
+        Object seo "Embedded"
+        String status "draft/published/hidden"
+        Number views
+        Date deletedAt
+    }
 
-    payments ||--o| commissions : "ghi nhận hoa hồng (paymentId)"
-    payments ||--o| template_purchases : "thanh toán hóa đơn (paymentId)"
+    WEDDING_EVENTS {
+        ObjectId _id PK
+        ObjectId weddingId FK
+        String title
+        String time
+        Date date
+        String locationName
+        String address
+        String mapUrl
+    }
+
+    WEDDING_TIMELINES {
+        ObjectId _id PK
+        ObjectId weddingId FK
+        String year
+        String title
+        String description
+        String imageUrl
+    }
+
+    GUESTS {
+        ObjectId _id PK
+        ObjectId weddingId FK
+        String name
+        String phone
+        String relationship
+        String rsvpStatus "pending/confirmed/declined"
+        Number guestsCount
+        String note
+        String inviteCode "UK"
+        String qrCode
+        String tableNumber
+        Boolean checkedIn
+        Date checkedInAt
+    }
+
+    GUESTBOOKS {
+        ObjectId _id PK
+        ObjectId weddingId FK
+        String name
+        String message
+        Boolean isApproved
+    }
+
+    MEDIA {
+        ObjectId _id PK
+        ObjectId weddingId FK
+        ObjectId ownerId FK
+        String type "avatar/cover/album/other"
+        String url
+        Number size
+        String mimeType
+        String filename
+    }
+
+    PAYMENTS {
+        ObjectId _id PK
+        ObjectId userId FK
+        ObjectId weddingId FK
+        ObjectId templateId FK
+        Number amount
+        String paymentMethod "bank_transfer/momo/vnpay"
+        String transactionId "UK"
+        String status "pending/completed/failed"
+        String planName
+        Mixed providerResponse
+    }
+
+    TEMPLATE_PURCHASES {
+        ObjectId _id PK
+        ObjectId userId FK
+        ObjectId templateId FK
+        ObjectId paymentId FK
+        Number purchasedPrice
+        String status "pending/completed/failed"
+    }
+
+    AFFILIATE_LINKS {
+        ObjectId _id PK
+        ObjectId affiliateId FK
+        String refCode "UK"
+        Number clickCount
+        Number conversionCount
+    }
+
+    COMMISSIONS {
+        ObjectId _id PK
+        ObjectId affiliateId FK
+        ObjectId weddingId FK
+        ObjectId paymentId FK
+        Number orderAmount
+        Number commissionPercent
+        Number commissionAmount
+        String status "pending/approved/paid"
+    }
+
+    PAYOUT_REQUESTS {
+        ObjectId _id PK
+        ObjectId affiliateId FK
+        Number amount
+        Object bankInfo
+        String status "pending/approved/rejected/paid"
+        String adminNote
+    }
+
+    NEWS {
+        ObjectId _id PK
+        String slug "UK"
+        String title
+        String summary
+        String content
+        String thumbnailUrl
+        ObjectId authorId FK
+        String status "draft/published"
+        Number views
+        Array tags
+    }
+
+    AUDIT_LOGS {
+        ObjectId _id PK
+        ObjectId userId FK
+        String action
+        String resourceType
+        String resourceId
+        String ip
+        String userAgent
+        Mixed details
+    }
+
+    USERS ||--o{ WEDDINGS : "sở hữu (ownerId/createdBy)"
+    USERS ||--o{ PAYMENTS : "thanh toán (userId)"
+    USERS ||--o{ NEWS : "viết bài (authorId)"
+    USERS ||--o{ COMMISSIONS : "nhận hoa hồng (affiliateId)"
+    USERS ||--o{ PAYOUT_REQUESTS : "rút tiền (affiliateId)"
+    USERS ||--o{ AFFILIATE_LINKS : "quản lý link (affiliateId)"
+    USERS ||--o{ TEMPLATE_PURCHASES : "mua giao diện (userId)"
+    USERS ||--o{ AUDIT_LOGS : "thực hiện (userId)"
+    
+    TEMPLATES ||--o{ WEDDINGS : "áp dụng mẫu (templateId)"
+    TEMPLATES ||--o{ TEMPLATE_PURCHASES : "được mua (templateId)"
+
+    WEDDINGS ||--o{ WEDDING_EVENTS : "sự kiện cưới (weddingId)"
+    WEDDINGS ||--o{ WEDDING_TIMELINES : "mốc thời gian (weddingId)"
+    WEDDINGS ||--o{ GUESTS : "khách mời (weddingId)"
+    WEDDINGS ||--o{ GUESTBOOKS : "lời chúc lưu bút (weddingId)"
+    WEDDINGS ||--o{ MEDIA : "sử dụng file ảnh (weddingId)"
+    WEDDINGS ||--o{ PAYMENTS : "thanh toán cho (weddingId)"
+    WEDDINGS ||--o{ COMMISSIONS : "tạo hoa hồng (weddingId)"
+
+    PAYMENTS ||--o| TEMPLATE_PURCHASES : "hóa đơn của (paymentId)"
+    PAYMENTS ||--o| COMMISSIONS : "doanh thu cho (paymentId)"
 ```
 
 ---

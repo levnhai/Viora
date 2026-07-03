@@ -6,6 +6,9 @@ export type TemplateDocument = Template & Document;
 @Schema({ timestamps: true, collection: 'templates' })
 export class Template {
   @Prop({ required: true, unique: true, index: true })
+  id: number;
+
+  @Prop({ required: true, unique: true, index: true })
   code: string; // e.g. "classic-pink", "modern-blue"
 
   @Prop({ required: true })

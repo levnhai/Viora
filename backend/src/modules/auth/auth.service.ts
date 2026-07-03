@@ -1,6 +1,5 @@
 import {
   Injectable,
-  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,7 +12,7 @@ import * as nodemailer from 'nodemailer';
 import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
-export class AuthService implements OnModuleInit {
+export class AuthService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
@@ -22,26 +21,6 @@ export class AuthService implements OnModuleInit {
     private readonly configService: ConfigService,
   ) {}
 
-  async onModuleInit() {
-    // Seed default users if collection is empty
-    const count = await this.userModel.countDocuments().exec();
-    if (count === 0) {
-      console.log('--- Seeding default users (admin, staff & users) ---');
-
-      // Admin
-      await this.createUser('admin', 'admin123', 'admin');
-
-      // Staff
-      await this.createUser('staff', 'staff123', 'staff');
-
-      // Users linked to their seeded weddings
-      await this.createUser('minh-lan', '123456', 'user', 'minh-lan');
-      await this.createUser('vanan', '123456', 'user', 'vanan-thibinh');
-      await this.createUser('hoang-yen', '123456', 'user', 'hoang-yen');
-
-      console.log('--- Seeding default users completed! ---');
-    }
-  }
 
   hashPassword(password: string): string {
     return crypto.createHash('sha256').update(password).digest('hex');
