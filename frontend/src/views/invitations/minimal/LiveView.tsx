@@ -36,7 +36,8 @@ export function LiveView({
 }: LiveViewProps) {
   const [playing, setPlaying] = useState(false);
   const [messages, setMessages] = useState<GuestMessage[]>([]);
-  const [envelopeOpen, setEnvelopeOpen] = useState(false);
+  // Mặc định mở phong bì cho giao diện minimal để có thể scroll do chưa có component Envelope
+  const [envelopeOpen, setEnvelopeOpen] = useState(true);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -65,7 +66,7 @@ export function LiveView({
       .catch((err) => console.error("Lỗi khi tải sổ lưu bút:", err));
   }, [weddingData.slug]);
 
-  useEffect(() => {
+  useEffect(() => {         
     if (audioRef.current) {
       if (playing) {
         audioRef.current.play().catch(() => {
@@ -131,236 +132,15 @@ export function LiveView({
   };
 
   return (
-    <div
-      className={`w-full text-center relative font-sans ${!envelopeOpen ? "h-screen overflow-hidden" : ""}`}
-    >
-      {/* ── ENVELOPE INTRO ── */}
-      {!envelopeOpen && (
-        <Envelope
-          variant="minimal"
-          guestName={guestName}
-          groomName={weddingData.groomName}
-          brideName={weddingData.brideName}
-          isFixed={!previewMode}
-          onOpen={() => {
-            setEnvelopeOpen(true);
-            setPlaying(true);
-          }}
-        />
-      )}
-
-      {/* Sticky Navigation */}
-      <WeddingNavigation
-        groomName={weddingData.groomName}
-        brideName={weddingData.brideName}
-        isFixed={!previewMode}
-      />
-
-      {/* Audio player */}
-      <audio
-        ref={audioRef}
-        src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3"
-        loop
-      />
-
-      {/* Music toggle */}
-      {envelopeOpen && (
-        <button
-          onClick={() => setPlaying(!playing)}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-lg border border-border transition-all cursor-pointer"
-          style={{
-            backgroundColor: "var(--primary)",
-            color: "var(--primary-foreground)",
-            animation: playing ? "spin 6s linear infinite" : "none",
-          }}
-        >
-          {playing ? <Volume2 size={18} /> : <VolumeX size={18} />}
-        </button>
-      )}
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-
-      {/* ── COVER ── */}
-      <div id="cover">
-        <InvitationCover
-          groomName={weddingData.groomName}
-          brideName={weddingData.brideName}
-          weddingDate={weddingData.weddingDate}
-          coverImageUrl={weddingData.galleryImages?.[0]}
-          guestName={guestName}
-          onScrollNext={() => {
-            document
-              .getElementById("countdown")
-              ?.scrollIntoView({ behavior: "smooth" });
-          }}
-        />
-      </div>
-
-      {/* ── COUNTDOWN ── */}
-      <section id="countdown" className="py-24 px-4 bg-background">
-        <FadeIn>
-          <SectionHeading en="Countdown" vi="Đếm ngược đến ngày vui" />
-          <div className="flex justify-center gap-4 sm:gap-8 flex-wrap">
-            {[
-              { val: countdown.days, label: "Ngày" },
-              { val: countdown.hours, label: "Giờ" },
-              { val: countdown.minutes, label: "Phút" },
-              { val: countdown.seconds, label: "Giây" },
-            ].map(({ val, label }) => (
-              <div key={label} className="text-center">
-                <div
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center shadow-md border"
-                  style={{
-                    backgroundColor: "rgba(139,58,82,0.04)",
-                    borderColor: "var(--border)",
-                  }}
-                >
-                  <span className="text-3xl sm:text-4xl font-light text-primary">
-                    {String(val).padStart(2, "0")}
-                  </span>
-                </div>
-                <p className="text-xs mt-2 uppercase tracking-wider text-muted-foreground">
-                  {label}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            🔗 {formattedWeddingDateLabel()}
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* ── SPOTLIGHT ── */}
-      <CoupleSpotlight
-        groomName={weddingData.groomName}
-        brideName={weddingData.brideName}
-        groomImage={weddingData.galleryImages?.[1]}
-        brideImage={weddingData.galleryImages?.[2]}
-      />
-
-      {/* Divider */}
-      <div className="flex items-center justify-center gap-3 py-2 bg-background">
-        <div className="h-px w-24 sm:w-40 bg-border" />
-        <span className="text-accent">❤️</span>
-        <div className="h-px w-24 sm:w-40 bg-border" />
-      </div>
-
-      {/* ── LOVE STORY (Timeline) ── */}
-      {weddingData.timeline && weddingData.timeline.length > 0 && (
-        <div id="love-story" className="bg-background">
-          <Timeline variant="simple" data={weddingData.timeline} />
+    <div className="w-full h-screen text-center relative font-sans bg-[rgb(0,26,8)] text-[rgb(225,188,124)]">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <p>THE WEDDING OF</p>
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <h3 style={{ fontFamily: "'The Nautigal', cursive", fontSize: "4rem", lineHeight: 1 }}>Trung hiếu</h3> 
+          <span className="text-2xl">&amp;</span>
+          <h3 style={{ fontFamily: "'The Nautigal', cursive", fontSize: "4rem", lineHeight: 1 }}>Như ý</h3>
         </div>
-      )}
-
-      {/* ── GALLERY ── */}
-      {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
-        <div id="gallery" className="bg-background">
-          <GalleryGrid variant="grid" images={weddingData.galleryImages} />
-        </div>
-      )}
-
-      {/* ── EVENTS ── */}
-      <div id="events" className="bg-background">
-        <EventInfo
-          events={weddingData.events}
-          groomFatherName={weddingData.groomFatherName}
-          groomMotherName={weddingData.groomMotherName}
-          brideFatherName={weddingData.brideFatherName}
-          brideMotherName={weddingData.brideMotherName}
-        />
-        {primaryEvent && (
-          <VenueMap
-            locationName={primaryEvent.locationName}
-            address={primaryEvent.address}
-            mapUrl={primaryEvent.mapUrl}
-          />
-        )}
       </div>
-
-      {/* ── RSVP & GUESTBOOK ── */}
-      <div id="guestbook" className="bg-background py-10">
-        <RsvpForm
-          weddingSlug={weddingData.slug || ""}
-          prefilledName={guestName}
-        />
-        <section className="py-10 px-4 max-w-lg mx-auto">
-          <FadeIn>
-            <SectionHeading en="Guestbook" vi="Sổ lưu bút" />
-          </FadeIn>
-          <FadeIn delay={100}>
-            <GuestbookForm onSendMessage={handleSendMessage} />
-            <GuestbookList messages={messages} />
-          </FadeIn>
-        </section>
-      </div>
-
-      {/* ── GIFT ── */}
-      <div id="gift" className="bg-background">
-        <GiftRegistry giftInfo={weddingData.giftInfo} />
-      </div>
-
-      {/* ── FOOTER ── */}
-      <footer
-        className="py-20 px-4 text-center bg-slate-900 text-white"
-        style={{
-          backgroundColor: "var(--foreground)",
-          color: "var(--background)",
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "var(--font-heading, sans-serif)",
-            fontSize: "2.5rem",
-            color: "var(--accent)",
-            lineHeight: 1.2,
-            fontWeight: 300,
-          }}
-        >
-          {weddingData.groomName} & {weddingData.brideName}
-        </h2>
-        <p className="text-sm mt-3 mb-8 opacity-75">
-          {formattedWeddingDateLabel().split(" · ")[0]} ·{" "}
-          {primaryEvent?.locationName}
-        </p>
-        <div className="flex justify-center gap-6 text-sm flex-wrap opacity-75">
-          {weddingData.contactInfo?.groomPhone && (
-            <a
-              href={`tel:${weddingData.contactInfo.groomPhone}`}
-              className="flex items-center gap-2 hover:text-accent transition-colors"
-            >
-              <Phone size={13} /> Chú rể: {weddingData.contactInfo.groomPhone}
-            </a>
-          )}
-          {weddingData.contactInfo?.bridePhone && (
-            <a
-              href={`tel:${weddingData.contactInfo.bridePhone}`}
-              className="flex items-center gap-2 hover:text-accent transition-colors"
-            >
-              <Phone size={13} /> Cô dâu: {weddingData.contactInfo.bridePhone}
-            </a>
-          )}
-          {weddingData.contactInfo?.email && (
-            <a
-              href={`mailto:${weddingData.contactInfo.email}`}
-              className="flex items-center gap-2 hover:text-accent transition-colors"
-            >
-              <Mail size={13} /> Email
-            </a>
-          )}
-        </div>
-        <div className="mt-10 pt-8 border-t border-white/10 opacity-30">
-          <p className="text-xs">
-            Thiệp được tạo tại{" "}
-            <span className="text-accent">thieponline.vn</span>
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

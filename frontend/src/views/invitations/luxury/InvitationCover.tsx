@@ -26,14 +26,14 @@ export function InvitationCover({
   guestName,
 }: InvitationCoverProps) {
   // Use image placeholders if not provided
-  const leftPhoto = getValidImage(
-    galleryImages[1],
-    "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&fit=crop",
-  );
-  const rightPhoto = getValidImage(
-    galleryImages[2],
-    "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&fit=crop",
-  );
+  // const leftPhoto = getValidImage(
+  //   galleryImages[1],
+  //   "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&fit=crop",
+  // );
+  // const rightPhoto = getValidImage(
+  //   galleryImages[2],
+  //   "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&fit=crop",
+  // );
 
   return (
     <section
@@ -56,11 +56,11 @@ export function InvitationCover({
               right: "19.5%",
             }}
           >
-            <img
+            {/* <img
               src={leftPhoto}
               alt="Groom Photo"
               className="w-full h-full object-cover"
-            />
+            /> */}
           </div>
           <Image
             src={polaroid1}
@@ -82,11 +82,11 @@ export function InvitationCover({
               right: "33.8%",
             }}
           >
-            <img
+            {/* <img
               src={rightPhoto}
               alt="Bride Photo"
               className="w-full h-full object-cover"
-            />
+            /> */}
           </div>
           <Image
             src={polaroid3}

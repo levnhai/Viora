@@ -54,14 +54,46 @@ export function WeddingInvitationDemoPage({
     const demoSlug = getDemoSlug(tId);
     setLoading(true);
 
+    // Mock data dự phòng khi DB chưa có dữ liệu demo (404)
+    const mockWeddingData: WeddingData = {
+      slug: demoSlug || "demo",
+      templateId: 1,
+      groomName: "Văn An",
+      brideName: "Thị Bình",
+      weddingDate: "2024-12-31T00:00:00.000Z",
+      events: [
+        {
+          title: "Lễ Tiệc Cưới",
+          time: "11:00",
+          date: "31/12/2024",
+          locationName: "Trung tâm tiệc cưới Trống Đồng",
+          address: "Số 1 Trần Đăng Ninh, Cầu Giấy, Hà Nội",
+        },
+      ],
+      timeline: [
+        {
+          year: "2020",
+          title: "Lần đầu gặp gỡ",
+          description: "Chúng mình gặp nhau tại một quán cà phê nhỏ.",
+          imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format"
+        },
+      ],
+      galleryImages: [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format"
+      ],
+    };
+
     // Fetch wedding details
     fetch(`${API_URL}/api/weddings/${demoSlug}`)
       .then((res) => {
         if (!res.ok) {
           // Fallback sang vanan-thibinh nếu slug kia không có
-          return fetch(`${API_URL}/api/weddings/vanan-thibinh`).then((r) =>
-            r.json(),
-          );
+          return fetch(`${API_URL}/api/weddings/vanan-thibinh`).then((r) => {
+            if (!r.ok) throw new Error("Not Found");
+            return r.json();
+          });
         }
         return res.json();
       })
@@ -73,10 +105,17 @@ export function WeddingInvitationDemoPage({
             finalData.templateId = Number(tId);
           }
           setWeddingData(finalData);
+        } else {
+          throw new Error("Invalid format");
         }
       })
       .catch((err) => {
-        console.error("Lỗi khi tải demo:", err);
+        console.warn("Lỗi khi tải demo (có thể DB trống), dùng mock data:", err);
+        const fallbackData = { ...mockWeddingData };
+        if (tId) {
+          fallbackData.templateId = Number(tId);
+        }
+        setWeddingData(fallbackData);
       })
       .finally(() => setLoading(false));
   }, []);

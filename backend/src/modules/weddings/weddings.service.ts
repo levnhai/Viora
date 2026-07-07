@@ -97,11 +97,15 @@ export class WeddingsService {
     await new this.weddingThemeSettingModel({
       weddingId: saved._id,
       primaryColor:
-        targetTemplate.code === 'classic-pink'
-          ? '#ff6b81'
-          : targetTemplate.code === 'modern-blue'
-            ? '#2e86de'
-            : '#ee5253',
+        targetTemplate.code === 'rose-gold' || targetTemplate.code === 'love-story'
+          ? '#db2777'
+          : targetTemplate.code === 'minimal-green'
+            ? '#2d5a27'
+            : targetTemplate.code === 'eternal-flower'
+              ? '#ac81bd'
+              : targetTemplate.code === 'black-elegant'
+                ? '#1e293b'
+                : '#7a5c4f', // classic-white (default)
       fontHeading: 'Dancing Script',
       fontBody: 'Inter',
       musicAutoplay: true,
