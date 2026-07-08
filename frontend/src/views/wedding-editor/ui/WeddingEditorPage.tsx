@@ -57,7 +57,7 @@ export function WeddingEditorPage({
   const params = useParams();
   const weddingSlug = params?.weddingSlug as string;
   const searchParams = useSearchParams();
-  const initialTemplateId = Number(searchParams?.get("templateId")) || 1;
+  const initialTemplateId = searchParams?.get("templateId") || "temp_1";
 
   // View state (Chỉnh sửa vs Xem trước)
   const [editorView, setEditorView] = useState<"edit" | "preview">("edit");
@@ -187,7 +187,7 @@ export function WeddingEditorPage({
   // Quản lý danh sách template đã mua lẻ
   const [purchasedTemplates, setPurchasedTemplates] = useState<number[]>([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [upgradeTemplateId, setUpgradeTemplateId] = useState<number | null>(null);
+  const [upgradeTemplateId, setUpgradeTemplateId] = useState<string | null>(null);
 
   // States cho các Accordion chỉnh sửa
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -495,7 +495,7 @@ export function WeddingEditorPage({
     }
 
     const selectedTemplate =
-      TEMPLATES.find((t) => t.id === weddingData.templateId) || TEMPLATES[0];
+      TEMPLATES.find((t) => t.code === weddingData.templateId) || TEMPLATES[0];
     const isOwned =
       selectedTemplate.price === 0 ||
       purchasedTemplates.includes(selectedTemplate.id);
@@ -617,7 +617,7 @@ export function WeddingEditorPage({
   };
 
   const selectedTemplate =
-    TEMPLATES.find((t) => t.id === weddingData.templateId) || TEMPLATES[0];
+    TEMPLATES.find((t) => t.code === weddingData.templateId) || TEMPLATES[0];
   const currentTheme = selectedTemplate.themeClass;
 
   // Lấy template package động theo id
@@ -1890,7 +1890,7 @@ export function WeddingEditorPage({
       {showUpgradeModal &&
         (() => {
           const targetTpl =
-            TEMPLATES.find((t) => t.id === (upgradeTemplateId || weddingData.templateId)) || selectedTemplate;
+            TEMPLATES.find((t) => t.code === (upgradeTemplateId || weddingData.templateId)) || selectedTemplate;
           return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-2xs p-4 animate-fade-in">
               <div className="bg-white border border-slate-200 rounded-3xl p-8 max-w-md w-full shadow-2xl text-center space-y-6 text-slate-800">
@@ -1929,7 +1929,7 @@ export function WeddingEditorPage({
                       const updated = [...purchasedTemplates, targetTpl.id];
                       setPurchasedTemplates(updated);
                       localStorage.setItem("purchasedTemplates", JSON.stringify(updated));
-                      updateField(["templateId"], targetTpl.id);
+                      updateField(["templateId"], targetTpl.code);
                       setShowUpgradeModal(false);
                       confetti({
                         particleCount: 100,

@@ -86,8 +86,8 @@ export function WeddingInvitationPage() {
     );
   }
 
-  const getThemeClass = (id: number) => {
-    const tpl = TEMPLATES.find(t => t.id === id);
+  const getThemeClass = (code: string) => {
+    const tpl = TEMPLATES.find(t => t.code === code);
     return tpl ? tpl.themeClass : "theme-pink";
   };
 

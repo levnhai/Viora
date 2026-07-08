@@ -6,23 +6,23 @@ import { LiveView as LuxuryLiveView } from "@/views/invitations/luxury/LiveView"
 
 const LegacyMockEditView = () => null;
 
-export const getTemplatePackage = (id: number): TemplatePackage => {
-  const config = TEMPLATES.find((t) => t.id === id) || TEMPLATES[0];
+export const getTemplatePackage = (code: string): TemplatePackage => {
+  const config = TEMPLATES.find((t) => t.code === code) || TEMPLATES[0];
 
-  switch (id) {
-    case 1:
+  switch (code) {
+    case "temp_1":
       return {
         config,
         LiveView: MinimalLiveView,
         EditView: LegacyMockEditView,
       };
-    case 2:
+    case "minimal-green":
       return {
         config,
         LiveView: FloralLiveView,
         EditView: LegacyMockEditView,
       };
-    case 3:
+    case "classic-white":
       return {
         config,
         LiveView: LuxuryLiveView,

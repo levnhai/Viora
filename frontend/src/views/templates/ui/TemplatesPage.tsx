@@ -74,7 +74,7 @@ export function TemplatesPage() {
 
   const navigate = (path: string) => router.push(path);
 
-  const handleStartCreating = (tplId: number = 1) => {
+  const handleStartCreating = (tplId: string = "temp_1") => {
     navigate(`/create?templateId=${tplId}`);
   };
 
@@ -304,7 +304,7 @@ export function TemplatesPage() {
 
   return (
     <div className="min-h-screen bg-[#fffdfb] text-[#2c1810]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-      <Header onOpenRequest={() => handleStartCreating(1)} />
+      <Header onOpenRequest={() => handleStartCreating("temp_1")} />
 
       {/* Search & Hero Banner */}
       <section 
@@ -527,7 +527,7 @@ export function TemplatesPage() {
               </p>
               <div className="pt-2">
                 <button
-                  onClick={() => handleStartCreating(1)}
+                  onClick={() => handleStartCreating("temp_1")}
                   className="bg-white hover:bg-pink-50 text-[#db2777] border border-[#db2777]/20 px-8 py-3.5 rounded-full font-semibold text-xs shadow-md transition-all inline-flex items-center gap-2 cursor-pointer"
                 >
                   Tạo thiệp riêng ngay <ArrowRight size={14} />
@@ -571,7 +571,7 @@ export function TemplatesPage() {
         <PreviewModal
           tpl={previewTpl}
           onClose={() => setPreviewTpl(null)}
-          onRequestDesign={() => handleStartCreating(previewTpl.id)}
+          onRequestDesign={() => handleStartCreating(previewTpl.code)}
           onSelectTemplate={setPreviewTpl}
         />
       )}

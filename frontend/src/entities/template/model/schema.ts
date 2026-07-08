@@ -28,6 +28,7 @@ export interface TemplateSchema {
 
 export interface TemplateConfig {
   id: number;
+  code: string;
   name: string;
   style: string;
   preview: string;

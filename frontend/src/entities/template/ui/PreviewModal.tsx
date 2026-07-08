@@ -71,7 +71,7 @@ export function PreviewModal({
 
   const handlePreviewDemo = () => {
     onClose();
-    router.push(`/wedding-demo?templateId=${tpl.id}`);
+    router.push(`/wedding-demo?templateId=${tpl.code}`);
   };
 
   const similarTpls = TEMPLATES.filter((t) => t.id !== tpl.id).slice(0, 6);
@@ -133,7 +133,7 @@ export function PreviewModal({
         {/* Live Wedding Preview (No Phone Mockup) */}
         <div className="relative w-full aspect-[9/16.5] rounded-3xl overflow-hidden shadow-2xl border border-stone-850 bg-[#121110] shrink-0 my-4">
           <iframe
-            src={`/wedding-demo?embed=true&templateId=${tpl.id}`}
+            src={`/wedding-demo?embed=true&templateId=${tpl.code}`}
             className="w-full h-full border-0"
             title="Wedding Invitation Demo"
           />

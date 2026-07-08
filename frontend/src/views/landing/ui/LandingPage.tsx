@@ -14,14 +14,14 @@ import { BlogSection } from "@/widgets/blog-section/ui/BlogSection";
 import { Footer } from "@/widgets/footer/ui/Footer";
 
 interface LandingPageProps {
-  onPreviewDemo: (tplId: number) => void;
+  onPreviewDemo: (tplId: string) => void;
 }
 
 export function LandingPage({ onPreviewDemo }: LandingPageProps) {
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
 
-  const handleStartCreating = (tplId: number = 1) => {
+  const handleStartCreating = (tplId: string = "temp_1") => {
     navigate(`/create?templateId=${tplId}`);
   };
 
@@ -29,12 +29,12 @@ export function LandingPage({ onPreviewDemo }: LandingPageProps) {
     <div className="min-h-screen bg-[#fffdfb] text-[#2c1810] pb-16 md:pb-0" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       
       {/* 1. Header (Thanh menu) */}
-      <Header onOpenRequest={() => handleStartCreating(1)} />
+      <Header onOpenRequest={() => handleStartCreating("temp_1")} />
       
       {/* 2. Hero Section (Đầu trang, có cánh hoa đào rơi) */}
       <Hero 
-        onOpenRequest={() => handleStartCreating(1)}
-        onOpenDemo={() => onPreviewDemo(1)}
+        onOpenRequest={() => handleStartCreating("temp_1")}
+        onOpenDemo={() => onPreviewDemo("temp_1")}
       />
 
       {/* 3. Stats Section (Dải số liệu thống kê) */}

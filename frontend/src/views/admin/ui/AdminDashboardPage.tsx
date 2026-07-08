@@ -20,7 +20,7 @@ export function AdminDashboardPage() {
 
     if (!savedRole || (savedRole !== "admin" && savedRole !== "staff")) {
       localStorage.clear();
-      navigate("/login");
+      navigate("/admin/login");
       return;
     }
 
@@ -62,7 +62,7 @@ export function AdminDashboardPage() {
       console.error("Lỗi đăng xuất:", err);
     }
     localStorage.clear();
-    navigate("/login");
+    navigate("/admin/login");
   };
 
   if (loading) {
@@ -187,7 +187,7 @@ export function AdminDashboardPage() {
                         </div>
                       )}
                       <div className="flex items-center gap-1.5">
-                        <Layers size={13} /> Mẫu: <span className="font-semibold text-[#2c1810]">{req.templateName}</span> (ID: {req.templateId})
+                        <Layers size={13} /> Mẫu: <span className="font-semibold text-[#2c1810]">{req.templateName}</span> (Code: {req.templateId})
                       </div>
                       {req.weddingDate && (
                         <div className="flex items-center gap-1.5">

@@ -32,19 +32,19 @@ export function WeddingInvitationDemoPage({
     }
 
     // Xác định demo slug theo templateId
-    const getDemoSlug = (id: string | null) => {
-      switch (id) {
-        case "1":
+    const getDemoSlug = (code: string | null) => {
+      switch (code) {
+        case "temp_1":
           return "vanan-thibinh";
-        case "2":
+        case "minimal-green":
           return "minh-lan";
-        case "3":
+        case "classic-white":
           return "hoang-yen";
-        case "4":
+        case "love-story":
           return "love-story-demo";
-        case "5":
+        case "eternal-flower":
           return "royal-demo";
-        case "6":
+        case "black-elegant":
           return "lavender-demo";
         default:
           return "vanan-thibinh";
@@ -57,7 +57,7 @@ export function WeddingInvitationDemoPage({
     // Mock data dự phòng khi DB chưa có dữ liệu demo (404)
     const mockWeddingData: WeddingData = {
       slug: demoSlug || "demo",
-      templateId: 1,
+      templateId: "temp_1",
       groomName: "Văn An",
       brideName: "Thị Bình",
       weddingDate: "2024-12-31T00:00:00.000Z",
@@ -102,7 +102,7 @@ export function WeddingInvitationDemoPage({
           const finalData = data.data;
           // Ép buộc render theo templateId trong URL để test/preview đúng mẫu
           if (tId) {
-            finalData.templateId = Number(tId);
+            finalData.templateId = tId;
           }
           setWeddingData(finalData);
         } else {
@@ -113,7 +113,7 @@ export function WeddingInvitationDemoPage({
         console.warn("Lỗi khi tải demo (có thể DB trống), dùng mock data:", err);
         const fallbackData = { ...mockWeddingData };
         if (tId) {
-          fallbackData.templateId = Number(tId);
+          fallbackData.templateId = tId;
         }
         setWeddingData(fallbackData);
       })
@@ -131,8 +131,8 @@ export function WeddingInvitationDemoPage({
     );
   }
 
-  const getThemeClass = (id: number) => {
-    const tpl = TEMPLATES.find((t) => t.id === id);
+  const getThemeClass = (code: string) => {
+    const tpl = TEMPLATES.find((t) => t.code === code);
     return tpl ? tpl.themeClass : "theme-pink";
   };
 

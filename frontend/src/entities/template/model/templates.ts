@@ -3,8 +3,9 @@ import { TemplateConfig } from "./schema";
 export const TEMPLATES: TemplateConfig[] = [
   {
     id: 1,
-    name: "Rose Gold",
-    style: "Lãng mạn",
+    code: "temp_1",
+    name: "Hoàng Kim Xanh",
+    style: "Hoàng gia",
     preview: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-pink",
     tier: "basic",
@@ -22,6 +23,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 2,
+    code: "minimal-green",
     name: "Minimal Green",
     style: "Tinh giản",
     preview: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
@@ -41,6 +43,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 3,
+    code: "classic-white",
     name: "Classic White",
     style: "Cổ điển",
     preview: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
@@ -60,6 +63,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 4,
+    code: "love-story",
     name: "Love Story",
     style: "Hiện đại",
     preview: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
@@ -79,6 +83,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 5,
+    code: "eternal-flower",
     name: "Eternal Flower",
     style: "Thơ mộng",
     preview: "https://images.unsplash.com/photo-1507504038482-76210378664a?w=600&h=800&fit=crop&auto=format",
@@ -98,6 +103,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 6,
+    code: "black-elegant",
     name: "Black Elegant",
     style: "Sang trọng",
     preview: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop&auto=format",

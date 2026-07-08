@@ -33,7 +33,7 @@ export interface ContactInfo {
 
 export interface WeddingData {
   slug: string;
-  templateId: number;
+  templateId: string; // Refactored from number to string to match code (e.g. 'temp_1')
   groomName: string;
   groomFatherName?: string;
   groomMotherName?: string;
