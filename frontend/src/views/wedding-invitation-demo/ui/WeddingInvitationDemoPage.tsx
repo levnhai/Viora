@@ -66,8 +66,8 @@ export function WeddingInvitationDemoPage({
           title: "Lễ Tiệc Cưới",
           time: "11:00",
           date: "31/12/2024",
-          locationName: "Trung tâm tiệc cưới Trống Đồng",
-          address: "Số 1 Trần Đăng Ninh, Cầu Giấy, Hà Nội",
+          locationName: "Ninh Bình Legend",
+          address: "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
         },
       ],
       timeline: [

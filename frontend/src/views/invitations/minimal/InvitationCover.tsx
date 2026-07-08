@@ -1,44 +1,86 @@
-import { ChevronDown } from "lucide-react";
-import { formatDate } from "@/shared/lib/utils/date";
+import { FadeIn } from "@/shared/ui/FadeIn";
+import { WeddingData } from "@/entities/invitation/model/types";
+import img_1 from "@/shared/assets/image/flower/img_1.png";
 
 interface InvitationCoverProps {
-  onScrollNext: () => void;
-  groomName: string;
-  brideName: string;
-  weddingDate: string;
-  coverImageUrl?: string;
+  weddingData: WeddingData;
   guestName?: string;
 }
 
 export function InvitationCover({
-  onScrollNext,
-  groomName,
-  brideName,
-  weddingDate,
-  coverImageUrl = "",
+  weddingData,
   guestName,
 }: InvitationCoverProps) {
+  const { groomName, brideName } = weddingData;
+
   return (
-    <section
-      onClick={onScrollNext}
-      className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-8 cursor-pointer hover:opacity-[0.99] transition-all"
-    >
-      <div className="absolute inset-0">
+    <section className="relative min-h-[50vh] flex flex-col items-center justify-start text-center overflow-visible pb-20 bg-[rgb(0,26,8)]">
+      {/* Floral top image */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[400px]">
         <img
-          src={coverImageUrl}
-          alt="Couple photo"
-          className="w-full h-full object-cover"
+          src={img_1.src}
+          alt="Floral decoration"
+          className="w-full h-auto object-contain opacity-90 -mt-45"
         />
-        {/* Nền phủ xám/trắng thanh khiết cho phong cách Botanical Minimalist */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f7f7f5]/30 via-[#f7f7f5]/90 to-[#f7f7f5]" />
       </div>
 
-      <button
-        onClick={onScrollNext}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-stone-600 border-0 bg-transparent cursor-pointer"
+      <FadeIn
+        delay={200}
+        className="z-10 flex flex-col items-center mt-20 space-y-4 pt-48 sm:pt-56 w-3/5"
       >
-        <ChevronDown size={28} />
-      </button>
+        <p className="text-[rgb(225,188,124)] font-serif uppercase tracking-[0.2em] text-[12px] mb-4">
+          THE WEDDING OF
+        </p>
+
+        <h1
+          className="text-6xl mt-10 sm:text-8xl text-[rgb(225,188,124)] text-left w-full"
+          style={{
+            fontFamily: "'Great Vibes', cursive",
+            textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
+          }}
+        >
+          {groomName || "Trung Hiếu"}
+        </h1>
+
+        <div className="text-4xl sm:text-5xl text-[rgb(225,188,124)] font-serif italic my-2 opacity-80">
+          &
+        </div>
+
+        <h1
+          className="text-6xl sm:text-8xl mt-6 text-[rgb(225,188,124)] text-right w-full"
+          style={{
+            fontFamily: "'Great Vibes', cursive",
+            textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
+          }}
+        >
+          {brideName || "Như Ý"}
+        </h1>
+      </FadeIn>
+
+      {guestName && (
+        <FadeIn
+          delay={400}
+          className="mt-16 z-10 border border-[rgb(225,188,124)]/30 rounded-full px-8 py-3 bg-[rgb(225,188,124)]/5"
+        >
+          <p className="text-lg font-serif text-[rgb(225,188,124)] uppercase tracking-widest">
+            Thân Mời:{" "}
+            <span className="font-semibold text-white ml-2">
+              {guestName || " hai le"}
+            </span>
+          </p>
+        </FadeIn>
+      )}
+
+      {/* Decorative Divider to separate Cover from next section */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 max-w-md flex items-center justify-center gap-4 py-8">
+        <div className="flex-1 h-[1px]" style={{ background: 'linear-gradient(to right, transparent, rgba(225,188,124,0.6))' }}></div>
+        <div className="flex items-center justify-center text-[rgb(225,188,124)] opacity-80 gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-[rgb(225,188,124)]" />
+          <span className="text-lg">✧</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[rgb(225,188,124)]" />
+        </div>
+        <div className="flex-1 h-[1px]" style={{ background: 'linear-gradient(to left, transparent, rgba(225,188,124,0.6))' }}></div>
+      </div>
     </section>
   );
 }
