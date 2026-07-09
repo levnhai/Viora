@@ -23,6 +23,15 @@ export interface TemplateSchema {
   gallery: {
     maxImages: number;
   };
+  story: {
+    enabled: boolean;
+  };
+  rsvp: {
+    enabled: boolean;
+  };
+  gift: {
+    enabled: boolean;
+  };
   customFields?: TemplateCustomField[];
 }
 

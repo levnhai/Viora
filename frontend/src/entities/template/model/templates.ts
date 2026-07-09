@@ -6,7 +6,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "temp_1",
     name: "Hoàng Kim Xanh",
     style: "Hoàng gia",
-    preview: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-pink",
     tier: "basic",
     price: 460000,
@@ -19,6 +20,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: false, showTitles: false },
       timeline: { enabled: false },
       gallery: { maxImages: 10 },
+      story: { enabled: false },
+      rsvp: { enabled: false },
+      gift: { enabled: true },
     },
   },
   {
@@ -26,7 +30,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "minimal-green",
     name: "Minimal Green",
     style: "Tinh giản",
-    preview: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-green",
     tier: "basic",
     price: 460000,
@@ -39,6 +44,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: true, showTitles: true },
       timeline: { enabled: true },
       gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
     },
   },
   {
@@ -46,7 +54,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "classic-white",
     name: "Classic White",
     style: "Cổ điển",
-    preview: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-modern",
     tier: "basic",
     price: 460000,
@@ -59,6 +68,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: true, showTitles: true },
       timeline: { enabled: true },
       gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
     },
   },
   {
@@ -66,7 +78,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "love-story",
     name: "Love Story",
     style: "Hiện đại",
-    preview: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-pink",
     tier: "basic",
     price: 460000,
@@ -79,6 +92,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: true, showTitles: true },
       timeline: { enabled: true },
       gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
     },
   },
   {
@@ -86,7 +102,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "eternal-flower",
     name: "Eternal Flower",
     style: "Thơ mộng",
-    preview: "https://images.unsplash.com/photo-1507504038482-76210378664a?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1507504038482-76210378664a?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-purple",
     tier: "basic",
     price: 460000,
@@ -99,6 +116,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: true, showTitles: true },
       timeline: { enabled: true },
       gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
     },
   },
   {
@@ -106,7 +126,8 @@ export const TEMPLATES: TemplateConfig[] = [
     code: "black-elegant",
     name: "Black Elegant",
     style: "Sang trọng",
-    preview: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop&auto=format",
+    preview:
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-navy",
     tier: "premium",
     price: 560000,
@@ -120,6 +141,9 @@ export const TEMPLATES: TemplateConfig[] = [
       spotlight: { hasGroomBrideImages: true, showTitles: true },
       timeline: { enabled: true },
       gallery: { maxImages: 30 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
     },
-  }
+  },
 ];
