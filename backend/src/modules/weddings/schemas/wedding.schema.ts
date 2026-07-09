@@ -3,6 +3,7 @@ import { Document, Types } from 'mongoose';
 
 export type WeddingDocument = Wedding & Document;
 
+// thông tin ngân hàngs
 @Schema()
 class GiftRegistryInfo {
   @Prop()
@@ -30,6 +31,7 @@ class GiftRegistryInfo {
   brideQrUrl?: string;
 }
 
+// thông tin liên hệ
 @Schema()
 class ContactInfo {
   @Prop()
@@ -42,6 +44,7 @@ class ContactInfo {
   email?: string;
 }
 
+// cài đặt: hiển thị và không hiển thị
 @Schema()
 class WeddingSettings {
   @Prop({ default: true })
@@ -57,6 +60,7 @@ class WeddingSettings {
   musicUrl?: string;
 }
 
+// seo
 @Schema()
 class WeddingSEO {
   @Prop()
@@ -86,6 +90,7 @@ export class Wedding {
   @Prop({ required: true, default: '1.0.0' })
   templateVersion: string; // Khóa phiên bản template khi tạo thiệp cưới
 
+  // thông tin chú rễ
   @Prop({ required: true })
   groomName: string;
 
@@ -95,6 +100,10 @@ export class Wedding {
   @Prop()
   groomMotherName?: string;
 
+  @Prop()
+  groomRank?: string; // Thứ bậc (ví dụ: Trưởng nam, Thứ nam, Út nam)
+
+  // thông tin cô dâu
   @Prop({ required: true })
   brideName: string;
 
@@ -103,6 +112,9 @@ export class Wedding {
 
   @Prop()
   brideMotherName?: string;
+
+  @Prop()
+  brideRank?: string; // Thứ bậc (ví dụ: Trưởng nữ, Thứ nữ, Út nữ)
 
   @Prop({ required: true })
   weddingDate: Date;

@@ -10,6 +10,9 @@ import {
   TemplatePurchaseSchema,
 } from './schemas/template-purchase.schema';
 
+import { TemplatesController } from './templates.controller';
+import { TemplatesService } from './templates.service';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -18,6 +21,8 @@ import {
       { name: TemplatePurchase.name, schema: TemplatePurchaseSchema },
     ]),
   ],
-  exports: [MongooseModule],
+  controllers: [TemplatesController],
+  providers: [TemplatesService],
+  exports: [MongooseModule, TemplatesService],
 })
 export class TemplatesModule {}

@@ -10,7 +10,7 @@ import {
 import { SystemService } from './system.service';
 import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('requests')
+@Controller('invitation-requests')
 export class SystemController {
   constructor(private readonly systemService: SystemService) {}
 

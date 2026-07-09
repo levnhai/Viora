@@ -122,6 +122,10 @@ export class CreateWeddingDto {
   @IsString()
   groomMotherName?: string;
 
+  @IsOptional()
+  @IsString()
+  groomRank?: string;
+
   @IsNotEmpty()
   @IsString()
   brideName: string;
@@ -133,6 +137,10 @@ export class CreateWeddingDto {
   @IsOptional()
   @IsString()
   brideMotherName?: string;
+
+  @IsOptional()
+  @IsString()
+  brideRank?: string;
 
   @IsNotEmpty()
   @IsDateString()
