@@ -103,6 +103,9 @@ export class Wedding {
   @Prop()
   groomRank?: string; // Thứ bậc (ví dụ: Trưởng nam, Thứ nam, Út nam)
 
+  @Prop()
+  groomAddress?: string; // Địa chỉ nhà nam
+
   // thông tin cô dâu
   @Prop({ required: true })
   brideName: string;
@@ -115,6 +118,9 @@ export class Wedding {
 
   @Prop()
   brideRank?: string; // Thứ bậc (ví dụ: Trưởng nữ, Thứ nữ, Út nữ)
+
+  @Prop()
+  brideAddress?: string; // Địa chỉ nhà nữ
 
   @Prop({ required: true })
   weddingDate: Date;

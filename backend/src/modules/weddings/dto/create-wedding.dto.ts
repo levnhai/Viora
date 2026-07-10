@@ -126,6 +126,10 @@ export class CreateWeddingDto {
   @IsString()
   groomRank?: string;
 
+  @IsOptional()
+  @IsString()
+  groomAddress?: string;
+
   @IsNotEmpty()
   @IsString()
   brideName: string;
@@ -141,6 +145,10 @@ export class CreateWeddingDto {
   @IsOptional()
   @IsString()
   brideRank?: string;
+
+  @IsOptional()
+  @IsString()
+  brideAddress?: string;
 
   @IsNotEmpty()
   @IsDateString()
@@ -176,4 +184,8 @@ export class CreateWeddingDto {
   @ValidateNested()
   @Type(() => ContactInfoDto)
   contactInfo?: ContactInfoDto;
+
+  @IsOptional()
+  @IsString()
+  customerEmail?: string;
 }

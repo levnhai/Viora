@@ -17,6 +17,18 @@ import { AuthGuard } from '../auth/auth.guard';
 export class WeddingsController {
   constructor(private readonly weddingsService: WeddingsService) {}
 
+  @Get()
+  @UseGuards(AuthGuard)
+  async findAll(@Req() req: any) {
+    const user = req.user;
+    const query = req.query || {};
+    const data = await this.weddingsService.findAll(query, user);
+    return {
+      success: true,
+      data,
+    };
+  }
+
   @Post()
   @UseGuards(AuthGuard)
   async create(@Body() createDto: CreateWeddingDto, @Req() req: any) {

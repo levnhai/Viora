@@ -24,6 +24,8 @@ import {
   GuestbookSchema,
 } from '../guestbooks/schemas/guestbook.schema';
 
+import { AuthModule } from '../auth/auth.module';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -37,6 +39,7 @@ import {
       { name: Guest.name, schema: GuestSchema },
       { name: Guestbook.name, schema: GuestbookSchema },
     ]),
+    AuthModule,
   ],
   controllers: [WeddingsController],
   providers: [WeddingsService],

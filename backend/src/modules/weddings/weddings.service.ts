@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Wedding, WeddingDocument } from './schemas/wedding.schema';
@@ -26,6 +26,7 @@ import {
   GuestbookDocument,
 } from '../guestbooks/schemas/guestbook.schema';
 import { CreateWeddingDto } from './dto/create-wedding.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class WeddingsService {
@@ -48,15 +49,125 @@ export class WeddingsService {
     private readonly guestModel: Model<GuestDocument>,
     @InjectModel(Guestbook.name)
     private readonly guestbookModel: Model<GuestbookDocument>,
+    private readonly authService: AuthService,
   ) {}
 
+
+  async findAll(query: any, user: any): Promise<any> {
+    const { page = 1, limit = 10, status, search, templateId } = query;
+    const skip = (Number(page) - 1) * Number(limit);
+
+    // Xây dựng query cơ bản
+    const filter: any = { deletedAt: null };
+
+    // Phân quyền: Nếu không phải admin/staff thì chỉ lấy thiệp của chính họ
+    if (user.role !== 'admin' && user.role !== 'staff') {
+      filter.$or = [
+        { ownerId: new Types.ObjectId(user.id) },
+        { createdBy: new Types.ObjectId(user.id) }
+      ];
+    }
+
+    // Lọc theo trạng thái
+    if (status) {
+      filter.status = status;
+    }
+
+    // Lọc theo template
+    if (templateId) {
+      filter.templateId = new Types.ObjectId(templateId);
+    }
+
+    // Tìm kiếm theo tên hoặc mã
+    if (search) {
+      filter.$or = [
+        ...filter.$or || [],
+        { brideName: { $regex: search, $options: 'i' } },
+        { groomName: { $regex: search, $options: 'i' } },
+        { slug: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Đếm tổng số
+    const total = await this.weddingModel.countDocuments(filter).exec();
+
+    // Lấy dữ liệu, populate templateId để lấy thông tin template
+    const items = await this.weddingModel
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .populate('templateId', 'name code thumbnail')
+      .exec();
+
+    // Lấy thêm thống kê nhanh cho Admin/User dashboard
+    let stats: any = null;
+    let topTemplates: any = null;
+    if (Number(page) === 1) {
+      // Đếm số lượng theo status
+      const statsQuery = user.role !== 'admin' && user.role !== 'staff' 
+        ? { deletedAt: null, $or: [{ ownerId: new Types.ObjectId(user.id) }, { createdBy: new Types.ObjectId(user.id) }] }
+        : { deletedAt: null };
+
+      const allWeddings = await this.weddingModel.find(statsQuery, 'status templateId').populate('templateId', 'name code thumbnail').exec();
+      
+      stats = {
+        total: allWeddings.length,
+        published: allWeddings.filter(w => w.status === 'published').length,
+        draft: allWeddings.filter(w => w.status === 'draft').length,
+        hidden: allWeddings.filter(w => w.status === 'hidden').length,
+      };
+
+      // Tính top templates
+      const templateCounts: Record<string, any> = {};
+      allWeddings.forEach(w => {
+        if (w.templateId && (w.templateId as any)._id) {
+          const tId = (w.templateId as any)._id.toString();
+          if (!templateCounts[tId]) {
+            templateCounts[tId] = {
+              template: w.templateId,
+              count: 0
+            };
+          }
+          templateCounts[tId].count += 1;
+        }
+      });
+
+      topTemplates = Object.values(templateCounts)
+        .sort((a: any, b: any) => b.count - a.count)
+        .slice(0, 5)
+        .map((t: any) => ({
+          ...t.template.toObject(),
+          count: t.count,
+          percentage: allWeddings.length > 0 ? ((t.count / allWeddings.length) * 100).toFixed(1) : 0
+        }));
+    }
+
+    return {
+      items,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / Number(limit)),
+      stats,
+      topTemplates
+    };
+  }
 
   async create(
     createDto: CreateWeddingDto,
     userId?: string,
     createdById?: string,
   ): Promise<any> {
-    const { events, timeline, galleryImages, templateId, ...restDto } =
+    // Nếu slug đã tồn tại, thực hiện update thay vì báo lỗi duplicate
+    const existing = await this.weddingModel
+      .findOne({ slug: createDto.slug, deletedAt: null })
+      .exec();
+    if (existing) {
+      return this.update(createDto.slug, createDto);
+    }
+
+    const { events, timeline, galleryImages, templateId, customerEmail, ...restDto } =
       createDto;
 
     // Tìm template tương ứng
@@ -75,12 +186,38 @@ export class WeddingsService {
       throw new NotFoundException(`Template không hợp lệ`);
     }
 
-    const ownerObjectId = userId
-      ? new Types.ObjectId(userId)
-      : new Types.ObjectId();
-    const createdByObjectId = createdById
-      ? new Types.ObjectId(createdById)
-      : ownerObjectId;
+    let ownerObjectId = userId ? new Types.ObjectId(userId) : new Types.ObjectId();
+    const createdByObjectId = createdById ? new Types.ObjectId(createdById) : ownerObjectId;
+    let credentials: any = null;
+
+    if (customerEmail) {
+      // Check if user already exists
+      let customerUser: any = await this.userModel.findOne({ email: customerEmail }).exec();
+      if (!customerUser) {
+        customerUser = await this.userModel.findOne({ username: customerEmail }).exec();
+      }
+      
+      if (customerUser) {
+        throw new BadRequestException('Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!');
+      }
+      
+      // Create new user
+      const generatedPassword = "cuoi@123"; // default password
+      customerUser = await this.authService.createUser(
+        customerEmail, // username
+        generatedPassword,
+        'user',
+        createDto.slug,
+        createDto.groomName + ' & ' + createDto.brideName, // fullName
+        '', // phone
+        'active'
+      );
+      credentials = {
+        email: customerEmail,
+        password: generatedPassword
+      };
+      ownerObjectId = customerUser?._id as Types.ObjectId;
+    }
 
     const created = new this.weddingModel({
       ...restDto,
@@ -158,7 +295,11 @@ export class WeddingsService {
         .exec();
     }
 
-    return this.findBySlug(saved.slug);
+    const result = await this.findBySlug(saved.slug);
+    return {
+      ...result,
+      credentials
+    };
   }
 
   // Phục vụ API tương thích ngược cũ GET /weddings/:slug
@@ -213,7 +354,59 @@ export class WeddingsService {
       throw new NotFoundException(`Wedding with slug "${slug}" not found`);
     }
 
-    const { events, timeline, galleryImages, ...restDto } = updateDto;
+    const { events, timeline, galleryImages, templateId, customerEmail, ...restDto } = updateDto;
+
+    let credentials: any = null;
+
+    if (customerEmail) {
+      // Check if user already exists
+      let customerUser: any = await this.userModel.findOne({ email: customerEmail }).exec();
+      if (!customerUser) {
+        customerUser = await this.userModel.findOne({ username: customerEmail }).exec();
+      }
+      
+      if (customerUser) {
+        if (!wedding.ownerId || wedding.ownerId.toString() !== customerUser._id.toString()) {
+          throw new BadRequestException('Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!');
+        }
+        // It's their own email, so we do nothing
+      } else {
+        // Create new user
+        const generatedPassword = "cuoi@123"; // default password
+        customerUser = await this.authService.createUser(
+          customerEmail, // username
+          generatedPassword,
+          'user',
+          updateDto.slug,
+          updateDto.groomName + ' & ' + updateDto.brideName, // fullName
+          '', // phone
+          'active'
+        );
+        credentials = {
+          email: customerEmail,
+          password: generatedPassword
+        };
+        wedding.ownerId = customerUser?._id as Types.ObjectId;
+      }
+    }
+
+    // Resolve template if templateId is provided
+    if (templateId !== undefined) {
+      let targetTemplate: TemplateDocument | null = null;
+      if (typeof templateId === 'number') {
+        targetTemplate = await this.templateModel
+          .findOne({ id: templateId, deletedAt: null })
+          .exec();
+      } else {
+        targetTemplate = await this.templateModel
+          .findOne({ _id: templateId, deletedAt: null })
+          .exec();
+      }
+      if (targetTemplate) {
+        wedding.templateId = targetTemplate._id;
+        wedding.templateVersion = targetTemplate.version;
+      }
+    }
 
     // Cập nhật thông tin cơ bản
     Object.assign(wedding, restDto);
@@ -270,7 +463,11 @@ export class WeddingsService {
       }
     }
 
-    return this.findBySlug(slug);
+    const result = await this.findBySlug(slug);
+    return {
+      ...result,
+      credentials
+    };
   }
 
   // ================= WEDDING RENDER API (NEW) =================
