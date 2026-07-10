@@ -110,8 +110,8 @@ export function AdminSidebar() {
                 }`}
               >
                 <Link
-                  href="#"
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  href="/admin/invitations"
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-pink-500 bg-pink-500/10 rounded-lg transition-colors font-medium"
                 >
                   <div className="w-4" /> Danh sách thiệp
                 </Link>
@@ -132,7 +132,7 @@ export function AdminSidebar() {
           </div>
         </div>
 
-        {/* <div>
+        <div>
           <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
             Quản lý khách mời
           </p>
@@ -165,9 +165,9 @@ export function AdminSidebar() {
               <ChevronDown size={14} className="opacity-50" />
             </a>
           </div>
-        </div> */}
+        </div>
 
-        {/* <div>
+        <div>
           <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
             Nội dung & tiện ích
           </p>
@@ -203,13 +203,31 @@ export function AdminSidebar() {
               <FileText size={18} /> Trang thông tin
             </a>
           </div>
-        </div> */}
+        </div>
 
-        {/* <div>
+        <div>
           <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-            Quản trị hệ thống
+            Cài đặt hệ thống
           </p>
           <div className="space-y-1">
+            <a
+              href="#"
+              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+            >
+              <Settings size={18} /> Cài đặt chung
+            </a>
+            <a
+              href="#"
+              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+            >
+              <MessageSquare size={18} /> Email & SMS
+            </a>
+            <a
+              href="#"
+              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+            >
+              <Database size={18} /> Tên miền
+            </a>
             <a
               href="#"
               className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
@@ -220,56 +238,12 @@ export function AdminSidebar() {
               href="#"
               className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
             >
-              <Shield size={18} /> Vai trò & Phân quyền
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <Settings size={18} /> Cài đặt hệ thống
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <FileText size={18} /> Nhật ký hoạt động
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <Database size={18} /> Sao lưu dữ liệu
+              <Shield size={18} /> Phân quyền
             </a>
           </div>
-        </div> */}
+        </div>
 
-        {/* <div>
-          <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-            Thanh toán
-          </p>
-          <div className="space-y-1">
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <Heart size={18} /> Gói dịch vụ
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <ShoppingCart size={18} /> Đơn hàng
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-            >
-              <CreditCard size={18} /> Thanh toán
-            </a>
-          </div>
-        </div> */}
-
-        {/* <div>
+        <div>
           <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
             Báo cáo & Thống kê
           </p>
@@ -284,10 +258,10 @@ export function AdminSidebar() {
               href="#"
               className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
             >
-              <FileText size={18} /> Báo cáo
+              <FileText size={18} /> Nhật ký hoạt động
             </a>
           </div>
-        </div> */}
+        </div>
       </nav>
 
       {/* Bottom Toggle */}

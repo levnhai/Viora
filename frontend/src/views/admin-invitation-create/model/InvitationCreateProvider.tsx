@@ -5,7 +5,15 @@ import { Template } from "@/entities/template/api/template.api";
 
 export interface BasicInfo {
   groomName: string;
+  groomFatherName?: string;
+  groomMotherName?: string;
+  groomRank?: string;
+  groomAddress?: string;
   brideName: string;
+  brideFatherName?: string;
+  brideMotherName?: string;
+  brideRank?: string;
+  brideAddress?: string;
   weddingDate: string;
   weddingTime: string;
   locationName: string;
@@ -22,6 +30,18 @@ export interface PublishSettings {
   allowComments: boolean;
   showRsvp: boolean;
   passwordProtect: boolean;
+}
+
+export interface GiftInfo {
+  groomBankName?: string;
+  groomAccountNumber?: string;
+  groomAccountName?: string;
+  groomQrUrl?: string;
+
+  brideBankName?: string;
+  brideAccountNumber?: string;
+  brideAccountName?: string;
+  brideQrUrl?: string;
 }
 
 interface InvitationCreateState {
@@ -45,6 +65,12 @@ interface InvitationCreateState {
 
   basicInfo: BasicInfo;
   setBasicInfo: (info: BasicInfo) => void;
+
+  giftInfo: GiftInfo;
+  setGiftInfo: (info: GiftInfo) => void;
+
+  galleryImages: string[];
+  setGalleryImages: (images: string[]) => void;
 
   story: string;
   setStory: (story: string) => void;
@@ -79,6 +105,15 @@ export function InvitationCreateProvider({
     mapLink: "https://maps.google.com/?q=Gem+Center",
   });
   
+  const [giftInfo, setGiftInfo] = useState<GiftInfo>({});
+  
+  const [galleryImages, setGalleryImages] = useState<string[]>([
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80"
+  ]);
+
   const [story, setStory] = useState(
     "Sau bao nhiêu ngày tháng bên nhau, chúng tôi quyết định đi đến một hành trình mới..."
   );
@@ -111,6 +146,10 @@ export function InvitationCreateProvider({
         setEditorActiveTab,
         basicInfo,
         setBasicInfo,
+        giftInfo,
+        setGiftInfo,
+        galleryImages,
+        setGalleryImages,
         story,
         setStory,
         publishSettings,

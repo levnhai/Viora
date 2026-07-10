@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  Volume2,
-  VolumeX,
-  Heart,
-  Calendar,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Volume2, VolumeX, Heart, Calendar, MapPin, Phone } from "lucide-react";
 
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
@@ -17,12 +10,17 @@ import {
 } from "@/entities/invitation/ui/GuestbookList";
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { API_URL } from "@/shared/lib/config";
-import { formatTimeAgo } from "@/shared/lib/utils/date";
+import { formatTimeAgo, formatDate } from "@/shared/lib/utils/date";
+import hyImg from "@/shared/assets/image/hy/img_1.webp";
+import bgImg1 from "@/shared/assets/image/hy/img_2.webp";
+import bgImg2 from "@/shared/assets/image/hy/img_3.webp";
+import frame1Svg from "@/shared/assets/image/frame/frame_1.svg";
 
-import { Envelope } from "@/widgets/envelope";
+import { LongPhungEnvelope } from "./LongPhungEnvelope";
 import { InvitationCover } from "./InvitationCover";
 import { Timeline } from "@/widgets/timeline";
 import { GalleryGrid } from "@/widgets/gallery";
+import "./styles.css";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -40,9 +38,6 @@ export function LiveView({
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const targetTime = new Date(weddingData.weddingDate).getTime();
-  const countdown = useCountdown(targetTime);
 
   useEffect(() => {
     if (previewMode) {
@@ -105,27 +100,13 @@ export function LiveView({
   const primaryEvent = weddingData.events[0];
 
   return (
-    <div
-      className={`w-full relative font-sans text-center bg-background text-foreground transition-all duration-500 ${
-        !envelopeOpen ? "h-screen overflow-hidden" : ""
-      }`}
-    >
-      {/* Background Audio */}
-      <audio
-        ref={audioRef}
-        src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3"
-        loop
-      />
+    <div className={`w-full relative font-sans text-center long-phung-theme transition-all duration-500 ${!envelopeOpen ? "h-[100dvh] overflow-hidden" : ""}`}>
+      {/* Background audio */}
+      <audio ref={audioRef} src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3" loop />
 
-      {/* ── ENVELOPE INTRO ── */}
       {!envelopeOpen && (
-        <Envelope
-          variant="lavender"
+        <LongPhungEnvelope
           weddingData={weddingData}
-          guestName={guestName}
-          groomName={weddingData.groomName}
-          brideName={weddingData.brideName}
-          isFixed={!previewMode}
           onOpen={() => {
             setEnvelopeOpen(true);
             setPlaying(true);
@@ -133,194 +114,184 @@ export function LiveView({
         />
       )}
 
-      {/* Music toggle */}
-      {envelopeOpen && (
+      {/* Main Content (Shown after envelope opens) */}
+      <div className={`transition-opacity duration-1000 ${envelopeOpen ? "opacity-100" : "opacity-0"}`}>
+        {/* Fixed Music Toggle */}
         <button
           onClick={() => setPlaying(!playing)}
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[#7c4d90] text-white flex items-center justify-center border-2 border-white shadow-lg active:scale-95 transition-all cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7a0014] text-[#FFBE89] flex items-center justify-center border-2 border-[#FFBE89] shadow-lg active:scale-95 transition-all cursor-pointer"
         >
-          {playing ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          {playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
         </button>
-      )}
 
-      {/* ── CUSTOM COVER SECTION ── */}
-      <InvitationCover
-        onScrollNext={() => {
-          document
-            .getElementById("countdown")
-            ?.scrollIntoView({ behavior: "smooth" });
-        }}
-        groomName={weddingData.groomName}
-        brideName={weddingData.brideName}
-        weddingDate={weddingData.weddingDate}
-        coverImageUrl={weddingData.galleryImages?.[0]}
-        guestName={guestName}
-      />
+        {/* ── BACKGROUND FIXED MÔ TÍP ── */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#7a0014]"></div>
+          {/* Đan xen nhau làm background chìm */}
+          <img src={bgImg1.src} alt="" className="absolute top-[10%] -left-[10%] w-[500px] opacity-40 rotate-[25deg]" />
+          <img src={bgImg2.src} alt="" className="absolute bottom-[10%] -right-[10%] w-[500px] opacity-40 -rotate-[25deg]" />
+        </div>
 
-      {/* ── SINGLE PORTRAIT COVER IMAGE ── */}
-      {weddingData.galleryImages && weddingData.galleryImages[0] && (
-        <section className="py-16 px-6 bg-card text-center space-y-6">
-          <div className="max-w-xs mx-auto bg-white p-3 shadow-md border border-[#eee4f3] rounded-sm transform rotate-1">
-            <div className="w-full aspect-[4/5] overflow-hidden bg-stone-100">
-              <img
-                src={weddingData.galleryImages[0]}
-                alt="Couple photo"
-                className="w-full h-full object-cover"
-              />
+        <div className="relative z-10 max-w-2xl mx-auto px-4 pb-20 pt-10">
+          {/* ── ARCH COVER ── */}
+          <section className="mb-16 flex flex-col items-center w-full">
+            <div className="flex items-center justify-center gap-4 sm:gap-6 mb-8 w-full max-w-2xl mx-auto px-2">
+              <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-[1.3rem] sm:text-3xl md:text-4xl uppercase tracking-widest flex-1 text-right whitespace-nowrap">
+                {weddingData.groomName}
+              </h1>
+              <div className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 border border-[#FFBE89] rounded-full flex items-center justify-center">
+                 <img src={hyImg.src} className="w-10 h-10 sm:w-12 sm:h-12" alt="Hỷ" />
+              </div>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-[1.3rem] sm:text-3xl md:text-4xl uppercase tracking-widest flex-1 text-left whitespace-nowrap">
+                {weddingData.brideName}
+              </h1>
             </div>
-            <p className="text-3xs uppercase mt-3 tracking-widest text-[#7c4d90] font-semibold">
-              Our Happy Moment
-            </p>
-          </div>
-        </section>
-      )}
 
-      {/* ── COUNTDOWN ── */}
-      <section
-        id="countdown"
-        className="py-16 px-6 bg-background border-t border-[#7c4d90]/10"
-      >
-        <FadeIn>
-          <h2
-            className="text-xl text-[#7c4d90] font-semibold mb-6"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Đếm ngược ngày chung đôi
-          </h2>
-          <div className="flex justify-center gap-3">
-            {[
-              { val: countdown.days, label: "Ngày" },
-              { val: countdown.hours, label: "Giờ" },
-              { val: countdown.minutes, label: "Phút" },
-              { val: countdown.seconds, label: "Giây" },
-            ].map(({ val, label }) => (
-              <div key={label} className="text-center">
-                <div className="w-16 h-16 bg-[#eee4f3]/50 border border-[#7c4d90]/15 rounded-xl flex flex-col items-center justify-center">
-                  <span className="text-xl font-bold text-[#7c4d90]">
-                    {String(val).padStart(2, "0")}
-                  </span>
+            {weddingData.galleryImages && weddingData.galleryImages[0] && (
+              <div className="relative w-[90%] sm:w-[80%] max-w-sm mx-auto mt-12 mb-8">
+                {/* 2 Birds on top left and right */}
+                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-12 -left-6 sm:-left-12 w-24 sm:w-32 -scale-x-100 opacity-90 z-20" alt="chim én" />
+                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-12 -right-6 sm:-right-12 w-24 sm:w-32 opacity-90 z-20" alt="chim én" />
+
+                {/* The framed image container */}
+                <div className="relative aspect-[754/1099] w-full">
+                  {/* The actual photo */}
+                  <img
+                    src={weddingData.galleryImages[0]}
+                    alt="Cover"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* The SVG frame acting as a cookie-cutter overlay */}
+                  <img 
+                    src={frame1Svg.src} 
+                    alt="Frame" 
+                    className="absolute inset-0 w-full h-full pointer-events-none z-10" 
+                  />
                 </div>
-                <p className="text-[10px] mt-1.5 text-[#705d7b] uppercase font-semibold">
-                  {label}
-                </p>
               </div>
-            ))}
-          </div>
-        </FadeIn>
-      </section>
+            )}
+            
+            <p className="mt-8 text-[#FFBE89] font-serif tracking-[0.2em]">{formatDate(weddingData.weddingDate)}</p>
+          </section>
 
-      {/* ── EVENT INFO ── */}
-      <section className="py-16 px-6 bg-card border-t border-[#7c4d90]/10">
-        <h2
-          className="text-xl text-[#7c4d90] font-semibold mb-8"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Thông tin Hôn lễ
-        </h2>
-        <div className="space-y-6 max-w-sm mx-auto">
-          {weddingData.events.map((ev, index) => (
-            <div
-              key={index}
-              className="p-5 bg-background border border-[#7c4d90]/15 rounded-2xl text-left space-y-3 shadow-xs"
-            >
-              <span className="text-3xs bg-[#eee4f3] text-[#7c4d90] px-2.5 py-1 rounded-full font-bold uppercase">
-                {ev.title}
-              </span>
-              <div className="space-y-2 text-xs text-[#705d7b] font-sans">
-                <p className="flex items-center gap-2">
-                  <Calendar size={13} className="text-[#7c4d90]" />
-                  <span>
-                    {ev.date} vào lúc {ev.time}
-                  </span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <MapPin size={13} className="text-[#7c4d90]" />
-                  <span>
-                    {ev.locationName} ({ev.address})
-                  </span>
-                </p>
-              </div>
+          {/* ── WEDDING EVENTS ── */}
+          <section id="countdown" className="mb-16 relative">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Sự Kiện</h2>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* ── LOVE STORY (Timeline) ── */}
-      {weddingData.timeline && weddingData.timeline.length > 0 && (
-        <div id="love-story" className="bg-background">
-          <Timeline variant="vertical" data={weddingData.timeline} />
-        </div>
-      )}
+            <div className="grid gap-6 sm:grid-cols-2">
+              {weddingData.events.map((ev, idx) => (
+                <div key={idx} className="relative p-6 bg-[#660000] border-2 border-[#FFBE89]/40 rounded-t-full rounded-b-lg overflow-hidden shadow-xl mt-8">
+                  <div className="absolute inset-0 opacity-30 pointer-events-none flex justify-center items-center overflow-hidden">
+                     <img src={idx === 0 ? bgImg1.src : bgImg2.src} className="w-[150%] h-[150%] object-cover" alt="" />
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col items-center pt-8">
+                    <h3 className="text-[#FFBE89] font-serif text-xl uppercase mb-1 tracking-widest">{ev.title}</h3>
+                    <div className="w-12 h-px bg-[#FFBE89]/30 mb-4"></div>
+                    
+                    <p className="text-white font-serif text-lg mb-1">{ev.date}</p>
+                    <p className="text-[#FFBE89] font-sans text-xs uppercase tracking-widest mb-4">Thời gian: {ev.time}</p>
+                    
+                    <div className="bg-[#5a0001] w-full p-4 rounded-md border border-[#FFBE89]/20 text-sm">
+                      <p className="font-bold text-[#FFBE89] mb-1">{ev.locationName}</p>
+                      <p className="text-white/80 text-xs leading-relaxed">{ev.address}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
-      {/* ── GALLERY ── */}
-      {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
-        <div id="gallery" className="bg-background">
-          <GalleryGrid variant="grid" images={weddingData.galleryImages} />
-        </div>
-      )}
-
-      {/* ── GIFT ── */}
-      <section className="py-16 px-6 bg-background border-t border-[#7c4d90]/10">
-        <h2
-          className="text-xl text-[#7c4d90] font-semibold mb-6"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Mừng cưới
-        </h2>
-        <div className="space-y-4 max-w-sm mx-auto text-xs text-[#705d7b]">
-          <p className="opacity-90">
-            Hạnh phúc của chúng mình là sự hiện diện của bạn. Nếu muốn chúc mừng
-            thêm, bạn có thể gửi quà cưới qua số tài khoản:
-          </p>
-          <div className="grid grid-cols-1 gap-4">
-            {weddingData.giftInfo?.groomAccountNumber && (
-              <div className="p-4 bg-[#eee4f3]/40 border border-[#7c4d90]/10 rounded-xl space-y-2">
-                <p className="font-bold text-[#7c4d90] text-[10px] uppercase">
-                  Gia đình nhà trai
-                </p>
-                <p>Ngân hàng: {weddingData.giftInfo.groomBankName}</p>
-                <p>Số tài khoản: {weddingData.giftInfo.groomAccountNumber}</p>
-                <p>Chủ tài khoản: {weddingData.giftInfo.groomAccountName}</p>
+          {/* ── TIMELINE ── */}
+          {weddingData.timeline && weddingData.timeline.length > 0 && (
+            <section className="mb-16">
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Lịch Trình</h2>
+                <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
               </div>
-            )}
-            {weddingData.giftInfo?.brideAccountNumber && (
-              <div className="p-4 bg-[#eee4f3]/40 border border-[#7c4d90]/10 rounded-xl space-y-2">
-                <p className="font-bold text-[#7c4d90] text-[10px] uppercase">
-                  Gia đình nhà gái
-                </p>
-                <p>Ngân hàng: {weddingData.giftInfo.brideBankName}</p>
-                <p>Số tài khoản: {weddingData.giftInfo.brideAccountNumber}</p>
-                <p>Chủ tài khoản: {weddingData.giftInfo.brideAccountName}</p>
+              <div className="bg-[#660000]/80 rounded-xl p-4 border border-[#FFBE89]/20">
+                <Timeline variant="vertical" data={weddingData.timeline} />
               </div>
-            )}
-          </div>
+            </section>
+          )}
+
+          {/* ── GALLERY ── */}
+          {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
+            <section className="mb-16">
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Album Ảnh</h2>
+                <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+              </div>
+              <GalleryGrid variant="masonry" images={weddingData.galleryImages} />
+            </section>
+          )}
+
+          {/* ── GIFT INFO ── */}
+          <section className="mb-16">
+             <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Hộp Mừng Cưới</h2>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+            </div>
+            
+            <p className="text-[#f3e5c8]/80 text-sm italic mb-6">Sự hiện diện của quý vị là món quà quý giá nhất. Nếu có lòng gửi thiệp mừng, quý vị có thể gửi qua số tài khoản dưới đây:</p>
+            
+            <div className="grid sm:grid-cols-2 gap-4">
+               {weddingData.giftInfo?.groomAccountNumber && (
+                  <div className="p-5 bg-[#5a0001] border border-[#FFBE89]/30 rounded-lg text-left relative overflow-hidden">
+                    <img src={bgImg1.src} className="absolute top-[-20%] right-[-10%] w-32 opacity-40" alt="" />
+                    <p className="text-[#FFBE89] text-xs uppercase tracking-widest font-bold mb-3 border-b border-[#FFBE89]/20 pb-2 relative z-10">Nhà Trai</p>
+                    <p className="text-sm font-serif">NH: <span className="text-white">{weddingData.giftInfo.groomBankName}</span></p>
+                    <p className="text-sm font-serif">STK: <span className="text-white font-bold">{weddingData.giftInfo.groomAccountNumber}</span></p>
+                    <p className="text-sm font-serif">Tên: <span className="text-white">{weddingData.giftInfo.groomAccountName}</span></p>
+                  </div>
+                )}
+                {weddingData.giftInfo?.brideAccountNumber && (
+                  <div className="p-5 bg-[#5a0001] border border-[#FFBE89]/30 rounded-lg text-left relative overflow-hidden">
+                    <img src={bgImg2.src} className="absolute bottom-[-20%] right-[-10%] w-32 opacity-40" alt="" />
+                    <p className="text-[#FFBE89] text-xs uppercase tracking-widest font-bold mb-3 border-b border-[#FFBE89]/20 pb-2 relative z-10">Nhà Gái</p>
+                    <p className="text-sm font-serif">NH: <span className="text-white">{weddingData.giftInfo.brideBankName}</span></p>
+                    <p className="text-sm font-serif">STK: <span className="text-white font-bold">{weddingData.giftInfo.brideAccountNumber}</span></p>
+                    <p className="text-sm font-serif">Tên: <span className="text-white">{weddingData.giftInfo.brideAccountName}</span></p>
+                  </div>
+                )}
+            </div>
+          </section>
+
+          {/* ── GUESTBOOK ── */}
+          <section className="mb-16">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Sổ Lưu Bút</h2>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+            </div>
+            
+            <div className="bg-[#fff7f0] rounded-xl p-1 shadow-2xl">
+               <GuestbookForm onSendMessage={handleSendMessage} />
+            </div>
+            <div className="mt-6 text-[#710001] bg-[#fff7f0] rounded-xl p-4 shadow-2xl">
+               <GuestbookList messages={messages} />
+            </div>
+          </section>
+
+          {/* ── FOOTER ── */}
+          <footer className="pt-8 pb-12 border-t border-[#FFBE89]/20 text-center flex flex-col items-center">
+             <div className="w-10 h-10 border border-[#FFBE89] rounded-full flex items-center justify-center mb-4">
+               <img src={hyImg.src} className="w-6 h-6" alt="Hỷ" />
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl text-[#FFBE89] tracking-widest uppercase mb-2">Trân Trọng Cảm ƠN</h2>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#FFBE89]/70 mt-2">
+              {weddingData.groomName} &amp; {weddingData.brideName}
+            </p>
+          </footer>
         </div>
-      </section>
-
-      {/* ── GUESTBOOK ── */}
-      <section className="py-16 px-6 bg-background border-t border-[#7c4d90]/10 max-w-lg mx-auto">
-        <h2
-          className="text-xl text-[#7c4d90] font-semibold mb-6"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Sổ lưu bút
-        </h2>
-        <GuestbookForm onSendMessage={handleSendMessage} />
-        <GuestbookList messages={messages} />
-      </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="py-16 px-6 bg-card border-t border-[#7c4d90]/10 text-center space-y-3">
-        <h2
-          className="text-3xl font-light text-[#7c4d90]"
-          style={{ fontFamily: "'Great Vibes', cursive" }}
-        >
-          Thank you!
-        </h2>
-        <p className="text-3xs uppercase tracking-widest text-[#705d7b] font-semibold">
-          — {weddingData.groomName} & {weddingData.brideName} —
-        </p>
-      </footer>
+      </div>
     </div>
   );
 }

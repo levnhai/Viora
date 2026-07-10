@@ -39,8 +39,7 @@ export function LiveView({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const targetTime = new Date(weddingData.weddingDate).getTime();
-  const countdown = useCountdown(targetTime);
+
 
   useEffect(() => {
     if (previewMode) {

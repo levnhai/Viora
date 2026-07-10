@@ -7,7 +7,7 @@ import { getTemplatePackage } from "@/entities/template/model/registry";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 export function InvitationPreview() {
-  const { basicInfo, activeTemplate } = useInvitationCreate();
+  const { basicInfo, activeTemplate, giftInfo, galleryImages } = useInvitationCreate();
 
   const templatePackage = getTemplatePackage(
     activeTemplate?.code || "minimal-green",
@@ -20,6 +20,25 @@ export function InvitationPreview() {
     templateId: activeTemplate?.code || "minimal-green",
     groomName: basicInfo.groomName || "Chú Rể",
     brideName: basicInfo.brideName || "Cô Dâu",
+    groomFatherName: basicInfo.groomFatherName || "",
+    groomMotherName: basicInfo.groomMotherName || "",
+    brideFatherName: basicInfo.brideFatherName || "",
+    brideMotherName: basicInfo.brideMotherName || "",
+    groomRank: basicInfo.groomRank || "",
+    brideRank: basicInfo.brideRank || "",
+    groomAddress: basicInfo.groomAddress || "",
+    brideAddress: basicInfo.brideAddress || "",
+    giftInfo: {
+      groomBankName: giftInfo.groomBankName || "",
+      groomAccountNumber: giftInfo.groomAccountNumber || "",
+      groomAccountName: giftInfo.groomAccountName || "",
+      groomQrUrl: giftInfo.groomQrUrl || "",
+      brideBankName: giftInfo.brideBankName || "",
+      brideAccountNumber: giftInfo.brideAccountNumber || "",
+      brideAccountName: giftInfo.brideAccountName || "",
+      brideQrUrl: giftInfo.brideQrUrl || "",
+    },
+    galleryImages: galleryImages,
     weddingDate: basicInfo.weddingDate || new Date().toISOString(),
     weddingTime: basicInfo.weddingTime || "18:00",
     events: [
@@ -33,7 +52,6 @@ export function InvitationPreview() {
       },
     ],
     timeline: [],
-    galleryImages: [],
   };
 
   return (

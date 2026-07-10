@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Volume2, VolumeX, Phone, Mail, X } from "lucide-react";
 
-import { Envelope } from "@/widgets/envelope";
 import { InvitationCover } from "./InvitationCover";
 import { MinimalFrame } from "./components/MinimalFrame";
 import { MinimalCoupleSpotlight } from "./components/MinimalCoupleSpotlight";
@@ -14,10 +13,8 @@ import { MinimalGallery } from "./components/MinimalGallery";
 import { GuestMessage } from "@/entities/invitation/ui/GuestbookList";
 import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
 import { FadeIn } from "@/shared/ui/FadeIn";
-import { SectionHeading } from "@/entities/invitation/ui/SectionHeading";
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { WeddingNavigation } from "@/entities/invitation/ui/WeddingNavigation";
 import { API_URL } from "@/shared/lib/config";
 import { formatTimeAgo } from "@/shared/lib/utils/date";
 
@@ -34,6 +31,7 @@ export function LiveView({
   guestName,
   previewMode,
 }: LiveViewProps) {
+  console.log({ weddingData, guestName, previewMode });
   const [playing, setPlaying] = useState(false);
   const [messages, setMessages] = useState<GuestMessage[]>([]);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
@@ -45,9 +43,6 @@ export function LiveView({
   }, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const targetTime = new Date(weddingData.weddingDate).getTime();
-  const countdown = useCountdown(targetTime);
 
   useEffect(() => {
     if (previewMode) {
@@ -309,13 +304,14 @@ export function LiveView({
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
                 />
               </FadeIn>
+              {/* ảnh */}
+              <MinimalGallery weddingData={weddingData} />
+              {/* thông tin tiệc cưới */}
+              <FadeIn>
+                <MinimalTimeline weddingData={weddingData} />
+              </FadeIn>
             </div>
-            {/* ảnh */}
-            <MinimalGallery weddingData={weddingData} />
-            {/* thông tin tiệc cưới */}
-            <FadeIn>
-              <MinimalTimeline weddingData={weddingData} />
-            </FadeIn>
+
             {/* địa điểm */}
             {primaryEvent && <MinimalVenueMap event={primaryEvent} />}
             {/* lời chúc */}
@@ -331,11 +327,6 @@ export function LiveView({
               />
             </FadeIn>
           </div>
-
-          {/* <WeddingNavigation 
-            groomName={weddingData.groomName || "Chú Rể"} 
-            brideName={weddingData.brideName || "Cô Dâu"} 
-          /> */}
 
           {/* Nút bật/tắt nhạc */}
           <button

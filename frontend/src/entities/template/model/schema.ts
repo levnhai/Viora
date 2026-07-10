@@ -9,6 +9,11 @@ export interface TemplateCustomField {
 }
 
 export interface TemplateSchema {
+  basicInfo?: {
+    hasParentsInfo?: boolean;
+    hasRankInfo?: boolean;
+    hasAddressInfo?: boolean;
+  };
   cover: {
     hasBackgroundVideo: boolean;
     hasCoverImage: boolean;

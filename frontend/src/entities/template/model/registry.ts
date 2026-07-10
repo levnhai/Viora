@@ -16,13 +16,13 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
         LiveView: MinimalLiveView,
         EditView: LegacyMockEditView,
       };
-    case "minimal-green":
+    case "temp_2":
       return {
         config,
         LiveView: FloralLiveView,
         EditView: LegacyMockEditView,
       };
-    case "classic-white":
+    case "temp_3":
       return {
         config,
         LiveView: LuxuryLiveView,

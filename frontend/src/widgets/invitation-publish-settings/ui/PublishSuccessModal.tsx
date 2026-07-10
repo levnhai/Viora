@@ -12,14 +12,21 @@ import {
   Eye,
 } from "lucide-react";
 
-export function PublishSuccessModal() {
-  const { isPublishSuccessModalOpen, setIsPublishSuccessModalOpen, setStep } =
-    useInvitationCreate();
+import { useState, useEffect } from "react";
 
-  if (!isPublishSuccessModalOpen) return null;
+export function PublishSuccessModal({ credentials }: { credentials?: {email: string, password: string} | null }) {
+  const { isPublishSuccessModalOpen, setIsPublishSuccessModalOpen, setStep, publishSettings } =
+    useInvitationCreate();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isPublishSuccessModalOpen || !mounted) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-[#1e1e2d]/80 backdrop-blur-sm"
@@ -92,6 +99,38 @@ export function PublishSuccessModal() {
               </div>
             </div>
           </div>
+
+          {/* Credentials */}
+          {credentials && (
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider text-rose-600">
+                Tài khoản quản lý thiệp (Gửi cho khách)
+              </label>
+              <div className="flex flex-col gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-slate-700">Email:</span>
+                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">{credentials.email}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-slate-700">Mật khẩu:</span>
+                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">{credentials.password}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-slate-700">Link quản trị:</span>
+                  <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 truncate max-w-[200px]">{typeof window !== 'undefined' ? `${window.location.origin}/login` : `https://wedding.com/login`}</span>
+                </div>
+                <button
+                  className="mt-2 flex items-center justify-center gap-2 px-4 py-2 bg-white text-rose-600 border border-rose-200 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`Tài khoản quản lý thiệp cưới:\nLink: ${window.location.origin}/w/${publishSettings.urlSlug}\nEmail: ${credentials.email}\nMật khẩu: ${credentials.password}\nĐăng nhập tại: ${window.location.origin}/login`);
+                    alert("Đã sao chép thông tin tài khoản!");
+                  }}
+                >
+                  <Copy size={16} /> Sao chép thông tin gửi khách
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Chia sẻ nhanh */}
           <div>
