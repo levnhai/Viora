@@ -18,7 +18,7 @@ export function MinimalCoupleSpotlight({
   } = weddingData;
 
   return (
-    <section className="pt-16 pb-12 px-4 relative">
+    <section className="pt-16 pb-4 px-4 relative">
       <div className="max-w-4xl mx-auto relative z-10">
         <FadeIn>
           <div className="text-center mb-16 space-y-4">

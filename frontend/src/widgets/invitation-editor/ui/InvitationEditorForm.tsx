@@ -541,6 +541,29 @@ export function InvitationEditorForm() {
 
             <div className="space-y-4">
               <h4 className="text-sm font-semibold text-slate-700">
+                Nhạc nền
+              </h4>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1.5">
+                  Link nhạc nền (tuỳ chọn)
+                </label>
+                <input
+                  type="text"
+                  value={basicInfo.musicUrl || ""}
+                  onChange={(e) =>
+                    setBasicInfo({
+                      ...basicInfo,
+                      musicUrl: e.target.value,
+                    })
+                  }
+                  placeholder="VD: /audio/wedding-song.mp3 hoặc URL nhạc (.mp3)"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold text-slate-700">
                 Địa điểm tổ chức
               </h4>
               <div className="space-y-3">

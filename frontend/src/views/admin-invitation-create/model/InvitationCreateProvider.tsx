@@ -43,6 +43,7 @@ export interface BasicInfo {
   locationName: string;
   address: string;
   mapLink: string;
+  musicUrl?: string;
 }
 
 export interface PublishSettings {

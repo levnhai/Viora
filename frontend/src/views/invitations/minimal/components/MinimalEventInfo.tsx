@@ -15,7 +15,7 @@ export function MinimalEventInfo({
   if (!events || events.length === 0) return null;
 
   return (
-    <section className="pt-10 pb-4 sm:pt-20 sm:pb-8 px-4 relative">
+    <section className="pt-4 pb-4 sm:pt-8 sm:pb-8 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col gap-24">
           {events.map((ev, i) => {

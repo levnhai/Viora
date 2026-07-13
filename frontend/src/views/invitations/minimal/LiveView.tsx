@@ -262,7 +262,7 @@ export function LiveView({
                 <MinimalCoupleSpotlight weddingData={weddingData} />
               </FadeIn>
 
-              <FadeIn className="flex justify-center my-8">
+              <FadeIn className="flex justify-center my-2">
                 <img
                   src={img_1.src}
                   alt="divider"
@@ -277,7 +277,7 @@ export function LiveView({
                 />
               </FadeIn>
 
-              <FadeIn className="flex justify-center my-8">
+              <FadeIn className="flex justify-center my-2">
                 <img
                   src={img_1.src}
                   alt="divider"

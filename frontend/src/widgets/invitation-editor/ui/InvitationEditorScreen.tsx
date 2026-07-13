@@ -72,6 +72,7 @@ export function InvitationEditorScreen() {
             mapUrl: basicInfo.mapLink,
           },
         ],
+        musicUrl: basicInfo.musicUrl,
       };
 
       const res = await fetch(`${API_URL}/api/weddings`, {
