@@ -26,14 +26,14 @@ export function InvitationCover({
 
       <FadeIn
         delay={200}
-        className="z-10 flex flex-col items-center mt-20 space-y-4 pt-48 sm:pt-56 w-3/5"
+        className="z-10 flex flex-col items-center mt-20 space-y-4 pt-48 sm:pt-56 w-11/12 sm:w-4/5 md:w-3/5"
       >
         <p className="text-[rgb(225,188,124)] font-serif uppercase tracking-[0.2em] text-[12px] mb-4">
           THE WEDDING OF
         </p>
 
         <h1
-          className="text-6xl mt-10 sm:text-8xl text-[rgb(225,188,124)] text-left w-full"
+          className="text-5xl sm:text-7xl md:text-8xl mt-10 text-[rgb(225,188,124)] text-left w-full"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
@@ -47,7 +47,7 @@ export function InvitationCover({
         </div>
 
         <h1
-          className="text-6xl sm:text-8xl mt-6 text-[rgb(225,188,124)] text-right w-full"
+          className="text-5xl sm:text-7xl md:text-8xl mt-6 text-[rgb(225,188,124)] text-right w-full"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",

@@ -41,6 +41,7 @@ export interface WeddingData {
   brideFatherName?: string;
   brideMotherName?: string;
   weddingDate: string; // ISO string
+  musicUrl?: string; // Tùy chỉnh nhạc nền
   weddingTime?: string;
   events: WeddingEvent[];
   timeline: LoveStoryTimelineItem[];

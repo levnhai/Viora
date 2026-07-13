@@ -30,40 +30,48 @@ export function MinimalCoupleSpotlight({
 
         <FadeIn
           delay={100}
-          className="flex justify-between items-start max-w-lg mx-auto text-center mb-16 px-4"
+          className="flex flex-row justify-between items-start max-w-lg mx-auto text-center mb-16 px-4 sm:px-0 gap-4 sm:gap-0"
         >
-          <div className="space-y-1">
-            <p className="text-sm font-serif text-[rgb(225,188,124)]/80">
-              Ông Bà
-            </p>
-            <h3 className="text-lg font-serif text-[rgb(225,188,124)]">
+          <div className="space-y-2 flex-1">
+            <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4">
+              <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
+              <p className="text-[10px] sm:text-[11px] font-sans text-[rgb(225,188,124)]/70 uppercase tracking-[0.25em] font-semibold">
+                NHÀ TRAI
+              </p>
+              <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
+            </div>
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
               {groomFatherName || "Lê Văn Bình"}
             </h3>
-            <h3 className="text-lg font-serif text-[rgb(225,188,124)]">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
               {groomMotherName || "Trần Thị Hằng"}
             </h3>
-            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/60 pt-2 max-w-[150px] mx-auto">
+            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 pt-2 max-w-[150px] mx-auto leading-relaxed">
               Số 3, Xóm 1, Xã Ninh Nhất, TP. Ninh Bình
             </p>
           </div>
 
-          <div className="space-y-1">
-            <p className="text-sm font-serif text-[rgb(225,188,124)]/80">
-              Ông Bà
-            </p>
-            <h3 className="text-lg font-serif text-[rgb(225,188,124)]">
+          <div className="space-y-2 flex-1">
+            <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4">
+              <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
+              <p className="text-[10px] sm:text-[11px] font-sans text-[rgb(225,188,124)]/70 uppercase tracking-[0.25em] font-semibold">
+                NHÀ GÁI
+              </p>
+              <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
+            </div>
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
               {brideFatherName || "Nguyễn Văn Lợi"}
             </h3>
-            <h3 className="text-lg font-serif text-[rgb(225,188,124)]">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
               {brideMotherName || "Vũ Thị Thanh"}
             </h3>
-            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/60 pt-2 max-w-[150px] mx-auto">
+            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 pt-2 max-w-[150px] mx-auto leading-relaxed">
               Tổ 5, Phường Nam Thành, TP. Ninh Bình
             </p>
           </div>
         </FadeIn>
 
-        <FadeIn delay={200} className="text-center space-y-6">
+        <FadeIn delay={300} className="text-center mt-12 space-y-6">
           <p className="text-[rgb(225,188,124)] font-serif uppercase tracking-widest text-sm mb-12">
             Trân trọng báo tin <br />
             Lễ thành hôn của con chúng tôi

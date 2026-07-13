@@ -20,7 +20,7 @@ export function MinimalGuestbook({ messages, onSendMessage, guestName: initialGu
   }
 
   return (
-    <section className="py-20 px-4 relative">
+    <section className="py-10 sm:py-20 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <FadeIn>
           <div className="text-center mb-12 space-y-4">

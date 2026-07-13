@@ -25,6 +25,7 @@ import {
 } from '../guestbooks/schemas/guestbook.schema';
 
 import { AuthModule } from '../auth/auth.module';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AuthModule } from '../auth/auth.module';
       { name: Guestbook.name, schema: GuestbookSchema },
     ]),
     AuthModule,
+    CloudinaryModule,
   ],
   controllers: [WeddingsController],
   providers: [WeddingsService],

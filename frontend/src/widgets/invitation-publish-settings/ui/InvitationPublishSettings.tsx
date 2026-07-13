@@ -5,10 +5,16 @@ import { Toggle } from "@/shared/ui/Toggle";
 import { CheckCircle2, Copy, Facebook, Twitter, Mail, Link as LinkIcon, Upload } from "lucide-react";
 
 export function InvitationPublishSettings() {
-  const { publishSettings, setPublishSettings } = useInvitationCreate();
+  const { publishSettings, setPublishSettings, setIsSlugEdited } = useInvitationCreate();
 
   const handleSettingChange = (field: keyof typeof publishSettings, value: any) => {
     setPublishSettings({ ...publishSettings, [field]: value });
+  };
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSlugEdited(true);
+    let val = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "");
+    handleSettingChange("urlSlug", val);
   };
 
   return (
@@ -38,8 +44,15 @@ export function InvitationPublishSettings() {
             Link thiệp cưới
           </label>
           <div className="flex items-center gap-2">
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-600 truncate">
-              https://{publishSettings.domain}/{publishSettings.urlSlug}
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-600 flex items-center">
+              <span className="text-slate-400 shrink-0">https://{publishSettings.domain}/</span>
+              <input 
+                type="text" 
+                value={publishSettings.urlSlug}
+                onChange={handleSlugChange}
+                className="bg-transparent border-none outline-none w-full ml-1 text-slate-700 font-medium"
+                placeholder="ten-co-dau-chu-re"
+              />
             </div>
             <button className="flex items-center gap-1.5 px-3 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-medium transition-colors shrink-0">
               <Copy size={12} /> Sao chép

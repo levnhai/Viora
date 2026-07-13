@@ -39,3 +39,45 @@ export const formatDateToDDMMYYYY = (dateString: string) => {
     return dateString;
   }
 };
+
+export const formatVietnameseDate = (
+  date: string | Date,
+  options?: {
+    includeWeekday?: boolean;
+    time?: string;
+  },
+): string => {
+  try {
+    const d = new Date(date);
+
+    if (isNaN(d.getTime())) return String(date);
+
+    const weekdays = [
+      "Chủ Nhật",
+      "Thứ Hai",
+      "Thứ Ba",
+      "Thứ Tư",
+      "Thứ Năm",
+      "Thứ Sáu",
+      "Thứ Bảy",
+    ];
+
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+
+    let result = `ngày ${day} tháng ${month} năm ${year}`;
+
+    if (options?.includeWeekday) {
+      result = `${weekdays[d.getDay()]}, ${result}`;
+    }
+
+    if (options?.time) {
+      result += ` · ${options.time}`;
+    }
+
+    return result;
+  } catch {
+    return String(date);
+  }
+};

@@ -37,10 +37,10 @@ export function DetailHeader({ data }: { data: any }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-lg text-sm font-medium transition-colors shadow-sm">
+        <Link href={`/admin/invitations/${wedding?.slug}/edit`} className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-lg text-sm font-medium transition-colors shadow-sm">
           <Edit3 size={16} />
           Chỉnh sửa
-        </button>
+        </Link>
         <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-lg text-sm font-medium transition-colors shadow-sm">
           <Globe size={16} />
           Xem website

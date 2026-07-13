@@ -36,21 +36,29 @@ class WeddingEventDto {
 }
 
 class LoveStoryTimelineDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  year: string;
+  year?: string;
 
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  time?: string;
+
+  @IsOptional()
+  @IsString()
+  icon?: string;
 }
 
 class GiftRegistryInfoDto {
@@ -174,6 +182,11 @@ export class CreateWeddingDto {
   @IsArray()
   @IsString({ each: true })
   galleryImages?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  deletedGalleryImages?: string[];
 
   @IsOptional()
   @ValidateNested()

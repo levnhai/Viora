@@ -32,22 +32,23 @@ export function AdminInvitationDetailPage({ slug }: { slug: string }) {
     );
   }
 
-  const { wedding, template, themeSettings, sections, media, guestStats } = data;
+  const { wedding, template, themeSettings, sections, media, guestStats } =
+    data;
 
   return (
     <AdminLayout>
       <div className="w-full max-w-[1600px] mx-auto">
         <DetailHeader data={data} />
-        
+
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Cột trái (70%) */}
+          {/* trái (70%) */}
           <div className="flex-1 min-w-0">
             <DetailSummaryCard data={data} />
             <DetailTabs />
             <DetailInfoTab data={data} />
           </div>
 
-          {/* Cột phải (30%) */}
+          {/* phải (30%) */}
           <div className="w-full lg:w-[320px] shrink-0">
             <DetailSidebar data={data} />
           </div>

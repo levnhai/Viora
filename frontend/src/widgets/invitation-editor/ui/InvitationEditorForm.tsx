@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useInvitationCreate } from "@/views/admin-invitation-create/model/InvitationCreateProvider";
+import { API_URL } from "@/shared/lib/config";
 import {
   FileText,
   Image as ImageIcon,
@@ -14,6 +16,18 @@ import {
   Share2,
   Upload,
   X,
+  Loader2,
+  Heart,
+  Gem,
+  Camera,
+  ConciergeBell,
+  Cake,
+  Music,
+  Plus,
+  GripVertical,
+  Clock,
+  Edit2,
+  Trash2,
 } from "lucide-react";
 import { getTemplatePackage } from "@/entities/template/model/registry";
 
@@ -29,40 +43,195 @@ export function InvitationEditorForm() {
     setGiftInfo,
     galleryImages,
     setGalleryImages,
+    deletedGalleryImages,
+    setDeletedGalleryImages,
     activeTemplate,
+    timeline,
+    setTimeline,
   } = useInvitationCreate();
 
-  const handleImageUpload = (
+  const handleRemoveGalleryImage = (urlToRemove: string) => {
+    setDeletedGalleryImages((prev: string[]) => {
+      if (!prev.includes(urlToRemove)) return [...prev, urlToRemove];
+      return prev;
+    });
+    setGalleryImages((prev: string[]) => prev.filter((img) => img !== urlToRemove));
+  };
+
+  const handleAddEvent = () => {
+    const newEvent = {
+      id: Date.now().toString(),
+      time: "12:00",
+      title: "Sự kiện mới",
+      description: "Mô tả chi tiết sự kiện",
+      icon: "Heart"
+    };
+    setTimeline([...timeline, newEvent]);
+  };
+
+  const handleRemoveEvent = (id: string) => {
+    setTimeline(timeline.filter(e => e.id !== id));
+  };
+
+  const updateEvent = (id: string, field: string, value: string) => {
+    setTimeline(timeline.map(e => e.id === id ? { ...e, [field]: value } : e));
+  };
+
+  const ICON_LIST = ["Heart", "Gem", "Camera", "ConciergeBell", "Cake", "Music", "Gift"];
+  const cycleIcon = (id: string, currentIcon: string) => {
+    const currentIndex = ICON_LIST.indexOf(currentIcon);
+    const nextIndex = (currentIndex + 1) % ICON_LIST.length;
+    updateEvent(id, 'icon', ICON_LIST[nextIndex]);
+  };
+
+  const getIconProps = (iconName: string) => {
+    switch (iconName) {
+      case "Heart": return { icon: <Heart size={20} />, bg: "bg-rose-50", color: "text-rose-500" };
+      case "Gem": return { icon: <Gem size={20} />, bg: "bg-orange-50", color: "text-orange-500" };
+      case "Camera": return { icon: <Camera size={20} />, bg: "bg-emerald-50", color: "text-emerald-500" };
+      case "ConciergeBell": return { icon: <ConciergeBell size={20} />, bg: "bg-purple-50", color: "text-purple-500" };
+      case "Cake": return { icon: <Cake size={20} />, bg: "bg-blue-50", color: "text-blue-500" };
+      case "Music": return { icon: <Music size={20} />, bg: "bg-pink-50", color: "text-pink-500" };
+      case "Gift": return { icon: <Gift size={20} />, bg: "bg-amber-50", color: "text-amber-500" };
+      default: return { icon: <Heart size={20} />, bg: "bg-rose-50", color: "text-rose-500" };
+    }
+  };
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [banks, setBanks] = useState<any[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    fetch("https://api.vietqr.io/v2/banks")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code === "00") {
+          setBanks(data.data);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (banks.length === 0) return;
+
+    setGiftInfo((prev) => {
+      let updated = false;
+      const next = { ...prev };
+
+      // Groom
+      if (prev.groomBankName && prev.groomAccountNumber && prev.groomAccountName) {
+        const bank = banks.find((b) => b.shortName === prev.groomBankName);
+        if (bank) {
+          const encodedName = encodeURIComponent(prev.groomAccountName.trim());
+          const newUrl = `https://qr.sepay.vn/img?acc=${prev.groomAccountNumber.trim()}&bank=${bank.bin}&name=${encodedName}`;
+          if (!prev.groomQrUrl || prev.groomQrUrl.includes("img.vietqr.io") || prev.groomQrUrl.includes("qr.sepay.vn")) {
+            if (prev.groomQrUrl !== newUrl) {
+              next.groomQrUrl = newUrl;
+              updated = true;
+            }
+          }
+        }
+      } else if (prev.groomQrUrl && (prev.groomQrUrl.includes("img.vietqr.io") || prev.groomQrUrl.includes("qr.sepay.vn"))) {
+        next.groomQrUrl = "";
+        updated = true;
+      }
+
+      // Bride
+      if (prev.brideBankName && prev.brideAccountNumber && prev.brideAccountName) {
+        const bank = banks.find((b) => b.shortName === prev.brideBankName);
+        if (bank) {
+          const encodedName = encodeURIComponent(prev.brideAccountName.trim());
+          const newUrl = `https://qr.sepay.vn/img?acc=${prev.brideAccountNumber.trim()}&bank=${bank.bin}&name=${encodedName}`;
+          if (!prev.brideQrUrl || prev.brideQrUrl.includes("img.vietqr.io") || prev.brideQrUrl.includes("qr.sepay.vn")) {
+            if (prev.brideQrUrl !== newUrl) {
+              next.brideQrUrl = newUrl;
+              updated = true;
+            }
+          }
+        }
+      } else if (prev.brideQrUrl && (prev.brideQrUrl.includes("img.vietqr.io") || prev.brideQrUrl.includes("qr.sepay.vn"))) {
+        next.brideQrUrl = "";
+        updated = true;
+      }
+
+      return updated ? next : prev;
+    });
+  }, [
+    giftInfo.groomBankName,
+    giftInfo.groomAccountNumber,
+    giftInfo.groomAccountName,
+    giftInfo.brideBankName,
+    giftInfo.brideAccountNumber,
+    giftInfo.brideAccountName,
+    banks,
+    setGiftInfo,
+  ]);
+
+  const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: "groomQrUrl" | "brideQrUrl"
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setGiftInfo({ ...giftInfo, [field]: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "qr");
+
+        const res = await fetch(`${API_URL}/api/media/upload`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          const uploadedUrl = result.data?.url || result.url;
+          if (uploadedUrl) {
+            setGiftInfo({ ...giftInfo, [field]: uploadedUrl });
+          }
+        }
+      } catch (error) {
+        console.error("Upload failed", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
-  const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
-      const newImages: string[] = [];
-      let loaded = 0;
+      setIsUploading(true);
+      try {
+        const uploadedUrls: string[] = [];
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("type", "gallery");
 
-      files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          newImages.push(reader.result as string);
-          loaded++;
-          if (loaded === files.length) {
-            setGalleryImages([...galleryImages, ...newImages]);
+          const res = await fetch(`${API_URL}/api/media/upload`, {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          });
+
+          if (res.ok) {
+            const result = await res.json();
+            const url = result.data?.url || result.url;
+            if (url) {
+              uploadedUrls.push(url);
+            }
           }
-        };
-        reader.readAsDataURL(file);
-      });
+        }
+        setGalleryImages((prev) => [...prev, ...uploadedUrls]);
+      } catch (error) {
+        console.error("Upload failed", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -475,13 +644,18 @@ export function InvitationEditorForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs text-slate-500 mb-1.5">Ngân hàng</label>
-                  <input
-                    type="text"
+                  <select
                     value={giftInfo.groomBankName || ""}
                     onChange={(e) => setGiftInfo({ ...giftInfo, groomBankName: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                    placeholder="VD: Vietcombank, MB Bank..."
-                  />
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-white"
+                  >
+                    <option value="">Chọn ngân hàng</option>
+                    {banks.map((bank, idx) => (
+                      <option key={`groom-bank-${idx}`} value={bank.shortName}>
+                        {bank.shortName} - {bank.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs text-slate-500 mb-1.5">Tên chủ tài khoản</label>
@@ -506,10 +680,16 @@ export function InvitationEditorForm() {
                 <div className="col-span-2">
                   <label className="block text-xs text-slate-500 mb-1.5">Ảnh mã QR</label>
                   {giftInfo.groomQrUrl ? (
-                    <div className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group">
+                    <div 
+                      className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group cursor-pointer"
+                      onClick={() => setPreviewImage(giftInfo.groomQrUrl || null)}
+                    >
                       <img src={giftInfo.groomQrUrl} alt="QR Code" className="w-full h-full object-cover" />
                       <button
-                        onClick={() => setGiftInfo({ ...giftInfo, groomQrUrl: "" })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setGiftInfo({ ...giftInfo, groomQrUrl: "" });
+                        }}
                         className="absolute top-1 right-1 p-1 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
                       >
                         <X size={14} />
@@ -517,13 +697,14 @@ export function InvitationEditorForm() {
                     </div>
                   ) : (
                     <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50">
-                      <Upload size={24} className="mb-2" />
-                      <span className="text-xs font-medium">Tải ảnh lên</span>
+                      {isUploading ? <Loader2 size={24} className="mb-2 animate-spin" /> : <Upload size={24} className="mb-2" />}
+                      <span className="text-xs font-medium">{isUploading ? "Đang tải..." : "Tải ảnh lên"}</span>
                       <input
                         type="file"
                         accept="image/*"
                         className="absolute inset-0 opacity-0 cursor-pointer"
                         onChange={(e) => handleImageUpload(e, "groomQrUrl")}
+                        disabled={isUploading}
                       />
                     </div>
                   )}
@@ -537,13 +718,18 @@ export function InvitationEditorForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs text-slate-500 mb-1.5">Ngân hàng</label>
-                  <input
-                    type="text"
+                  <select
                     value={giftInfo.brideBankName || ""}
                     onChange={(e) => setGiftInfo({ ...giftInfo, brideBankName: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                    placeholder="VD: Vietcombank, Techcombank..."
-                  />
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-white"
+                  >
+                    <option value="">Chọn ngân hàng</option>
+                    {banks.map((bank, idx) => (
+                      <option key={`bride-bank-${idx}`} value={bank.shortName}>
+                        {bank.shortName} - {bank.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs text-slate-500 mb-1.5">Tên chủ tài khoản</label>
@@ -568,10 +754,16 @@ export function InvitationEditorForm() {
                 <div className="col-span-2">
                   <label className="block text-xs text-slate-500 mb-1.5">Ảnh mã QR</label>
                   {giftInfo.brideQrUrl ? (
-                    <div className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group">
+                    <div 
+                      className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group cursor-pointer"
+                      onClick={() => setPreviewImage(giftInfo.brideQrUrl || null)}
+                    >
                       <img src={giftInfo.brideQrUrl} alt="QR Code" className="w-full h-full object-cover" />
                       <button
-                        onClick={() => setGiftInfo({ ...giftInfo, brideQrUrl: "" })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setGiftInfo({ ...giftInfo, brideQrUrl: "" });
+                        }}
                         className="absolute top-1 right-1 p-1 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
                       >
                         <X size={14} />
@@ -579,13 +771,14 @@ export function InvitationEditorForm() {
                     </div>
                   ) : (
                     <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50">
-                      <Upload size={24} className="mb-2" />
-                      <span className="text-xs font-medium">Tải ảnh lên</span>
+                      {isUploading ? <Loader2 size={24} className="mb-2 animate-spin" /> : <Upload size={24} className="mb-2" />}
+                      <span className="text-xs font-medium">{isUploading ? "Đang tải..." : "Tải ảnh lên"}</span>
                       <input
                         type="file"
                         accept="image/*"
                         className="absolute inset-0 opacity-0 cursor-pointer"
                         onChange={(e) => handleImageUpload(e, "brideQrUrl")}
+                        disabled={isUploading}
                       />
                     </div>
                   )}
@@ -603,31 +796,30 @@ export function InvitationEditorForm() {
               </h4>
               
               <div className="relative">
-                <button className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors">
-                  <Upload size={16} />
-                  <span>Tải ảnh lên</span>
+                <button 
+                  className={`flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors ${isUploading ? "opacity-70 cursor-not-allowed" : ""}`}
+                >
+                  {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                  <span>{isUploading ? "Đang tải..." : "Tải ảnh lên"}</span>
                 </button>
                 <input
                   type="file"
                   multiple
                   accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
                   onChange={handleGalleryUpload}
+                  disabled={isUploading}
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               {galleryImages.map((img, idx) => (
-                <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-200">
+                <div key={img} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-200">
                   <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <button
-                      onClick={() => {
-                        const newImages = [...galleryImages];
-                        newImages.splice(idx, 1);
-                        setGalleryImages(newImages);
-                      }}
+                      onClick={() => handleRemoveGalleryImage(img)}
                       className="p-2 bg-white/20 hover:bg-rose-500 text-white rounded-full backdrop-blur-sm transition-colors"
                       title="Xóa ảnh này"
                     >
@@ -651,16 +843,138 @@ export function InvitationEditorForm() {
           </div>
         )}
 
+        {editorActiveTab === "Timeline sự kiện" && (
+          <div className="space-y-6">
+            <div className="mb-2">
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Timeline sự kiện</h3>
+              <p className="text-sm text-slate-500">Thêm và chỉnh sửa các mốc sự kiện trong ngày trọng đại của bạn</p>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-xl p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">Danh sách sự kiện</h4>
+                </div>
+                <button
+                  onClick={handleAddEvent}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-sm font-medium hover:bg-rose-100 transition-colors"
+                >
+                  <Plus size={16} />
+                  <span>Thêm sự kiện</span>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {timeline.map((event, index) => {
+                  const { icon, bg, color } = getIconProps(event.icon);
+                  return (
+                    <div key={event.id} className="flex items-center space-x-4 p-4 border border-slate-100 bg-slate-50/50 shadow-sm rounded-xl hover:border-slate-200 transition-colors group">
+                      <div className="text-slate-300 cursor-grab hover:text-slate-500 transition-colors">
+                        <GripVertical size={20} />
+                      </div>
+                      
+                      <button 
+                        onClick={() => cycleIcon(event.id, event.icon)}
+                        className={`flex-shrink-0 w-12 h-12 rounded-full ${bg} flex items-center justify-center ${color} hover:opacity-80 transition-opacity cursor-pointer`}
+                        title="Click để đổi icon"
+                      >
+                         {icon}
+                      </button>
+                      
+                      <div className="flex-1 grid grid-cols-12 gap-4 items-center">
+                        <div className="col-span-8 bg-white border border-slate-200 rounded-lg p-2 space-y-1">
+                           <input 
+                             className="font-bold text-sm text-slate-800 w-full outline-none border-b border-transparent focus:border-slate-300 bg-transparent px-1 placeholder-slate-400"
+                             value={event.title}
+                             onChange={(e) => updateEvent(event.id, 'title', e.target.value)}
+                             placeholder="Tên sự kiện"
+                           />
+                           <input 
+                             className="text-xs text-slate-500 w-full outline-none border-b border-transparent focus:border-slate-300 bg-transparent px-1 placeholder-slate-300"
+                             value={event.description}
+                             onChange={(e) => updateEvent(event.id, 'description', e.target.value)}
+                             placeholder="Mô tả chi tiết sự kiện (không bắt buộc)"
+                           />
+                        </div>
+                        <div className="col-span-4 h-full">
+                           <div className="bg-white border border-slate-200 rounded-lg p-2 h-full flex flex-col justify-center">
+                             <div className="text-[10px] text-slate-400 mb-1 font-medium uppercase tracking-wider">Thời gian</div>
+                             <div className="flex items-center space-x-2">
+                               <input 
+                                 type="time"
+                                 className="text-sm font-semibold text-slate-700 w-full bg-transparent outline-none cursor-pointer"
+                                 value={event.time}
+                                 onChange={(e) => updateEvent(event.id, 'time', e.target.value)}
+                               />
+                               <Clock size={14} className="text-slate-400" />
+                             </div>
+                           </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100">
+                          <Edit2 size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleRemoveEvent(event.id)}
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-100"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 text-blue-700 rounded-xl mt-6 border border-blue-100">
+                 <div className="mt-0.5"><div className="w-4 h-4 rounded-full border border-blue-500 flex items-center justify-center text-[10px] font-bold">i</div></div>
+                 <div className="text-sm">
+                    <strong>Hướng dẫn:</strong> Kéo thả để sắp xếp thứ tự các sự kiện. Thời gian sẽ hiển thị theo thứ tự từ trên xuống trong thiệp cưới. <br />
+                    <span className="text-xs text-blue-500 mt-1 inline-block">Mẹo: Click vào biểu tượng tròn để đổi icon sự kiện.</span>
+                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Other tabs can be implemented similarly... */}
         {editorActiveTab !== "Thông tin cơ bản" &&
           editorActiveTab !== "Lời ngỏ" &&
           editorActiveTab !== "Quà mừng" &&
-          editorActiveTab !== "Album ảnh" && (
+          editorActiveTab !== "Album ảnh" &&
+          editorActiveTab !== "Timeline sự kiện" && (
             <div className="flex flex-col items-center justify-center py-20 text-slate-400 text-sm">
               <p>Đang xây dựng nội dung cho tab này...</p>
             </div>
-          )}
+        )}
       </div>
+
+      {/* Modal Phóng to Ảnh */}
+      {previewImage && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div 
+            className="relative flex items-center justify-center max-w-md w-full animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={previewImage} 
+              alt="Preview Fullscreen" 
+              className="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain bg-white"
+            />
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute -top-4 -right-4 p-2 bg-white text-slate-800 rounded-full hover:bg-slate-200 transition-colors shadow-lg"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

@@ -49,7 +49,7 @@ export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
 
   return (
     <>
-      <section className="py-20 px-4 text-center relative">
+      <section className="pt-4 pb-10 sm:pt-8 sm:pb-20 px-4 text-center relative">
         <FadeIn>
           <h2 className="text-2xl text-[rgb(225,188,124)] mb-12 uppercase tracking-widest font-serif">
             ALBUM ẢNH CƯỚI
@@ -57,7 +57,7 @@ export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
         </FadeIn>
 
         <FadeIn delay={100} className="max-w-xl mx-auto">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {displayImages.map((src, idx) => {
               const isLast = idx === 3;
               const hasMore = remainingCount > 0;

@@ -1,5 +1,6 @@
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { WeddingEvent } from "@/entities/invitation/model/types";
+import { MapPin } from "lucide-react";
 
 interface MinimalVenueMapProps {
   event: WeddingEvent;
@@ -22,7 +23,7 @@ export function MinimalVenueMap({ event }: MinimalVenueMapProps) {
         </p>
       </FadeIn>
       <FadeIn delay={100}>
-        <div className="max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-[rgb(225,188,124)]/30 h-64 sm:h-80 relative bg-white/5">
+        <div className="max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-[rgb(225,188,124)]/30 h-64 sm:h-80 relative bg-[#001005] mb-6">
           <iframe
             src={mapUrl}
             width="100%"
@@ -31,8 +32,10 @@ export function MinimalVenueMap({ event }: MinimalVenueMapProps) {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            className="relative z-10"
           ></iframe>
         </div>
+        
       </FadeIn>
     </section>
   );

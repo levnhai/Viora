@@ -15,15 +15,28 @@ export function MinimalEventInfo({
   if (!events || events.length === 0) return null;
 
   return (
-    <section className="py-20 px-4 relative">
+    <section className="pt-10 pb-4 sm:pt-20 sm:pb-8 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col gap-24">
           {events.map((ev, i) => {
-            const dateParts = ev.date.split("/");
-            const day = dateParts[0] || "";
-            const monthYear =
-              dateParts.length >= 2 ? `THÁNG ${dateParts[1]}` : "";
-            const yearStr = dateParts.length >= 3 ? dateParts[2] : "2026";
+            let day = "";
+            let month = "";
+            let year = "2026";
+
+            if (ev.date.includes("-")) {
+              const parts = ev.date.split("-");
+              year = parts[0];
+              month = parts[1];
+              day = parts[2];
+            } else if (ev.date.includes("/")) {
+              const parts = ev.date.split("/");
+              day = parts[0];
+              month = parts[1];
+              year = parts[2];
+            }
+
+            const monthYear = month ? `THÁNG ${month}` : "";
+            const yearStr = year || "2026";
 
             return (
               <FadeIn key={i} delay={i * 100}>
@@ -45,7 +58,7 @@ export function MinimalEventInfo({
                   <h3 className="text-4xl mb-8 text-[rgb(225,188,124)] font-serif drop-shadow-[0_0_15px_rgba(225,188,124,0.5)]">
                     {ev.time.split(" ")[0]}
                   </h3>
-                  <div className="flex justify-center items-center gap-6 mb-8 text-[rgb(225,188,124)] font-serif">
+                  <div className="flex justify-center items-center gap-3 sm:gap-6 mb-8 text-[rgb(225,188,124)] font-serif">
                     <span className="uppercase tracking-widest text-sm">
                       CHỦ NHẬT
                     </span>
@@ -64,27 +77,8 @@ export function MinimalEventInfo({
                       (Tức ngày 15/04 năm Bính Ngọ)
                     </p>
                   </div>
-                  {/* Giờ đón khách & Khai tiệc */}
-                  <div className="flex justify-center items-center gap-16 mb-16 font-serif">
-                    <div className="text-center">
-                      <p className="text-[rgb(225,188,124)] uppercase tracking-widest text-sm mb-2">
-                        ĐÓN KHÁCH
-                      </p>
-                      <p className="text-[rgb(225,188,124)] text-xl font-light">
-                        17:30
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-[rgb(225,188,124)] uppercase tracking-widest text-sm mb-2">
-                        KHAI TIỆC
-                      </p>
-                      <p className="text-[rgb(225,188,124)] text-xl font-light">
-                        18:00
-                      </p>
-                    </div>
-                  </div>
                   {/* Lịch */}
-                  <div className="border border-[rgb(225,188,124)]/30 rounded-lg p-6 max-w-sm mx-auto mb-10 bg-[rgb(225,188,124)]/5 shadow-[inset_0_0_20px_rgba(225,188,124,0.05)] hover:shadow-[0_0_20px_rgba(225,188,124,0.15)] transition-shadow duration-500 ml-2 mr-2">
+                  <div className="border border-[rgb(225,188,124)]/30 rounded-lg p-6 max-w-[90%] sm:max-w-sm mx-auto mb-10 bg-[rgb(225,188,124)]/5 shadow-[inset_0_0_20px_rgba(225,188,124,0.05)] hover:shadow-[0_0_20px_rgba(225,188,124,0.15)] transition-shadow duration-500">
                     <h5 className="text-[rgb(225,188,124)] font-serif text-lg mb-4 drop-shadow-[0_0_8px_rgba(225,188,124,0.3)]">
                       {monthYear.replace("THÁNG", "Tháng")} / {yearStr}
                     </h5>
@@ -113,7 +107,7 @@ export function MinimalEventInfo({
                       </div>
 
                       {(() => {
-                        const m = parseInt(dateParts[1]) - 1 || 0;
+                        const m = parseInt(month) - 1 || 0;
                         const y = parseInt(yearStr) || 2026;
                         const firstDay = new Date(y, m, 1).getDay();
                         const startDayIndex = firstDay === 0 ? 6 : firstDay - 1;

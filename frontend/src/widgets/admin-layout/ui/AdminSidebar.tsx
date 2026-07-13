@@ -132,7 +132,7 @@ export function AdminSidebar() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
             Quản lý khách mời
           </p>
@@ -261,7 +261,7 @@ export function AdminSidebar() {
               <FileText size={18} /> Nhật ký hoạt động
             </a>
           </div>
-        </div>
+        </div> */}
       </nav>
 
       {/* Bottom Toggle */}

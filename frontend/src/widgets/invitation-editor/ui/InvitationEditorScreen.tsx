@@ -17,6 +17,9 @@ export function InvitationEditorScreen() {
     publishSettings,
     giftInfo,
     galleryImages,
+    deletedGalleryImages,
+    timeline,
+    isEditMode,
   } = useInvitationCreate();
 
   const [isPublishing, setIsPublishing] = useState(false);
@@ -25,7 +28,11 @@ export function InvitationEditorScreen() {
   const [credentials, setCredentials] = useState<{email: string, password: string} | null>(null);
 
   const triggerPublish = () => {
-    setIsEmailModalOpen(true);
+    if (isEditMode) {
+      handlePublish();
+    } else {
+      setIsEmailModalOpen(true);
+    }
   };
 
   const handlePublish = async () => {
@@ -52,6 +59,8 @@ export function InvitationEditorScreen() {
         weddingTime: basicInfo.weddingTime,
         giftInfo: giftInfo,
         galleryImages: galleryImages,
+        deletedGalleryImages: deletedGalleryImages,
+        timeline: timeline,
         customerEmail: customerEmail || undefined,
         events: [
           {
@@ -148,14 +157,20 @@ export function InvitationEditorScreen() {
           </button>
           <div>
             <h2 className="font-bold text-slate-800 text-sm">
-              {activeTemplate?.name || "Tạo thiệp mới"}
+              {isEditMode ? "Chỉnh sửa thiệp cưới" : (activeTemplate?.name || "Tạo thiệp mới")}
             </h2>
-            <p className="text-[10px] text-slate-500">Đã lưu nháp lúc 13:30</p>
+            <p className="text-[10px] text-slate-500">
+              {isPublishing ? "Đang lưu..." : "Sẵn sàng lưu"}
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+          <button 
+            onClick={handlePublish}
+            disabled={isPublishing}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
+          >
             <Save size={16} /> Lưu nháp
           </button>
           <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">

@@ -805,6 +805,17 @@ export function WeddingEditorPage({
                     </div>
                     <p className="text-[9px] text-zinc-500 leading-normal">Hiển thị tên chú rể và nhà trai trước trên thiệp</p>
                   </div>
+                  
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-zinc-400">Link nhạc nền (tuỳ chọn)</label>
+                    <input 
+                      type="text"
+                      value={weddingData.musicUrl || ""}
+                      placeholder="Nhập đường dẫn file MP3"
+                      onChange={(e) => updateField(["musicUrl"], e.target.value)}
+                      className="w-full border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs bg-zinc-900 text-zinc-100 outline-none focus:border-pink-500"
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -1238,6 +1249,16 @@ export function WeddingEditorPage({
                         className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-[#db2777] bg-slate-50/30"
                       />
                     </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Link nhạc nền</label>
+                    <input
+                      type="text"
+                      value={weddingData.musicUrl || ""}
+                      onChange={(e) => updateField(["musicUrl"], e.target.value)}
+                      placeholder="Nhập đường dẫn file nhạc (.mp3)"
+                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-[#db2777] bg-slate-50/30"
+                    />
                   </div>
                 </div>
               )}

@@ -58,6 +58,7 @@ const WeddingSchema = new Schema<IWedding>({
   groomName: { type: String, required: true },
   brideName: { type: String, required: true },
   weddingDate: { type: String, required: true },
+  musicUrl: { type: String },
   events: [WeddingEventSchema],
   galleryImages: [{ type: String }],
   giftInfo: GiftRegistryInfoSchema,

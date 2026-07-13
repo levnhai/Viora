@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Model, Types, Connection } from 'mongoose';
 import { Wedding, WeddingDocument } from './schemas/wedding.schema';
 import {
   WeddingSection,
@@ -27,6 +31,12 @@ import {
 } from '../guestbooks/schemas/guestbook.schema';
 import { CreateWeddingDto } from './dto/create-wedding.dto';
 import { AuthService } from '../auth/auth.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import {
+  DEFAULT_THEME_COLORS,
+  FALLBACK_THEME_COLOR,
+  DEFAULT_PASSWORD,
+} from './constants/theme-colors.constant';
 
 @Injectable()
 export class WeddingsService {
@@ -50,8 +60,9 @@ export class WeddingsService {
     @InjectModel(Guestbook.name)
     private readonly guestbookModel: Model<GuestbookDocument>,
     private readonly authService: AuthService,
+    private readonly cloudinaryService: CloudinaryService,
+    @InjectConnection() private readonly connection: Connection,
   ) {}
-
 
   async findAll(query: any, user: any): Promise<any> {
     const { page = 1, limit = 10, status, search, templateId } = query;
@@ -64,7 +75,7 @@ export class WeddingsService {
     if (user.role !== 'admin' && user.role !== 'staff') {
       filter.$or = [
         { ownerId: new Types.ObjectId(user.id) },
-        { createdBy: new Types.ObjectId(user.id) }
+        { createdBy: new Types.ObjectId(user.id) },
       ];
     }
 
@@ -81,10 +92,10 @@ export class WeddingsService {
     // Tìm kiếm theo tên hoặc mã
     if (search) {
       filter.$or = [
-        ...filter.$or || [],
+        ...(filter.$or || []),
         { brideName: { $regex: search, $options: 'i' } },
         { groomName: { $regex: search, $options: 'i' } },
-        { slug: { $regex: search, $options: 'i' } }
+        { slug: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -105,28 +116,38 @@ export class WeddingsService {
     let topTemplates: any = null;
     if (Number(page) === 1) {
       // Đếm số lượng theo status
-      const statsQuery = user.role !== 'admin' && user.role !== 'staff' 
-        ? { deletedAt: null, $or: [{ ownerId: new Types.ObjectId(user.id) }, { createdBy: new Types.ObjectId(user.id) }] }
-        : { deletedAt: null };
+      const statsQuery =
+        user.role !== 'admin' && user.role !== 'staff'
+          ? {
+              deletedAt: null,
+              $or: [
+                { ownerId: new Types.ObjectId(user.id) },
+                { createdBy: new Types.ObjectId(user.id) },
+              ],
+            }
+          : { deletedAt: null };
 
-      const allWeddings = await this.weddingModel.find(statsQuery, 'status templateId').populate('templateId', 'name code thumbnail').exec();
-      
+      const allWeddings = await this.weddingModel
+        .find(statsQuery, 'status templateId')
+        .populate('templateId', 'name code thumbnail')
+        .exec();
+
       stats = {
         total: allWeddings.length,
-        published: allWeddings.filter(w => w.status === 'published').length,
-        draft: allWeddings.filter(w => w.status === 'draft').length,
-        hidden: allWeddings.filter(w => w.status === 'hidden').length,
+        published: allWeddings.filter((w) => w.status === 'published').length,
+        draft: allWeddings.filter((w) => w.status === 'draft').length,
+        hidden: allWeddings.filter((w) => w.status === 'hidden').length,
       };
 
       // Tính top templates
       const templateCounts: Record<string, any> = {};
-      allWeddings.forEach(w => {
+      allWeddings.forEach((w) => {
         if (w.templateId && (w.templateId as any)._id) {
           const tId = (w.templateId as any)._id.toString();
           if (!templateCounts[tId]) {
             templateCounts[tId] = {
               template: w.templateId,
-              count: 0
+              count: 0,
             };
           }
           templateCounts[tId].count += 1;
@@ -139,7 +160,10 @@ export class WeddingsService {
         .map((t: any) => ({
           ...t.template.toObject(),
           count: t.count,
-          percentage: allWeddings.length > 0 ? ((t.count / allWeddings.length) * 100).toFixed(1) : 0
+          percentage:
+            allWeddings.length > 0
+              ? ((t.count / allWeddings.length) * 100).toFixed(1)
+              : 0,
         }));
     }
 
@@ -150,7 +174,7 @@ export class WeddingsService {
       limit: Number(limit),
       totalPages: Math.ceil(total / Number(limit)),
       stats,
-      topTemplates
+      topTemplates,
     };
   }
 
@@ -159,7 +183,6 @@ export class WeddingsService {
     userId?: string,
     createdById?: string,
   ): Promise<any> {
-    // Nếu slug đã tồn tại, thực hiện update thay vì báo lỗi duplicate
     const existing = await this.weddingModel
       .findOne({ slug: createDto.slug, deletedAt: null })
       .exec();
@@ -167,10 +190,16 @@ export class WeddingsService {
       return this.update(createDto.slug, createDto);
     }
 
-    const { events, timeline, galleryImages, templateId, customerEmail, ...restDto } =
-      createDto;
+    const {
+      events,
+      timeline,
+      galleryImages,
+      deletedGalleryImages,
+      templateId,
+      customerEmail,
+      ...restDto
+    } = createDto;
 
-    // Tìm template tương ứng
     let targetTemplate: TemplateDocument | null = null;
     if (typeof templateId === 'number') {
       targetTemplate = await this.templateModel
@@ -181,125 +210,176 @@ export class WeddingsService {
         .findOne({ _id: templateId, deletedAt: null })
         .exec();
     }
+    if (!targetTemplate) throw new NotFoundException(`Template không hợp lệ`);
 
-    if (!targetTemplate) {
-      throw new NotFoundException(`Template không hợp lệ`);
-    }
+    const session = await this.connection.startSession();
+    session.startTransaction();
 
-    let ownerObjectId = userId ? new Types.ObjectId(userId) : new Types.ObjectId();
-    const createdByObjectId = createdById ? new Types.ObjectId(createdById) : ownerObjectId;
-    let credentials: any = null;
+    try {
+      let ownerObjectId = userId
+        ? new Types.ObjectId(userId)
+        : new Types.ObjectId();
+      const createdByObjectId = createdById
+        ? new Types.ObjectId(createdById)
+        : ownerObjectId;
+      let credentials: any = null;
 
-    if (customerEmail) {
-      // Check if user already exists
-      let customerUser: any = await this.userModel.findOne({ email: customerEmail }).exec();
-      if (!customerUser) {
-        customerUser = await this.userModel.findOne({ username: customerEmail }).exec();
-      }
-      
-      if (customerUser) {
-        throw new BadRequestException('Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!');
-      }
-      
-      // Create new user
-      const generatedPassword = "cuoi@123"; // default password
-      customerUser = await this.authService.createUser(
-        customerEmail, // username
-        generatedPassword,
-        'user',
-        createDto.slug,
-        createDto.groomName + ' & ' + createDto.brideName, // fullName
-        '', // phone
-        'active'
-      );
-      credentials = {
-        email: customerEmail,
-        password: generatedPassword
-      };
-      ownerObjectId = customerUser?._id as Types.ObjectId;
-    }
+      if (customerEmail) {
+        let customerUser: any = await this.userModel
+          .findOne({
+            $or: [{ email: customerEmail }, { username: customerEmail }],
+          })
+          .session(session)
+          .exec();
 
-    const created = new this.weddingModel({
-      ...restDto,
-      ownerId: ownerObjectId,
-      createdBy: createdByObjectId,
-      templateId: targetTemplate._id,
-      templateVersion: targetTemplate.version, // Khóa phiên bản template gốc
-      weddingDate: new Date(createDto.weddingDate),
-      status: 'published',
-    });
-    const saved = await created.save();
+        if (customerUser) {
+          throw new BadRequestException(
+            'Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!',
+          );
+        }
 
-    // 1. Tạo Theme Settings mặc định cho thiệp cưới này
-    await new this.weddingThemeSettingModel({
-      weddingId: saved._id,
-      primaryColor:
-        targetTemplate.code === 'rose-gold' || targetTemplate.code === 'love-story'
-          ? '#db2777'
-          : targetTemplate.code === 'minimal-green'
-            ? '#2d5a27'
-            : targetTemplate.code === 'eternal-flower'
-              ? '#ac81bd'
-              : targetTemplate.code === 'black-elegant'
-                ? '#1e293b'
-                : '#7a5c4f', // classic-white (default)
-      fontHeading: 'Dancing Script',
-      fontBody: 'Inter',
-      musicAutoplay: true,
-      musicUrl: '',
-      effectType: 'none',
-    }).save();
-
-    // 2. Nhân bản template_sections thành wedding_sections
-    const tempSections = await this.templateSectionModel
-      .find({ templateId: targetTemplate._id })
-      .exec();
-    for (const tSec of tempSections) {
-      let customSettings = {};
-      if (tSec.type === 'timeline' && timeline && timeline.length > 0) {
-        customSettings = { timeline };
-      } else if (tSec.type === 'rsvp' && events && events.length > 0) {
-        // Gộp sự kiện cưới vào rsvp/event settings
-        customSettings = { events };
+        customerUser = await this.authService.createUser(
+          customerEmail,
+          DEFAULT_PASSWORD,
+          'user',
+          createDto.slug,
+          createDto.groomName + ' & ' + createDto.brideName,
+          '',
+          'active',
+        );
+        credentials = { email: customerEmail, password: DEFAULT_PASSWORD };
+        ownerObjectId = customerUser?._id as Types.ObjectId;
       }
 
-      await new this.weddingSectionModel({
+      const created = new this.weddingModel({
+        ...restDto,
+        ownerId: ownerObjectId,
+        createdBy: createdByObjectId,
+        templateId: targetTemplate._id,
+        templateVersion: targetTemplate.version,
+        weddingDate: new Date(createDto.weddingDate),
+        galleryImages: galleryImages || [],
+        status: 'published',
+      });
+      const saved = await created.save({ session });
+
+      await new this.weddingThemeSettingModel({
         weddingId: saved._id,
-        sectionVersion: 1,
-        type: tSec.type,
-        enabled: true,
-        order: tSec.required ? 1 : 2, // Đơn giản hóa thứ tự
-        layout: tSec.defaultLayout,
-        settings: customSettings,
-      }).save();
-    }
+        primaryColor:
+          DEFAULT_THEME_COLORS[targetTemplate.code] || FALLBACK_THEME_COLOR,
+        fontHeading: 'Dancing Script',
+        fontBody: 'Inter',
+        musicAutoplay: true,
+        musicUrl: '',
+        effectType: 'none',
+      }).save({ session });
 
-    // 3. Lưu hình ảnh gallery trong media collection
-    if (galleryImages && galleryImages.length > 0) {
-      let order = 0;
-      for (const imgUrl of galleryImages) {
-        await new this.mediaModel({
-          ownerId: ownerObjectId,
-          weddingId: saved._id,
-          type: 'gallery',
-          url: imgUrl,
-          order: order++,
-          size: 0,
-        }).save();
-      }
-    }
-
-    if (userId) {
-      await this.userModel
-        .findByIdAndUpdate(userId, { weddingSlug: saved.slug })
+      const tempSections = await this.templateSectionModel
+        .find({ templateId: targetTemplate._id })
         .exec();
-    }
 
-    const result = await this.findBySlug(saved.slug);
-    return {
-      ...result,
-      credentials
-    };
+      let newSections: any[] = [];
+      if (tempSections && tempSections.length > 0) {
+        newSections = tempSections.map((tSec) => {
+          let customSettings = {};
+          if (tSec.type === 'timeline' && timeline && timeline.length > 0)
+            customSettings = { timeline };
+          else if (tSec.type === 'rsvp' && events && events.length > 0)
+            customSettings = { events };
+
+          return {
+            weddingId: saved._id,
+            sectionVersion: 1,
+            type: tSec.type,
+            enabled: true,
+            order: tSec.required ? 1 : 2,
+            layout: tSec.defaultLayout,
+            settings: customSettings,
+          };
+        });
+      } else {
+        newSections = [
+          { weddingId: saved._id, sectionVersion: 1, type: 'timeline', enabled: true, order: 1, layout: 'default', settings: { timeline: timeline || [] } },
+          { weddingId: saved._id, sectionVersion: 1, type: 'rsvp', enabled: true, order: 2, layout: 'default', settings: { events: events || [] } }
+        ];
+      }
+
+      if (newSections.length > 0)
+        await this.weddingSectionModel.insertMany(newSections, { session });
+
+      if (deletedGalleryImages && deletedGalleryImages.length > 0) {
+        const mediaToDelete = await this.mediaModel
+          .find({ url: { $in: deletedGalleryImages } })
+          .session(session)
+          .exec();
+        for (const m of mediaToDelete) {
+          if (
+            m.filename &&
+            !m.filename.startsWith('gallery_') &&
+            !m.filename.startsWith('external_')
+          ) {
+            this.cloudinaryService
+              .deleteFile(m.filename)
+              .catch((e) => console.error('Cloudinary delete error:', e));
+          }
+        }
+        await this.mediaModel
+          .deleteMany(
+            { _id: { $in: mediaToDelete.map((m) => m._id) } },
+            { session },
+          )
+          .exec();
+      }
+
+      if (galleryImages && galleryImages.length > 0) {
+        const orphans = await this.mediaModel
+          .find({ url: { $in: galleryImages } })
+          .session(session)
+          .exec();
+        const orphanUrls = orphans.map((m) => m.url);
+
+        if (orphanUrls.length > 0) {
+          await this.mediaModel
+            .updateMany(
+              { url: { $in: orphanUrls } },
+              { $set: { weddingId: saved._id, type: 'gallery' } },
+              { session },
+            )
+            .exec();
+        }
+
+        const trulyNewUrls = galleryImages.filter(
+          (url) => !orphanUrls.includes(url),
+        );
+        if (trulyNewUrls.length > 0) {
+          const newMediaDocs = trulyNewUrls.map((url: string, idx: number) => ({
+            ownerId: ownerObjectId,
+            weddingId: saved._id,
+            type: 'gallery',
+            url: url,
+            order: orphanUrls.length + idx,
+            size: 0,
+          }));
+          await this.mediaModel.insertMany(newMediaDocs, { session });
+        }
+      }
+
+      if (userId) {
+        await this.userModel
+          .findByIdAndUpdate(userId, { weddingSlug: saved.slug }, { session })
+          .exec();
+      }
+
+      await session.commitTransaction();
+
+      const result = await this.findBySlug(saved.slug);
+      return { ...result, credentials };
+    } catch (err) {
+      await session.abortTransaction();
+      throw err;
+    } finally {
+      session.endSession();
+    }
   }
 
   // Phục vụ API tương thích ngược cũ GET /weddings/:slug
@@ -350,124 +430,264 @@ export class WeddingsService {
     const wedding = await this.weddingModel
       .findOne({ slug, deletedAt: null })
       .exec();
-    if (!wedding) {
+    if (!wedding)
       throw new NotFoundException(`Wedding with slug "${slug}" not found`);
-    }
 
-    const { events, timeline, galleryImages, templateId, customerEmail, ...restDto } = updateDto;
+    const {
+      events,
+      timeline,
+      galleryImages,
+      deletedGalleryImages,
+      templateId,
+      customerEmail,
+      ...restDto
+    } = updateDto;
 
-    let credentials: any = null;
-
-    if (customerEmail) {
-      // Check if user already exists
-      let customerUser: any = await this.userModel.findOne({ email: customerEmail }).exec();
-      if (!customerUser) {
-        customerUser = await this.userModel.findOne({ username: customerEmail }).exec();
-      }
-      
-      if (customerUser) {
-        if (!wedding.ownerId || wedding.ownerId.toString() !== customerUser._id.toString()) {
-          throw new BadRequestException('Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!');
-        }
-        // It's their own email, so we do nothing
-      } else {
-        // Create new user
-        const generatedPassword = "cuoi@123"; // default password
-        customerUser = await this.authService.createUser(
-          customerEmail, // username
-          generatedPassword,
-          'user',
-          updateDto.slug,
-          updateDto.groomName + ' & ' + updateDto.brideName, // fullName
-          '', // phone
-          'active'
-        );
-        credentials = {
-          email: customerEmail,
-          password: generatedPassword
-        };
-        wedding.ownerId = customerUser?._id as Types.ObjectId;
-      }
-    }
-
-    // Resolve template if templateId is provided
+    let targetTemplate: TemplateDocument | null = null;
     if (templateId !== undefined) {
-      let targetTemplate: TemplateDocument | null = null;
-      if (typeof templateId === 'number') {
+      if (typeof templateId === 'number')
         targetTemplate = await this.templateModel
           .findOne({ id: templateId, deletedAt: null })
           .exec();
-      } else {
+      else
         targetTemplate = await this.templateModel
           .findOne({ _id: templateId, deletedAt: null })
           .exec();
+    }
+
+    const session = await this.connection.startSession();
+    session.startTransaction();
+
+    try {
+      let credentials: any = null;
+
+      if (customerEmail) {
+        let customerUser: any = await this.userModel
+          .findOne({
+            $or: [{ email: customerEmail }, { username: customerEmail }],
+          })
+          .session(session)
+          .exec();
+
+        if (customerUser) {
+          if (
+            !wedding.ownerId ||
+            wedding.ownerId.toString() !== customerUser._id.toString()
+          ) {
+            throw new BadRequestException(
+              'Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác!',
+            );
+          }
+        } else {
+          customerUser = await this.authService.createUser(
+            customerEmail,
+            DEFAULT_PASSWORD,
+            'user',
+            updateDto.slug,
+            updateDto.groomName + ' & ' + updateDto.brideName,
+            '',
+            'active',
+          );
+          credentials = { email: customerEmail, password: DEFAULT_PASSWORD };
+          wedding.ownerId = customerUser?._id as Types.ObjectId;
+        }
       }
+
       if (targetTemplate) {
         wedding.templateId = targetTemplate._id;
         wedding.templateVersion = targetTemplate.version;
       }
-    }
 
-    // Cập nhật thông tin cơ bản
-    Object.assign(wedding, restDto);
-    if (updateDto.weddingDate) {
-      wedding.weddingDate = new Date(updateDto.weddingDate);
-    }
-    const saved = await wedding.save();
-
-    // Cập nhật events trong wedding_sections
-    if (events) {
-      const eventSec = await this.weddingSectionModel
-        .findOne({ weddingId: saved._id, type: 'rsvp' })
-        .exec();
-      if (eventSec) {
-        eventSec.settings = { ...eventSec.settings, events };
-        eventSec.markModified('settings');
-        await eventSec.save();
+      Object.assign(wedding, restDto);
+      if (galleryImages) {
+        wedding.galleryImages = galleryImages;
       }
-    }
+      if (updateDto.weddingDate)
+        wedding.weddingDate = new Date(updateDto.weddingDate);
+      await wedding.save({ session });
 
-    // Cập nhật timeline trong wedding_sections
-    if (timeline) {
-      const timelineSec = await this.weddingSectionModel
-        .findOne({ weddingId: saved._id, type: 'timeline' })
-        .exec();
-      if (timelineSec) {
-        timelineSec.settings = { ...timelineSec.settings, timeline };
-        timelineSec.markModified('settings');
-        await timelineSec.save();
+      if (events) {
+        const eventSec = await this.weddingSectionModel
+          .findOne({ weddingId: wedding._id, type: 'rsvp' })
+          .session(session)
+          .exec();
+        if (eventSec) {
+          eventSec.settings = { ...eventSec.settings, events };
+          eventSec.markModified('settings');
+          await eventSec.save({ session });
+        } else {
+          await new this.weddingSectionModel({
+            weddingId: wedding._id,
+            sectionVersion: 1,
+            type: 'rsvp',
+            enabled: true,
+            order: 2,
+            layout: 'default',
+            settings: { events },
+          }).save({ session });
+        }
       }
-    }
 
-    // Cập nhật gallery images trong media collection
-    if (galleryImages) {
-      // Soft delete toàn bộ ảnh gallery cũ của wedding này
-      await this.mediaModel
-        .updateMany(
-          { weddingId: saved._id, type: 'gallery', deletedAt: null },
-          { deletedAt: new Date() },
-        )
-        .exec();
-
-      // Thêm ảnh mới
-      let order = 0;
-      for (const imgUrl of galleryImages) {
-        await new this.mediaModel({
-          ownerId: saved.ownerId,
-          weddingId: saved._id,
-          type: 'gallery',
-          url: imgUrl,
-          order: order++,
-          size: 0,
-        }).save();
+      if (timeline) {
+        const timelineSec = await this.weddingSectionModel
+          .findOne({ weddingId: wedding._id, type: 'timeline' })
+          .session(session)
+          .exec();
+        if (timelineSec) {
+          timelineSec.settings = { ...timelineSec.settings, timeline };
+          timelineSec.markModified('settings');
+          await timelineSec.save({ session });
+        } else {
+          await new this.weddingSectionModel({
+            weddingId: wedding._id,
+            sectionVersion: 1,
+            type: 'timeline',
+            enabled: true,
+            order: 1,
+            layout: 'default',
+            settings: { timeline },
+          }).save({ session });
+        }
       }
-    }
 
-    const result = await this.findBySlug(slug);
-    return {
-      ...result,
-      credentials
-    };
+      if (deletedGalleryImages && deletedGalleryImages.length > 0) {
+        console.log(
+          '--- DEBUG: deletedGalleryImages ---',
+          deletedGalleryImages,
+        );
+        const mediaToDelete = await this.mediaModel
+          .find({ url: { $in: deletedGalleryImages } })
+          .session(session)
+          .exec();
+
+        for (const m of mediaToDelete) {
+          if (
+            m.filename &&
+            !m.filename.startsWith('gallery_') &&
+            !m.filename.startsWith('external_')
+          ) {
+            this.cloudinaryService
+              .deleteFile(m.filename)
+              .catch((e) => console.error('Cloudinary delete error:', e));
+          }
+        }
+
+        await this.mediaModel
+          .deleteMany(
+            { _id: { $in: mediaToDelete.map((m) => m._id) } },
+            { session },
+          )
+          .exec();
+      }
+
+      if (galleryImages) {
+        const existingMedia = await this.mediaModel
+          .find({ weddingId: wedding._id, type: 'gallery', deletedAt: null })
+          .session(session)
+          .exec();
+        const existingUrls = existingMedia.map((m) => m.url);
+
+        const urlsToDelete = existingUrls.filter(
+          (url) =>
+            !galleryImages.includes(url) &&
+            (!deletedGalleryImages || !deletedGalleryImages.includes(url)),
+        );
+        if (urlsToDelete.length > 0) {
+          const mediaToDelete = await this.mediaModel
+            .find({
+              weddingId: wedding._id,
+              type: 'gallery',
+              url: { $in: urlsToDelete },
+              deletedAt: null,
+            })
+            .session(session)
+            .exec();
+
+          for (const m of mediaToDelete) {
+            if (
+              m.filename &&
+              !m.filename.startsWith('gallery_') &&
+              !m.filename.startsWith('external_')
+            ) {
+              this.cloudinaryService
+                .deleteFile(m.filename)
+                .catch((e) => console.error('Cloudinary delete error:', e));
+            }
+          }
+
+          await this.mediaModel
+            .deleteMany(
+              { _id: { $in: mediaToDelete.map((m) => m._id) } },
+              { session },
+            )
+            .exec();
+        }
+
+        const urlsToInsert = galleryImages.filter(
+          (url: string) => !existingUrls.includes(url),
+        );
+        if (urlsToInsert.length > 0) {
+          // Link orphan uploads (uploaded via API but no weddingId yet)
+          const orphans = await this.mediaModel
+            .find({ url: { $in: urlsToInsert } })
+            .session(session)
+            .exec();
+          const orphanUrls = orphans.map((m) => m.url);
+
+          if (orphanUrls.length > 0) {
+            await this.mediaModel
+              .updateMany(
+                { url: { $in: orphanUrls } },
+                { $set: { weddingId: wedding._id, type: 'gallery' } },
+                { session },
+              )
+              .exec();
+          }
+
+          const trulyNewUrls = urlsToInsert.filter(
+            (url) => !orphanUrls.includes(url),
+          );
+          if (trulyNewUrls.length > 0) {
+            const newMediaDocs = trulyNewUrls.map(
+              (url: string, idx: number) => ({
+                ownerId: wedding.ownerId,
+                weddingId: wedding._id,
+                type: 'gallery',
+                url: url,
+                order: existingUrls.length + idx,
+                size: 0,
+              }),
+            );
+            await this.mediaModel.insertMany(newMediaDocs, { session });
+          }
+        }
+
+        const bulkOps = galleryImages.map((url: string, idx: number) => ({
+          updateOne: {
+            filter: {
+              weddingId: wedding._id,
+              type: 'gallery',
+              url: url,
+              deletedAt: null,
+            },
+            update: { $set: { order: idx } },
+          },
+        }));
+        if (bulkOps.length > 0) {
+          await this.mediaModel.bulkWrite(bulkOps, { session });
+        }
+      }
+
+      await session.commitTransaction();
+
+      const result = await this.findBySlug(slug);
+      return { ...result, credentials };
+    } catch (err) {
+      await session.abortTransaction();
+      throw err;
+    } finally {
+      session.endSession();
+    }
   }
 
   // ================= WEDDING RENDER API (NEW) =================
@@ -517,13 +737,8 @@ export class WeddingsService {
 
     return {
       wedding: {
+        ...wedding.toObject(),
         id: wedding._id,
-        slug: wedding.slug,
-        brideName: wedding.brideName,
-        groomName: wedding.groomName,
-        weddingDate: wedding.weddingDate,
-        weddingTime: wedding.weddingTime,
-        templateVersion: wedding.templateVersion,
         views: wedding.views + 1,
       },
       template: template

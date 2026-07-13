@@ -23,7 +23,7 @@ export const TEMPLATES: TemplateConfig[] = [
       },
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: false, showTitles: false },
-      timeline: { enabled: false },
+      timeline: { enabled: true },
       gallery: { maxImages: 10 },
       story: { enabled: true },
       rsvp: { enabled: true },

@@ -10,7 +10,7 @@ export const fetchInvitations = async (query: any = {}) => {
 
   const url = `${API_URL}/api/weddings?${queryParams.toString()}`;
 
-  const res = await fetch(url, { credentials: "include" });
+  const res = await fetch(url, { credentials: "include", cache: "no-store" });
 
   if (res.status === 401) {
     throw new Error("UNAUTHORIZED");
@@ -27,7 +27,7 @@ export const fetchInvitations = async (query: any = {}) => {
 export const fetchInvitationDetail = async (slug: string) => {
   const url = `${API_URL}/api/weddings/${slug}/render`;
 
-  const res = await fetch(url, { credentials: "include" });
+  const res = await fetch(url, { credentials: "include", cache: "no-store" });
 
   if (res.status === 401) {
     throw new Error("UNAUTHORIZED");

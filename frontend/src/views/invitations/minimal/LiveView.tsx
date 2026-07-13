@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Volume2, VolumeX, Phone, Mail, X } from "lucide-react";
+import { Volume2, VolumeX, Phone, Mail, X, Music } from "lucide-react";
 
 import { InvitationCover } from "./InvitationCover";
 import { MinimalFrame } from "./components/MinimalFrame";
@@ -10,13 +10,15 @@ import { MinimalGuestbook } from "./components/MinimalGuestbook";
 import { MinimalRegistry } from "./components/MinimalRegistry";
 import { MinimalVenueMap } from "./components/MinimalVenueMap";
 import { MinimalGallery } from "./components/MinimalGallery";
+import { MinimalCountdown } from "./components/MinimalCountdown";
+import { FallingLeaves } from "./components/FallingLeaves";
 import { GuestMessage } from "@/entities/invitation/ui/GuestbookList";
 import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { useCountdown } from "@/shared/lib/hooks";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { API_URL } from "@/shared/lib/config";
-import { formatTimeAgo } from "@/shared/lib/utils/date";
+import { formatTimeAgo, formatVietnameseDate } from "@/shared/lib/utils/date";
 
 import img_1 from "@/shared/assets/image/flower/img_1.png";
 
@@ -109,56 +111,14 @@ export function LiveView({
         ev.title.toUpperCase().includes("HÔN LỄ"),
     ) || weddingData.events[0];
 
-  const formattedWeddingDateLabel = () => {
-    try {
-      const d = new Date(weddingData.weddingDate);
-      const daysOfWeek = [
-        "Chủ Nhật",
-        "Thứ Hai",
-        "Thứ Ba",
-        "Thứ Tư",
-        "Thứ Năm",
-        "Thứ Sáu",
-        "Thứ Bảy",
-      ];
-      const dayName = daysOfWeek[d.getDay()];
-      const day = String(d.getDate()).padStart(2, "0");
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const year = d.getFullYear();
-      return `${dayName}, ngày ${day} tháng ${month} năm ${year} · ${weddingData.weddingTime || "18:00"}`;
-    } catch {
-      return weddingData.weddingDate;
-    }
-  };
+  const weddingDateLabel = formatVietnameseDate(weddingData.weddingDate, {
+    includeWeekday: true,
+    time: weddingData.weddingTime,
+  });
 
   return (
     <div className="w-full min-h-screen relative font-sans bg-[rgb(0,26,8)] text-[rgb(225,188,124)] overflow-hidden">
-      {/* Ambient background Gold Dust */}
-      {isMounted && (
-        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-          {[...Array(40)].map((_, i) => {
-            const size = Math.random() * 3 + 1;
-            return (
-              <div
-                key={i}
-                className="absolute rounded-full opacity-60 mix-blend-screen"
-                style={
-                  {
-                    left: `${Math.random() * 100}%`,
-                    top: "-30px",
-                    width: `${size}px`,
-                    height: `${size}px`,
-                    backgroundColor: "#E1BC7C",
-                    boxShadow: `0 0 ${size * 3}px ${size}px rgba(225,188,124,0.6)`,
-                    animation: `ambient-fall ${Math.random() * 10 + 15}s ease-in-out ${Math.random() * 10}s infinite`,
-                    "--sway": `${(Math.random() - 0.5) * 80}px`,
-                  } as any
-                }
-              />
-            );
-          })}
-        </div>
-      )}
+      {/* {isMounted && <FallingLeaves />} */}
 
       {!envelopeOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[rgba(0,14,6,0.98)]">
@@ -222,14 +182,18 @@ export function LiveView({
 
                 <div className="relative z-10 text-center px-6 pt-28 pb-14 md:pt-24 md:pb-8 flex flex-col items-center">
                   <h1
-                    className="mb-2 flex flex-col items-center leading-tight text-5xl sm:text-6xl text-[#E1BC7C]"
+                    className="mb-2 flex flex-col items-center leading-tight text-4xl sm:text-5xl md:text-6xl text-[#E1BC7C]"
                     style={{ fontFamily: "'The Nautigal', cursive" }}
                   >
-                    <span className="block w-full text-center">Trung hiếu</span>
+                    <span className="block w-full text-center">
+                      {weddingData?.groomName || "Tên chú rễ"}
+                    </span>
                     <span className="block w-full text-center text-2xl leading-none my-2 font-serif">
                       &amp;
                     </span>
-                    <span className="block w-full text-center">Như ý</span>
+                    <span className="block w-full text-center">
+                      {weddingData?.brideName || "Tên cô dâu"}
+                    </span>
                   </h1>
 
                   <div className="flex items-center justify-center gap-3 mb-2 w-full max-w-[200px]">
@@ -251,7 +215,7 @@ export function LiveView({
                   </div>
 
                   <div className="text-[18px] mb-5 flex flex-col items-center font-serif text-[rgba(225,188,124,0.75)]">
-                    <span>{formattedWeddingDateLabel()}</span>
+                    <span>{weddingDateLabel}</span>
                   </div>
 
                   <div className="mb-8">
@@ -298,14 +262,43 @@ export function LiveView({
                 <MinimalCoupleSpotlight weddingData={weddingData} />
               </FadeIn>
 
+              <FadeIn className="flex justify-center my-8">
+                <img
+                  src={img_1.src}
+                  alt="divider"
+                  className="w-24 sm:w-32 opacity-40"
+                />
+              </FadeIn>
+
               <FadeIn>
                 <MinimalEventInfo
                   weddingData={weddingData}
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
                 />
               </FadeIn>
+
+              <FadeIn className="flex justify-center my-8">
+                <img
+                  src={img_1.src}
+                  alt="divider"
+                  className="w-24 sm:w-32 opacity-40 -scale-y-100"
+                />
+              </FadeIn>
+
               {/* ảnh */}
               <MinimalGallery weddingData={weddingData} />
+
+              {/* đếm ngược */}
+              <MinimalCountdown weddingData={weddingData} />
+
+              <FadeIn className="flex justify-center my-2">
+                <img
+                  src={img_1.src}
+                  alt="divider"
+                  className="w-24 sm:w-32 opacity-40"
+                />
+              </FadeIn>
+
               {/* thông tin tiệc cưới */}
               <FadeIn>
                 <MinimalTimeline weddingData={weddingData} />
@@ -331,11 +324,30 @@ export function LiveView({
           {/* Nút bật/tắt nhạc */}
           <button
             onClick={() => setPlaying(!playing)}
-            className="fixed bottom-6 left-6 z-50 p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[rgb(225,188,124)] hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-xl"
+            className={`fixed bottom-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-full transition-all duration-500 ${
+              playing
+                ? "bg-[rgb(225,188,124)] text-[rgb(0,26,8)] shadow-[0_0_25px_rgba(225,188,124,0.6)] hover:shadow-[0_0_35px_rgba(225,188,124,0.8)]"
+                : "bg-white/10 backdrop-blur-md text-[rgb(225,188,124)] border border-[rgb(225,188,124)]/30 hover:bg-white/20"
+            } hover:scale-110`}
             aria-label={playing ? "Tắt nhạc" : "Bật nhạc"}
           >
-            {playing ? <Volume2 size={24} /> : <VolumeX size={24} />}
+            <div className={playing ? "animate-[spin_4s_linear_infinite]" : ""}>
+              {playing ? (
+                <Music size={20} />
+              ) : (
+                <VolumeX size={20} />
+              )}
+            </div>
+            {/* Lấp lánh khi đang phát nhạc */}
+            {playing && (
+              <div className="absolute inset-0 rounded-full border-2 border-white/40 animate-ping opacity-20"></div>
+            )}
           </button>
+
+          {/* Audio Element */}
+          <audio ref={audioRef} loop preload="auto">
+            <source src={(weddingData as any).musicUrl || "/audio/wedding-song.mp3"} type="audio/mpeg" />
+          </audio>
 
           {/* RSVP Modal */}
           {rsvpModalOpen && (
@@ -361,6 +373,8 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     guestName={guestName}
+                    theme="minimal"
+                    hideMessage
                   />
                 </div>
               </div>

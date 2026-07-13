@@ -79,7 +79,7 @@ export function AdminDashboardPage() {
           <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
             <span className="hover:text-indigo-600 cursor-pointer">
               Trang chủ
-            </span>{" "}
+            </span>
             <ChevronRight size={12} />{" "}
             <span className="text-slate-700">Dashboard</span>
           </p>
