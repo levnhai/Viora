@@ -1,16 +1,26 @@
 import React from "react";
-import { WeddingData } from "@/entities/invitation/model/types";
 import { formatDate } from "@/shared/lib/utils/date";
 import hyImg from "@/shared/assets/image/hy/img_1.webp";
 import bgImg1 from "@/shared/assets/image/hy/img_2.webp";
 import bgImg2 from "@/shared/assets/image/hy/img_3.webp";
 
-interface LongPhungEnvelopeProps {
+interface FloralEnvelopeProps {
+  guestName?: string;
+  groomName: string;
+  brideName: string;
+  weddingDate: string;
   onOpen: () => void;
-  weddingData: WeddingData;
+  isFixed?: boolean;
 }
 
-export function LongPhungEnvelope({ onOpen, weddingData }: LongPhungEnvelopeProps) {
+export function FloralEnvelope({
+  guestName,
+  groomName,
+  brideName,
+  weddingDate,
+  onOpen,
+  isFixed = true,
+}: FloralEnvelopeProps) {
   const characters = [
     { left: "31.55%", size: "13.55px", sway: "14.64px", dur: "11.4s", delay: "1.92s" },
     { left: "57.77%", size: "14.06px", sway: "-8.92px", dur: "9.46s", delay: "1.74s" },
@@ -29,7 +39,7 @@ export function LongPhungEnvelope({ onOpen, weddingData }: LongPhungEnvelopeProp
   return (
     <div
       style={{ background: "linear-gradient(to bottom right, #710001, #5a0001, #450001)" }}
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+      className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden`}
     >
       <div style={{ zIndex: 1 }} className="absolute inset-0 pointer-events-none overflow-hidden">
         {characters.map((char, i) => (
@@ -112,11 +122,11 @@ export function LongPhungEnvelope({ onOpen, weddingData }: LongPhungEnvelopeProp
                 }}
                 className="mb-2 flex flex-col items-center leading-tight text-3xl sm:text-4xl"
               >
-                <span className="block w-full text-center">{weddingData.groomName}</span>
+                <span className="block w-full text-center">{groomName}</span>
                 <span className="block w-full text-center text-lg leading-none sm:text-xl my-1">
                   &amp;
                 </span>
-                <span className="block w-full text-center">{weddingData.brideName}</span>
+                <span className="block w-full text-center">{brideName}</span>
               </h1>
               <div className="flex items-center justify-center gap-3 mb-2">
                 <div
@@ -139,7 +149,7 @@ export function LongPhungEnvelope({ onOpen, weddingData }: LongPhungEnvelopeProp
                 }}
                 className="text-[18px] mb-5 flex flex-col items-center"
               >
-                <span dir="auto">{formatDate(weddingData.weddingDate)}</span>
+                <span dir="auto">{formatDate(weddingDate)}</span>
               </div>
               
               <div className="mb-6">
@@ -151,6 +161,7 @@ export function LongPhungEnvelope({ onOpen, weddingData }: LongPhungEnvelopeProp
                   className="text-[18px] font-light mb-2"
                 >
                   <span dir="auto">Thân Mời</span>
+                  {guestName && <span className="block mt-2 font-bold text-[#FFBE89]">{guestName}</span>}
                 </p>
               </div>
               

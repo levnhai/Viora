@@ -10,16 +10,17 @@ import {
 } from "@/entities/invitation/ui/GuestbookList";
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { API_URL } from "@/shared/lib/config";
-import { formatTimeAgo, formatDate } from "@/shared/lib/utils/date";
+import { formatDate } from "@/shared/lib/utils/date";
 import hyImg from "@/shared/assets/image/hy/img_1.webp";
 import bgImg1 from "@/shared/assets/image/hy/img_2.webp";
 import bgImg2 from "@/shared/assets/image/hy/img_3.webp";
 import frame1Svg from "@/shared/assets/image/frame/frame_1.svg";
 
-import { LongPhungEnvelope } from "./LongPhungEnvelope";
 import { InvitationCover } from "./InvitationCover";
 import { Timeline } from "@/widgets/timeline";
 import { GalleryGrid } from "@/widgets/gallery";
+import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
+import { Envelope } from "@/widgets/envelope";
 import "./styles.css";
 
 interface LiveViewProps {
@@ -33,11 +34,10 @@ export function LiveView({
   guestName,
   previewMode,
 }: LiveViewProps) {
-  const [playing, setPlaying] = useState(false);
-  const [messages, setMessages] = useState<GuestMessage[]>([]);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { playing, setPlaying, togglePlay, audioRef } = useWeddingMusic(weddingData.musicUrl || "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3");
+  const { messages, handleSendMessage } = useGuestbook(weddingData.slug);
 
   useEffect(() => {
     if (previewMode) {
@@ -45,55 +45,10 @@ export function LiveView({
     }
   }, [previewMode]);
 
-  useEffect(() => {
-    fetch(`${API_URL}/api/weddings/${weddingData.slug}/guestbook`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.data) {
-          const formatted = data.data.map((item: any) => ({
-            name: item.name,
-            msg: item.message,
-            time: formatTimeAgo(item.createdAt),
-          }));
-          setMessages(formatted);
-        }
-      })
-      .catch((err) => console.error("Lỗi khi tải sổ lưu bút:", err));
-  }, [weddingData.slug]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      if (playing) {
-        audioRef.current.play().catch(() => {
-          setPlaying(false);
-        });
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [playing]);
-
-  const handleSendMessage = async (name: string, msg: string) => {
-    try {
-      const response = await fetch(
-        `${API_URL}/api/weddings/${weddingData.slug}/guestbook`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, message: msg }),
-        },
-      );
-      const data = await response.json();
-      if (response.ok && data.success) {
-        setMessages((prev) => [{ name, msg, time: "Vừa xong" }, ...prev]);
-      } else {
-        alert(data.message || "Gửi lời chúc thất bại!");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Đã xảy ra lỗi khi gửi lời chúc!");
+  const onSendMessage = async (name: string, msg: string) => {
+    const result = await handleSendMessage(name, msg);
+    if (!result.success) {
+      alert(result.error || "Gửi lời chúc thất bại!");
     }
   };
 
@@ -105,8 +60,12 @@ export function LiveView({
       <audio ref={audioRef} src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3" loop />
 
       {!envelopeOpen && (
-        <LongPhungEnvelope
-          weddingData={weddingData}
+        <Envelope
+          variant="floral"
+          groomName={weddingData.groomName}
+          brideName={weddingData.brideName}
+          weddingDate={weddingData.weddingDate}
+          guestName={guestName}
           onOpen={() => {
             setEnvelopeOpen(true);
             setPlaying(true);
@@ -118,7 +77,7 @@ export function LiveView({
       <div className={`transition-opacity duration-1000 ${envelopeOpen ? "opacity-100" : "opacity-0"}`}>
         {/* Fixed Music Toggle */}
         <button
-          onClick={() => setPlaying(!playing)}
+          onClick={togglePlay}
           className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7a0014] text-[#FFBE89] flex items-center justify-center border-2 border-[#FFBE89] shadow-lg active:scale-95 transition-all cursor-pointer"
         >
           {playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
@@ -273,7 +232,7 @@ export function LiveView({
             </div>
             
             <div className="bg-[#fff7f0] rounded-xl p-1 shadow-2xl">
-               <GuestbookForm onSendMessage={handleSendMessage} />
+               <GuestbookForm onSendMessage={onSendMessage} />
             </div>
             <div className="mt-6 text-[#710001] bg-[#fff7f0] rounded-xl p-4 shadow-2xl">
                <GuestbookList messages={messages} />
