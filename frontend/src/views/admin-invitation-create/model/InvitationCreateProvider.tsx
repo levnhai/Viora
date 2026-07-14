@@ -165,6 +165,7 @@ export function InvitationCreateProvider({
     locationName: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.locationName || "Gem Center",
     address: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.address || "08 Nguyễn Bỉnh Khiêm, P. Đa Kao, Q.1, TP.HCM",
     mapLink: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.mapUrl || "https://maps.google.com/?q=Gem+Center",
+    musicUrl: initialData?.themeSettings?.musicUrl || "",
   });
   
   const [giftInfo, setGiftInfo] = useState<GiftInfo>(initialData?.wedding?.giftInfo || {});

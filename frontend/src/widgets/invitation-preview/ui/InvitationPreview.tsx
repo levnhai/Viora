@@ -41,6 +41,7 @@ export function InvitationPreview() {
     galleryImages: galleryImages,
     weddingDate: basicInfo.weddingDate || new Date().toISOString(),
     weddingTime: basicInfo.weddingTime || "18:00",
+    musicUrl: basicInfo.musicUrl,
     events: [
       {
         title: "TIỆC CƯỚI",

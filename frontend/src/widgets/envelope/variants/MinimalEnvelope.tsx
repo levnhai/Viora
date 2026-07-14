@@ -9,6 +9,8 @@ interface MinimalEnvelopeProps {
   weddingTime?: string;
   onOpen: () => void;
   isFixed?: boolean;
+  primaryColor?: string;
+  textColor?: string;
 }
 
 export function MinimalEnvelope({
@@ -19,6 +21,8 @@ export function MinimalEnvelope({
   weddingTime,
   onOpen,
   isFixed = true,
+  primaryColor,
+  textColor,
 }: MinimalEnvelopeProps) {
   const weddingDateLabel = formatVietnameseDate(weddingDate, {
     includeWeekday: true,
@@ -26,7 +30,10 @@ export function MinimalEnvelope({
   });
 
   return (
-    <div className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden bg-[rgba(0,14,6,0.98)]`}>
+    <div
+      className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden`}
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="relative z-10">
         <div className="relative w-[310px] sm:w-[340px] md:w-[520px] lg:w-[600px]">
           {/* Wax Seal */}
@@ -38,15 +45,14 @@ export function MinimalEnvelope({
                 width: "56px",
                 height: "56px",
                 transform: "translate(-50%, -50%)",
-                background:
-                  "radial-gradient(circle at 30% 30%, #E1BC7C, rgb(195, 158, 94))",
-                "--shadow-color": "rgba(225, 188, 124, 0.5)",
+                background: `radial-gradient(circle at 30% 30%, ${textColor}, rgba(255,255,255,0.2))`,
+                "--shadow-color": textColor,
                 zIndex: 30,
               } as any
             }
           >
             <svg
-              style={{ fill: "#001A08" }}
+              style={{ fill: primaryColor }}
               viewBox="0 0 24 24"
               className="w-7 h-7"
             >
@@ -65,9 +71,10 @@ export function MinimalEnvelope({
             <div
               className="absolute inset-0 rounded-lg overflow-hidden"
               style={{
-                background:
-                  "linear-gradient(to bottom right, #001A08, #003F1E, #001A08)",
-                border: "1px solid rgba(225, 188, 124, 0.15)",
+                backgroundColor: primaryColor,
+                backgroundImage:
+                  "linear-gradient(to bottom right, rgba(0,0,0,0.3), rgba(255,255,255,0.05), rgba(0,0,0,0.3))",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 clipPath: "inset(0 round 8px)",
               }}
             >
@@ -87,8 +94,11 @@ export function MinimalEnvelope({
 
             <div className="relative z-10 text-center px-6 pt-28 pb-14 md:pt-24 md:pb-8 flex flex-col items-center">
               <h1
-                className="mb-2 flex flex-col items-center leading-tight text-4xl sm:text-5xl md:text-6xl text-[#E1BC7C]"
-                style={{ fontFamily: "'The Nautigal', cursive" }}
+                className="mb-2 flex flex-col items-center leading-tight text-4xl sm:text-5xl md:text-6xl"
+                style={{
+                  fontFamily: "'The Nautigal', cursive",
+                  color: textColor,
+                }}
               >
                 <span className="block w-full text-center">
                   {groomName || "Tên chú rể"}
@@ -105,28 +115,44 @@ export function MinimalEnvelope({
                 <div
                   className="flex-1 h-px"
                   style={{
-                    background:
-                      "linear-gradient(to right, transparent, #E1BC7C)",
+                    background: `linear-gradient(to right, transparent, ${textColor})`,
                   }}
                 ></div>
-                <span className="text-[#E1BC7C] opacity-70 text-sm">❦</span>
+                <span
+                  className="opacity-70 text-sm"
+                  style={{ color: textColor }}
+                >
+                  ❦
+                </span>
                 <div
                   className="flex-1 h-px"
                   style={{
-                    background:
-                      "linear-gradient(to left, transparent, #E1BC7C)",
+                    background: `linear-gradient(to left, transparent, ${textColor})`,
                   }}
                 ></div>
               </div>
 
-              <div className="text-[18px] mb-5 flex flex-col items-center font-serif text-[rgba(225,188,124,0.75)]">
+              <div
+                className="text-[18px] mb-5 flex flex-col items-center font-serif"
+                style={{ color: textColor, opacity: 0.75 }}
+              >
                 <span>{weddingDateLabel}</span>
               </div>
 
               <div className="mb-8">
-                <p className="text-[18px] font-light font-serif text-[rgba(225,188,124,0.75)]">
-                  Thân Mời
-                  {guestName && <span className="block mt-2 font-bold text-[#E1BC7C]">{guestName}</span>}
+                <p
+                  className="text-[18px] font-light font-serif"
+                  style={{ color: textColor, opacity: 0.75 }}
+                >
+                  Thân Mời:{"   "}
+                  {guestName && (
+                    <span
+                      className="font-bold"
+                      style={{ color: textColor, opacity: 1 }}
+                    >
+                      {guestName}
+                    </span>
+                  )}
                 </p>
               </div>
 
@@ -134,9 +160,9 @@ export function MinimalEnvelope({
                 onClick={onOpen}
                 className="relative px-8 py-2.5 text-lg font-serif font-semibold rounded-full shadow-lg flex items-center justify-center overflow-hidden transition-transform hover:scale-105 active:scale-95"
                 style={{
-                  backgroundColor: "#E1BC7C",
-                  color: "#001A08",
-                  boxShadow: "0 4px 14px rgba(225, 188, 124, 0.35)",
+                  backgroundColor: textColor,
+                  color: primaryColor,
+                  boxShadow: `0 4px 14px ${textColor}59`,
                 }}
               >
                 <span>Mở thiệp</span>

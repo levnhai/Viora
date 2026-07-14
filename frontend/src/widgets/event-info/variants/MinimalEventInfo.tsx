@@ -1,18 +1,31 @@
 import { FadeIn } from "@/shared/ui/FadeIn";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { Heart } from "lucide-react";
+import React from "react";
 
 interface MinimalEventInfoProps {
   weddingData: WeddingData;
   onOpenRsvpModal: () => void;
+  primaryColor?: string;
+  textColor?: string;
 }
 
 export function MinimalEventInfo({
   weddingData,
   onOpenRsvpModal,
+  primaryColor,
+  textColor,
 }: MinimalEventInfoProps) {
   const { events } = weddingData;
   if (!events || events.length === 0) return null;
+
+  const pColor = primaryColor || "#e1bc7c";
+  const tColor = textColor || "#e1bc7c";
+  const pColor30 = pColor + "4D"; // 30% opacity
+  const pColor50 = pColor + "80"; // 50% opacity
+  const pColor80 = pColor + "CC"; // 80% opacity
+  const pColor05 = pColor + "0D"; // 5% opacity
+  const pColor15 = pColor + "26"; // 15% opacity
 
   return (
     <section className="pt-4 pb-4 sm:pt-8 sm:pb-8 px-4 relative">
@@ -42,23 +55,29 @@ export function MinimalEventInfo({
               <FadeIn key={i} delay={i * 100}>
                 <div className="text-center">
                   <p
-                    className="text-[rgb(225,188,124)] font-serif uppercase tracking-widest text-sm mb-4"
-                    style={{ textShadow: "0 0 10px rgba(225,188,124,0.3)" }}
+                    className="font-serif uppercase tracking-widest text-sm mb-4"
+                    style={{ color: pColor, textShadow: `0 0 10px ${pColor30}` }}
                   >
                     Lễ thành hôn được cử hành tại
                     <br />
                     {ev.locationName.toUpperCase()}
                   </p>
                   <p
-                    className="text-[rgb(225,188,124)] font-serif uppercase tracking-widest text-sm mb-8"
-                    style={{ textShadow: "0 0 10px rgba(225,188,124,0.3)" }}
+                    className="font-serif uppercase tracking-widest text-sm mb-8"
+                    style={{ color: pColor, textShadow: `0 0 10px ${pColor30}` }}
                   >
                     VÀO LÚC
                   </p>
-                  <h3 className="text-4xl mb-8 text-[rgb(225,188,124)] font-serif drop-shadow-[0_0_15px_rgba(225,188,124,0.5)]">
+                  <h3 
+                    className="text-4xl mb-8 font-serif"
+                    style={{ color: pColor, textShadow: `0 0 15px ${pColor50}` }}
+                  >
                     {ev.time.split(" ")[0]}
                   </h3>
-                  <div className="flex justify-center items-center gap-3 sm:gap-6 mb-8 text-[rgb(225,188,124)] font-serif">
+                  <div 
+                    className="flex justify-center items-center gap-3 sm:gap-6 mb-8 font-serif"
+                    style={{ color: pColor }}
+                  >
                     <span className="uppercase tracking-widest text-sm">
                       CHỦ NHẬT
                     </span>
@@ -70,41 +89,45 @@ export function MinimalEventInfo({
                     </span>
                   </div>
                   <div className="space-y-4 mb-16">
-                    <h4 className="text-2xl font-serif text-[rgb(225,188,124)]">
+                    <h4 
+                      className="text-2xl font-serif"
+                      style={{ color: pColor }}
+                    >
                       {yearStr}
                     </h4>
-                    <p className="text-xs uppercase tracking-widest font-serif text-[rgb(225,188,124)]/80">
+                    <p 
+                      className="text-xs uppercase tracking-widest font-serif"
+                      style={{ color: pColor80 }}
+                    >
                       (Tức ngày 15/04 năm Bính Ngọ)
                     </p>
                   </div>
                   {/* Lịch */}
-                  <div className="border border-[rgb(225,188,124)]/30 rounded-lg p-6 max-w-[90%] sm:max-w-sm mx-auto mb-10 bg-[rgb(225,188,124)]/5 shadow-[inset_0_0_20px_rgba(225,188,124,0.05)] hover:shadow-[0_0_20px_rgba(225,188,124,0.15)] transition-shadow duration-500">
-                    <h5 className="text-[rgb(225,188,124)] font-serif text-lg mb-4 drop-shadow-[0_0_8px_rgba(225,188,124,0.3)]">
+                  <div 
+                    className="border rounded-lg p-6 max-w-[90%] sm:max-w-sm mx-auto mb-10 transition-shadow duration-500"
+                    style={{ 
+                      borderColor: pColor30, 
+                      backgroundColor: pColor05,
+                      boxShadow: `inset 0 0 20px ${pColor05}, 0 0 20px ${pColor15}`
+                    }}
+                  >
+                    <h5 
+                      className="font-serif text-lg mb-4"
+                      style={{ color: pColor, textShadow: `0 0 8px ${pColor30}` }}
+                    >
                       {monthYear.replace("THÁNG", "Tháng")} / {yearStr}
                     </h5>
 
                     <div className="grid grid-cols-7 gap-y-4 text-sm font-serif">
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T2
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T3
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T4
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T5
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T6
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        T7
-                      </div>
-                      <div className="text-[rgb(225,188,124)]/80 pb-2 border-b border-[rgb(225,188,124)]/40 mb-2">
-                        CN
-                      </div>
+                      {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map(day => (
+                        <div 
+                          key={day}
+                          className="pb-2 border-b mb-2"
+                          style={{ color: pColor80, borderColor: pColor + '66' }}
+                        >
+                          {day}
+                        </div>
+                      ))}
 
                       {(() => {
                         const m = parseInt(month) - 1 || 0;
@@ -114,7 +137,7 @@ export function MinimalEventInfo({
                         const daysInMonth = new Date(y, m + 1, 0).getDate();
                         const targetDay = parseInt(day);
 
-                        const cells = [];
+                        const cells: React.ReactNode[] = [];
                         for (let j = 0; j < startDayIndex; j++) {
                           cells.push(<div key={`empty-${j}`} />);
                         }
@@ -126,10 +149,14 @@ export function MinimalEventInfo({
                               className="relative flex items-center justify-center h-8"
                             >
                               {isTarget && (
-                                <Heart className="absolute fill-[rgb(225,188,124)] text-[rgb(225,188,124)] w-8 h-8 opacity-80" />
+                                <Heart 
+                                  className="absolute w-8 h-8 opacity-80" 
+                                  style={{ fill: pColor, color: pColor }}
+                                />
                               )}
                               <span
-                                className={`relative z-10 ${isTarget ? "text-[rgb(0,26,8)] font-bold" : "text-[rgb(225,188,124)]"}`}
+                                className={`relative z-10 ${isTarget ? "text-[rgb(0,26,8)] font-bold" : ""}`}
+                                style={!isTarget ? { color: pColor } : {}}
                               >
                                 {d}
                               </span>
@@ -142,9 +169,13 @@ export function MinimalEventInfo({
                   </div>
                   <button
                     onClick={onOpenRsvpModal}
-                    className="relative px-10 py-3 bg-[rgb(225,188,124)] text-[rgb(0,26,8)] font-serif uppercase tracking-widest text-sm font-semibold rounded-full hover:bg-[rgb(225,188,124)]/90 transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(225,188,124,0.4)] overflow-hidden"
+                    className="relative px-10 py-3 text-[rgb(0,26,8)] font-serif uppercase tracking-widest text-sm font-semibold rounded-full transition-transform hover:scale-105 active:scale-95 overflow-hidden"
+                    style={{ 
+                      backgroundColor: pColor,
+                      boxShadow: `0 0 20px ${pColor + '66'}`
+                    }}
                   >
-                    <span>XÁC NHẬN</span>
+                    <span style={{ opacity: 0.9 }}>XÁC NHẬN</span>
                     <div
                       className="absolute top-0 h-full w-8 pointer-events-none animate-shine"
                       style={{

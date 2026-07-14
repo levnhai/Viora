@@ -1,4 +1,4 @@
-import { Cinzel, Great_Vibes, EB_Garamond, Montserrat } from "next/font/google";
+import { Cinzel, Great_Vibes, EB_Garamond, Montserrat, Playfair_Display } from "next/font/google";
 
 export const cinzel = Cinzel({
   subsets: ["latin"],
@@ -21,5 +21,11 @@ export const ebGaramond = EB_Garamond({
 export const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["200", "400", "600"],
+  display: "swap",
+});
+
+export const playfairDisplay = Playfair_Display({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });

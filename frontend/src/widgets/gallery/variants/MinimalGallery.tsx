@@ -3,11 +3,13 @@ import { FadeIn } from "@/shared/ui/FadeIn";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
 
-interface MinimalGalleryProps {
+export interface MinimalGalleryProps {
   weddingData: WeddingData;
+  primaryColor?: string;
+  textColor?: string;
 }
 
-export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
+export function MinimalGallery({ weddingData, primaryColor, textColor }: MinimalGalleryProps) {
   const images = weddingData.galleryImages || [];
   if (images.length === 0) return null;
 
@@ -47,11 +49,16 @@ export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
   const displayImages = images.slice(0, 4);
   const remainingCount = images.length - 4;
 
+  const color = textColor || "rgb(225,188,124)";
+
   return (
     <>
       <section className="pt-4 pb-10 sm:pt-8 sm:pb-20 px-4 text-center relative">
         <FadeIn>
-          <h2 className="text-2xl text-[rgb(225,188,124)] mb-12 uppercase tracking-widest font-serif">
+          <h2 
+            className="text-2xl mb-12 uppercase tracking-widest font-serif"
+            style={{ color }}
+          >
             ALBUM ẢNH CƯỚI
           </h2>
         </FadeIn>
@@ -111,13 +118,45 @@ export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
             {/* Nav Buttons */}
             <button 
               onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white/70 hover:text-[rgb(225,188,124)] hover:border-[rgb(225,188,124)]/60 hover:bg-black/60 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-[0_0_25px_rgba(225,188,124,0.4)] z-50 group"
+              className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white/70 hover:bg-black/60 transition-all duration-300 hover:scale-110 shadow-lg z-50 group"
+              style={{
+                "--tw-hover-text-opacity": 1,
+                "--hover-color": color,
+                "--hover-border-color": `${color}99`, // 60% opacity
+                "--hover-shadow-color": `${color}66` // 40% opacity
+              } as any}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = color;
+                e.currentTarget.style.borderColor = `${color}99`;
+                e.currentTarget.style.boxShadow = `0 0 25px ${color}66`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "";
+                e.currentTarget.style.borderColor = "";
+                e.currentTarget.style.boxShadow = "";
+              }}
             >
               <ChevronLeft size={28} className="group-hover:-translate-x-0.5 transition-transform" />
             </button>
             <button 
               onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white/70 hover:text-[rgb(225,188,124)] hover:border-[rgb(225,188,124)]/60 hover:bg-black/60 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-[0_0_25px_rgba(225,188,124,0.4)] z-50 group"
+              className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white/70 hover:bg-black/60 transition-all duration-300 hover:scale-110 shadow-lg z-50 group"
+              style={{
+                "--tw-hover-text-opacity": 1,
+                "--hover-color": color,
+                "--hover-border-color": `${color}99`,
+                "--hover-shadow-color": `${color}66`
+              } as any}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = color;
+                e.currentTarget.style.borderColor = `${color}99`;
+                e.currentTarget.style.boxShadow = `0 0 25px ${color}66`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "";
+                e.currentTarget.style.borderColor = "";
+                e.currentTarget.style.boxShadow = "";
+              }}
             >
               <ChevronRight size={28} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -131,9 +170,10 @@ export function MinimalGallery({ weddingData }: MinimalGalleryProps) {
                 onClick={() => setSelectedIndex(idx)}
                 className={`w-16 h-16 rounded-md overflow-hidden flex-shrink-0 cursor-pointer transition-all duration-300 ${
                   idx === selectedIndex 
-                    ? "ring-2 ring-[rgb(225,188,124)] opacity-100 scale-110" 
+                    ? "opacity-100 scale-110" 
                     : "opacity-40 hover:opacity-100"
                 }`}
+                style={idx === selectedIndex ? { boxShadow: `0 0 0 2px ${color}` } : {}}
               >
                 <img src={src} className="w-full h-full object-cover" alt={`Thumb ${idx}`} />
               </div>

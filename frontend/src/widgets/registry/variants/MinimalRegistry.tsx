@@ -17,7 +17,7 @@ export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
   }, []);
 
   const giftInfo = weddingData.giftInfo;
-  const registries = [];
+  const registries: any[] = [];
 
   if (giftInfo) {
     if (giftInfo.groomBankName && giftInfo.groomAccountNumber) {

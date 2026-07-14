@@ -2,28 +2,48 @@ import { useState, useEffect, useRef } from "react";
 import { API_URL } from "./config";
 import { formatTimeAgo } from "./utils/date";
 
+interface Countdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+// tính toán thời gian
+function calculateCountdown(targetMs: number): Countdown {
+  const diff = Math.max(0, targetMs - Date.now());
+
+  return {
+    days: Math.floor(diff / 86_400_000),
+    hours: Math.floor((diff % 86_400_000) / 3_600_000),
+    minutes: Math.floor((diff % 3_600_000) / 60_000),
+    seconds: Math.floor((diff % 60_000) / 1_000),
+  };
+}
+
 // đếm ngược thời gian
 export function useCountdown(targetMs: number) {
-  const [time, setTime] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [time, setTime] = useState(() => calculateCountdown(targetMs));
+
   useEffect(() => {
-    function calc() {
-      const diff = Math.max(0, targetMs - Date.now());
-      setTime({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff % 86400000) / 3600000),
-        minutes: Math.floor((diff % 3600000) / 60000),
-        seconds: Math.floor((diff % 60000) / 1000),
-      });
-    }
-    calc();
-    const id = setInterval(calc, 1000);
-    return () => clearInterval(id);
+    const intervalId = window.setInterval(() => {
+      const next = calculateCountdown(targetMs);
+
+      setTime(next);
+
+      if (
+        next.days === 0 &&
+        next.hours === 0 &&
+        next.minutes === 0 &&
+        next.seconds === 0
+      ) {
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, [targetMs]);
+
   return time;
 }
 
@@ -115,7 +135,10 @@ export function useGuestbook(weddingSlug: string) {
         setMessages((prev) => [{ name, msg, time: "Vừa xong" }, ...prev]);
         return { success: true };
       } else {
-        return { success: false, error: data.message || "Gửi lời chúc thất bại!" };
+        return {
+          success: false,
+          error: data.message || "Gửi lời chúc thất bại!",
+        };
       }
     } catch (err) {
       console.error(err);

@@ -1,24 +1,22 @@
-import { useState, useEffect, useRef } from "react";
-import { Volume2, VolumeX, Phone, Mail, X, Music } from "lucide-react";
+import { useState, useEffect } from "react";
+import { VolumeX, X, Music } from "lucide-react";
 
 import { InvitationCover } from "./InvitationCover";
 import { MinimalFrame } from "./components/MinimalFrame";
 import { MinimalCoupleSpotlight } from "./components/MinimalCoupleSpotlight";
-import { MinimalTimeline } from "./components/MinimalTimeline";
-import { MinimalEventInfo } from "./components/MinimalEventInfo";
-import { MinimalGuestbook } from "./components/MinimalGuestbook";
-import { MinimalRegistry } from "./components/MinimalRegistry";
-import { MinimalVenueMap } from "./components/MinimalVenueMap";
-import { MinimalGallery } from "./components/MinimalGallery";
-import { MinimalCountdown } from "./components/MinimalCountdown";
-import { FallingLeaves } from "./components/FallingLeaves";
-import { GuestMessage } from "@/entities/invitation/ui/GuestbookList";
-import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
-import { FadeIn } from "@/shared/ui/FadeIn";
-import { WeddingData } from "@/entities/invitation/model/types";
-import { formatVietnameseDate } from "@/shared/lib/utils/date";
-import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
+import { EventInfo } from "@/widgets/event-info";
+import { Guestbook } from "@/widgets/guestbook";
+import { Registry } from "@/widgets/registry";
+import { VenueMap } from "@/widgets/venue-map";
+import { Gallery } from "@/widgets/gallery";
+import { Countdown } from "@/widgets/countdown";
+import { Timeline } from "@/widgets/timeline";
 import { Envelope } from "@/widgets/envelope";
+import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
+import { WeddingData } from "@/entities/invitation/model/types";
+import { FadeIn } from "@/shared/ui/FadeIn";
+import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
+
 import img_1 from "@/shared/assets/image/flower/img_1.png";
 
 interface LiveViewProps {
@@ -32,11 +30,12 @@ export function LiveView({
   guestName,
   previewMode,
 }: LiveViewProps) {
-  console.log({ weddingData, guestName, previewMode });
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
 
-  const { playing, togglePlay, audioRef } = useWeddingMusic(weddingData.musicUrl);
+  const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
+    weddingData.musicUrl,
+  );
   const { messages, handleSendMessage } = useGuestbook(weddingData.slug);
 
   useEffect(() => {
@@ -59,15 +58,9 @@ export function LiveView({
         ev.title.toUpperCase().includes("HÔN LỄ"),
     ) || weddingData.events[0];
 
-  const weddingDateLabel = formatVietnameseDate(weddingData.weddingDate, {
-    includeWeekday: true,
-    time: weddingData.weddingTime,
-  });
-
   return (
     <div className="w-full min-h-screen relative font-sans bg-[rgb(0,26,8)] text-[rgb(225,188,124)] overflow-hidden">
-      {/* {isMounted && <FallingLeaves />} */}
-
+      {/* phong bì */}
       {!envelopeOpen ? (
         <Envelope
           variant="minimal"
@@ -76,7 +69,12 @@ export function LiveView({
           weddingDate={weddingData.weddingDate}
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
-          onOpen={() => setEnvelopeOpen(true)}
+          primaryColor="#001A08"
+          textColor="#E1BC7C"
+          onOpen={() => {
+            setEnvelopeOpen(true);
+            if (weddingData.musicUrl) setPlaying(true);
+          }}
         />
       ) : (
         <div className="relative z-10 w-full bg-[rgb(0,26,8)]">
@@ -102,9 +100,12 @@ export function LiveView({
               </FadeIn>
 
               <FadeIn>
-                <MinimalEventInfo
+                <EventInfo
+                  variantId="minimal"
                   weddingData={weddingData}
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
+                  primaryColor={weddingData.primaryColor}
+                  textColor={weddingData.textColor}
                 />
               </FadeIn>
 
@@ -116,11 +117,21 @@ export function LiveView({
                 />
               </FadeIn>
 
-              {/* ảnh */}
-              <MinimalGallery weddingData={weddingData} />
+              {/* bộ sưu tập ảnh */}
+              <Gallery
+                variantId="minimal"
+                weddingData={weddingData}
+                primaryColor={weddingData.primaryColor}
+                textColor={weddingData.textColor}
+              />
 
               {/* đếm ngược */}
-              <MinimalCountdown weddingData={weddingData} />
+              <Countdown
+                variantId="minimal"
+                weddingData={weddingData}
+                primaryColor={weddingData.primaryColor}
+                textColor={weddingData.textColor}
+              />
 
               <FadeIn className="flex justify-center my-2">
                 <img
@@ -132,22 +143,38 @@ export function LiveView({
 
               {/* thông tin tiệc cưới */}
               <FadeIn>
-                <MinimalTimeline weddingData={weddingData} />
+                <Timeline
+                  variant="minimal"
+                  weddingData={weddingData}
+                  primaryColor={weddingData.primaryColor}
+                  textColor={weddingData.textColor}
+                />
               </FadeIn>
             </div>
 
             {/* địa điểm */}
-            {primaryEvent && <MinimalVenueMap event={primaryEvent} />}
-            {/* lời chúc */}
+            {primaryEvent && (
+              <VenueMap
+                variantId="minimal"
+                event={primaryEvent}
+                primaryColor={weddingData.primaryColor}
+                textColor={weddingData.textColor}
+              />
+            )}
+            {/*mừng cưới */}
             <FadeIn>
-              <MinimalRegistry weddingData={weddingData} />
+              <Registry variantId="minimal" weddingData={weddingData} />
             </FadeIn>
+
             {/* sổ lời chúc */}
             <FadeIn>
-              <MinimalGuestbook
+              <Guestbook
+                variantId="minimal"
                 messages={messages}
                 guestName={guestName}
                 onSendMessage={onSendMessage}
+                primaryColor={weddingData.primaryColor}
+                textColor={weddingData.textColor}
               />
             </FadeIn>
           </div>
@@ -163,11 +190,7 @@ export function LiveView({
             aria-label={playing ? "Tắt nhạc" : "Bật nhạc"}
           >
             <div className={playing ? "animate-[spin_4s_linear_infinite]" : ""}>
-              {playing ? (
-                <Music size={20} />
-              ) : (
-                <VolumeX size={20} />
-              )}
+              {playing ? <Music size={20} /> : <VolumeX size={20} />}
             </div>
             {/* Lấp lánh khi đang phát nhạc */}
             {playing && (
@@ -177,7 +200,10 @@ export function LiveView({
 
           {/* Audio Element */}
           <audio ref={audioRef} loop preload="auto">
-            <source src={(weddingData as any).musicUrl || "/audio/wedding-song.mp3"} type="audio/mpeg" />
+            <source
+              src={(weddingData as any).musicUrl || "/audio/wedding-song.mp3"}
+              type="audio/mpeg"
+            />
           </audio>
 
           {/* RSVP Modal */}

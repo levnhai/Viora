@@ -201,4 +201,8 @@ export class CreateWeddingDto {
   @IsOptional()
   @IsString()
   customerEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  musicUrl?: string;
 }

@@ -270,7 +270,7 @@ export class WeddingsService {
         fontHeading: 'Dancing Script',
         fontBody: 'Inter',
         musicAutoplay: true,
-        musicUrl: '',
+        musicUrl: createDto.musicUrl || '',
         effectType: 'none',
       }).save({ session });
 
@@ -411,15 +411,20 @@ export class WeddingsService {
         ? timelineSec.settings.timeline || []
         : [];
 
-    // Lấy gallery images từ media collection
     const mediaImages = await this.mediaModel
       .find({ weddingId: wedding._id, type: 'gallery', deletedAt: null })
       .sort({ order: 1 })
       .exec();
     const galleryImages = mediaImages.map((m) => m.url);
 
+    const themeSettings = await this.weddingThemeSettingModel
+      .findOne({ weddingId: wedding._id })
+      .lean()
+      .exec();
+
     return {
       ...wedding,
+      themeSettings,
       galleryImages,
       events,
       timeline,
@@ -440,6 +445,7 @@ export class WeddingsService {
       deletedGalleryImages,
       templateId,
       customerEmail,
+      musicUrl,
       ...restDto
     } = updateDto;
 
@@ -505,6 +511,27 @@ export class WeddingsService {
       if (updateDto.weddingDate)
         wedding.weddingDate = new Date(updateDto.weddingDate);
       await wedding.save({ session });
+
+      if (musicUrl !== undefined) {
+        const themeSettings = await this.weddingThemeSettingModel
+          .findOne({ weddingId: wedding._id })
+          .session(session)
+          .exec();
+        if (themeSettings) {
+          themeSettings.musicUrl = musicUrl;
+          await themeSettings.save({ session });
+        } else {
+          await new this.weddingThemeSettingModel({
+            weddingId: wedding._id,
+            primaryColor: FALLBACK_THEME_COLOR,
+            fontHeading: 'Dancing Script',
+            fontBody: 'Inter',
+            musicAutoplay: true,
+            musicUrl: musicUrl,
+            effectType: 'none',
+          }).save({ session });
+        }
+      }
 
       if (events) {
         const eventSec = await this.weddingSectionModel

@@ -36,7 +36,12 @@ export function WeddingInvitationPage() {
       })
       .then((data) => {
         if (data.success && data.data) {
-          setWeddingData(data.data);
+          const wd = data.data;
+          // Ensure musicUrl is at the root level for templates to consume
+          if (wd.themeSettings?.musicUrl) {
+            wd.musicUrl = wd.themeSettings.musicUrl;
+          }
+          setWeddingData(wd);
         } else {
           throw new Error("Không lấy được thông tin đám cưới!");
         }

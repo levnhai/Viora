@@ -11,9 +11,13 @@ export function MinimalCoupleSpotlight({
   const {
     groomName,
     brideName,
+    groomRank,
+    brideRank,
     groomFatherName,
     groomMotherName,
     brideFatherName,
+    groomAddress,
+    brideAddress,
     brideMotherName,
   } = weddingData;
 
@@ -40,14 +44,14 @@ export function MinimalCoupleSpotlight({
               </p>
               <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
             </div>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize">
               {groomFatherName || "Lê Văn Bình"}
             </h3>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize">
               {groomMotherName || "Trần Thị Hằng"}
             </h3>
             <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 pt-2 max-w-[150px] mx-auto leading-relaxed">
-              Số 3, Xóm 1, Xã Ninh Nhất, TP. Ninh Bình
+              {groomAddress || ""}
             </p>
           </div>
 
@@ -59,14 +63,14 @@ export function MinimalCoupleSpotlight({
               </p>
               <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
             </div>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize">
               {brideFatherName || "Nguyễn Văn Lợi"}
             </h3>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm">
+            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize">
               {brideMotherName || "Vũ Thị Thanh"}
             </h3>
             <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 pt-2 max-w-[150px] mx-auto leading-relaxed">
-              Tổ 5, Phường Nam Thành, TP. Ninh Bình
+              {brideAddress || ""}
             </p>
           </div>
         </FadeIn>
@@ -80,13 +84,13 @@ export function MinimalCoupleSpotlight({
           <div className="space-y-6 flex flex-col items-center">
             <div className="space-y-2">
               <h3
-                className="text-5xl text-[rgb(225,188,124)] font-light"
+                className="text-5xl text-[rgb(225,188,124)] font-light capitalize"
                 style={{ fontFamily: "'EB Garamond', serif" }}
               >
                 {groomName}
               </h3>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-[rgb(225,188,124)]/80 font-serif">
-                Trưởng Nam
+              <p className="text-[10px] uppercase tracking-[0.3em] text-[rgb(225,188,124)]/80 font-serif capitalize">
+                {groomRank}
               </p>
             </div>
 
@@ -96,13 +100,13 @@ export function MinimalCoupleSpotlight({
 
             <div className="space-y-2">
               <h3
-                className="text-5xl text-[rgb(225,188,124)] font-light"
+                className="text-5xl text-[rgb(225,188,124)] font-light capitalize"
                 style={{ fontFamily: "'EB Garamond', serif" }}
               >
                 {brideName}
               </h3>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-[rgb(225,188,124)]/80 font-serif">
-                Thứ Nữ
+              <p className="text-[10px] uppercase tracking-[0.3em] text-[rgb(225,188,124)]/80 font-serif capitalize">
+                {brideRank}
               </p>
             </div>
           </div>

@@ -21,6 +21,7 @@ import { Timeline } from "@/widgets/timeline";
 import { GalleryGrid } from "@/widgets/gallery";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
 import { Envelope } from "@/widgets/envelope";
+import { greatVibes, playfairDisplay } from "@/shared/lib/fonts";
 import "./styles.css";
 
 interface LiveViewProps {
@@ -35,8 +36,9 @@ export function LiveView({
   previewMode,
 }: LiveViewProps) {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const { playing, setPlaying, togglePlay, audioRef } = useWeddingMusic(weddingData.musicUrl || "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3");
+  const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(weddingData.musicUrl || "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3");
   const { messages, handleSendMessage } = useGuestbook(weddingData.slug);
 
   useEffect(() => {
@@ -52,8 +54,6 @@ export function LiveView({
     }
   };
 
-  const primaryEvent = weddingData.events[0];
-
   return (
     <div className={`w-full relative font-sans text-center long-phung-theme transition-all duration-500 ${!envelopeOpen ? "h-[100dvh] overflow-hidden" : ""}`}>
       {/* Background audio */}
@@ -68,7 +68,7 @@ export function LiveView({
           guestName={guestName}
           onOpen={() => {
             setEnvelopeOpen(true);
-            setPlaying(true);
+            if (weddingData.musicUrl) setPlaying(true);
           }}
         />
       )}
@@ -78,42 +78,53 @@ export function LiveView({
         {/* Fixed Music Toggle */}
         <button
           onClick={togglePlay}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7a0014] text-[#FFBE89] flex items-center justify-center border-2 border-[#FFBE89] shadow-lg active:scale-95 transition-all cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-b from-[#aa0000] to-[#5a0000] text-[#ffd700] flex items-center justify-center border-2 border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.4)] active:scale-95 transition-all cursor-pointer"
         >
-          {playing ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          {playing ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </button>
 
         {/* ── BACKGROUND FIXED MÔ TÍP ── */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 bg-[#7a0014]"></div>
+          <div className="absolute inset-0 bg-[#8b0000] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#aa0000] via-[#8b0000] to-[#5a0000]"></div>
           {/* Đan xen nhau làm background chìm */}
-          <img src={bgImg1.src} alt="" className="absolute top-[10%] -left-[10%] w-[500px] opacity-40 rotate-[25deg]" />
-          <img src={bgImg2.src} alt="" className="absolute bottom-[10%] -right-[10%] w-[500px] opacity-40 -rotate-[25deg]" />
+          <img src={bgImg1.src} alt="" className="absolute top-[5%] -left-[10%] md:left-[5%] w-[300px] md:w-[400px] opacity-20 mix-blend-screen" />
+          <img src={bgImg2.src} alt="" className="absolute bottom-[5%] -right-[10%] md:right-[5%] w-[300px] md:w-[400px] opacity-20 mix-blend-screen" />
         </div>
 
-        <div className="relative z-10 max-w-2xl mx-auto px-4 pb-20 pt-10">
+        {/* ── INVITATION COVER (Full Screen) ── */}
+        <InvitationCover
+          onScrollNext={() => contentRef.current?.scrollIntoView({ behavior: "smooth" })}
+          groomName={weddingData.groomName}
+          brideName={weddingData.brideName}
+          weddingDate={weddingData.weddingDate}
+          guestName={guestName}
+          coverImageUrl={weddingData.coverImage}
+        />
+
+        <div ref={contentRef} className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 pb-20 pt-10">
+          
           {/* ── ARCH COVER ── */}
-          <section className="mb-16 flex flex-col items-center w-full">
-            <div className="flex items-center justify-center gap-4 sm:gap-6 mb-8 w-full max-w-2xl mx-auto px-2">
-              <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-[1.3rem] sm:text-3xl md:text-4xl uppercase tracking-widest flex-1 text-right whitespace-nowrap">
+          <section className="mb-12 md:mb-20 flex flex-col items-center w-full">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8 w-full">
+              <h1 className={`${greatVibes.className} text-[3rem] md:text-[5rem] text-[#ffd700] flex-1 md:text-right whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>
                 {weddingData.groomName}
               </h1>
-              <div className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 border border-[#FFBE89] rounded-full flex items-center justify-center">
-                 <img src={hyImg.src} className="w-10 h-10 sm:w-12 sm:h-12" alt="Hỷ" />
+              <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 border-2 border-[#d4af37] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.3)] bg-[#8b0000]/50 backdrop-blur-sm animate-float">
+                 <img src={hyImg.src} className="w-10 h-10 md:w-12 md:h-12" alt="Hỷ" />
               </div>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-[1.3rem] sm:text-3xl md:text-4xl uppercase tracking-widest flex-1 text-left whitespace-nowrap">
+              <h1 className={`${greatVibes.className} text-[3rem] md:text-[5rem] text-[#ffd700] flex-1 md:text-left whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>
                 {weddingData.brideName}
               </h1>
             </div>
 
             {weddingData.galleryImages && weddingData.galleryImages[0] && (
-              <div className="relative w-[90%] sm:w-[80%] max-w-sm mx-auto mt-12 mb-8">
-                {/* 2 Birds on top left and right */}
-                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-12 -left-6 sm:-left-12 w-24 sm:w-32 -scale-x-100 opacity-90 z-20" alt="chim én" />
-                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-12 -right-6 sm:-right-12 w-24 sm:w-32 opacity-90 z-20" alt="chim én" />
+              <div className="relative w-full max-w-xs md:max-w-md mx-auto mt-8 md:mt-12 mb-8 drop-shadow-2xl">
+                {/* 2 Birds on top left and right - Using placeholders for now if not available, keeping img tag structure */}
+                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-8 md:-top-12 -left-4 md:-left-12 w-20 md:w-32 -scale-x-100 opacity-90 z-20" alt="chim én" />
+                <img src="https://chungdoi.com/images/themes/longphung-v3-red/chim-en.webp" className="absolute -top-8 md:-top-12 -right-4 md:-right-12 w-20 md:w-32 opacity-90 z-20" alt="chim én" />
 
                 {/* The framed image container */}
-                <div className="relative aspect-[754/1099] w-full">
+                <div className="relative aspect-[754/1099] w-full border-[6px] md:border-[10px] border-[#d4af37] rounded-tl-full rounded-tr-full overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.4)]">
                   {/* The actual photo */}
                   <img
                     src={weddingData.galleryImages[0]}
@@ -124,40 +135,40 @@ export function LiveView({
                   <img 
                     src={frame1Svg.src} 
                     alt="Frame" 
-                    className="absolute inset-0 w-full h-full pointer-events-none z-10" 
+                    className="absolute inset-0 w-full h-full pointer-events-none z-10 mix-blend-multiply opacity-50" 
                   />
                 </div>
               </div>
             )}
             
-            <p className="mt-8 text-[#FFBE89] font-serif tracking-[0.2em]">{formatDate(weddingData.weddingDate)}</p>
+            <p className={`${playfairDisplay.className} mt-6 md:mt-8 text-[#ffd700] text-sm md:text-lg tracking-[0.2em] md:tracking-[0.4em] uppercase font-bold`}>{formatDate(weddingData.weddingDate)}</p>
           </section>
 
           {/* ── WEDDING EVENTS ── */}
-          <section id="countdown" className="mb-16 relative">
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Sự Kiện</h2>
-              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+          <section id="countdown" className="mb-16 md:mb-24 relative">
+            <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+              <h2 className={`${playfairDisplay.className} text-xl md:text-3xl text-[#ffd700] uppercase tracking-widest m-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Sự Kiện</h2>
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]"></div>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-8 md:gap-12 md:grid-cols-2">
               {weddingData.events.map((ev, idx) => (
-                <div key={idx} className="relative p-6 bg-[#660000] border-2 border-[#FFBE89]/40 rounded-t-full rounded-b-lg overflow-hidden shadow-xl mt-8">
-                  <div className="absolute inset-0 opacity-30 pointer-events-none flex justify-center items-center overflow-hidden">
-                     <img src={idx === 0 ? bgImg1.src : bgImg2.src} className="w-[150%] h-[150%] object-cover" alt="" />
+                <div key={idx} className="relative p-6 md:p-8 bg-gradient-to-b from-[#8b0000] to-[#5a0000] border border-[#d4af37]/40 rounded-t-full rounded-b-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] group hover:-translate-y-2 transition-transform duration-300">
+                  <div className="absolute inset-0 opacity-20 pointer-events-none flex justify-center items-center overflow-hidden mix-blend-screen">
+                     <img src={idx === 0 ? bgImg1.src : bgImg2.src} className="w-[120%] h-[120%] object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                   </div>
                   
-                  <div className="relative z-10 flex flex-col items-center pt-8">
-                    <h3 className="text-[#FFBE89] font-serif text-xl uppercase mb-1 tracking-widest">{ev.title}</h3>
-                    <div className="w-12 h-px bg-[#FFBE89]/30 mb-4"></div>
+                  <div className="relative z-10 flex flex-col items-center pt-10 md:pt-14">
+                    <h3 className={`${playfairDisplay.className} text-[#ffd700] text-xl md:text-2xl uppercase mb-2 md:mb-4 tracking-widest drop-shadow-md`}>{ev.title}</h3>
+                    <div className="w-16 h-[2px] bg-[#d4af37]/50 mb-4 md:mb-6"></div>
                     
-                    <p className="text-white font-serif text-lg mb-1">{ev.date}</p>
-                    <p className="text-[#FFBE89] font-sans text-xs uppercase tracking-widest mb-4">Thời gian: {ev.time}</p>
+                    <p className={`${playfairDisplay.className} text-white text-lg md:text-xl mb-2 font-medium`}>{ev.date}</p>
+                    <p className="text-[#ffd700] font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] mb-6 md:mb-8 bg-[#5a0000]/80 px-4 py-1.5 rounded-full border border-[#d4af37]/30">Thời gian: {ev.time}</p>
                     
-                    <div className="bg-[#5a0001] w-full p-4 rounded-md border border-[#FFBE89]/20 text-sm">
-                      <p className="font-bold text-[#FFBE89] mb-1">{ev.locationName}</p>
-                      <p className="text-white/80 text-xs leading-relaxed">{ev.address}</p>
+                    <div className="bg-[#5a0000]/80 w-full p-4 md:p-6 rounded-xl border border-[#d4af37]/30 text-sm md:text-base backdrop-blur-md shadow-inner">
+                      <p className="font-bold text-[#ffd700] mb-2 text-base md:text-lg">{ev.locationName}</p>
+                      <p className="text-white/90 text-xs md:text-sm leading-relaxed">{ev.address}</p>
                     </div>
                   </div>
                 </div>
@@ -167,13 +178,13 @@ export function LiveView({
 
           {/* ── TIMELINE ── */}
           {weddingData.timeline && weddingData.timeline.length > 0 && (
-            <section className="mb-16">
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Lịch Trình</h2>
-                <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+            <section className="mb-16 md:mb-24">
+              <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
+                <div className="w-12 md:w-24 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+                <h2 className={`${playfairDisplay.className} text-xl md:text-3xl text-[#ffd700] uppercase tracking-widest m-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Lịch Trình</h2>
+                <div className="w-12 md:w-24 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]"></div>
               </div>
-              <div className="bg-[#660000]/80 rounded-xl p-4 border border-[#FFBE89]/20">
+              <div className="bg-gradient-to-b from-[#8b0000]/80 to-[#5a0000]/80 rounded-2xl p-4 md:p-8 border border-[#d4af37]/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)] backdrop-blur-sm">
                 <Timeline variant="vertical" data={weddingData.timeline} />
               </div>
             </section>
@@ -181,71 +192,109 @@ export function LiveView({
 
           {/* ── GALLERY ── */}
           {weddingData.galleryImages && weddingData.galleryImages.length > 0 && (
-            <section className="mb-16">
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Album Ảnh</h2>
-                <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+            <section className="mb-16 md:mb-24">
+              <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
+                <div className="w-12 md:w-24 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+                <h2 className={`${playfairDisplay.className} text-xl md:text-3xl text-[#ffd700] uppercase tracking-widest m-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Album Ảnh</h2>
+                <div className="w-12 md:w-24 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]"></div>
               </div>
-              <GalleryGrid variant="masonry" images={weddingData.galleryImages} />
+              <div className="bg-[#8b0000]/30 p-2 md:p-4 rounded-2xl border border-[#d4af37]/20 backdrop-blur-sm">
+                 <GalleryGrid variant="masonry" images={weddingData.galleryImages} />
+              </div>
             </section>
           )}
 
           {/* ── GIFT INFO ── */}
-          <section className="mb-16">
-             <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Hộp Mừng Cưới</h2>
-              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+          <section className="mb-16 md:mb-24">
+             <div className="flex items-center justify-center gap-4 mb-6 md:mb-8">
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+              <h2 className={`${playfairDisplay.className} text-xl md:text-3xl text-[#ffd700] uppercase tracking-widest m-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Hộp Mừng Cưới</h2>
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]"></div>
             </div>
             
-            <p className="text-[#f3e5c8]/80 text-sm italic mb-6">Sự hiện diện của quý vị là món quà quý giá nhất. Nếu có lòng gửi thiệp mừng, quý vị có thể gửi qua số tài khoản dưới đây:</p>
+            <p className="text-[#f3e5c8]/90 text-xs md:text-sm italic mb-8 md:mb-12 max-w-2xl mx-auto px-4 font-sans leading-relaxed">
+              Sự hiện diện của quý vị là món quà quý giá nhất đối với chúng tôi. Nếu có lòng gửi thiệp mừng, quý vị có thể gửi qua số tài khoản dưới đây:
+            </p>
             
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
                {weddingData.giftInfo?.groomAccountNumber && (
-                  <div className="p-5 bg-[#5a0001] border border-[#FFBE89]/30 rounded-lg text-left relative overflow-hidden">
-                    <img src={bgImg1.src} className="absolute top-[-20%] right-[-10%] w-32 opacity-40" alt="" />
-                    <p className="text-[#FFBE89] text-xs uppercase tracking-widest font-bold mb-3 border-b border-[#FFBE89]/20 pb-2 relative z-10">Nhà Trai</p>
-                    <p className="text-sm font-serif">NH: <span className="text-white">{weddingData.giftInfo.groomBankName}</span></p>
-                    <p className="text-sm font-serif">STK: <span className="text-white font-bold">{weddingData.giftInfo.groomAccountNumber}</span></p>
-                    <p className="text-sm font-serif">Tên: <span className="text-white">{weddingData.giftInfo.groomAccountName}</span></p>
+                  <div className="p-6 md:p-8 bg-gradient-to-b from-[#b22222] to-[#8b0000] border-2 border-[#d4af37] rounded-xl text-left relative overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.4)] group">
+                    {/* Flap of the red envelope */}
+                    <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-[#d4af37]/20 to-transparent pointer-events-none rounded-t-xl border-b border-[#d4af37]/30"></div>
+                    
+                    <img src={bgImg1.src} className="absolute -bottom-10 -right-10 w-48 opacity-20 mix-blend-screen group-hover:scale-110 transition-transform duration-500" alt="" />
+                    <div className="flex justify-between items-start mb-6 border-b border-[#d4af37]/30 pb-4 relative z-10">
+                      <p className={`${playfairDisplay.className} text-[#ffd700] text-lg md:text-xl uppercase tracking-widest font-bold`}>Nhà Trai</p>
+                      <div className="w-8 h-8 rounded-full border border-[#d4af37] flex items-center justify-center bg-[#8b0000]">
+                        <img src={hyImg.src} className="w-5 h-5" alt="Hỷ" />
+                      </div>
+                    </div>
+                    <div className="space-y-3 relative z-10 font-sans">
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80">Ngân hàng: <span className="text-white font-medium ml-2">{weddingData.giftInfo.groomBankName}</span></p>
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80 flex items-center">
+                        Số tài khoản: 
+                        <span className="text-[#ffd700] font-bold text-lg md:text-xl ml-2 bg-[#5a0000]/50 px-3 py-1 rounded-md">{weddingData.giftInfo.groomAccountNumber}</span>
+                      </p>
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80">Chủ tài khoản: <span className="text-white font-medium ml-2 uppercase">{weddingData.giftInfo.groomAccountName}</span></p>
+                    </div>
                   </div>
                 )}
                 {weddingData.giftInfo?.brideAccountNumber && (
-                  <div className="p-5 bg-[#5a0001] border border-[#FFBE89]/30 rounded-lg text-left relative overflow-hidden">
-                    <img src={bgImg2.src} className="absolute bottom-[-20%] right-[-10%] w-32 opacity-40" alt="" />
-                    <p className="text-[#FFBE89] text-xs uppercase tracking-widest font-bold mb-3 border-b border-[#FFBE89]/20 pb-2 relative z-10">Nhà Gái</p>
-                    <p className="text-sm font-serif">NH: <span className="text-white">{weddingData.giftInfo.brideBankName}</span></p>
-                    <p className="text-sm font-serif">STK: <span className="text-white font-bold">{weddingData.giftInfo.brideAccountNumber}</span></p>
-                    <p className="text-sm font-serif">Tên: <span className="text-white">{weddingData.giftInfo.brideAccountName}</span></p>
+                  <div className="p-6 md:p-8 bg-gradient-to-b from-[#b22222] to-[#8b0000] border-2 border-[#d4af37] rounded-xl text-left relative overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.4)] group">
+                    {/* Flap of the red envelope */}
+                    <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-[#d4af37]/20 to-transparent pointer-events-none rounded-t-xl border-b border-[#d4af37]/30"></div>
+                    
+                    <img src={bgImg2.src} className="absolute -bottom-10 -right-10 w-48 opacity-20 mix-blend-screen group-hover:scale-110 transition-transform duration-500" alt="" />
+                    <div className="flex justify-between items-start mb-6 border-b border-[#d4af37]/30 pb-4 relative z-10">
+                      <p className={`${playfairDisplay.className} text-[#ffd700] text-lg md:text-xl uppercase tracking-widest font-bold`}>Nhà Gái</p>
+                      <div className="w-8 h-8 rounded-full border border-[#d4af37] flex items-center justify-center bg-[#8b0000]">
+                        <img src={hyImg.src} className="w-5 h-5" alt="Hỷ" />
+                      </div>
+                    </div>
+                    <div className="space-y-3 relative z-10 font-sans">
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80">Ngân hàng: <span className="text-white font-medium ml-2">{weddingData.giftInfo.brideBankName}</span></p>
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80 flex items-center">
+                        Số tài khoản: 
+                        <span className="text-[#ffd700] font-bold text-lg md:text-xl ml-2 bg-[#5a0000]/50 px-3 py-1 rounded-md">{weddingData.giftInfo.brideAccountNumber}</span>
+                      </p>
+                      <p className="text-sm md:text-base text-[#f3e5c8]/80">Chủ tài khoản: <span className="text-white font-medium ml-2 uppercase">{weddingData.giftInfo.brideAccountName}</span></p>
+                    </div>
                   </div>
                 )}
             </div>
           </section>
 
           {/* ── GUESTBOOK ── */}
-          <section className="mb-16">
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#FFBE89]"></div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FFBE89" }} className="text-2xl uppercase tracking-widest m-0">Sổ Lưu Bút</h2>
-              <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#FFBE89]"></div>
+          <section className="mb-16 md:mb-24">
+            <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]"></div>
+              <h2 className={`${playfairDisplay.className} text-xl md:text-3xl text-[#ffd700] uppercase tracking-widest m-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Sổ Lưu Bút</h2>
+              <div className="w-12 md:w-24 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]"></div>
             </div>
             
-            <div className="bg-[#fff7f0] rounded-xl p-1 shadow-2xl">
-               <GuestbookForm onSendMessage={onSendMessage} />
-            </div>
-            <div className="mt-6 text-[#710001] bg-[#fff7f0] rounded-xl p-4 shadow-2xl">
-               <GuestbookList messages={messages} />
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-gradient-to-b from-[#fffaf0] to-[#fdf5e6] rounded-2xl p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-[#8b0000]/20 relative">
+                 {/* Decorative corners */}
+                 <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[#8b0000] opacity-50 rounded-tl-lg"></div>
+                 <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[#8b0000] opacity-50 rounded-tr-lg"></div>
+                 <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#8b0000] opacity-50 rounded-bl-lg"></div>
+                 <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#8b0000] opacity-50 rounded-br-lg"></div>
+
+                 <GuestbookForm onSendMessage={onSendMessage} />
+              </div>
+              <div className="mt-8 text-[#5a0000] bg-gradient-to-b from-[#fffaf0] to-[#fdf5e6] rounded-2xl p-4 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-[#8b0000]/20 max-h-[500px] overflow-y-auto custom-scrollbar">
+                 <GuestbookList messages={messages} />
+              </div>
             </div>
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="pt-8 pb-12 border-t border-[#FFBE89]/20 text-center flex flex-col items-center">
-             <div className="w-10 h-10 border border-[#FFBE89] rounded-full flex items-center justify-center mb-4">
-               <img src={hyImg.src} className="w-6 h-6" alt="Hỷ" />
+          <footer className="pt-12 pb-16 border-t border-[#d4af37]/30 text-center flex flex-col items-center">
+             <div className="w-12 h-12 md:w-16 md:h-16 border-2 border-[#d4af37] rounded-full flex items-center justify-center mb-6 shadow-[0_0_15px_rgba(212,175,55,0.3)] bg-[#8b0000]/50 backdrop-blur-sm animate-float">
+               <img src={hyImg.src} className="w-6 h-6 md:w-8 md:h-8" alt="Hỷ" />
             </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl text-[#FFBE89] tracking-widest uppercase mb-2">Trân Trọng Cảm ƠN</h2>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#FFBE89]/70 mt-2">
+            <h2 className={`${playfairDisplay.className} text-2xl md:text-4xl text-[#ffd700] tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>Trân Trọng Cảm Ơn</h2>
+            <p className={`${greatVibes.className} text-3xl md:text-5xl text-[#f3e5c8] mt-4 mb-2 opacity-90`}>
               {weddingData.groomName} &amp; {weddingData.brideName}
             </p>
           </footer>

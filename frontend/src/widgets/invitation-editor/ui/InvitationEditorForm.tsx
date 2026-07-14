@@ -235,10 +235,45 @@ export function InvitationEditorForm() {
     }
   };
 
+  const handleAudioUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "audio"); // Assuming backend handles this or just stores it
+
+        const res = await fetch(`${API_URL}/api/media/upload`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          const uploadedUrl = result.data?.url || result.url;
+          if (uploadedUrl) {
+            setBasicInfo({ ...basicInfo, musicUrl: uploadedUrl });
+          }
+        }
+      } catch (error) {
+        console.error("Audio upload failed", error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
   const templatePackage = getTemplatePackage(
     activeTemplate?.code || "minimal-green",
   );
   const schema = templatePackage.config.schema;
+
+  const PRESET_MUSIC = [
+    { name: "-- Chọn bài hát từ thư viện --", url: "" },
+    { name: "River Flows In You - Yiruma", url: "/audio/RiverFlowsInYou.mp3" },
+  ];
 
   const MENU_ITEMS = [
     { id: "Thông tin cơ bản", icon: FileText, alwaysShow: true },
@@ -547,18 +582,55 @@ export function InvitationEditorForm() {
                 <label className="block text-xs text-slate-500 mb-1.5">
                   Link nhạc nền (tuỳ chọn)
                 </label>
-                <input
-                  type="text"
-                  value={basicInfo.musicUrl || ""}
-                  onChange={(e) =>
-                    setBasicInfo({
-                      ...basicInfo,
-                      musicUrl: e.target.value,
-                    })
-                  }
-                  placeholder="VD: /audio/wedding-song.mp3 hoặc URL nhạc (.mp3)"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                />
+                
+                <div className="mb-3">
+                  <select 
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 bg-white"
+                    onChange={(e) => {
+                      if (e.target.value !== undefined) {
+                        setBasicInfo({ ...basicInfo, musicUrl: e.target.value });
+                      }
+                    }}
+                    value={PRESET_MUSIC.find(m => m.url === basicInfo.musicUrl) ? basicInfo.musicUrl : ""}
+                  >
+                    {PRESET_MUSIC.map((song, idx) => (
+                      <option key={idx} value={song.url}>{song.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    value={basicInfo.musicUrl || ""}
+                    onChange={(e) =>
+                      setBasicInfo({
+                        ...basicInfo,
+                        musicUrl: e.target.value,
+                      })
+                    }
+                    placeholder="VD: /audio/wedding-song.mp3 hoặc dán link nhạc..."
+                    className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                  />
+                  <div className="relative shrink-0">
+                    <button 
+                      type="button"
+                      disabled={isUploading}
+                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50"
+                    >
+                      {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                      Tải lên
+                    </button>
+                    <input 
+                      type="file" 
+                      accept="audio/mpeg, audio/mp3, audio/wav" 
+                      onChange={handleAudioUpload}
+                      disabled={isUploading}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      title="Tải file nhạc lên"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 

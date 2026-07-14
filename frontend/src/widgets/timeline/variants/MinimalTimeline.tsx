@@ -3,9 +3,14 @@ import { WeddingData } from "@/entities/invitation/model/types";
 
 interface MinimalTimelineProps {
   weddingData: WeddingData;
+  primaryColor?: string;
+  textColor?: string;
 }
 
-export function MinimalTimeline({ weddingData }: MinimalTimelineProps) {
+export function MinimalTimeline({ weddingData, primaryColor, textColor }: MinimalTimelineProps) {
+  const pColor = primaryColor || "rgb(225,188,124)";
+  const tColor = textColor || "rgb(225,188,124)";
+  
   const timelineSection = weddingData?.sections?.find((s:any) => s.type === 'timeline');
   const schedule = timelineSection?.settings?.timeline || [
     { time: "17:30", title: "Đón khách", description: "" },
@@ -20,7 +25,10 @@ export function MinimalTimeline({ weddingData }: MinimalTimelineProps) {
       <div className="max-w-xl mx-auto">
         <FadeIn>
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-2xl text-[rgb(225,188,124)] uppercase tracking-widest font-serif">
+            <h2 
+              className="text-2xl uppercase tracking-widest font-serif"
+              style={{ color: pColor }}
+            >
               THÔNG TIN TIỆC CƯỚI
             </h2>
           </div>
@@ -28,7 +36,10 @@ export function MinimalTimeline({ weddingData }: MinimalTimelineProps) {
 
         <div className="relative">
           {/* Vertical Line */}
-          <div className="absolute left-1/2 top-2 bottom-2 w-px -translate-x-1/2 bg-[rgb(225,188,124)]/50" />
+          <div 
+            className="absolute left-1/2 top-2 bottom-2 w-px -translate-x-1/2 opacity-50"
+            style={{ backgroundColor: pColor }}
+          />
 
           <div className="space-y-12">
             {schedule.map((item, i) => (
@@ -38,20 +49,32 @@ export function MinimalTimeline({ weddingData }: MinimalTimelineProps) {
                 className="relative flex items-center justify-center"
               >
                 <div className="w-1/2 text-right pr-4 sm:pr-8">
-                  <span className="text-base font-serif text-[rgb(225,188,124)] tracking-widest">
+                  <span 
+                    className="text-base font-serif tracking-widest"
+                    style={{ color: pColor }}
+                  >
                     {item.time}
                   </span>
                 </div>
 
                 {/* Dot */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[rgb(225,188,124)] ring-4 ring-[rgb(0,26,8)]" />
+                <div 
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full ring-4 ring-[rgb(0,26,8)]"
+                  style={{ backgroundColor: pColor }}
+                />
 
                 <div className="w-1/2 text-left pl-4 sm:pl-8 flex flex-col justify-center">
-                  <span className="text-base font-serif text-[rgb(225,188,124)] leading-tight">
+                  <span 
+                    className="text-base font-serif leading-tight"
+                    style={{ color: pColor }}
+                  >
                     {item.title}
                   </span>
                   {item.description && (
-                    <span className="text-sm font-sans text-[rgb(225,188,124)]/70 mt-1">
+                    <span 
+                      className="text-sm font-sans mt-1 opacity-70"
+                      style={{ color: pColor }}
+                    >
                       {item.description}
                     </span>
                   )}

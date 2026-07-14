@@ -141,7 +141,7 @@ export function LiveView({
           isFixed={!previewMode}
           onOpen={() => {
             setEnvelopeOpen(true);
-            setPlaying(true);
+            if (weddingData.musicUrl) setPlaying(true);
           }}
         />
       )}

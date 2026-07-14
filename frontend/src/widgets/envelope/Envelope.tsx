@@ -15,6 +15,8 @@ export interface EnvelopeProps {
   weddingTime?: string;
   onOpen: () => void;
   isFixed?: boolean;
+  primaryColor?: string;
+  textColor?: string;
 }
 
 const envelopeRegistry: Record<
