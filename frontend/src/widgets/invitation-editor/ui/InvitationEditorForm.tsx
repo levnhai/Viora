@@ -28,6 +28,10 @@ import {
   Clock,
   Edit2,
   Trash2,
+  CloudUpload,
+  Info,
+  Maximize2,
+  Move,
 } from "lucide-react";
 import { getTemplatePackage } from "@/entities/template/model/registry";
 
@@ -259,6 +263,36 @@ export function InvitationEditorForm() {
         }
       } catch (error) {
         console.error("Audio upload failed", error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "image");
+
+        const res = await fetch(`${API_URL}/api/media/upload`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          const uploadedUrl = result.data?.url || result.url;
+          if (uploadedUrl) {
+            setBasicInfo({ ...basicInfo, coverImage: uploadedUrl });
+          }
+        }
+      } catch (error) {
+        console.error("Cover image upload failed", error);
       } finally {
         setIsUploading(false);
       }
@@ -1034,11 +1068,177 @@ export function InvitationEditorForm() {
         )}
 
         {/* Other tabs can be implemented similarly... */}
+        {editorActiveTab === "Ảnh & Video" && (
+          <div className="p-8">
+            <div className="mb-8">
+              <h3 className="text-lg font-bold text-slate-800">Ảnh & Video</h3>
+              <p className="text-sm text-slate-500 mt-1">
+                Thêm và quản lý hình ảnh, video hiển thị trên thiệp cưới
+              </p>
+            </div>
+            
+            {/* Cấu hình Ảnh Bìa */}
+            {schema.cover?.hasCoverImage && (
+              <div className="mb-10">
+                <div className="mb-4 flex flex-col">
+                  <h4 className="text-sm font-bold text-slate-800">Ảnh bìa (Hero Image)</h4>
+                  <p className="text-xs text-slate-500 mt-1">Ảnh bìa sẽ hiển thị ở phần đầu của thiệp cưới</p>
+                </div>
+                
+                <div className="flex flex-col lg:flex-row gap-6">
+                  {basicInfo.coverImage ? (
+                    <div className="w-full lg:w-1/2 flex flex-col gap-3">
+                      <div className="aspect-[21/9] lg:aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm relative group">
+                        <img src={basicInfo.coverImage} className="w-full h-full object-cover" alt="Cover Image" />
+                        <button 
+                          onClick={() => setPreviewImage(basicInfo.coverImage || null)}
+                          className="absolute bottom-3 right-3 p-2 bg-black/40 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 backdrop-blur-sm"
+                        >
+                          <Maximize2 size={16} />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="relative flex-1">
+                          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                            <Edit2 size={16} /> Sửa ảnh bìa
+                          </button>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={handleCoverImageUpload}
+                            disabled={isUploading}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                            title="Tải ảnh bìa lên"
+                          />
+                        </div>
+                        <button 
+                          onClick={() => setBasicInfo({...basicInfo, coverImage: ""})}
+                          className="px-4 py-2.5 text-rose-500 text-sm font-medium hover:bg-rose-50 rounded-lg transition-colors flex-1 lg:flex-none text-center"
+                        >
+                          Xóa ảnh
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full lg:w-1/2">
+                      <div className="w-full aspect-[21/9] lg:aspect-[16/9] rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-400">
+                        <Images size={32} className="opacity-40" />
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className={`w-full lg:w-1/2 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all rounded-xl flex flex-col items-center justify-center p-8 text-center relative ${basicInfo.coverImage ? 'opacity-40 hover:opacity-100' : ''}`}>
+                    <div className="w-12 h-12 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center text-slate-500 mb-3">
+                      {isUploading ? <Loader2 size={24} className="animate-spin text-indigo-500" /> : <CloudUpload size={24} />}
+                    </div>
+                    <h5 className="text-sm font-semibold text-slate-700 mb-1">Thay đổi ảnh bìa</h5>
+                    <p className="text-xs text-slate-500 mb-0.5">Định dạng: JPG, PNG, WebP</p>
+                    <p className="text-xs text-slate-400">Kích thước khuyến nghị: 1920x1080px</p>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleCoverImageUpload}
+                      disabled={isUploading}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Ảnh & Video nổi bật */}
+            <div>
+              <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">Ảnh & Video nổi bật</h4>
+                  <p className="text-xs text-slate-500 mt-1">Hiển thị trên trang chủ của thiệp cưới</p>
+                </div>
+                <div className="relative">
+                  <button 
+                    disabled={isUploading}
+                    className={`flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold transition-colors ${isUploading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-rose-100'}`}
+                  >
+                    {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />} 
+                    Thêm ảnh / video
+                  </button>
+                  <input 
+                    type="file" 
+                    multiple
+                    accept="image/*" 
+                    onChange={handleGalleryUpload}
+                    disabled={isUploading}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {galleryImages.map((img, idx) => (
+                  <div key={img} className="bg-white border border-slate-200 rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-shadow">
+                    <div className="aspect-[4/3] relative bg-slate-100">
+                      <img src={img} className="w-full h-full object-cover" alt={`Gallery ${idx}`} />
+                      <div className="absolute top-2 right-2 flex gap-1">
+                        <button className="p-1.5 bg-black/40 text-white rounded-md hover:bg-black/60 transition-colors backdrop-blur-sm cursor-grab active:cursor-grabbing">
+                          <Move size={14} />
+                        </button>
+                      </div>
+                      {idx === 0 && schema.cover?.hasCoverImage && !basicInfo.coverImage && (
+                        <div className="absolute top-2 left-2 px-2 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded">
+                          Ảnh bìa
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm font-medium text-slate-700">Ảnh {idx + 1}</span>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="relative">
+                            <button className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md">
+                              <Edit2 size={14} />
+                            </button>
+                          </div>
+                          <button 
+                            onClick={() => handleRemoveGalleryImage(img)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400">1920 x 1280 • 2.0 MB</span>
+                    </div>
+                  </div>
+                ))}
+                
+                {galleryImages.length === 0 && (
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 bg-slate-50">
+                    <Images size={32} className="mb-3 text-slate-300" />
+                    <p className="text-sm font-medium">Chưa có ảnh/video nào</p>
+                    <p className="text-xs mt-1">Nhấn nút "Thêm ảnh / video" để tải lên</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3">
+                <div className="mt-0.5"><div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><Info size={12}/></div></div>
+                <div>
+                  <h5 className="text-sm font-semibold text-blue-800 mb-1">Hướng dẫn</h5>
+                  <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
+                    <li>Ảnh sẽ hiển thị theo thứ tự từ trái sang phải, từ trên xuống dưới.</li>
+                    <li>Kéo thả để thay đổi thứ tự hiển thị.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {editorActiveTab !== "Thông tin cơ bản" &&
           editorActiveTab !== "Lời ngỏ" &&
           editorActiveTab !== "Quà mừng" &&
           editorActiveTab !== "Album ảnh" &&
-          editorActiveTab !== "Timeline sự kiện" && (
+          editorActiveTab !== "Timeline sự kiện" &&
+          editorActiveTab !== "Ảnh & Video" && (
             <div className="flex flex-col items-center justify-center py-20 text-slate-400 text-sm">
               <p>Đang xây dựng nội dung cho tab này...</p>
             </div>

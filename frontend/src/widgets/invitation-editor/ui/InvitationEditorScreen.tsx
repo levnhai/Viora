@@ -73,6 +73,9 @@ export function InvitationEditorScreen() {
           },
         ],
         musicUrl: basicInfo.musicUrl,
+        templateConfig: {
+          coverImage: basicInfo.coverImage,
+        },
       };
 
       const res = await fetch(`${API_URL}/api/weddings`, {

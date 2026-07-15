@@ -44,6 +44,7 @@ export interface BasicInfo {
   address: string;
   mapLink: string;
   musicUrl?: string;
+  coverImage?: string;
 }
 
 export interface PublishSettings {

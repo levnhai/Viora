@@ -1,8 +1,9 @@
 import { ComponentType } from "react";
 import { MinimalEventInfo } from "./variants/MinimalEventInfo";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { EventInfo1 } from "@/widgets/event-info/variants/EventInfo1";
 
-export type EventInfoKey = "minimal" | "royal" | "lavender" | "floral";
+export type EventInfoKey = "minimal" | "EventInfo1";
 
 export interface EventInfoProps {
   variantId: EventInfoKey;
@@ -14,9 +15,7 @@ export interface EventInfoProps {
 
 const eventInfoRegistry: Record<EventInfoKey, ComponentType<any>> = {
   minimal: MinimalEventInfo,
-  royal: MinimalEventInfo, // Fallback tạm thời
-  lavender: MinimalEventInfo, // Fallback tạm thời
-  floral: MinimalEventInfo, // Fallback tạm thời
+  EventInfo1: EventInfo1,
 };
 
 export function EventInfo({ variantId, ...props }: EventInfoProps) {

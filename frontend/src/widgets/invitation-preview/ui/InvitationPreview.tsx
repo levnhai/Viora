@@ -53,6 +53,9 @@ export function InvitationPreview() {
       },
     ],
     timeline: [],
+    templateConfig: {
+      coverImage: basicInfo.coverImage,
+    },
   };
 
   return (

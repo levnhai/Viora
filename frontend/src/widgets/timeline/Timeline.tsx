@@ -3,8 +3,9 @@ import { LoveStoryTimelineItem, WeddingData } from "@/entities/invitation/model/
 import { VerticalTimeline } from "./variants/VerticalTimeline";
 import { SimpleList } from "./variants/SimpleList";
 import { MinimalTimeline } from "./variants/MinimalTimeline";
+import { Timeline1 } from "./variants/Timeline1";
 
-export type TimelineKey = "vertical" | "slider" | "simple" | "minimal";
+export type TimelineKey = "vertical" | "slider" | "simple" | "minimal" | "Timeline1";
 
 interface TimelineProps {
   variant: TimelineKey;
@@ -18,7 +19,8 @@ const timelineRegistry: Record<TimelineKey, ComponentType<any>> = {
   vertical: VerticalTimeline,
   slider: VerticalTimeline, // Re-use vertical or slider if horizontal timeline is made
   simple: SimpleList,
-  minimal: MinimalTimeline,
+  minimal: Timeline1, // Map minimal to Timeline1 for this temp
+  Timeline1: Timeline1,
 };
 
 export function Timeline({ variant, data = [], weddingData, ...props }: TimelineProps) {

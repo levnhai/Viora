@@ -54,5 +54,6 @@ export interface WeddingData {
   brideTitle?: string;
   displayOrder?: "groom_first" | "bride_first";
   isCoverImageVisible?: boolean;
+  templateConfig?: Record<string, any>;
   [key: string]: any;
 }

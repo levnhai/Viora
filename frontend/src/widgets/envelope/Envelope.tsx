@@ -3,8 +3,14 @@ import { RoyalEnvelope } from "./variants/RoyalEnvelope";
 import { MinimalEnvelope } from "./variants/MinimalEnvelope";
 import { LavenderEnvelope } from "./variants/LavenderEnvelope";
 import { FloralEnvelope } from "./variants/FloralEnvelope";
+import { Envelope_4 } from "./variants/envelope_4";
 
-export type EnvelopeKey = "royal" | "minimal" | "lavender" | "floral";
+export type EnvelopeKey =
+  | "royal"
+  | "minimal"
+  | "lavender"
+  | "floral"
+  | "envelope_4";
 
 export interface EnvelopeProps {
   variant: EnvelopeKey;
@@ -19,14 +25,12 @@ export interface EnvelopeProps {
   textColor?: string;
 }
 
-const envelopeRegistry: Record<
-  EnvelopeKey,
-  ComponentType<any>
-> = {
+const envelopeRegistry: Record<EnvelopeKey, ComponentType<any>> = {
   royal: RoyalEnvelope,
   minimal: MinimalEnvelope,
   lavender: LavenderEnvelope,
   floral: FloralEnvelope,
+  envelope_4: Envelope_4,
 };
 
 export function Envelope({ variant, ...props }: EnvelopeProps) {

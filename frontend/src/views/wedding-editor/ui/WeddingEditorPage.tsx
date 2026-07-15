@@ -177,6 +177,8 @@ export function WeddingEditorPage({
     },
   });
 
+  const currentTemplate = TEMPLATES.find((t) => t.code === weddingData?.templateId) || TEMPLATES[0];
+
   const [loading, setLoading] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -777,6 +779,27 @@ export function WeddingEditorPage({
                     </div>
                   </div>
 
+                  {currentTemplate.schema.cover.hasCoverImage && (
+                    <div className="space-y-1 pt-3 border-t border-zinc-800">
+                      <label className="text-[10px] font-semibold text-pink-500 uppercase tracking-wider">Ảnh bìa thiệp (Cover)</label>
+                      <input 
+                        type="text"
+                        value={weddingData.templateConfig?.coverImage || ""}
+                        placeholder="Nhập đường dẫn URL ảnh khổ dọc (3:4)"
+                        onChange={(e) => {
+                          setWeddingData((prev) => ({
+                            ...prev,
+                            templateConfig: {
+                              ...prev.templateConfig,
+                              coverImage: e.target.value,
+                            }
+                          }));
+                        }}
+                        className="w-full border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs bg-zinc-900 text-zinc-100 outline-none focus:border-pink-500"
+                      />
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <label className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Thứ tự hiển thị</label>
                     <div className="flex gap-2">
@@ -1250,6 +1273,28 @@ export function WeddingEditorPage({
                       />
                     </div>
                   </div>
+
+                  {currentTemplate.schema.cover.hasCoverImage && (
+                    <div className="space-y-1 pt-3 border-t border-slate-100">
+                      <label className="block text-[11px] font-semibold text-[#db2777] uppercase tracking-wider">Ảnh bìa (Cover Image)</label>
+                      <input
+                        type="text"
+                        value={weddingData.templateConfig?.coverImage || ""}
+                        onChange={(e) => {
+                          setWeddingData((prev) => ({
+                            ...prev,
+                            templateConfig: {
+                              ...prev.templateConfig,
+                              coverImage: e.target.value,
+                            }
+                          }));
+                        }}
+                        placeholder="URL ảnh bìa (3:4 dọc)"
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-[#db2777] bg-slate-50/30"
+                      />
+                    </div>
+                  )}
+
                   <div className="space-y-1">
                     <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Link nhạc nền</label>
                     <input
