@@ -14,7 +14,7 @@ import { Timeline } from "@/widgets/timeline";
 import { Envelope } from "@/widgets/envelope";
 import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
 
 import img_1 from "@/shared/assets/image/flower/img_1.png";
@@ -32,6 +32,11 @@ export function LiveView({
 }: LiveViewProps) {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
+
+  const colorPalette = {
+    primaryColor: "#001A08",
+    textColor: "#E1BC7C",
+  };
 
   const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
     weddingData.musicUrl,
@@ -69,8 +74,8 @@ export function LiveView({
           weddingDate={weddingData.weddingDate}
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
-          primaryColor="#001A08"
-          textColor="#E1BC7C"
+          primaryColor={colorPalette.primaryColor}
+          textColor={colorPalette.textColor}
           onOpen={() => {
             setEnvelopeOpen(true);
             if (weddingData.musicUrl) setPlaying(true);
@@ -79,77 +84,91 @@ export function LiveView({
       ) : (
         <div className="relative z-10 w-full bg-[rgb(0,26,8)]">
           <div className="max-w-3xl mx-auto min-h-screen relative pb-20">
-            <FadeIn>
+            {/* hero */}
+            <GsapReveal direction="up" distance={50}>
               <InvitationCover
                 weddingData={weddingData}
                 guestName={guestName}
               />
-            </FadeIn>
+            </GsapReveal>
             <div className="relative pt-8 pb-12 mt-4 mb-16">
               <MinimalFrame />
-              <FadeIn>
+              {/* thông tin tiệc cưới */}
+              <GsapReveal direction="up" distance={40}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />
-              </FadeIn>
+              </GsapReveal>
 
-              <FadeIn className="flex justify-center my-2">
+              <GsapReveal
+                direction="up"
+                distance={30}
+                className="flex justify-center my-0 sm:my-0"
+              >
                 <img
                   src={img_1.src}
                   alt="divider"
                   className="w-24 sm:w-32 opacity-40"
                 />
-              </FadeIn>
+              </GsapReveal>
 
-              <FadeIn>
+              <GsapReveal direction="up" distance={40}>
                 <EventInfo
                   variantId="minimal"
                   weddingData={weddingData}
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
-                  primaryColor={weddingData.primaryColor}
-                  textColor={weddingData.textColor}
+                  primaryColor={colorPalette.primaryColor}
+                  textColor={colorPalette.textColor}
                 />
-              </FadeIn>
+              </GsapReveal>
 
-              <FadeIn className="flex justify-center my-2">
+              <GsapReveal
+                direction="up"
+                distance={30}
+                className="flex justify-center my-0 sm:my-0"
+              >
                 <img
                   src={img_1.src}
                   alt="divider"
                   className="w-24 sm:w-32 opacity-40 -scale-y-100"
                 />
-              </FadeIn>
+              </GsapReveal>
 
               {/* bộ sưu tập ảnh */}
               <Gallery
                 variantId="minimal"
                 weddingData={weddingData}
-                primaryColor={weddingData.primaryColor}
-                textColor={weddingData.textColor}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
               />
 
               {/* đếm ngược */}
               <Countdown
                 variantId="minimal"
                 weddingData={weddingData}
-                primaryColor={weddingData.primaryColor}
-                textColor={weddingData.textColor}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
               />
 
-              <FadeIn className="flex justify-center my-2">
+              <GsapReveal
+                direction="up"
+                distance={30}
+                className="flex justify-center my-0 sm:my-0"
+              >
                 <img
                   src={img_1.src}
                   alt="divider"
                   className="w-24 sm:w-32 opacity-40"
                 />
-              </FadeIn>
+              </GsapReveal>
 
               {/* thông tin tiệc cưới */}
-              <FadeIn>
+              <GsapReveal direction="up" distance={40}>
                 <Timeline
                   variant="minimal"
                   weddingData={weddingData}
-                  primaryColor={weddingData.primaryColor}
-                  textColor={weddingData.textColor}
+                  primaryColor={colorPalette.primaryColor}
+                  textColor={colorPalette.textColor}
                 />
-              </FadeIn>
+              </GsapReveal>
             </div>
 
             {/* địa điểm */}
@@ -157,26 +176,26 @@ export function LiveView({
               <VenueMap
                 variantId="minimal"
                 event={primaryEvent}
-                primaryColor={weddingData.primaryColor}
-                textColor={weddingData.textColor}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
               />
             )}
             {/*mừng cưới */}
-            <FadeIn>
+            <GsapReveal direction="up" distance={40}>
               <Registry variantId="minimal" weddingData={weddingData} />
-            </FadeIn>
+            </GsapReveal>
 
             {/* sổ lời chúc */}
-            <FadeIn>
+            <GsapReveal direction="up" distance={40}>
               <Guestbook
                 variantId="minimal"
                 messages={messages}
                 guestName={guestName}
                 onSendMessage={onSendMessage}
-                primaryColor={weddingData.primaryColor}
-                textColor={weddingData.textColor}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
               />
-            </FadeIn>
+            </GsapReveal>
           </div>
 
           {/* Nút bật/tắt nhạc */}

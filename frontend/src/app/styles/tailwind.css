@@ -4,6 +4,9 @@
 @import 'tw-animate-css';
 
 @theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-cursive: "Great Vibes", cursive;
   --animate-seal-pulse: seal-pulse 2s ease-in-out infinite;
   --animate-shine: shine 3s ease-in-out infinite;
   --animate-ambient-fall: ambient-fall linear infinite;

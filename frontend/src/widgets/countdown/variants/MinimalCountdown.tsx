@@ -1,7 +1,8 @@
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { useCountdown } from "@/shared/lib/hooks";
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
+import { useMemo } from "react";
 
 export interface MinimalCountdownProps {
   weddingData: WeddingData;
@@ -10,35 +11,31 @@ export interface MinimalCountdownProps {
 }
 
 export function MinimalCountdown({ weddingData, primaryColor, textColor }: MinimalCountdownProps) {
-  // Parse date and handle potential NaN issues
-  let targetDateMs = Date.now() + 86400000 * 30; // fallback to 30 days
-  try {
-    // Attempt to parse just the date first
-    const d = new Date(weddingData.weddingDate);
-    if (!isNaN(d.getTime())) {
-      // Nếu có giờ (vd "17:00"), ta gán giờ và phút vào ngày đó
-      if (weddingData.weddingTime) {
-        const [hours, minutes] = weddingData.weddingTime.split(":");
-        if (hours && minutes) {
-          d.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+  const targetDateMs = useMemo(() => {
+    let ms = Date.now() + 86400000 * 30; // fallback to 30 days
+    try {
+      if (!weddingData.weddingDate) return ms;
+      const d = new Date(weddingData.weddingDate);
+      if (!isNaN(d.getTime())) {
+        if (weddingData.weddingTime) {
+          const [hours, minutes] = weddingData.weddingTime.split(":");
+          if (hours && minutes) {
+            d.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+          }
+        }
+        ms = d.getTime();
+      } else {
+        const parts = weddingData.weddingDate.split(/[-/]/);
+        if (parts.length === 3) {
+          const d2 = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+          if (!isNaN(d2.getTime())) ms = d2.getTime();
         }
       }
-      targetDateMs = d.getTime();
-    } else {
-      // If the string is like DD-MM-YYYY, try basic split
-      const parts = weddingData.weddingDate.split(/[-/]/);
-      if (parts.length === 3) {
-        // Assume DD-MM-YYYY
-        const d2 = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-        if (!isNaN(d2.getTime())) targetDateMs = d2.getTime();
-      }
-    }
-  } catch (e) {
-    // fallback
-  }
+    } catch (e) {}
+    return ms;
+  }, [weddingData.weddingDate, weddingData.weddingTime]);
 
   const countdown = useCountdown(targetDateMs);
-  console.log(countdown);
 
   const formattedDate = formatVietnameseDate(weddingData.weddingDate, {
     includeWeekday: true,
@@ -48,9 +45,9 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
   const color = textColor || "rgb(225,188,124)";
 
   return (
-    <section className="pt-16 pb-4 px-4">
+    <section className="py-16 sm:py-24 px-4">
       <div className="max-w-4xl mx-auto">
-        <FadeIn className="text-center space-y-4 mb-10">
+        <GsapReveal direction="up" distance={30} className="text-center space-y-4 mb-10">
           <h2 
             className="text-2xl font-serif uppercase tracking-widest"
             style={{ color }}
@@ -63,9 +60,9 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
           >
             {formattedDate}
           </p>
-        </FadeIn>
+        </GsapReveal>
 
-        <FadeIn delay={200} className="flex justify-center gap-4 sm:gap-8">
+        <GsapReveal stagger={0.15} delay={0.2} direction="up" distance={30} className="flex justify-center gap-4 sm:gap-8">
           {[
             { label: "Ngày", value: countdown.days },
             { label: "Giờ", value: countdown.hours },
@@ -98,7 +95,7 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
               </span>
             </div>
           ))}
-        </FadeIn>
+        </GsapReveal>
       </div>
     </section>
   );

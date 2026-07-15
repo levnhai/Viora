@@ -94,7 +94,7 @@ export function MinimalEnvelope({
 
             <div className="relative z-10 text-center px-6 pt-28 pb-14 md:pt-24 md:pb-8 flex flex-col items-center">
               <h1
-                className="mb-2 flex flex-col items-center leading-tight text-4xl sm:text-5xl md:text-6xl"
+                className="mb-2 flex flex-col items-center leading-tight text-6xl sm:text-7xl md:text-8xl"
                 style={{
                   fontFamily: "'The Nautigal', cursive",
                   color: textColor,
@@ -133,28 +133,32 @@ export function MinimalEnvelope({
               </div>
 
               <div
-                className="text-[18px] mb-5 flex flex-col items-center font-serif"
+                className="text-[14px] sm:text-[15px] mb-5 flex flex-col items-center font-serif"
                 style={{ color: textColor, opacity: 0.75 }}
               >
                 <span>{weddingDateLabel}</span>
               </div>
 
-              <div className="mb-8">
-                <p
-                  className="text-[18px] font-light font-serif"
-                  style={{ color: textColor, opacity: 0.75 }}
-                >
-                  Thân Mời:{"   "}
-                  {guestName && (
+              {guestName && (
+                <div className="mb-8">
+                  <p
+                    className="text-[14px] sm:text-[15px] font-serif border rounded-full px-6 py-2 tracking-widest uppercase inline-block"
+                    style={{ 
+                      borderColor: `${textColor}40`, 
+                      color: textColor, 
+                      backgroundColor: `${textColor}0A` 
+                    }}
+                  >
+                    Thân Mời:{" "}
                     <span
-                      className="font-bold"
-                      style={{ color: textColor, opacity: 1 }}
+                      className="font-semibold ml-1 capitalize"
+                      style={{ color: textColor }}
                     >
                       {guestName}
                     </span>
-                  )}
-                </p>
-              </div>
+                  </p>
+                </div>
+              )}
 
               <button
                 onClick={onOpen}

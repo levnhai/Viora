@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
 
@@ -53,17 +53,17 @@ export function MinimalGallery({ weddingData, primaryColor, textColor }: Minimal
 
   return (
     <>
-      <section className="pt-4 pb-10 sm:pt-8 sm:pb-20 px-4 text-center relative">
-        <FadeIn>
+      <section className="py-16 sm:py-24 px-4 text-center relative">
+        <GsapReveal direction="up" distance={30}>
           <h2 
             className="text-2xl mb-12 uppercase tracking-widest font-serif"
             style={{ color }}
           >
             ALBUM ẢNH CƯỚI
           </h2>
-        </FadeIn>
+        </GsapReveal>
 
-        <FadeIn delay={100} className="max-w-xl mx-auto">
+        <GsapReveal delay={0.2} direction="up" distance={40} className="max-w-xl mx-auto">
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {displayImages.map((src, idx) => {
               const isLast = idx === 3;
@@ -88,7 +88,7 @@ export function MinimalGallery({ weddingData, primaryColor, textColor }: Minimal
               );
             })}
           </div>
-        </FadeIn>
+        </GsapReveal>
       </section>
 
       {/* Lightbox Modal */}

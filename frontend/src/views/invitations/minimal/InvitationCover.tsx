@@ -1,4 +1,4 @@
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import img_1 from "@/shared/assets/image/flower/img_1.png";
 
@@ -24,8 +24,10 @@ export function InvitationCover({
         />
       </div>
 
-      <FadeIn
-        delay={200}
+      <GsapReveal
+        delay={0.2}
+        direction="up"
+        distance={40}
         className="z-10 flex flex-col items-center mt-4 mb-6 space-y-4 pt-48 sm:pt-56 w-11/12 sm:w-4/5 md:w-3/5"
       >
         <p className="text-[rgb(225,188,124)] font-serif uppercase tracking-[0.2em] text-[12px] mb-4">
@@ -42,7 +44,7 @@ export function InvitationCover({
           {groomName || "Trung Hiếu"}
         </h1>
 
-        <div className="text-4xl sm:text-5xl text-[rgb(225,188,124)] font-serif italic my-2 opacity-80">
+        <div className="text-6xl sm:text-7xl text-[rgb(225,188,124)] font-cursive my-2 opacity-80">
           &
         </div>
 
@@ -55,11 +57,13 @@ export function InvitationCover({
         >
           {brideName || "Như Ý"}
         </h1>
-      </FadeIn>
+      </GsapReveal>
 
       {guestName && (
-        <FadeIn
-          delay={400}
+        <GsapReveal
+          delay={0.4}
+          direction="up"
+          distance={30}
           className="mt-16 z-10 border border-[rgb(225,188,124)]/30 rounded-full px-8 py-3 bg-[rgb(225,188,124)]/5"
         >
           <p className="text-lg font-serif text-[rgb(225,188,124)] uppercase tracking-widest">
@@ -68,7 +72,7 @@ export function InvitationCover({
               {guestName || " hai le"}
             </span>
           </p>
-        </FadeIn>
+        </GsapReveal>
       )}
 
       {/* Decorative Divider to separate Cover from next section */}

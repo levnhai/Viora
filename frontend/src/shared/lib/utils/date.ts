@@ -1,3 +1,5 @@
+import { Solar } from "lunar-javascript";
+
 export const formatDate = (dateStr: string) => {
   try {
     const d = new Date(dateStr);
@@ -66,18 +68,63 @@ export const formatVietnameseDate = (
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = d.getFullYear();
 
-    let result = `ngày ${day} tháng ${month} năm ${year}`;
+    let result = `${day} . ${month} . ${year}`;
 
     if (options?.includeWeekday) {
       result = `${weekdays[d.getDay()]}, ${result}`;
     }
 
-    if (options?.time) {
-      result += ` · ${options.time}`;
-    }
+    // if (options?.time) {
+    //   result += ` · ${options.time}`;
+    // }
 
     return result;
   } catch {
     return String(date);
+  }
+};
+
+export const getVietnameseLunarDate = (dateStr: string) => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+
+    const solar = Solar.fromYmd(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    const lunar = solar.getLunar();
+
+    const lunarDay = String(lunar.getDay()).padStart(2, "0");
+    const lunarMonth = String(lunar.getMonth()).padStart(2, "0");
+    const lunarYear = lunar.getYear();
+
+    const CAN = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"];
+    const CHI = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"];
+
+    const canStr = CAN[lunarYear % 10];
+    const chiStr = CHI[lunarYear % 12];
+
+    return `(Tức ngày ${lunarDay}/${lunarMonth} năm ${canStr} ${chiStr})`;
+  } catch (e) {
+    return "";
+  }
+};
+
+export const getVietnameseWeekday = (dateStr: string) => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+
+    const weekdays = [
+      "CHỦ NHẬT",
+      "THỨ HAI",
+      "THỨ BA",
+      "THỨ TƯ",
+      "THỨ NĂM",
+      "THỨ SÁU",
+      "THỨ BẢY",
+    ];
+
+    return weekdays[d.getDay()];
+  } catch {
+    return "";
   }
 };

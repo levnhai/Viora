@@ -1,4 +1,4 @@
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 interface MinimalTimelineProps {
@@ -7,12 +7,15 @@ interface MinimalTimelineProps {
   textColor?: string;
 }
 
-export function MinimalTimeline({ weddingData, primaryColor, textColor }: MinimalTimelineProps) {
-  const pColor = primaryColor || "rgb(225,188,124)";
-  const tColor = textColor || "rgb(225,188,124)";
-  
-  const timelineSection = weddingData?.sections?.find((s:any) => s.type === 'timeline');
-  const schedule = timelineSection?.settings?.timeline || [
+export function MinimalTimeline({
+  weddingData,
+  primaryColor,
+  textColor,
+}: MinimalTimelineProps) {
+  // Remove console.log
+  const pColor = textColor || "rgb(225,188,124)";
+  const tColor = primaryColor || "rgb(225,188,124)";
+  const schedule = weddingData?.timeline || [
     { time: "17:30", title: "Đón khách", description: "" },
     { time: "18:30", title: "Khai tiệc", description: "" },
     { time: "18:45", title: "Rót rượu, cắt bánh", description: "" },
@@ -21,35 +24,37 @@ export function MinimalTimeline({ weddingData, primaryColor, textColor }: Minima
   ];
 
   return (
-    <section className="pt-4 pb-10 sm:pt-8 sm:pb-20 px-4 relative">
+    <section className="pt-16 pb-16 sm:pt-24 sm:pb-32 px-4 relative">
       <div className="max-w-xl mx-auto">
-        <FadeIn>
+        <GsapReveal direction="up" distance={30}>
           <div className="text-center mb-16 space-y-4">
-            <h2 
+            <h2
               className="text-2xl uppercase tracking-widest font-serif"
               style={{ color: pColor }}
             >
               THÔNG TIN TIỆC CƯỚI
             </h2>
           </div>
-        </FadeIn>
+        </GsapReveal>
 
         <div className="relative">
           {/* Vertical Line */}
-          <div 
-            className="absolute left-1/2 top-2 bottom-2 w-px -translate-x-1/2 opacity-50"
+          <div
+            className="absolute left-[40%] top-2 bottom-2 w-px -translate-x-1/2 opacity-50"
             style={{ backgroundColor: pColor }}
           />
 
-          <div className="space-y-12">
+          <div className="space-y-16">
             {schedule.map((item, i) => (
-              <FadeIn
+              <GsapReveal
                 key={i}
-                delay={i * 100}
+                delay={i * 0.15}
+                direction={i % 2 === 0 ? "left" : "right"}
+                distance={50}
                 className="relative flex items-center justify-center"
               >
-                <div className="w-1/2 text-right pr-4 sm:pr-8">
-                  <span 
+                <div className="w-[40%] text-right pr-4 sm:pr-8">
+                  <span
                     className="text-base font-serif tracking-widest"
                     style={{ color: pColor }}
                   >
@@ -58,20 +63,20 @@ export function MinimalTimeline({ weddingData, primaryColor, textColor }: Minima
                 </div>
 
                 {/* Dot */}
-                <div 
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full ring-4 ring-[rgb(0,26,8)]"
+                <div
+                  className="absolute left-[40%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full ring-4 ring-[rgb(0,26,8)]"
                   style={{ backgroundColor: pColor }}
                 />
 
-                <div className="w-1/2 text-left pl-4 sm:pl-8 flex flex-col justify-center">
-                  <span 
+                <div className="w-[60%] text-left pl-4 sm:pl-8 flex flex-col justify-center">
+                  <span
                     className="text-base font-serif leading-tight"
                     style={{ color: pColor }}
                   >
                     {item.title}
                   </span>
                   {item.description && (
-                    <span 
+                    <span
                       className="text-sm font-sans mt-1 opacity-70"
                       style={{ color: pColor }}
                     >
@@ -79,7 +84,7 @@ export function MinimalTimeline({ weddingData, primaryColor, textColor }: Minima
                     </span>
                   )}
                 </div>
-              </FadeIn>
+              </GsapReveal>
             ))}
           </div>
         </div>

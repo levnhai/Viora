@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { Download, X } from "lucide-react";
 
@@ -54,9 +54,9 @@ export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
   };
 
   return (
-    <section className="py-10 sm:py-20 px-4 relative">
+    <section className="py-16 sm:py-24 px-4 relative">
       <div className="max-w-4xl mx-auto text-center">
-        <FadeIn>
+        <GsapReveal direction="up" distance={30}>
           <div className="mb-16">
             <h2 className="text-2xl text-[rgb(225,188,124)] uppercase tracking-widest font-serif">
               PHONG BAO MỪNG CƯỚI
@@ -118,7 +118,7 @@ export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
           <p className="text-[rgb(225,188,124)]/80 max-w-lg mx-auto font-serif text-sm leading-relaxed mt-12 px-4">
             Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!
           </p>
-        </FadeIn>
+        </GsapReveal>
 
         {/* Modal */}
         {mounted &&

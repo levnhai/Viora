@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FadeIn } from "@/shared/ui/FadeIn";
+import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { GuestMessage } from "@/entities/invitation/ui/GuestbookList";
 
 interface MinimalGuestbookProps {
@@ -17,8 +17,8 @@ export function MinimalGuestbook({
   primaryColor,
   textColor,
 }: MinimalGuestbookProps) {
-  const pColor = primaryColor || "rgb(225,188,124)";
-  const tColor = textColor || "rgb(225,188,124)";
+  const pColor = textColor || "rgb(225,188,124)";
+  const tColor = primaryColor || "rgb(225,188,124)";
   const [guestName, setGuestName] = useState(initialGuestName || "");
   const [guestMsg, setGuestMsg] = useState("");
 
@@ -30,9 +30,9 @@ export function MinimalGuestbook({
   }
 
   return (
-    <section className="py-10 sm:py-20 px-4 relative">
+    <section className="py-16 sm:py-24 px-4 relative">
       <div className="max-w-4xl mx-auto">
-        <FadeIn>
+        <GsapReveal direction="up" distance={30}>
           <div className="text-center mb-12 space-y-4">
             <h2 
               className="text-2xl font-serif uppercase tracking-widest"
@@ -41,9 +41,9 @@ export function MinimalGuestbook({
               SỔ LƯU BÚT
             </h2>
           </div>
-        </FadeIn>
+        </GsapReveal>
 
-        <FadeIn delay={100}>
+        <GsapReveal delay={0.2} direction="up" distance={40}>
           <div 
             className="max-w-xl mx-auto border p-8 rounded-xl relative"
             style={{ borderColor: pColor }}
@@ -73,18 +73,18 @@ export function MinimalGuestbook({
               <div className="text-right">
                 <button
                   type="submit"
-                  className="px-8 py-3 text-[rgb(0,26,8)] font-serif rounded-full text-sm font-semibold hover:opacity-90 transition-opacity uppercase"
-                  style={{ backgroundColor: pColor }}
+                  className="px-8 py-3 font-serif rounded-full text-sm font-semibold hover:opacity-90 transition-opacity uppercase"
+                  style={{ backgroundColor: pColor, color: tColor }}
                 >
                   GỬI LỜI CHÚC
                 </button>
               </div>
             </form>
           </div>
-        </FadeIn>
+        </GsapReveal>
 
         {messages && messages.length > 0 && (
-          <FadeIn delay={200} className="mt-16 max-w-2xl mx-auto">
+          <GsapReveal delay={0.4} direction="up" distance={40} className="mt-16 max-w-2xl mx-auto">
             <style>{`
               .guestbook-mask {
                 -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
@@ -159,7 +159,7 @@ export function MinimalGuestbook({
                   ))}
               </div>
             </div>
-          </FadeIn>
+          </GsapReveal>
         )}
       </div>
     </section>
