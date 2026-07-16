@@ -59,7 +59,7 @@ export function Timeline1({ weddingData }: Timeline1Props) {
   };
 
   return (
-    <section className="py-12 px-4 sm:px-8 relative z-20">
+    <section className="px-4 sm:px-8 relative z-20">
       <div className="max-w-xl mx-auto">
         <div
           className="rounded-[16px] p-8 sm:p-12 shadow-sm relative overflow-hidden"

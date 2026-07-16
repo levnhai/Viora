@@ -30,12 +30,10 @@ export function Guestbook_4({
   }
 
   return (
-    <section className="py-16 sm:py-24 px-4 relative">
+    <section className="pb-16 sm:py-24 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <GsapReveal delay={0.2} direction="up" distance={40}>
-          <div
-            className="max-w-xl mx-auto bg-[#f4efe6] p-6 sm:p-8 rounded-2xl shadow-md relative"
-          >
+          <div className="max-w-xl mx-auto bg-[#f4efe6] p-6 sm:p-8 rounded-2xl shadow-md relative">
             <div className="text-center mb-6 space-y-4">
               <h2
                 className="text-2xl font-serif uppercase tracking-widest font-bold"
@@ -44,7 +42,7 @@ export function Guestbook_4({
                 SỔ LƯU BÚT
               </h2>
             </div>
-            
+
             <form onSubmit={submitMessage} className="space-y-4">
               <div>
                 <input
@@ -72,7 +70,10 @@ export function Guestbook_4({
                 />
               </div>
               <div className="flex justify-between items-center mt-2">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl opacity-80" style={{ backgroundColor: `${pColor}15` }}>
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center text-xl opacity-80"
+                  style={{ backgroundColor: `${pColor}15` }}
+                >
                   🪄
                 </div>
                 <button
