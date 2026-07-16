@@ -1,14 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=The+Nautigal:wght@400;700&display=swap');
-@import url('https://chungdoi.com/fonts/font-face.css?v=2');
-Title: Cached Content
-
-Description: Fetched from cache
-
-Source: https://chungdoi.com/fonts/font-face.css?v=2
-
----
-
-/* Wedding Invitation Font Faces */
+﻿/* Wedding Invitation Font Faces */
 
 @font-face {
   font-family: "Pattaya";
@@ -18,7 +8,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Nháº­t BÃ¬nh Äá» (Figma 7907:35) â€” SVN-HC licensed fonts */
+/* Nhật Bình Đỏ (Figma 7907:35) — SVN-HC licensed fonts */
 @font-face {
   font-family: "SVN-HC Pacifico";
   src: url("https://chungdoi.com/fonts/SVN-HC-Pacifico.otf") format("opentype");
@@ -259,7 +249,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Hoáº¡ TÃ¬nh â€” Comic Helvetic */
+/* Hoạ Tình — Comic Helvetic */
 @font-face {
   font-family: "Comic Helvetic";
   src: url("https://chungdoi.com/fonts/ComicHelvetic-Light.ttf") format("truetype");
@@ -284,7 +274,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Hoáº¡ TÃ¬nh â€” SVN-HC Elixir Sans (section headings) */
+/* Hoạ Tình — SVN-HC Elixir Sans (section headings) */
 @font-face {
   font-family: "SVN-HC Elixir Sans";
   src: url("https://chungdoi.com/fonts/SVN-HC Elixir Sans.otf") format("opentype");
@@ -293,7 +283,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Hoáº¡ TÃ¬nh â€” Baloo Bhaijaan (announcement text) */
+/* Hoạ Tình — Baloo Bhaijaan (announcement text) */
 @font-face {
   font-family: "Baloo Bhaijaan";
   src: url("https://chungdoi.com/fonts/BalooBhaijaan-Regular.ttf") format("truetype");
@@ -302,7 +292,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Hoáº¡ TÃ¬nh â€” Noteworthy (danh xung Co dau / Chu re) */
+/* Hoạ Tình — Noteworthy (danh xung Co dau / Chu re) */
 @font-face {
   font-family: "Noteworthy";
   src: url("https://chungdoi.com/fonts/Noteworthy-Light.woff2") format("woff2");
@@ -319,7 +309,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Chateau Blue â€” DFVN New Eddy (hero couple names) */
+/* Chateau Blue — DFVN New Eddy (hero couple names) */
 @font-face {
   font-family: "DFVN New Eddy";
   src: url("https://chungdoi.com/fonts/DFVN-NewEddy-Regular.otf") format("opentype");
@@ -328,7 +318,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Chateau Blue â€” Alex Brush (script ampersand) */
+/* Chateau Blue — Alex Brush (script ampersand) */
 @font-face {
   font-family: "Alex Brush";
   src: url("https://chungdoi.com/fonts/AlexBrush-Regular.ttf") format("truetype");
@@ -337,7 +327,7 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-display: swap;
 }
 
-/* Chateau Blue â€” Cormorant Garamond (welcome heading, variable weight 300-700) */
+/* Chateau Blue — Cormorant Garamond (welcome heading, variable weight 300-700) */
 @font-face {
   font-family: "Cormorant Garamond";
   src: url("https://chungdoi.com/fonts/CormorantGaramond-Variable.ttf") format("truetype-variations");
@@ -345,7 +335,5 @@ Source: https://chungdoi.com/fonts/font-face.css?v=2
   font-style: normal;
   font-display: swap;
 }
-
-
 
 

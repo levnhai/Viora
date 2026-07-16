@@ -18,6 +18,11 @@ import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
 
 import img_1 from "@/shared/assets/image/flower/img_1.png";
+import img_6 from "@/shared/assets/image/flower/img_6.svg";
+import img_7 from "@/shared/assets/image/flower/img_7.svg";
+import img_8 from "@/shared/assets/image/flower/img_8.svg";
+import img_9 from "@/shared/assets/image/flower/img_9.svg";
+import bgPaper from "@/shared/assets/image/paper/paper1.webp";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -34,7 +39,7 @@ export function LiveView({
   const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
 
   const colorPalette = {
-    primaryColor: "#fdfbf6",
+    primaryColor: "transparent",
     textColor: "#7c6a60",
   };
 
@@ -64,7 +69,14 @@ export function LiveView({
     ) || weddingData.events[0];
 
   return (
-    <div className="w-full min-h-screen relative font-sans bg-[#fdfbf6] text-[#7c6a60] overflow-hidden">
+    <div
+      className="w-full min-h-screen relative font-sans text-[#7c6a60] overflow-hidden bg-center bg-repeat"
+      style={{
+        backgroundColor: "rgb(255, 247, 243)",
+        backgroundImage: `url(${bgPaper.src})`,
+        backgroundBlendMode: "multiply",
+      }}
+    >
       {/* phong bì */}
       {!envelopeOpen ? (
         <Envelope
@@ -74,7 +86,7 @@ export function LiveView({
           weddingDate={weddingData.weddingDate}
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
-          primaryColor={colorPalette.primaryColor}
+          primaryColor="#fdfbf6"
           textColor={colorPalette.textColor}
           onOpen={() => {
             setEnvelopeOpen(true);
@@ -82,8 +94,47 @@ export function LiveView({
           }}
         />
       ) : (
-        <div className="relative z-10 w-full bg-[#fdfbf6]">
-          <div className="max-w-3xl mx-auto min-h-screen relative pb-20">
+        <div className="relative z-10 w-full bg-transparent">
+          <div className="max-w-3xl mx-auto min-h-screen relative z-10 pb-20">
+            <style>{`
+              @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+              @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(25px); } }
+              .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; }
+              .animate-float-2 { animation: float-flower-2 9s ease-in-out infinite; }
+              .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; }
+              .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; }
+            `}</style>
+
+            {/* Scrollable background accents */}
+            <div className="absolute top-[15%] left-[-15%] w-64 opacity-20 mix-blend-multiply pointer-events-none z-0 animate-float-1">
+              <img
+                src={img_6.src || (img_6 as unknown as string)}
+                alt=""
+                className="w-full rotate-[15deg]"
+              />
+            </div>
+            <div className="absolute top-[45%] right-[-15%] w-80 opacity-15 mix-blend-multiply pointer-events-none z-0 animate-float-2">
+              <img
+                src={img_7.src || (img_7 as unknown as string)}
+                alt=""
+                className="w-full -rotate-[20deg]"
+              />
+            </div>
+            <div className="absolute top-[75%] left-[-10%] w-72 opacity-20 mix-blend-multiply pointer-events-none z-0 animate-float-3">
+              <img
+                src={img_8.src || (img_8 as unknown as string)}
+                alt=""
+                className="w-full rotate-[35deg]"
+              />
+            </div>
+            <div className="absolute bottom-[5%] right-[-5%] w-64 opacity-25 mix-blend-multiply pointer-events-none z-0 animate-float-4">
+              <img
+                src={img_9.src || (img_9 as unknown as string)}
+                alt=""
+                className="w-full -rotate-[10deg]"
+              />
+            </div>
+
             {/* hero */}
             <GsapReveal direction="up" distance={50}>
               <InvitationCover
@@ -91,23 +142,19 @@ export function LiveView({
                 guestName={guestName}
               />
             </GsapReveal>
-            <div className="relative pt-8 pb-12 mt-4 mb-16">
+            <div className="relative pt-8 pb-12 mb-16">
               {/* thông tin tiệc cưới */}
               <GsapReveal direction="up" distance={40}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />
               </GsapReveal>
 
-              <GsapReveal
-                direction="up"
-                distance={30}
-                className="flex justify-center my-0 sm:my-0"
-              >
-                <img
-                  src={img_1.src}
-                  alt="divider"
-                  className="w-24 sm:w-32 opacity-40"
-                />
-              </GsapReveal>
+              {/* bộ sưu tập ảnh */}
+              <Gallery
+                variantId="minimal"
+                weddingData={weddingData}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
+              />
 
               <GsapReveal direction="up" distance={40}>
                 <EventInfo
@@ -119,28 +166,8 @@ export function LiveView({
                 />
               </GsapReveal>
 
-              <GsapReveal
-                direction="up"
-                distance={30}
-                className="flex justify-center my-0 sm:my-0"
-              >
-                <img
-                  src={img_1.src}
-                  alt="divider"
-                  className="w-24 sm:w-32 opacity-40 -scale-y-100"
-                />
-              </GsapReveal>
-
-              {/* bộ sưu tập ảnh */}
-              <Gallery
-                variantId="minimal"
-                weddingData={weddingData}
-                primaryColor={colorPalette.primaryColor}
-                textColor={colorPalette.textColor}
-              />
-
               {/* đếm ngược */}
-              <Countdown
+              {/* <Countdown
                 variantId="minimal"
                 weddingData={weddingData}
                 primaryColor={colorPalette.primaryColor}
@@ -157,12 +184,23 @@ export function LiveView({
                   alt="divider"
                   className="w-24 sm:w-32 opacity-40"
                 />
-              </GsapReveal>
+              </GsapReveal> */}
+
+              {/* địa điểm */}
+              {primaryEvent && (
+                <VenueMap
+                  variantId="minimal"
+                  event={primaryEvent}
+                  primaryColor={colorPalette.primaryColor}
+                  textColor={colorPalette.textColor}
+                  fontFamily='"Times New Roman", serif'
+                />
+              )}
 
               {/* time line */}
               <GsapReveal direction="up" distance={40}>
                 <Timeline
-                  variant="minimal"
+                  variant="Timeline1"
                   weddingData={weddingData}
                   primaryColor={colorPalette.primaryColor}
                   textColor={colorPalette.textColor}
@@ -170,24 +208,10 @@ export function LiveView({
               </GsapReveal>
             </div>
 
-            {/* địa điểm */}
-            {primaryEvent && (
-              <VenueMap
-                variantId="minimal"
-                event={primaryEvent}
-                primaryColor={colorPalette.primaryColor}
-                textColor={colorPalette.textColor}
-              />
-            )}
-            {/*mừng cưới */}
-            <GsapReveal direction="up" distance={40}>
-              <Registry variantId="minimal" weddingData={weddingData} />
-            </GsapReveal>
-
             {/* sổ lời chúc */}
             <GsapReveal direction="up" distance={40}>
               <Guestbook
-                variantId="minimal"
+                variantId="guestbook_4"
                 messages={messages}
                 guestName={guestName}
                 onSendMessage={onSendMessage}
@@ -195,6 +219,15 @@ export function LiveView({
                 textColor={colorPalette.textColor}
               />
             </GsapReveal>
+
+            {/*mừng cưới */}
+            <GsapReveal direction="up" distance={40}>
+              <Registry variantId="register_4" weddingData={weddingData} />
+            </GsapReveal>
+            <h4 className="text-center text-sm px-4">
+              Sự hiện diện của quý khách là niềm vinh hạnh tới gia đình chúng
+              tôi
+            </h4>
           </div>
 
           {/* Nút bật/tắt nhạc */}
@@ -248,7 +281,7 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     prefilledName={guestName}
-                    theme="minimal"
+                    theme="temp4"
                     hideMessage
                   />
                 </div>

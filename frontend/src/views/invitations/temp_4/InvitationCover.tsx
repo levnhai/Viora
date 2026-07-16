@@ -1,6 +1,12 @@
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { getLastNameFirstLetter } from "@/shared/lib/utils/string";
+
+//img
 import img_5 from "@/shared/assets/image/flower/img_5.webp";
+import img_11 from "@/shared/assets/image/flower/img_11.webp";
+import img_12 from "@/shared/assets/image/flower/img_12.svg";
+import img_heart_1 from "@/shared/assets/image/heart/img_1.svg";
 
 interface InvitationCoverProps {
   weddingData: WeddingData;
@@ -13,14 +19,16 @@ export function InvitationCover({
 }: InvitationCoverProps) {
   const { groomName, brideName, galleryImages, templateConfig } = weddingData;
   const textColor = "#7c6a60";
-  
+
   // Use coverImage from templateConfig if available, else fallback to first gallery image, else hardcoded demo
-  const coverImage = 
-    templateConfig?.coverImage || 
-    (galleryImages && galleryImages.length > 0 ? galleryImages[0] : "https://i.pinimg.com/736x/0c/c6/cb/0cc6cb0151fd35b05d33c506061e46a6.jpg");
+  const coverImage =
+    templateConfig?.coverImage ||
+    (galleryImages && galleryImages.length > 0
+      ? "https://i.pinimg.com/736x/0c/c6/cb/0cc6cb0151fd35b05d33c506061e46a6.jpg"
+      : galleryImages[0]);
 
   return (
-    <section className="relative min-h-[100vh] flex flex-col items-center justify-start text-center overflow-hidden pb-12 pt-16 bg-[#fdfbf6]">
+    <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pb-12 pt-16 bg-transparent">
       <style>{`
         .wax-seal {
           background: radial-gradient(circle at 30% 30%, #dbba82, #b5925a 60%, #826639);
@@ -39,15 +47,21 @@ export function InvitationCover({
         }
       `}</style>
 
-      {/* Faded leaf decoration background (top-left) */}
-      <div
-        className="absolute -top-[50px] -left-[150px] w-[350px] opacity-[0.06] pointer-events-none"
-        style={{ transform: "rotate(120deg)" }}
-      >
+      {/* Faded leaf decoration background (left) */}
+      <div className="absolute top-0 left-[-20px] sm:left-[-180px] w-[140px] sm:w-[450px] opacity-15 mix-blend-multiply pointer-events-none z-0">
         <img
-          src={img_5.src || (img_5 as unknown as string)}
+          src={img_11.src || (img_11 as unknown as string)}
           alt=""
-          className="w-full h-auto"
+          className="w-full h-auto object-contain"
+        />
+      </div>
+
+      {/* Decorative heart background (top-right) */}
+      <div className="absolute top-[-5%] right-[-3%] w-[120px] sm:w-[180px] opacity-80 pointer-events-none z-0">
+        <img
+          src={img_heart_1.src || (img_heart_1 as unknown as string)}
+          alt=""
+          className="w-full h-auto object-contain"
         />
       </div>
 
@@ -67,29 +81,44 @@ export function InvitationCover({
         delay={0.2}
         direction="up"
         distance={40}
-        className="z-10 flex flex-col items-center w-full max-w-md px-4 mt-8"
+        className="z-10 flex flex-col items-center w-full max-w-md px-4"
       >
         <p
           className="uppercase tracking-[0.25em] text-[12px] font-medium mb-3"
-          style={{ color: "rgba(124, 106, 96, 0.7)" }}
+          style={{ color: "rgba(124, 106, 96, 0.7)", fontFamily: '"Lora", "Times New Roman", serif' }}
         >
           The Wedding Of
         </p>
 
         <h1
-          className="flex items-center justify-center gap-3 leading-tight text-[30px] sm:text-[36px]"
+          className="flex items-center justify-center gap-3 leading-tight text-[36px] sm:text-[36px]"
           style={{ color: textColor }}
         >
-          <span style={{ fontFamily: '"Fz Qellia", serif' }}>
+          <span
+            style={{
+              fontFamily: '"Times New Roman", serif',
+              fontStyle: "italic",
+              color: "rgb(130, 119, 113)",
+            }}
+          >
             {groomName || "Hoàng Nam"}
           </span>
           <span
-            className="text-[20px] -mt-1"
-            style={{ fontFamily: '"Baskerville", "Times New Roman", serif' }}
+            className="text-[30px] -mt-1"
+            style={{
+              fontFamily: '"The Nautigal", cursive',
+              color: "rgba(218, 63, 192, 1)",
+            }}
           >
             &amp;
           </span>
-          <span style={{ fontFamily: '"Fz Qellia", serif' }}>
+          <span
+            style={{
+              fontFamily: '"Times New Roman", serif',
+              fontStyle: "italic",
+              color: "rgb(130, 119, 113)",
+            }}
+          >
             {brideName || "Thảo Vy"}
           </span>
         </h1>
@@ -115,22 +144,39 @@ export function InvitationCover({
             }}
           ></div>
 
-          {/* Photo */}
-          <div className="w-full aspect-[3/4] overflow-hidden bg-gray-100">
-            <img
-              src={coverImage}
-              alt="Couple"
-              className="w-full h-full object-cover"
-            />
+          {/* Photo or Video */}
+          <div className="w-full aspect-[4/6] overflow-hidden bg-gray-100">
+            {templateConfig?.coverVideo ||
+            (coverImage && coverImage.match(/\.(mp4|webm|ogg)$/i)) ? (
+              <video
+                src={templateConfig?.coverVideo || coverImage}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster={
+                  coverImage && !coverImage.match(/\.(mp4|webm|ogg)$/i)
+                    ? coverImage
+                    : undefined
+                }
+              />
+            ) : (
+              <img
+                src={coverImage}
+                alt="Couple"
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
 
           {/* Flower Overlap */}
           <div
-            className="absolute -bottom-[50px] -left-[70px] w-[180px] z-40 pointer-events-none drop-shadow-xl"
-            style={{ transform: "rotate(25deg)" }}
+            className="absolute -bottom-[180px] -left-[70px] w-[200px] sm:w-[180px] z-40 pointer-events-none drop-shadow-xl"
+            style={{ transform: "rotate(15deg)" }}
           >
             <img
-              src={img_5.src || (img_5 as unknown as string)}
+              src={img_12.src || (img_12 as unknown as string)}
               alt=""
               className="w-full h-auto"
             />
@@ -144,8 +190,9 @@ export function InvitationCover({
               textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
             }}
           >
-            <span className="text-[18px] font-medium tracking-tighter italic">
-              {groomName?.[0] || "A"}/{brideName?.[0] || "A"}
+            <span className="text-[18px] font-medium tracking-tighter italic relative z-10">
+              {getLastNameFirstLetter(groomName)}/
+              {getLastNameFirstLetter(brideName)}
             </span>
           </div>
         </div>

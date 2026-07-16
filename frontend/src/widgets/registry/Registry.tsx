@@ -1,8 +1,9 @@
 import { ComponentType } from "react";
 import { MinimalRegistry } from "./variants/MinimalRegistry";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { Registry_4 } from "@/widgets/registry/variants/registry_4";
 
-export type RegistryId = "minimal" | "royal" | "lavender" | "floral";
+export type RegistryId = "minimal" | "register_4";
 
 export interface RegistryProps {
   variantId: RegistryId;
@@ -11,9 +12,7 @@ export interface RegistryProps {
 
 const registryComponents: Record<RegistryId, ComponentType<any>> = {
   minimal: MinimalRegistry,
-  royal: MinimalRegistry, // Fallback tạm thời
-  lavender: MinimalRegistry, // Fallback tạm thời
-  floral: MinimalRegistry, // Fallback tạm thời
+  register_4: Registry_4,
 };
 
 export function Registry({ variantId, ...props }: RegistryProps) {

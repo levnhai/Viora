@@ -3,7 +3,7 @@ export const formatName = (name: string) => {
   return name
     .toLowerCase()
     .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
 };
 
 export const getInitials = (name: string) => {
@@ -24,3 +24,7 @@ export const extractIframeSrc = (input: string) => {
   }
   return input;
 };
+
+// lấy chữ cái đầu tiên của tên
+export const getLastNameFirstLetter = (fullName: string) =>
+  fullName?.trim().split(/\s+/).pop()?.[0]?.toUpperCase() ?? "";

@@ -1,8 +1,9 @@
 import { ComponentType } from "react";
 import { MinimalGuestbook } from "./variants/MinimalGuestbook";
 import { GuestMessage } from "@/entities/invitation/ui/GuestbookList";
+import { Guestbook_4 } from "@/widgets/guestbook/variants/Guestbook_4";
 
-export type GuestbookKey = "minimal" | "royal" | "lavender" | "floral";
+export type GuestbookKey = "minimal" | "guestbook_4";
 
 export interface GuestbookProps {
   variantId: GuestbookKey;
@@ -15,9 +16,7 @@ export interface GuestbookProps {
 
 const guestbookRegistry: Record<GuestbookKey, ComponentType<any>> = {
   minimal: MinimalGuestbook,
-  royal: MinimalGuestbook, // Fallback tạm thời
-  lavender: MinimalGuestbook, // Fallback tạm thời
-  floral: MinimalGuestbook, // Fallback tạm thời
+  guestbook_4: Guestbook_4,
 };
 
 export function Guestbook({ variantId, ...props }: GuestbookProps) {

@@ -1069,7 +1069,7 @@ export function InvitationEditorForm() {
 
         {/* Other tabs can be implemented similarly... */}
         {editorActiveTab === "Ảnh & Video" && (
-          <div className="p-8">
+          <div className="p-8 max-w-2xl">
             <div className="mb-8">
               <h3 className="text-lg font-bold text-slate-800">Ảnh & Video</h3>
               <p className="text-sm text-slate-500 mt-1">
@@ -1085,55 +1085,36 @@ export function InvitationEditorForm() {
                   <p className="text-xs text-slate-500 mt-1">Ảnh bìa sẽ hiển thị ở phần đầu của thiệp cưới</p>
                 </div>
                 
-                <div className="flex flex-col lg:flex-row gap-6">
+                <div className="flex gap-4">
                   {basicInfo.coverImage ? (
-                    <div className="w-full lg:w-1/2 flex flex-col gap-3">
-                      <div className="aspect-[21/9] lg:aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm relative group">
-                        <img src={basicInfo.coverImage} className="w-full h-full object-cover" alt="Cover Image" />
-                        <button 
-                          onClick={() => setPreviewImage(basicInfo.coverImage || null)}
-                          className="absolute bottom-3 right-3 p-2 bg-black/40 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 backdrop-blur-sm"
-                        >
-                          <Maximize2 size={16} />
-                        </button>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="relative flex-1">
-                          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-                            <Edit2 size={16} /> Sửa ảnh bìa
-                          </button>
-                          <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={handleCoverImageUpload}
-                            disabled={isUploading}
-                            className="absolute inset-0 opacity-0 cursor-pointer"
-                            title="Tải ảnh bìa lên"
-                          />
-                        </div>
-                        <button 
-                          onClick={() => setBasicInfo({...basicInfo, coverImage: ""})}
-                          className="px-4 py-2.5 text-rose-500 text-sm font-medium hover:bg-rose-50 rounded-lg transition-colors flex-1 lg:flex-none text-center"
-                        >
-                          Xóa ảnh
-                        </button>
-                      </div>
+                    <div className="w-[200px] h-[220px] rounded-xl overflow-hidden border border-slate-200 shadow-sm relative group">
+                      <img src={basicInfo.coverImage} className="w-full h-full object-cover" alt="Cover Image" />
+                      <button 
+                        onClick={() => setPreviewImage(basicInfo.coverImage || null)}
+                        className="absolute bottom-2 right-2 p-1.5 bg-black/40 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 backdrop-blur-sm"
+                      >
+                        <Maximize2 size={14} />
+                      </button>
+                      <button 
+                        onClick={() => setBasicInfo({...basicInfo, coverImage: ""})}
+                        className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-500 backdrop-blur-sm"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
                   ) : (
-                    <div className="w-full lg:w-1/2">
-                      <div className="w-full aspect-[21/9] lg:aspect-[16/9] rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-400">
-                        <Images size={32} className="opacity-40" />
-                      </div>
+                    <div className="w-[200px] h-[220px] rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-center text-slate-300">
+                      <ImageIcon size={48} strokeWidth={1} />
                     </div>
                   )}
                   
-                  <div className={`w-full lg:w-1/2 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all rounded-xl flex flex-col items-center justify-center p-8 text-center relative ${basicInfo.coverImage ? 'opacity-40 hover:opacity-100' : ''}`}>
-                    <div className="w-12 h-12 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center text-slate-500 mb-3">
-                      {isUploading ? <Loader2 size={24} className="animate-spin text-indigo-500" /> : <CloudUpload size={24} />}
+                  <div className={`w-[200px] h-[220px] border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all rounded-xl flex flex-col items-center justify-center p-4 text-center relative ${basicInfo.coverImage ? 'opacity-40 hover:opacity-100' : ''}`}>
+                    <div className="w-12 h-12 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center text-slate-600 mb-4">
+                      {isUploading ? <Loader2 size={20} className="animate-spin text-indigo-500" /> : <CloudUpload size={20} />}
                     </div>
-                    <h5 className="text-sm font-semibold text-slate-700 mb-1">Thay đổi ảnh bìa</h5>
-                    <p className="text-xs text-slate-500 mb-0.5">Định dạng: JPG, PNG, WebP</p>
-                    <p className="text-xs text-slate-400">Kích thước khuyến nghị: 1920x1080px</p>
+                    <h5 className="text-[13px] font-bold text-slate-800 mb-1">Thay đổi ảnh bìa</h5>
+                    <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">Định dạng: JPG,<br/>PNG, WebP</p>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">Kích thước khuyến<br/>nghị: 1920x1080px</p>
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -1148,7 +1129,7 @@ export function InvitationEditorForm() {
 
             {/* Ảnh & Video nổi bật */}
             <div>
-              <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mb-4 flex items-center justify-between">
                 <div>
                   <h4 className="text-sm font-bold text-slate-800">Ảnh & Video nổi bật</h4>
                   <p className="text-xs text-slate-500 mt-1">Hiển thị trên trang chủ của thiệp cưới</p>
@@ -1156,7 +1137,7 @@ export function InvitationEditorForm() {
                 <div className="relative">
                   <button 
                     disabled={isUploading}
-                    className={`flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold transition-colors ${isUploading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-rose-100'}`}
+                    className={`flex items-center justify-center gap-2 px-6 py-2.5 bg-rose-50 text-rose-600 rounded-xl text-sm font-bold transition-colors ${isUploading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-rose-100'}`}
                   >
                     {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />} 
                     Thêm ảnh / video
@@ -1172,7 +1153,7 @@ export function InvitationEditorForm() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {galleryImages.map((img, idx) => (
                   <div key={img} className="bg-white border border-slate-200 rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-shadow">
                     <div className="aspect-[4/3] relative bg-slate-100">
@@ -1211,10 +1192,10 @@ export function InvitationEditorForm() {
                 ))}
                 
                 {galleryImages.length === 0 && (
-                  <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 bg-slate-50">
-                    <Images size={32} className="mb-3 text-slate-300" />
-                    <p className="text-sm font-medium">Chưa có ảnh/video nào</p>
-                    <p className="text-xs mt-1">Nhấn nút "Thêm ảnh / video" để tải lên</p>
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 bg-slate-50/50">
+                    <ImageIcon size={40} className="mb-3 text-slate-300" strokeWidth={1} />
+                    <p className="text-[13px] font-medium text-slate-500">Chưa có ảnh/video nào</p>
+                    <p className="text-[12px] mt-1 text-slate-400">Nhấn nút "Thêm ảnh / video" để tải lên</p>
                   </div>
                 )}
               </div>

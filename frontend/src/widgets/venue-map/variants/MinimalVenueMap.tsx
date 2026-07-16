@@ -7,9 +7,15 @@ interface MinimalVenueMapProps {
   event: WeddingEvent;
   primaryColor?: string;
   textColor?: string;
+  fontFamily?: string;
 }
 
-export function MinimalVenueMap({ event, primaryColor, textColor }: MinimalVenueMapProps) {
+export function MinimalVenueMap({
+  event,
+  primaryColor,
+  textColor,
+  fontFamily,
+}: MinimalVenueMapProps) {
   const pColor = textColor || "rgb(225,188,124)";
   const tColor = primaryColor || "rgb(225,188,124)";
 
@@ -22,21 +28,24 @@ export function MinimalVenueMap({ event, primaryColor, textColor }: MinimalVenue
   return (
     <section className="py-16 sm:py-24 px-4 text-center">
       <GsapReveal direction="up" distance={30}>
-        <h2 
-          className="text-xl font-serif uppercase tracking-widest mb-4"
-          style={{ color: pColor }}
+        <h2
+          className="text-xl font-serif font-bold uppercase tracking-widest mb-2"
+          style={{ color: pColor, fontFamily }}
         >
           TIỆC CƯỚI SẼ TỔ CHỨC TẠI
         </h2>
-        <p 
+        <p
           className="font-serif text-sm px-4 md:px-12 mb-8 leading-relaxed"
-          style={{ color: pColor }}
+          style={{
+            color: pColor,
+            fontFamily: "Baskerville, 'Times New Roman', serif",
+          }}
         >
           {event.locationName}, {event.address}
         </p>
       </GsapReveal>
       <GsapReveal delay={0.2} direction="up" distance={40}>
-        <div 
+        <div
           className="max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl border h-64 sm:h-80 relative bg-[#001005] mb-6"
           style={{ borderColor: pColor }}
         >

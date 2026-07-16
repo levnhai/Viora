@@ -7,7 +7,7 @@ import { API_URL } from "@/shared/lib/config";
 interface RsvpFormProps {
   weddingSlug: string;
   prefilledName?: string;
-  theme?: "default" | "minimal";
+  theme?: "default" | "minimal" | "temp4";
   hideMessage?: boolean;
 }
 
@@ -65,12 +65,26 @@ export function RsvpForm({
   }
 
   const isMinimal = theme === "minimal";
+  const isTemp4 = theme === "temp4";
+  const isCustom = isMinimal || isTemp4;
+
+  const t = {
+    primary: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
+    primaryAlpha: isTemp4 ? "rgba(124,106,96,0.8)" : "rgba(225,188,124,0.8)",
+    primaryLight: isTemp4 ? "rgba(124,106,96,0.1)" : "rgba(225,188,124,0.1)",
+    border: isTemp4 ? "rgba(124,106,96,0.3)" : "rgba(225,188,124,0.3)",
+    text: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
+    textLight: isTemp4 ? "rgba(124,106,96,0.6)" : "rgba(225,188,124,0.6)",
+    selectBg: isTemp4 ? "transparent" : "rgb(0,26,8)",
+    btnBg: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
+    btnText: isTemp4 ? "#fdfbf6" : "rgb(0,26,8)",
+  };
 
   return (
     <section
-      className={`py-10 px-4 max-w-lg mx-auto ${isMinimal ? "" : "py-20"}`}
+      className={`py-10 px-4 max-w-lg mx-auto ${isCustom ? "" : "py-20"}`}
     >
-      {!isMinimal && (
+      {!isCustom && (
         <FadeIn>
           <SectionHeading en="RSVP" vi="Xác nhận tham dự" />
         </FadeIn>
@@ -79,35 +93,35 @@ export function RsvpForm({
         {rsvpSent ? (
           <div
             className={
-              isMinimal
+              isCustom
                 ? "rounded-2xl p-8 text-center"
                 : "bg-white rounded-2xl p-10 text-center shadow-sm border"
             }
-            style={!isMinimal ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
+            style={!isCustom ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
           >
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
               style={
-                isMinimal
-                  ? { backgroundColor: "rgba(225,188,124,0.1)" }
+                isCustom
+                  ? { backgroundColor: t.primaryLight }
                   : { backgroundColor: "rgba(139,58,82,0.08)" }
               }
             >
               <Heart
                 size={28}
-                fill={isMinimal ? "rgb(225,188,124)" : "#8b3a52"}
-                stroke={isMinimal ? "rgb(225,188,124)" : "#8b3a52"}
+                fill={isCustom ? t.primary : "#8b3a52"}
+                stroke={isCustom ? t.primary : "#8b3a52"}
               />
             </div>
             <h3
               className="text-2xl mb-2 font-serif"
-              style={{ color: isMinimal ? "rgb(225,188,124)" : "#8b3a52" }}
+              style={{ color: isCustom ? t.primary : "#8b3a52" }}
             >
               Cảm ơn bạn!
             </h3>
             <p
               className="text-sm font-serif"
-              style={{ color: isMinimal ? "rgba(225,188,124,0.8)" : "#7a5c4f" }}
+              style={{ color: isCustom ? t.primaryAlpha : "#7a5c4f" }}
             >
               Chúng mình đã nhận được xác nhận của bạn. Hẹn gặp nhau tại tiệc
               cưới! 🎉
@@ -117,17 +131,17 @@ export function RsvpForm({
           <form
             onSubmit={submitRsvp}
             className={
-              isMinimal
+              isCustom
                 ? "space-y-6 text-left"
                 : "bg-white rounded-2xl p-8 shadow-sm border space-y-5 text-left"
             }
-            style={!isMinimal ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
+            style={!isCustom ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
           >
             <div>
               <label
                 className="block text-xs uppercase tracking-wider mb-2 font-serif"
                 style={{
-                  color: isMinimal ? "rgba(225,188,124,0.8)" : "#7a5c4f",
+                  color: isCustom ? t.primaryAlpha : "#7a5c4f",
                 }}
               >
                 Họ và tên *
@@ -139,12 +153,12 @@ export function RsvpForm({
                   setRsvpData({ ...rsvpData, name: e.target.value })
                 }
                 placeholder="Ví dụ: Nguyễn Văn A"
-                className={`w-full px-4 py-3 rounded-xl text-sm outline-none border transition-colors ${isMinimal ? "bg-transparent focus:border-[rgb(225,188,124)]" : ""}`}
+                className={`w-full px-4 py-3 rounded-xl text-sm outline-none border transition-colors ${isCustom ? "bg-transparent" : ""}`}
                 style={
-                  isMinimal
+                  isCustom
                     ? {
-                        borderColor: "rgba(225,188,124,0.3)",
-                        color: "rgb(225,188,124)",
+                        borderColor: t.border,
+                        color: t.text,
                       }
                     : {
                         borderColor: "rgba(201,130,142,0.3)",
@@ -153,13 +167,13 @@ export function RsvpForm({
                       }
                 }
                 onFocus={(e) =>
-                  (e.target.style.borderColor = isMinimal
-                    ? "rgb(225,188,124)"
+                  (e.target.style.borderColor = isCustom
+                    ? t.text
                     : "#8b3a52")
                 }
                 onBlur={(e) =>
-                  (e.target.style.borderColor = isMinimal
-                    ? "rgba(225,188,124,0.3)"
+                  (e.target.style.borderColor = isCustom
+                    ? t.border
                     : "rgba(201,130,142,0.3)")
                 }
               />
@@ -168,7 +182,7 @@ export function RsvpForm({
               <label
                 className="block text-xs uppercase tracking-wider mb-2 font-serif"
                 style={{
-                  color: isMinimal ? "rgba(225,188,124,0.8)" : "#7a5c4f",
+                  color: isCustom ? t.primaryAlpha : "#7a5c4f",
                 }}
               >
                 Bạn sẽ tham dự? *
@@ -186,20 +200,20 @@ export function RsvpForm({
                     }
                     className="py-3 px-2 rounded-xl text-[13px] border transition-all cursor-pointer font-serif"
                     style={
-                      isMinimal
+                      isCustom
                         ? {
                             borderColor:
                               rsvpData.attend === opt.val
-                                ? "rgb(225,188,124)"
-                                : "rgba(225,188,124,0.2)",
+                                ? t.text
+                                : t.border,
                             backgroundColor:
                               rsvpData.attend === opt.val
-                                ? "rgba(225,188,124,0.1)"
+                                ? t.primaryLight
                                 : "transparent",
                             color:
                               rsvpData.attend === opt.val
-                                ? "rgb(225,188,124)"
-                                : "rgba(225,188,124,0.6)",
+                                ? t.text
+                                : t.textLight,
                           }
                         : {
                             borderColor:
@@ -228,7 +242,7 @@ export function RsvpForm({
                 <label
                   className="block text-xs uppercase tracking-wider mb-2 font-serif"
                   style={{
-                    color: isMinimal ? "rgba(225,188,124,0.8)" : "#7a5c4f",
+                    color: isCustom ? t.primaryAlpha : "#7a5c4f",
                   }}
                 >
                   Số người tham dự
@@ -238,12 +252,13 @@ export function RsvpForm({
                   onChange={(e) =>
                     setRsvpData({ ...rsvpData, guests: e.target.value })
                   }
-                  className={`w-full px-4 h-[46px] rounded-xl text-sm outline-none border ${isMinimal ? "bg-[rgb(0,26,8)]" : ""}`}
+                  className={`w-full px-4 h-[46px] rounded-xl text-sm outline-none border transition-colors ${isCustom ? "" : ""}`}
                   style={
-                    isMinimal
+                    isCustom
                       ? {
-                          borderColor: "rgba(225,188,124,0.3)",
-                          color: "rgb(225,188,124)",
+                          borderColor: t.border,
+                          color: t.text,
+                          backgroundColor: t.selectBg,
                         }
                       : {
                           borderColor: "rgba(201,130,142,0.3)",
@@ -264,10 +279,10 @@ export function RsvpForm({
               type="submit"
               className="w-full py-3.5 rounded-xl text-sm font-serif uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90 cursor-pointer"
               style={
-                isMinimal
+                isCustom
                   ? {
-                      backgroundColor: "rgb(225,188,124)",
-                      color: "rgb(0,26,8)",
+                      backgroundColor: t.btnBg,
+                      color: t.btnText,
                       fontWeight: 600,
                     }
                   : {

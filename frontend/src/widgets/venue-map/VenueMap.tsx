@@ -9,6 +9,7 @@ export interface VenueMapProps {
   event: WeddingEvent;
   primaryColor?: string;
   textColor?: string;
+  fontFamily?: string;
 }
 
 const venueMapRegistry: Record<VenueMapKey, ComponentType<any>> = {
