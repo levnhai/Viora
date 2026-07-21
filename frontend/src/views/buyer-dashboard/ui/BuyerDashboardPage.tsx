@@ -7,6 +7,7 @@ import { Heart, Loader2, Plus, Key, ChevronDown, LogOut } from "lucide-react";
 import { OverviewTab } from "./OverviewTab";
 import { GuestsTab } from "./GuestsTab";
 import { GuestbookTab } from "./GuestbookTab";
+import { SettingTab } from "./SettingTab";
 
 import { useBuyerDashboard } from "@/features/buyer-dashboard/model/useBuyerDashboard";
 import { useGuestActions } from "@/features/guest-management/model/useGuestActions";
@@ -351,6 +352,14 @@ export function BuyerDashboardPage() {
               guestbookList={guestbookList}
               getAvatarColor={getAvatarColor}
               getInitials={getInitials}
+            />
+          )}
+
+          {activeTab === "setting" && (
+            <SettingTab
+              weddingData={weddingData}
+              weddingSlug={weddingSlug}
+              refetch={refetch}
             />
           )}
         </main>

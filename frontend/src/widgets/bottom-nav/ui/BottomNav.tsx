@@ -30,8 +30,8 @@ export function BottomNav() {
   if (pathname.includes("/dashboard")) {
     if (tabParam === "guests") {
       activeTab = "guests";
-    } else if (tabParam === "qr") {
-      activeTab = "qr";
+    } else if (tabParam === "setting") {
+      activeTab = "setting";
     } else if (tabParam === "guestbook") {
       activeTab = "guestbook";
     } else {
@@ -50,8 +50,8 @@ export function BottomNav() {
       router.push("/dashboard?tab=guestbook");
     } else if (tab === "guests") {
       router.push("/dashboard?tab=guests");
-    } else if (tab === "qr") {
-      router.push("/dashboard?tab=qr");
+    } else if (tab === "setting") {
+      router.push("/dashboard?tab=setting");
     }
   };
  
@@ -126,9 +126,9 @@ export function BottomNav() {
  
       {/* 5. Cài đặt */}
       <button
-        onClick={() => handleNav("qr")}
+        onClick={() => handleNav("setting")}
         className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-all active:scale-95 relative ${
-          activeTab === "qr" ? "text-[#1b365d]" : "text-slate-400"
+          activeTab === "setting" ? "text-[#1b365d]" : "text-slate-400"
         }`}
       >
         <Settings 
@@ -138,7 +138,7 @@ export function BottomNav() {
         <span className="text-[10px] font-medium tracking-wide">
           Cài đặt
         </span>
-        {activeTab === "qr" && (
+        {activeTab === "setting" && (
           <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#c6925c] animate-pulse" />
         )}
       </button>

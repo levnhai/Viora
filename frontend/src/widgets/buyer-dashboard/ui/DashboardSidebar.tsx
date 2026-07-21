@@ -1,4 +1,4 @@
-import { Heart, Users, BookOpen } from "lucide-react";
+import { Heart, Users, BookOpen, Settings } from "lucide-react";
 
 interface DashboardSidebarProps {
   activeTab: string;
@@ -18,7 +18,7 @@ export const DashboardSidebar = ({
   navigate,
 }: DashboardSidebarProps) => {
   return (
-    <aside className="w-full md:w-64 shrink-0 hidden md:block">
+    <aside className="w-full md:w-64 shrink-0 hidden md:block font-sans">
       <div className="bg-white rounded-2xl border border-slate-100 p-4 space-y-2 shadow-sm">
         <button
           onClick={() => setActiveTab("overview")}
@@ -71,6 +71,16 @@ export const DashboardSidebar = ({
           >
             {guestbookListLength}
           </span>
+        </button>
+        <button
+          onClick={() => setActiveTab("setting")}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer ${
+            activeTab === "setting"
+              ? "bg-[#1b365d] text-white shadow-sm"
+              : "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          }`}
+        >
+          <Settings size={16} /> Cài đặt
         </button>
       </div>
     </aside>
