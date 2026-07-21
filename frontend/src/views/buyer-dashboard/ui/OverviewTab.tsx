@@ -302,7 +302,6 @@ export function OverviewTab({
             </ResponsiveContainer>
           </div>
         </div>
-        </div>
 
         {/* Cột 2: Đếm ngược */}
         <div className="bg-white rounded-2xl border border-stone-100 p-4 shadow-3xs flex flex-col justify-between overflow-hidden relative">
