@@ -11,11 +11,16 @@ export function InvitationTemplateSelector() {
   const [searchQuery, setSearchQuery] = useState("");
   const { templates, loading, error } = useTemplates();
 
-  const categories = ["Tất cả", "Hiện đại", "Cổ điển", "Rustic", "Hoa lá", "Tối giản", "Sang trọng"];
-  
+  const categories = ["Tất cả"];
+
   const filteredTemplates = templates.filter((t) => {
-    const matchTab = activeTab === "Tất cả" || t.tags.includes(activeTab) || t.tags.includes(activeTab.toLowerCase());
-    const matchSearch = t.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchTab =
+      activeTab === "Tất cả" ||
+      t.tags.includes(activeTab) ||
+      t.tags.includes(activeTab.toLowerCase());
+    const matchSearch = t.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     return matchTab && matchSearch;
   });
 
@@ -26,8 +31,12 @@ export function InvitationTemplateSelector() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 mb-1">Tạo thiệp mới</h1>
-              <p className="text-sm text-slate-500">Chọn template để bắt đầu tạo thiệp cưới của bạn</p>
+              <h1 className="text-2xl font-bold text-slate-800 mb-1">
+                Tạo thiệp mới
+              </h1>
+              <p className="text-sm text-slate-500">
+                Chọn template để bắt đầu tạo thiệp cưới của bạn
+              </p>
             </div>
             <div className="relative w-72">
               <input
@@ -37,7 +46,10 @@ export function InvitationTemplateSelector() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
               />
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
             </div>
           </div>
 
@@ -86,7 +98,10 @@ export function InvitationTemplateSelector() {
                 >
                   <div className="relative aspect-[1/1.4] bg-slate-100 overflow-hidden">
                     <img
-                      src={template.thumbnail || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=300&auto=format&fit=crop"}
+                      src={
+                        template.thumbnail ||
+                        "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=300&auto=format&fit=crop"
+                      }
                       alt={template.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -96,13 +111,15 @@ export function InvitationTemplateSelector() {
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="p-4 flex flex-col flex-1">
-                    <h3 className="font-bold text-slate-800 text-base mb-1 truncate">{template.name}</h3>
+                    <h3 className="font-bold text-slate-800 text-base mb-1 truncate">
+                      {template.name}
+                    </h3>
                     <p className="text-xs text-slate-500 line-clamp-1 mb-4">
                       {template.tags?.join(", ") || "Thiệp cưới đẹp"}
                     </p>
-                    
+
                     <div className="mt-auto flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <button className="text-slate-400 hover:text-rose-500 transition-colors">
@@ -112,7 +129,7 @@ export function InvitationTemplateSelector() {
                           <Eye size={16} />
                         </button>
                       </div>
-                      
+
                       <button
                         onClick={() => {
                           setActiveTemplate(template);

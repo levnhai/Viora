@@ -14,9 +14,17 @@ import {
 
 import { useState, useEffect } from "react";
 
-export function PublishSuccessModal({ credentials }: { credentials?: {email: string, password: string} | null }) {
-  const { isPublishSuccessModalOpen, setIsPublishSuccessModalOpen, setStep, publishSettings } =
-    useInvitationCreate();
+export function PublishSuccessModal({
+  credentials,
+}: {
+  credentials?: { email: string; password: string } | null;
+}) {
+  const {
+    isPublishSuccessModalOpen,
+    setIsPublishSuccessModalOpen,
+    setStep,
+    publishSettings,
+  } = useInvitationCreate();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -63,12 +71,16 @@ export function PublishSuccessModal({ credentials }: { credentials?: {email: str
             </label>
             <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-slate-200 rounded-xl">
               <div className="flex-1 px-3 text-sm text-slate-600 truncate">
-                {typeof window !== 'undefined' ? `${window.location.origin}/w/${publishSettings.urlSlug}` : `https://wedding.com/w/${publishSettings.urlSlug}`}
+                {typeof window !== "undefined"
+                  ? `${window.location.origin}/w/${publishSettings.urlSlug}`
+                  : `https://wedding.com/w/${publishSettings.urlSlug}`}
               </div>
-              <button 
+              <button
                 className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors shrink-0"
                 onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/w/${publishSettings.urlSlug}`);
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/w/${publishSettings.urlSlug}`,
+                  );
                 }}
               >
                 <Copy size={16} /> Sao chép
@@ -84,7 +96,7 @@ export function PublishSuccessModal({ credentials }: { credentials?: {email: str
             <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
               <div className="w-16 h-16 bg-white p-1 rounded-lg border border-slate-200 shrink-0">
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${typeof window !== 'undefined' ? `${window.location.origin}/w/${publishSettings.urlSlug}` : `https://wedding.com/w/${publishSettings.urlSlug}`}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${typeof window !== "undefined" ? `${window.location.origin}/w/${publishSettings.urlSlug}` : `https://wedding.com/w/${publishSettings.urlSlug}`}`}
                   alt="QR"
                   className="w-full h-full"
                 />
@@ -104,29 +116,45 @@ export function PublishSuccessModal({ credentials }: { credentials?: {email: str
           {credentials && (
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider text-rose-600">
-                Tài khoản quản lý thiệp (Gửi cho khách)
+                Thông tin tài khoản
               </label>
               <div className="flex flex-col gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">Email:</span>
-                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">{credentials.email}</span>
+                  <span className="text-sm font-semibold text-slate-700">
+                    Email:
+                  </span>
+                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">
+                    {credentials.email}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">Mật khẩu:</span>
-                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">{credentials.password}</span>
+                  <span className="text-sm font-semibold text-slate-700">
+                    Mật khẩu:
+                  </span>
+                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">
+                    {credentials.password}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">Link quản trị:</span>
-                  <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 truncate max-w-[200px]">{typeof window !== 'undefined' ? `${window.location.origin}/login` : `https://wedding.com/login`}</span>
+                  <span className="text-sm font-semibold text-slate-700">
+                    Link quản trị:
+                  </span>
+                  <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 truncate max-w-[200px]">
+                    {typeof window !== "undefined"
+                      ? `${window.location.origin}/login`
+                      : `https://wedding.com/login`}
+                  </span>
                 </div>
                 <button
                   className="mt-2 flex items-center justify-center gap-2 px-4 py-2 bg-white text-rose-600 border border-rose-200 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors"
                   onClick={() => {
-                    navigator.clipboard.writeText(`Tài khoản quản lý thiệp cưới:\nLink: ${window.location.origin}/w/${publishSettings.urlSlug}\nEmail: ${credentials.email}\nMật khẩu: ${credentials.password}\nĐăng nhập tại: ${window.location.origin}/login`);
+                    navigator.clipboard.writeText(
+                      `Tài khoản quản lý thiệp cưới:\nLink: ${window.location.origin}/w/${publishSettings.urlSlug}\nEmail: ${credentials.email}\nMật khẩu: ${credentials.password}\nĐăng nhập tại: ${window.location.origin}/login`,
+                    );
                     alert("Đã sao chép thông tin tài khoản!");
                   }}
                 >
-                  <Copy size={16} /> Sao chép thông tin gửi khách
+                  <Copy size={16} /> Sao chép
                 </button>
               </div>
             </div>

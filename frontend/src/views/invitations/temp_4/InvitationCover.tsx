@@ -1,6 +1,9 @@
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { getLastNameFirstLetter } from "@/shared/lib/utils/string";
+import {
+  getLastNameFirstLetter,
+  getLastTwoNames,
+} from "@/shared/lib/utils/string";
 
 //img
 import img_5 from "@/shared/assets/image/flower/img_5.webp";
@@ -85,13 +88,16 @@ export function InvitationCover({
       >
         <p
           className="uppercase tracking-[0.25em] text-[12px] font-medium mb-3"
-          style={{ color: "rgba(124, 106, 96, 0.7)", fontFamily: '"Lora", "Times New Roman", serif' }}
+          style={{
+            color: "rgba(124, 106, 96, 0.7)",
+            fontFamily: '"Lora", "Times New Roman", serif',
+          }}
         >
           The Wedding Of
         </p>
 
         <h1
-          className="flex items-center justify-center gap-3 leading-tight text-[36px] sm:text-[36px]"
+          className="flex items-center justify-center capitalize  gap-3 leading-tight text-[36px] sm:text-[36px]"
           style={{ color: textColor }}
         >
           <span
@@ -101,7 +107,7 @@ export function InvitationCover({
               color: "rgb(130, 119, 113)",
             }}
           >
-            {groomName || "Hoàng Nam"}
+            {getLastTwoNames(groomName) || "Hoàng Nam"}
           </span>
           <span
             className="text-[30px] -mt-1"
@@ -119,7 +125,7 @@ export function InvitationCover({
               color: "rgb(130, 119, 113)",
             }}
           >
-            {brideName || "Thảo Vy"}
+            {getLastTwoNames(brideName) || "Thảo Vy"}
           </span>
         </h1>
       </GsapReveal>

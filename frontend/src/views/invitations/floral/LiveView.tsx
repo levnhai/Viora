@@ -66,6 +66,7 @@ export function LiveView({
           brideName={weddingData.brideName}
           weddingDate={weddingData.weddingDate}
           guestName={guestName}
+          isFixed={!previewMode}
           onOpen={() => {
             setEnvelopeOpen(true);
             if (weddingData.musicUrl) setPlaying(true);

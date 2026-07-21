@@ -1,4 +1,4 @@
-import { Heart, Users, BookOpen, Edit3, Settings } from "lucide-react";
+import { Heart, Users, BookOpen } from "lucide-react";
 
 interface DashboardSidebarProps {
   activeTab: string;
@@ -19,13 +19,13 @@ export const DashboardSidebar = ({
 }: DashboardSidebarProps) => {
   return (
     <aside className="w-full md:w-64 shrink-0 hidden md:block">
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#c9828e]/15 p-4 space-y-2">
+      <div className="bg-white rounded-2xl border border-slate-100 p-4 space-y-2 shadow-sm">
         <button
           onClick={() => setActiveTab("overview")}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer ${
             activeTab === "overview"
-              ? "bg-[#8b3a52] text-white shadow-sm"
-              : "bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
+              ? "bg-[#1b365d] text-white shadow-sm"
+              : "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           }`}
         >
           <Heart
@@ -38,8 +38,8 @@ export const DashboardSidebar = ({
           onClick={() => setActiveTab("guests")}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer ${
             activeTab === "guests"
-              ? "bg-[#8b3a52] text-white shadow-sm"
-              : "bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
+              ? "bg-[#1b365d] text-white shadow-sm"
+              : "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           }`}
         >
           <Users size={16} /> Khách mời
@@ -47,7 +47,7 @@ export const DashboardSidebar = ({
             className={`ml-auto text-2xs px-2 py-0.5 rounded-full ${
               activeTab === "guests"
                 ? "bg-white/20 text-white"
-                : "bg-[#8b3a52]/10 text-[#8b3a52]"
+                : "bg-[#1b365d]/10 text-[#1b365d]"
             }`}
           >
             {guestListLength}
@@ -57,8 +57,8 @@ export const DashboardSidebar = ({
           onClick={() => setActiveTab("guestbook")}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer ${
             activeTab === "guestbook"
-              ? "bg-[#8b3a52] text-white shadow-sm"
-              : "bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
+              ? "bg-[#1b365d] text-white shadow-sm"
+              : "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           }`}
         >
           <BookOpen size={16} /> Lời chúc
@@ -66,24 +66,11 @@ export const DashboardSidebar = ({
             className={`ml-auto text-2xs px-2 py-0.5 rounded-full ${
               activeTab === "guestbook"
                 ? "bg-white/20 text-white"
-                : "bg-[#8b3a52]/10 text-[#8b3a52]"
+                : "bg-[#1b365d]/10 text-[#1b365d]"
             }`}
           >
             {guestbookListLength}
           </span>
-        </button>
-        <hr className="border-[#c9828e]/15 my-2" />
-        <button
-          onClick={() => navigate(`/edit/${weddingSlug}`)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
-        >
-          <Edit3 size={16} /> Chỉnh sửa thiệp cưới
-        </button>
-        <button
-          onClick={() => navigate("/account")}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer bg-transparent text-[#7a5c4f] hover:bg-[#8b3a52]/5"
-        >
-          <Settings size={16} /> Cài đặt tài khoản
         </button>
       </div>
     </aside>

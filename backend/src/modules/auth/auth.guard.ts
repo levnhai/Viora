@@ -23,6 +23,7 @@ export class AuthGuard implements CanActivate {
     }
 
     if (!token) {
+      console.log('AuthGuard: Missing token in cookies and authorization header');
       throw new UnauthorizedException('Thiếu mã token xác thực');
     }
     const secret =
@@ -32,6 +33,7 @@ export class AuthGuard implements CanActivate {
     try {
       const [data, signature] = token.split('.');
       if (!data || !signature) {
+        console.log('AuthGuard: Invalid token format', token);
         throw new UnauthorizedException('Định dạng token không hợp lệ');
       }
 
@@ -41,6 +43,7 @@ export class AuthGuard implements CanActivate {
         .digest('base64');
 
       if (signature !== expectedSignature) {
+        console.log('AuthGuard: Signature mismatch. Expected:', expectedSignature, 'Got:', signature);
         throw new UnauthorizedException(
           'Token không chính xác hoặc đã hết hạn',
         );
@@ -50,6 +53,7 @@ export class AuthGuard implements CanActivate {
       request.user = user;
       return true;
     } catch (err) {
+      console.error('AuthGuard: Token verification error:', err);
       throw new UnauthorizedException('Lỗi xác thực token');
     }
   }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useInvitationCreate } from "@/views/admin-invitation-create/model/InvitationCreateProvider";
 import { ArrowLeft, Save, Eye, CheckCircle, Loader2 } from "lucide-react";
+
 import { InvitationEditorForm } from "./InvitationEditorForm";
 import { InvitationPreview } from "@/widgets/invitation-preview/ui/InvitationPreview";
 import { PublishSuccessModal } from "@/widgets/invitation-publish-settings/ui/PublishSuccessModal";
+import { useInvitationCreate } from "@/views/admin-invitation-create/model/InvitationCreateProvider";
 import { API_URL } from "@/shared/lib/config";
 
 export function InvitationEditorScreen() {
@@ -25,7 +26,10 @@ export function InvitationEditorScreen() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [customerEmail, setCustomerEmail] = useState("");
-  const [credentials, setCredentials] = useState<{email: string, password: string} | null>(null);
+  const [credentials, setCredentials] = useState<{
+    email: string;
+    password: string;
+  } | null>(null);
 
   const triggerPublish = () => {
     if (isEditMode) {
@@ -43,8 +47,7 @@ export function InvitationEditorScreen() {
       const payload = {
         slug: publishSettings.urlSlug,
         templateId:
-          Number((activeTemplate as any)?.id || (activeTemplate as any)?._id) ||
-          1,
+          (activeTemplate as any)?.id || (activeTemplate as any)?._id || 1,
         groomName: basicInfo.groomName,
         brideName: basicInfo.brideName,
         groomFatherName: basicInfo.groomFatherName,
@@ -119,10 +122,10 @@ export function InvitationEditorScreen() {
           ></div>
           <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 flex flex-col animate-in fade-in zoom-in-95 duration-200">
             <h3 className="text-xl font-bold text-slate-800 mb-2">
-              Email khách hàng (Bắt buộc)
+              Email khách hàng
             </h3>
             <p className="text-sm text-slate-500 mb-6">
-              Vui lòng nhập email của Cô dâu/Chú rể để hệ thống tự động tạo tài khoản quản lý thiệp cho họ.
+              Vui lòng nhập email của Cô dâu/Chú rể
             </p>
             <input
               type="email"
@@ -140,7 +143,7 @@ export function InvitationEditorScreen() {
               </button>
               <button
                 onClick={handlePublish}
-                disabled={!customerEmail || !customerEmail.includes('@')}
+                disabled={!customerEmail || !customerEmail.includes("@")}
                 className="px-5 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Tiếp tục Xuất bản
@@ -161,7 +164,9 @@ export function InvitationEditorScreen() {
           </button>
           <div>
             <h2 className="font-bold text-slate-800 text-sm">
-              {isEditMode ? "Chỉnh sửa thiệp cưới" : (activeTemplate?.name || "Tạo thiệp mới")}
+              {isEditMode
+                ? "Chỉnh sửa thiệp cưới"
+                : activeTemplate?.name || "Tạo thiệp mới"}
             </h2>
             <p className="text-[10px] text-slate-500">
               {isPublishing ? "Đang lưu..." : "Sẵn sàng lưu"}
@@ -170,7 +175,7 @@ export function InvitationEditorScreen() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={handlePublish}
             disabled={isPublishing}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
@@ -241,7 +246,7 @@ export function InvitationEditorScreen() {
               </button>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto custom-scrollbar flex items-center justify-center p-8">
+          <div className="flex-1 overflow-hidden flex items-center justify-center p-8">
             <InvitationPreview />
           </div>
         </div>

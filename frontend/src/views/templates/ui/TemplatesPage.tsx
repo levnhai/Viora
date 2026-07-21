@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Search, SlidersHorizontal, ArrowRight, X, ChevronDown, Check, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/widgets/header/ui/Header";
-import { Footer } from "@/widgets/footer/ui/Footer";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 import { TEMPLATES } from "@/entities/template/model/templates";
@@ -575,8 +574,6 @@ export function TemplatesPage() {
           onSelectTemplate={setPreviewTpl}
         />
       )}
-
-      <Footer />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, User, Key, ChevronDown } from "lucide-react";
 
 interface DashboardHeaderProps {
   activeTab: string;
@@ -25,56 +25,130 @@ export const DashboardHeader = ({
   const [isMobileGuestMenuOpen, setIsMobileGuestMenuOpen] = useState(false);
   const [isMobileGuestbookMenuOpen, setIsMobileGuestbookMenuOpen] =
     useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const getInitials = (name: string | null) => {
+    if (!name) return "U";
+    const cleanName = name.trim();
+    if (!cleanName) return "U";
+    const parts = cleanName.split(" ");
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   return (
     <>
       {/* Header Desktop (hidden md:block) */}
-      <header className="bg-white border-b border-[#c9828e]/15 sticky top-0 z-30 hidden md:block">
+      <header className="bg-white border-b border-slate-100 sticky top-0 z-30 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <img
-            src="/icon.svg"
-            alt="Viora Logo"
-            className="h-10 w-auto select-none font-sans"
-            style={{ cursor: "pointer" }}
+          <div 
+            className="flex items-center gap-3 cursor-pointer select-none"
             onClick={() => navigate("/dashboard")}
-          />
-
+          >
+            <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 shadow-3xs transition-transform duration-200 hover:scale-105">
+              <img
+                src="/icon.svg"
+                alt="Viora Logo"
+                className="h-6 w-auto"
+              />
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-lg font-black text-slate-800 tracking-wider font-sans uppercase">
+                Viora
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 font-sans tracking-wide uppercase pt-0.5">
+                / Dashboard
+              </span>
+            </div>
+          </div>
+ 
           <div className="flex items-center gap-4">
-            <span className="text-xs text-[#7a5c4f] hidden sm:inline-block">
-              Tài khoản: <span className="font-semibold">{username}</span>
-            </span>
             {weddingSlug && (
               <a
                 href={`/w/${weddingSlug}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs px-3 py-1.5 rounded-lg border border-[#c9828e]/30 text-[#8b3a52] hover:bg-[#8b3a52]/5 transition-colors no-underline font-medium font-sans"
+                className="text-xs px-3.5 py-2 rounded-xl border border-[#1b365d]/20 text-[#1b365d] hover:bg-[#1b365d]/5 transition-colors no-underline font-medium font-sans flex items-center justify-center"
               >
                 Xem thiệp live
               </a>
             )}
-            <button
-              onClick={handleLogout}
-              className="text-xs text-[#7a5c4f] hover:text-red-600 transition-colors flex items-center gap-1.5 border-0 bg-transparent cursor-pointer font-medium font-sans"
-            >
-              <LogOut size={14} /> Đăng xuất
-            </button>
+            
+            {/* User Avatar Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-50 border-0 bg-transparent cursor-pointer transition-all focus:outline-none"
+              >
+                <div className="w-8 h-8 rounded-full bg-[#1b365d] text-white flex items-center justify-center text-xs font-bold font-mono tracking-wider shadow-2xs">
+                  {getInitials(username)}
+                </div>
+                <ChevronDown size={14} className="text-slate-450" />
+              </button>
+
+              {isUserMenuOpen && (
+                <>
+                  {/* Overlay to close menu */}
+                  <div
+                    className="fixed inset-0 z-40 cursor-default"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  />
+                  {/* Dropdown Menu */}
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 py-2.5 z-50 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
+                    {/* User Info Section */}
+                    <div className="px-4 py-2 border-b border-slate-100 mb-2">
+                      <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                        Tài khoản
+                      </p>
+                      <p className="text-sm font-bold text-slate-800 truncate mt-0.5">
+                        {username || "Người dùng"}
+                      </p>
+                    </div>
+
+                    {/* Menu Items */}
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        navigate("/account");
+                      }}
+                      className="w-full px-4 py-2 text-xs text-left hover:bg-slate-50 border-0 bg-transparent cursor-pointer text-slate-700 font-medium flex items-center gap-2.5 transition-colors"
+                    >
+                      <Key size={14} className="text-slate-400" />
+                      Đổi mật khẩu
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="w-full px-4 py-2 text-xs text-left hover:bg-red-50 hover:text-red-600 border-0 bg-transparent cursor-pointer text-slate-700 font-medium flex items-center gap-2.5 transition-colors"
+                    >
+                      <LogOut size={14} className="text-slate-400" />
+                      Đăng xuất
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
-
+ 
       {/* Header Mobile (block md:hidden) */}
       <header className="sticky top-0 w-full border-b border-stone-100 z-30 block md:hidden bg-white">
         <div className="flex items-center justify-between h-14 px-4 w-full">
           {activeTab === "overview" && (
             <>
-              <div className="flex items-center">
-                <img
-                  src="/icon.svg"
-                  alt="Viora Logo"
-                  className="h-20 w-auto select-none"
-                />
-                <h3 className="text-[16px] font-extrabold text-pink-500 font-sans tracking-tight pt-0.5">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100">
+                  <img
+                    src="/icon.svg"
+                    alt="Viora Logo"
+                    className="h-5.5 w-auto select-none"
+                  />
+                </div>
+                <h3 className="text-[15px] font-black text-slate-800 font-sans tracking-wider uppercase pt-0.5">
                   VIORA
                 </h3>
               </div>

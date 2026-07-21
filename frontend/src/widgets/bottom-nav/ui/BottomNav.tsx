@@ -56,65 +56,91 @@ export function BottomNav() {
   };
  
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#1c1917] border-t border-[#292524] flex items-center justify-around h-16 shadow-[0_-4px_12px_rgba(0,0,0,0.35)] select-none px-2">
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-slate-100 flex items-center justify-around h-16 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.04)] select-none px-2">
       {/* 1. Tổng quan */}
       <button
         onClick={() => handleNav("overview")}
-        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-colors ${
-          activeTab === "overview" ? "text-[#db2777]" : "text-stone-400"
+        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-all active:scale-95 relative ${
+          activeTab === "overview" ? "text-[#1b365d]" : "text-slate-400"
         }`}
       >
-        <Heart size={18} fill={activeTab === "overview" ? "currentColor" : "none"} />
-        <span className="text-[9px] font-bold tracking-wide">
+        <Heart 
+          size={18} 
+          fill={activeTab === "overview" ? "currentColor" : "none"} 
+          className="transition-transform duration-200"
+        />
+        <span className="text-[10px] font-medium tracking-wide">
           Tổng quan
         </span>
+        {activeTab === "overview" && (
+          <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#c6925c] animate-pulse" />
+        )}
       </button>
  
       {/* 2. Lời chúc */}
       <button
         onClick={() => handleNav("guestbook")}
-        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-colors ${
-          activeTab === "guestbook" ? "text-[#db2777]" : "text-stone-400"
+        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-all active:scale-95 relative ${
+          activeTab === "guestbook" ? "text-[#1b365d]" : "text-slate-400"
         }`}
       >
-        <BookOpen size={18} fill={activeTab === "guestbook" ? "currentColor" : "none"} />
-        <span className="text-[9px] font-bold tracking-wide">
+        <BookOpen 
+          size={18} 
+          fill={activeTab === "guestbook" ? "currentColor" : "none"} 
+          className="transition-transform duration-200"
+        />
+        <span className="text-[10px] font-medium tracking-wide">
           Lời chúc
         </span>
+        {activeTab === "guestbook" && (
+          <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#c6925c] animate-pulse" />
+        )}
       </button>
 
       {/* 3. Nút tròn hồng đỏ nổi dấu + ở giữa */}
       <button
         onClick={() => router.push("/dashboard?tab=guests&action=add")}
-        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#db2777] text-white hover:bg-[#be185d] transition-all border-0 shadow-lg active:scale-95 cursor-pointer -mt-5 shrink-0"
+        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1b365d] text-white hover:bg-[#122543] transition-all border-0 shadow-[0_4px_14px_rgba(27,54,93,0.3)] active:scale-90 cursor-pointer -mt-6 shrink-0 ring-4 ring-white/90"
       >
-        <Plus size={24} />
+        <Plus size={22} className="transition-transform active:rotate-90 duration-200" />
       </button>
  
       {/* 4. Khách mời */}
       <button
         onClick={() => handleNav("guests")}
-        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-colors ${
-          activeTab === "guests" ? "text-[#db2777]" : "text-stone-400"
+        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-all active:scale-95 relative ${
+          activeTab === "guests" ? "text-[#1b365d]" : "text-slate-400"
         }`}
       >
-        <Users size={18} />
-        <span className="text-[9px] font-bold tracking-wide">
+        <Users 
+          size={18} 
+          className="transition-transform duration-200"
+        />
+        <span className="text-[10px] font-medium tracking-wide">
           Khách mời
         </span>
+        {activeTab === "guests" && (
+          <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#c6925c] animate-pulse" />
+        )}
       </button>
  
       {/* 5. Cài đặt */}
       <button
         onClick={() => handleNav("qr")}
-        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-colors ${
-          activeTab === "qr" ? "text-[#db2777]" : "text-stone-400"
+        className={`flex flex-col items-center justify-center gap-1 w-14 h-full border-0 bg-transparent cursor-pointer transition-all active:scale-95 relative ${
+          activeTab === "qr" ? "text-[#1b365d]" : "text-slate-400"
         }`}
       >
-        <Settings size={18} />
-        <span className="text-[9px] font-bold tracking-wide">
+        <Settings 
+          size={18} 
+          className="transition-transform duration-200"
+        />
+        <span className="text-[10px] font-medium tracking-wide">
           Cài đặt
         </span>
+        {activeTab === "qr" && (
+          <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#c6925c] animate-pulse" />
+        )}
       </button>
     </div>
   );

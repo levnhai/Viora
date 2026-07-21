@@ -2,12 +2,23 @@
 
 import { useInvitationCreate } from "@/views/admin-invitation-create/model/InvitationCreateProvider";
 import { Accordion } from "@/shared/ui/Accordion";
-import { Upload, Calendar, Clock, MapPin, Map, AlignLeft, Bold, Italic, Underline, Link as LinkIcon, Image as ImageIcon } from "lucide-react";
+import {
+  Upload,
+  AlignLeft,
+  Bold,
+  Italic,
+  Underline,
+  Link as LinkIcon,
+  Image as ImageIcon,
+} from "lucide-react";
 
 export function InvitationEditor() {
   const { basicInfo, setBasicInfo, story, setStory } = useInvitationCreate();
 
-  const handleBasicInfoChange = (field: keyof typeof basicInfo, value: string) => {
+  const handleBasicInfoChange = (
+    field: keyof typeof basicInfo,
+    value: string,
+  ) => {
     setBasicInfo({ ...basicInfo, [field]: value });
   };
 
@@ -18,7 +29,6 @@ export function InvitationEditor() {
       </div>
 
       <div className="p-4 overflow-y-auto flex-1 custom-scrollbar space-y-4">
-        
         {/* Basic Info */}
         <Accordion title="Thông tin cơ bản" defaultOpen>
           <div className="space-y-4">
@@ -29,7 +39,9 @@ export function InvitationEditor() {
               <input
                 type="text"
                 value={basicInfo.groomName}
-                onChange={(e) => handleBasicInfoChange("groomName", e.target.value)}
+                onChange={(e) =>
+                  handleBasicInfoChange("groomName", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
@@ -40,7 +52,9 @@ export function InvitationEditor() {
               <input
                 type="text"
                 value={basicInfo.brideName}
-                onChange={(e) => handleBasicInfoChange("brideName", e.target.value)}
+                onChange={(e) =>
+                  handleBasicInfoChange("brideName", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
@@ -53,7 +67,9 @@ export function InvitationEditor() {
                   <input
                     type="date"
                     value={basicInfo.weddingDate}
-                    onChange={(e) => handleBasicInfoChange("weddingDate", e.target.value)}
+                    onChange={(e) =>
+                      handleBasicInfoChange("weddingDate", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
                   />
                 </div>
@@ -65,7 +81,9 @@ export function InvitationEditor() {
                 <input
                   type="time"
                   value={basicInfo.weddingTime}
-                  onChange={(e) => handleBasicInfoChange("weddingTime", e.target.value)}
+                  onChange={(e) =>
+                    handleBasicInfoChange("weddingTime", e.target.value)
+                  }
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
@@ -78,7 +96,9 @@ export function InvitationEditor() {
                 <input
                   type="text"
                   value={basicInfo.locationName}
-                  onChange={(e) => handleBasicInfoChange("locationName", e.target.value)}
+                  onChange={(e) =>
+                    handleBasicInfoChange("locationName", e.target.value)
+                  }
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
@@ -89,7 +109,9 @@ export function InvitationEditor() {
                 <input
                   type="text"
                   value={basicInfo.address}
-                  onChange={(e) => handleBasicInfoChange("address", e.target.value)}
+                  onChange={(e) =>
+                    handleBasicInfoChange("address", e.target.value)
+                  }
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
@@ -101,7 +123,9 @@ export function InvitationEditor() {
               <input
                 type="text"
                 value={basicInfo.mapLink}
-                onChange={(e) => handleBasicInfoChange("mapLink", e.target.value)}
+                onChange={(e) =>
+                  handleBasicInfoChange("mapLink", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
@@ -117,12 +141,21 @@ export function InvitationEditor() {
               </label>
               <div className="flex items-center gap-3">
                 <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0">
-                  <img src="https://i.pravatar.cc/150?img=11" alt="Groom" className="w-full h-full object-cover" />
+                  <img
+                    src="https://i.pravatar.cc/150?img=11"
+                    alt="Groom"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="flex-1">
                   <button className="flex flex-col items-center justify-center w-full h-16 border-2 border-dashed border-slate-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors cursor-pointer group">
-                    <Upload size={14} className="text-slate-400 group-hover:text-indigo-500 mb-1" />
-                    <span className="text-[10px] text-slate-500 group-hover:text-indigo-600">Thay ảnh</span>
+                    <Upload
+                      size={14}
+                      className="text-slate-400 group-hover:text-indigo-500 mb-1"
+                    />
+                    <span className="text-[10px] text-slate-500 group-hover:text-indigo-600">
+                      Thay ảnh
+                    </span>
                   </button>
                 </div>
               </div>
@@ -133,12 +166,21 @@ export function InvitationEditor() {
               </label>
               <div className="flex items-center gap-3">
                 <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0">
-                  <img src="https://i.pravatar.cc/150?img=5" alt="Bride" className="w-full h-full object-cover" />
+                  <img
+                    src="https://i.pravatar.cc/150?img=5"
+                    alt="Bride"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="flex-1">
                   <button className="flex flex-col items-center justify-center w-full h-16 border-2 border-dashed border-slate-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors cursor-pointer group">
-                    <Upload size={14} className="text-slate-400 group-hover:text-indigo-500 mb-1" />
-                    <span className="text-[10px] text-slate-500 group-hover:text-indigo-600">Thay ảnh</span>
+                    <Upload
+                      size={14}
+                      className="text-slate-400 group-hover:text-indigo-500 mb-1"
+                    />
+                    <span className="text-[10px] text-slate-500 group-hover:text-indigo-600">
+                      Thay ảnh
+                    </span>
                   </button>
                 </div>
               </div>
@@ -157,14 +199,26 @@ export function InvitationEditor() {
                 <option>Heading 2</option>
               </select>
               <div className="w-px h-4 bg-slate-300 mx-1" />
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><Bold size={14} /></button>
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><Italic size={14} /></button>
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><Underline size={14} /></button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <Bold size={14} />
+              </button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <Italic size={14} />
+              </button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <Underline size={14} />
+              </button>
               <div className="w-px h-4 bg-slate-300 mx-1" />
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><AlignLeft size={14} /></button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <AlignLeft size={14} />
+              </button>
               <div className="w-px h-4 bg-slate-300 mx-1" />
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><LinkIcon size={14} /></button>
-              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600"><ImageIcon size={14} /></button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <LinkIcon size={14} />
+              </button>
+              <button className="p-1.5 hover:bg-slate-200 rounded text-slate-600">
+                <ImageIcon size={14} />
+              </button>
             </div>
             <textarea
               value={story}
@@ -177,11 +231,10 @@ export function InvitationEditor() {
         </Accordion>
 
         {/* Other Sections (Collapsed) */}
-        <Accordion title="Thông tin sự kiện" />
+        {/* <Accordion title="Thông tin sự kiện" />
         <Accordion title="Timeline" />
         <Accordion title="Quà mừng" />
-        <Accordion title="Thiết lập khác" />
-
+        <Accordion title="Thiết lập khác" /> */}
       </div>
 
       <div className="p-4 border-t border-slate-100 shrink-0">

@@ -74,6 +74,7 @@ export function LiveView({
           weddingDate={weddingData.weddingDate}
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
+          isFixed={!previewMode}
           primaryColor={colorPalette.primaryColor}
           textColor={colorPalette.textColor}
           onOpen={() => {

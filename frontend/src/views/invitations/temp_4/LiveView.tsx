@@ -86,6 +86,7 @@ export function LiveView({
           weddingDate={weddingData.weddingDate}
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
+          isFixed={!previewMode}
           primaryColor="#fdfbf6"
           textColor={colorPalette.textColor}
           onOpen={() => {
@@ -165,26 +166,6 @@ export function LiveView({
                   textColor={colorPalette.textColor}
                 />
               </GsapReveal>
-
-              {/* đếm ngược */}
-              {/* <Countdown
-                variantId="minimal"
-                weddingData={weddingData}
-                primaryColor={colorPalette.primaryColor}
-                textColor={colorPalette.textColor}
-              />
-
-              <GsapReveal
-                direction="up"
-                distance={30}
-                className="flex justify-center my-0 sm:my-0"
-              >
-                <img
-                  src={img_1.src}
-                  alt="divider"
-                  className="w-24 sm:w-32 opacity-40"
-                />
-              </GsapReveal> */}
 
               {/* địa điểm */}
               {primaryEvent && (

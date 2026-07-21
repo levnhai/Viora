@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Heart, Loader2, Plus } from "lucide-react";
+import { Heart, Loader2, Plus, Key, ChevronDown, LogOut } from "lucide-react";
 
 import { OverviewTab } from "./OverviewTab";
 import { GuestsTab } from "./GuestsTab";
@@ -30,6 +30,7 @@ export function BuyerDashboardPage() {
     "overview" | "guests" | "guestbook" | "setting" | "qr"
   >("overview");
   const [subTab, setSubTab] = useState<"list" | "rsvp">("list");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const {
     weddingSlug,
@@ -93,6 +94,17 @@ export function BuyerDashboardPage() {
     }
   }, [actionParam, router]);
 
+  // Realtime Polling: refetch every 5 seconds to update lists and stats automatically in background
+  useEffect(() => {
+    if (!weddingSlug) return;
+
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [weddingSlug, refetch]);
+
   const handleCopyLink = (name: string, id: string) => {
     const baseUrl = window.location.origin;
     const personalizedUrl = `${baseUrl}/w/${weddingSlug}?to=${encodeURIComponent(name)}`;
@@ -116,9 +128,9 @@ export function BuyerDashboardPage() {
 
   if (!hasMounted || loading) {
     return (
-      <div className="min-h-screen bg-[#fdf6ef] flex flex-col items-center justify-center space-y-4">
-        <Loader2 className="w-10 h-10 animate-spin text-[#8b3a52]" />
-        <p className="text-sm font-medium text-[#7a5c4f] tracking-wide">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="w-10 h-10 animate-spin text-[#1b365d]" />
+        <p className="text-sm font-medium text-slate-500 tracking-wide">
           Đang tải trang quản lý...
         </p>
       </div>
@@ -128,62 +140,109 @@ export function BuyerDashboardPage() {
   if (!weddingSlug) {
     return (
       <div
-        className="min-h-screen bg-[#faf5f0] flex flex-col font-sans pb-24 md:pb-0"
+        className="min-h-screen bg-slate-50 flex flex-col font-sans pb-24 md:pb-0"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
-        <header className="bg-white border-b border-[#c9828e]/15 sticky top-0 z-30">
+        <header className="bg-white border-b border-slate-100 sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#8b3a52] flex items-center justify-center">
-                <Heart size={14} className="text-white" fill="currentColor" />
+            <div
+              className="flex items-center gap-3 cursor-pointer select-none"
+              onClick={() => router.push("/dashboard")}
+            >
+              <div className="">
+                <img src="/icon.svg" alt="Viora Logo" className="h-6 w-auto" />
               </div>
-              <span className="text-lg font-semibold text-[#2c1810]">
-                Viora Studio{" "}
-                <span className="text-xs font-normal text-[#7a5c4f]/70">
-                  / Dashboard
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-black text-slate-800 tracking-wider font-sans uppercase">
+                  Viora
                 </span>
-              </span>
+              </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-xs text-[#7a5c4f] hidden sm:inline-block">
-                Tài khoản:{" "}
-                <span className="font-semibold">
-                  {localStorage.getItem("username")}
-                </span>
-              </span>
-              <button
-                onClick={handleLogout}
-                className="text-xs text-[#7a5c4f] hover:text-red-600 transition-colors flex items-center gap-1.5 border-0 bg-transparent cursor-pointer font-medium"
-              >
-                Đăng xuất
-              </button>
+              {/* User Avatar Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-50 border-0 bg-transparent cursor-pointer transition-all focus:outline-none"
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#1b365d] text-white flex items-center justify-center text-xs font-bold font-mono tracking-wider shadow-2xs">
+                    {getInitials(typeof window !== "undefined" ? localStorage.getItem("username") : null)}
+                  </div>
+                  <ChevronDown size={14} className="text-slate-450" />
+                </button>
+
+                {isUserMenuOpen && (
+                  <>
+                    {/* Overlay to close menu */}
+                    <div
+                      className="fixed inset-0 z-40 cursor-default"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    />
+                    {/* Dropdown Menu */}
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 py-2.5 z-50 animate-in fade-in zoom-in-95 duration-100 origin-top-right">
+                      {/* User Info Section */}
+                      <div className="px-4 py-2 border-b border-slate-100 mb-2">
+                        <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                          Tài khoản
+                        </p>
+                        <p className="text-sm font-bold text-slate-800 truncate mt-0.5">
+                          {(typeof window !== "undefined" ? localStorage.getItem("username") : "") || "Người dùng"}
+                        </p>
+                      </div>
+
+                      {/* Menu Items */}
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          router.push("/account");
+                        }}
+                        className="w-full px-4 py-2 text-xs text-left hover:bg-slate-50 border-0 bg-transparent cursor-pointer text-slate-700 font-medium flex items-center gap-2.5 transition-colors"
+                      >
+                        <Key size={14} className="text-slate-400" />
+                        Đổi mật khẩu
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full px-4 py-2 text-xs text-left hover:bg-red-50 hover:text-red-600 border-0 bg-transparent cursor-pointer text-slate-700 font-medium flex items-center gap-2.5 transition-colors"
+                      >
+                        <LogOut size={14} className="text-slate-400" />
+                        Đăng xuất
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </header>
 
         <div className="flex-1 flex flex-col items-center justify-center p-8 max-w-lg mx-auto text-center space-y-6">
-          <div className="w-16 h-16 rounded-3xl bg-[#8b3a52]/10 flex items-center justify-center mx-auto shadow-sm">
+          <div className="w-16 h-16 rounded-3xl bg-[#c6925c]/10 flex items-center justify-center mx-auto shadow-sm">
             <Heart
               size={28}
-              className="text-[#8b3a52] animate-pulse"
+              className="text-[#c6925c] animate-pulse"
               fill="currentColor"
             />
           </div>
           <div className="space-y-2">
             <h2
-              className="text-3xl font-semibold text-[#2c1810]"
+              className="text-3xl font-semibold text-slate-800"
               style={{ fontFamily: "'EB Garamond', serif" }}
             >
               Chào mừng bạn đến với Viora Wedding
             </h2>
-            <p className="text-sm text-[#7a5c4f] leading-relaxed max-w-sm mx-auto">
+            <p className="text-sm text-slate-500 leading-relaxed max-w-sm mx-auto">
               Bạn chưa tạo thiệp cưới trực tuyến nào. Hãy bắt đầu tạo một mẫu
               thiệp cưới thật lộng lẫy để chia sẻ niềm vui của bạn!
             </p>
           </div>
           <button
             onClick={() => router.push("/create")}
-            className="px-6 py-3.5 bg-[#8b3a52] text-white rounded-xl text-xs font-semibold hover:opacity-95 active:scale-[0.98] transition-all border-0 cursor-pointer flex items-center gap-2 mx-auto"
+            className="px-6 py-3.5 bg-[#1b365d] text-white rounded-xl text-xs font-semibold hover:opacity-95 active:scale-[0.98] transition-all border-0 cursor-pointer flex items-center gap-2 mx-auto"
           >
             <Plus size={14} />
             <span>Tạo thiệp cưới đầu tiên</span>
@@ -217,7 +276,7 @@ export function BuyerDashboardPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#faf5f0] flex flex-col"
+      className="min-h-screen bg-slate-50 flex flex-col"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <DashboardHeader
@@ -253,19 +312,15 @@ export function BuyerDashboardPage() {
             </div>
           )}
 
-          {activeTab === "overview" && weddingData && (
+          {activeTab === "overview" && (
             <OverviewTab
               weddingData={weddingData}
               confirmedGuests={confirmedGuests}
-              declinedGuests={declinedGuests}
-              pendingGuests={pendingGuests}
-              totalGuests={totalGuests}
+              totalGuests={guestList.length}
               guestList={guestList}
               guestbookList={guestbookList}
               origin={origin}
               weddingSlug={weddingSlug}
-              copiedId={copiedId}
-              setCopiedId={setCopiedId}
               setActiveTab={setActiveTab}
               setSubTab={setSubTab}
               navigate={router.push}

@@ -390,6 +390,7 @@ export class WeddingsService {
         { $inc: { views: 1 } },
         { returnDocument: 'after' },
       )
+      .populate('templateId')
       .lean()
       .exec();
 
@@ -422,8 +423,11 @@ export class WeddingsService {
       .lean()
       .exec();
 
+    const templateCode = (wedding.templateId as any)?.code || 'temp_1';
+
     return {
       ...wedding,
+      templateId: templateCode,
       themeSettings,
       galleryImages,
       events,

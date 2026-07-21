@@ -28,3 +28,14 @@ export const extractIframeSrc = (input: string) => {
 // lấy chữ cái đầu tiên của tên
 export const getLastNameFirstLetter = (fullName: string) =>
   fullName?.trim().split(/\s+/).pop()?.[0]?.toUpperCase() ?? "";
+
+// lấy 2 chữ cái cuối cùng của tên
+export const getLastTwoNames = (fullName: string) => {
+  const parts = fullName.trim().split(/\s+/);
+
+  if (parts.length <= 2) {
+    return fullName.trim();
+  }
+
+  return parts.slice(-2).join(" ");
+};

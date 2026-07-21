@@ -93,7 +93,7 @@ export function GuestsTab({
             onClick={() => setFilterRsvp("all")}
             className={`flex-1 min-w-max text-center py-2.5 px-3 text-[11px] font-bold rounded-[0.75rem] transition-all cursor-pointer whitespace-nowrap snap-start border-0 ${
               filterRsvp === "all"
-                ? "bg-white text-[#db2777] shadow-sm"
+                ? "bg-white text-[#1b365d] shadow-sm"
                 : "text-stone-500 hover:text-stone-700 bg-transparent"
             }`}
           >
@@ -122,27 +122,34 @@ export function GuestsTab({
         </div>
 
         {/* Desktop Filter Bar */}
-        <div className="hidden md:flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl border border-[#c9828e]/15">
+        <div className="hidden md:flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl border border-[#e2e8f0]/15">
           <div className="relative w-full sm:w-80">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#7a5c4f]/50" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#475569]/50" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm theo tên hoặc số điện thoại..."
-              className="w-full pl-9 pr-4 py-2.5 border border-[#c9828e]/20 rounded-xl text-xs outline-none focus:border-[#8b3a52] text-[#2c1810]"
+              className="w-full pl-9 pr-4 py-2.5 border border-[#e2e8f0]/20 rounded-xl text-xs outline-none focus:border-[#1b365d] text-[#1e293b]"
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <select
               value={filterRsvp}
               onChange={(e: any) => setFilterRsvp(e.target.value)}
-              className="px-3 py-2 border border-[#c9828e]/20 rounded-xl text-xs outline-none focus:border-[#8b3a52] bg-white text-[#2c1810] cursor-pointer font-medium"
+              className="px-3 py-2 border border-[#e2e8f0]/20 rounded-xl text-xs outline-none focus:border-[#1b365d] bg-white text-[#1e293b] cursor-pointer font-medium"
             >
               <option value="all">Tất cả trạng thái</option>
               <option value="confirmed">Đã xác nhận</option>
               <option value="pending">Chưa xác nhận</option>
             </select>
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1b365d] text-white hover:bg-[#1b365d]/90 border-0 rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-2xs hover:shadow-xs active:scale-98"
+            >
+              <Plus size={14} />
+              Thêm khách mới
+            </button>
           </div>
         </div>
 
@@ -153,8 +160,11 @@ export function GuestsTab({
             <span className="text-[9px] sm:text-[11px] font-extrabold text-stone-400 tracking-wide uppercase">
               Tổng số
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-stone-800 mt-1.5 font-mono leading-none">
-              {totalGuests}
+            <h3 className="text-xl sm:text-2xl font-black text-stone-800 mt-1.5 font-mono leading-none flex items-baseline gap-1">
+              {totalGuests}{" "}
+              <span className="text-[10px] sm:text-xs font-semibold text-stone-400 lowercase">
+                khách
+              </span>
             </h3>
           </div>
           <div className="bg-white p-3 sm:p-4 rounded-[1.25rem] border border-stone-100 flex flex-col justify-between shadow-3xs relative overflow-hidden">
@@ -162,8 +172,11 @@ export function GuestsTab({
             <span className="text-[9px] sm:text-[11px] font-extrabold text-stone-400 tracking-wide uppercase">
               Xác nhận
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-green-600 mt-1.5 font-mono leading-none">
-              {confirmedGuests}
+            <h3 className="text-xl sm:text-2xl font-black text-green-600 mt-1.5 font-mono leading-none flex items-baseline gap-1">
+              {confirmedGuests}{" "}
+              <span className="text-[10px] sm:text-xs font-semibold text-green-500/70 lowercase">
+                khách
+              </span>
             </h3>
           </div>
           <div className="bg-white p-3 sm:p-4 rounded-[1.25rem] border border-stone-100 flex flex-col justify-between shadow-3xs relative overflow-hidden">
@@ -171,8 +184,11 @@ export function GuestsTab({
             <span className="text-[9px] sm:text-[11px] font-extrabold text-stone-400 tracking-wide uppercase">
               Chờ KQ
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-orange-500 mt-1.5 font-mono leading-none">
-              {pendingGuests + declinedGuests}
+            <h3 className="text-xl sm:text-2xl font-black text-orange-500 mt-1.5 font-mono leading-none flex items-baseline gap-1">
+              {pendingGuests + declinedGuests}{" "}
+              <span className="text-[10px] sm:text-xs font-semibold text-orange-400/70 lowercase">
+                khách
+              </span>
             </h3>
           </div>
         </div>
@@ -327,7 +343,7 @@ export function GuestsTab({
           <div className="fixed bottom-20 left-4 right-4 z-40">
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="w-full py-4 bg-[#db2777] text-white hover:bg-[#be185d] border-0 rounded-2xl text-xs font-bold transition-all shadow-md shadow-pink-900/20 active:scale-98 cursor-pointer flex items-center justify-center gap-1.5 font-sans"
+              className="w-full py-4 bg-[#1b365d] text-white hover:bg-[#be185d] border-0 rounded-2xl text-xs font-bold transition-all shadow-md shadow-[#1b365d]/20 active:scale-98 cursor-pointer flex items-center justify-center gap-1.5 font-sans"
             >
               <Plus size={16} /> Thêm khách mới
             </button>
@@ -335,35 +351,32 @@ export function GuestsTab({
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden md:block bg-white rounded-2xl border border-[#c9828e]/15 overflow-hidden shadow-2xs">
-          <div className="px-6 py-4 border-b border-[#c9828e]/10 flex items-center justify-between">
-            <h2
-              className="text-lg font-medium text-[#2c1810]"
-              style={{ fontFamily: "'EB Garamond', serif" }}
-            >
-              Danh sách khách mời đã lập
+        <div className="hidden md:block bg-white rounded-2xl border border-[#e2e8f0]/15 overflow-hidden shadow-2xs">
+          <div className="px-6 py-4 border-b border-[#e2e8f0]/10 flex items-center justify-between">
+            <h2 className="text-base font-bold text-slate-800 tracking-tight">
+              Danh sách khách mời
             </h2>
-            <span className="text-xs text-[#7a5c4f]/70 italic">
-              Link mời riêng biệt từng người
+            <span className="text-xs text-slate-400 font-medium">
+              Link mời từng người
             </span>
           </div>
 
           {filteredGuestList.length === 0 ? (
-            <div className="text-center py-12 text-[#7a5c4f]/60 text-sm">
+            <div className="text-center py-12 text-[#475569]/60 text-sm">
               Danh sách đang trống hoặc không khớp với bộ lọc.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-[#faf5f0] border-b border-[#c9828e]/10 text-[10px] uppercase tracking-wider text-[#7a5c4f] font-semibold">
+                  <tr className="bg-[#f8fafc] border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-bold">
                     <th className="px-6 py-3">Khách mời</th>
                     <th className="px-6 py-3">
-                      <Phone size={11} className="inline mr-1" />
+                      <Phone size={12} className="inline mr-1" />
                       Số điện thoại
                     </th>
                     <th className="px-6 py-3">
-                      <Tag size={11} className="inline mr-1" />
+                      <Tag size={12} className="inline mr-1" />
                       Nhóm
                     </th>
                     <th className="px-6 py-3 text-center">Trạng thái RSVP</th>
@@ -371,30 +384,32 @@ export function GuestsTab({
                     <th className="px-6 py-3 text-center">Hành động</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#c9828e]/10 text-sm text-[#2c1810]">
+                <tbody className="divide-y divide-[#e2e8f0]/10 text-sm text-[#1e293b]">
                   {filteredGuestList.map((g) => {
                     const avatarColor = getAvatarColor(g.name);
                     const initials = getInitials(g.name);
                     return (
                       <tr
                         key={g._id}
-                        className="hover:bg-[#faf5f0]/30 transition-colors"
+                        className="hover:bg-[#f8fafc]/30 transition-colors"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div
-                              className={`w-8 h-8 rounded-full flex items-center justify-center text-2xs font-bold font-mono ${avatarColor.bg}`}
+                              className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${avatarColor.bg} border-2 border-white shadow-3xs`}
                             >
                               {initials}
                             </div>
-                            <span className="font-semibold">{g.name}</span>
+                            <span className="font-semibold text-slate-700 text-sm">
+                              {g.name}
+                            </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-xs font-mono">
+                        <td className="px-6 py-4 text-xs font-mono text-slate-500">
                           {g.phone || "—"}
                         </td>
                         <td className="px-6 py-4">
-                          <span className="inline-block px-2 py-0.5 rounded-md text-[10px] bg-[#faf5f0] text-[#7a5c4f] border border-[#c9828e]/15 font-medium">
+                          <span className="inline-block px-2.5 py-1 rounded-full text-xs bg-slate-100 text-slate-600 font-medium">
                             {g.relationship}
                           </span>
                         </td>
@@ -404,12 +419,12 @@ export function GuestsTab({
                             onChange={(e) =>
                               handleUpdateGuestStatus(g._id, e.target.value)
                             }
-                            className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border outline-none cursor-pointer ${
+                            className={`text-xs font-semibold px-3 py-1.5 rounded-full border outline-none cursor-pointer transition-colors ${
                               g.rsvpStatus === "confirmed"
-                                ? "bg-green-50 text-green-700 border-green-200"
+                                ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100/50"
                                 : g.rsvpStatus === "declined"
-                                  ? "bg-red-50 text-red-700 border-red-200"
-                                  : "bg-orange-50 text-orange-600 border-orange-200"
+                                  ? "bg-red-50 text-red-700 border-red-200 hover:bg-red-100/50"
+                                  : "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-100/50"
                             }`}
                           >
                             <option value="pending">Chưa phản hồi</option>
@@ -420,16 +435,18 @@ export function GuestsTab({
                         <td className="px-6 py-4">
                           <button
                             onClick={() => handleCopyLink(g.name, g._id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-2xs bg-[#8b3a52]/5 text-[#8b3a52] hover:bg-[#8b3a52]/10 transition-colors border-0 cursor-pointer font-medium font-sans font-semibold"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs bg-slate-50 text-[#1b365d] hover:bg-[#1b365d]/10 hover:text-[#1b365d] transition-all border border-[#1b365d]/20 hover:border-transparent cursor-pointer font-semibold"
                           >
                             {copiedId === g._id ? (
                               <>
-                                <Check size={11} className="text-green-600" />
-                                <span className="text-green-600">Đã copy!</span>
+                                <Check size={12} className="text-green-600" />
+                                <span className="text-green-600 font-bold">
+                                  Đã copy!
+                                </span>
                               </>
                             ) : (
                               <>
-                                <Copy size={11} />
+                                <Copy size={12} />
                                 <span>Copy link mời</span>
                               </>
                             )}
@@ -438,10 +455,10 @@ export function GuestsTab({
                         <td className="px-6 py-4 text-center">
                           <button
                             onClick={() => handleDeleteGuest(g._id)}
-                            className="p-1 text-stone-400 hover:text-red-600 bg-transparent border-0 cursor-pointer rounded-lg hover:bg-stone-50 transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-red-600 bg-transparent border-0 cursor-pointer rounded-lg hover:bg-red-50 transition-colors"
                             title="Xóa khách mời"
                           >
-                            <Trash2 size={15} />
+                            <Trash2 size={16} />
                           </button>
                         </td>
                       </tr>
@@ -470,10 +487,10 @@ export function GuestsTab({
             </button>
 
             <h3
-              className="text-lg font-bold text-[#2c1810] mb-4 flex items-center gap-2"
+              className="text-lg font-bold text-[#1e293b] mb-4 flex items-center gap-2"
               style={{ fontFamily: "'EB Garamond', serif" }}
             >
-              <UserPlus size={20} className="text-[#8b3a52]" /> Thêm khách mời
+              <UserPlus size={20} className="text-[#1b365d]" /> Thêm khách mời
               mới
             </h3>
 
@@ -491,7 +508,7 @@ export function GuestsTab({
               className="space-y-4"
             >
               <div>
-                <label className="block text-xs font-semibold text-[#7a5c4f] mb-1">
+                <label className="block text-xs font-semibold text-[#475569] mb-1">
                   Danh sách họ và tên *
                 </label>
                 <p className="text-[10px] text-stone-500 mb-2 font-medium">
@@ -508,7 +525,7 @@ export function GuestsTab({
                     })
                   }
                   placeholder={`Anh Tuấn\nChị Hương\nHoàng Minh Đức`}
-                  className="w-full px-3.5 py-3 rounded-xl text-xs border border-stone-200 outline-none focus:border-[#8b3a52] text-[#2c1810] resize-none leading-relaxed"
+                  className="w-full px-3.5 py-3 rounded-xl text-xs border border-stone-200 outline-none focus:border-[#1b365d] text-[#1e293b] resize-none leading-relaxed"
                 />
               </div>
 
@@ -525,7 +542,7 @@ export function GuestsTab({
                   name="close"
                   value="true"
                   disabled={guestSubmitting}
-                  className="flex-1 py-2.5 bg-[#8b3a52] text-white rounded-xl text-xs font-bold hover:opacity-90 disabled:opacity-50 cursor-pointer border-0 flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2.5 bg-[#1b365d] text-white rounded-xl text-xs font-bold hover:opacity-90 disabled:opacity-50 cursor-pointer border-0 flex items-center justify-center gap-1.5"
                 >
                   {guestSubmitting ? (
                     <Loader2 className="w-4.5 h-4.5 animate-spin" />

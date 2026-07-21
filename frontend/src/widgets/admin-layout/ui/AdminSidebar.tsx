@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Heart,
@@ -25,6 +26,12 @@ import {
 export function AdminSidebar() {
   const [isWeddingMenuOpen, setIsWeddingMenuOpen] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
+
+  const isDashboardActive = pathname === "/admin";
+  const isCreateInvitationActive = pathname === "/admin/invitations/create";
+  const isInvitationListActive = pathname.startsWith("/admin/invitations") && !isCreateInvitationActive;
+
 
   return (
     <aside
@@ -54,7 +61,11 @@ export function AdminSidebar() {
         <div>
           <Link
             href="/admin"
-            className={`flex items-center gap-3 px-3 py-2.5 bg-indigo-500 text-white rounded-lg text-sm font-medium shadow-md shadow-indigo-500/20 transition-colors ${isCollapsed ? "justify-center" : ""}`}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isDashboardActive
+                ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20"
+                : "text-slate-400 hover:text-white hover:bg-white/5"
+            } ${isCollapsed ? "justify-center" : ""}`}
             title="Tổng quan"
           >
             <LayoutDashboard size={18} className="shrink-0" />{" "}
@@ -111,13 +122,21 @@ export function AdminSidebar() {
               >
                 <Link
                   href="/admin/invitations"
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-pink-500 bg-pink-500/10 rounded-lg transition-colors font-medium"
+                  className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                    isInvitationListActive
+                      ? "text-pink-500 bg-pink-500/10 font-medium"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
                 >
                   <div className="w-4" /> Danh sách thiệp
                 </Link>
                 <Link
                   href="/admin/invitations/create"
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                    isCreateInvitationActive
+                      ? "text-pink-500 bg-pink-500/10 font-medium"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
                 >
                   <div className="w-4" /> Tạo thiệp mới
                 </Link>

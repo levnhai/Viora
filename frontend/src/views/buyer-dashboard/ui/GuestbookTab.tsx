@@ -17,7 +17,7 @@ export function GuestbookTab({
       {/* PHIÊN BẢN MOBILE (block md:hidden) */}
       <div className="block md:hidden space-y-4 font-sans">
         {guestbookList.length === 0 ? (
-          <div className="text-center py-12 text-[#7a5c4f]/60 text-xs italic bg-white rounded-2xl border border-[#c9828e]/15">
+          <div className="text-center py-12 text-[#475569]/60 text-xs italic bg-white rounded-2xl border border-[#e2e8f0]/15">
             Chưa có lời chúc nào được gửi qua thiệp cưới.
           </div>
         ) : (
@@ -39,7 +39,7 @@ export function GuestbookTab({
 
                   {/* Nội dung */}
                   <div className="flex-1 min-w-0 pr-6">
-                    <h4 className="font-bold text-sm text-[#2c1810] leading-none mb-1">
+                    <h4 className="font-bold text-sm text-[#1e293b] leading-none mb-1">
                       {msg.name}
                     </h4>
                     <p className="text-xs leading-relaxed text-stone-600 mb-2">
@@ -65,7 +65,7 @@ export function GuestbookTab({
             })}
 
             {/* Nút Xem tất cả lời chúc ở cuối */}
-            <button className="w-full py-3.5 bg-[#db2777] hover:bg-[#be185d] text-white rounded-2xl text-xs font-bold transition-all border-0 shadow-xs cursor-pointer flex items-center justify-center gap-1.5 font-sans mt-6">
+            <button className="w-full py-3.5 bg-[#1b365d] hover:bg-[#be185d] text-white rounded-2xl text-xs font-bold transition-all border-0 shadow-xs cursor-pointer flex items-center justify-center gap-1.5 font-sans mt-6">
               Xem tất cả {guestbookList.length} lời chúc
             </button>
           </div>
@@ -73,17 +73,17 @@ export function GuestbookTab({
       </div>
 
       {/* PHIÊN BẢN DESKTOP (hidden md:block) */}
-      <div className="hidden md:block bg-white rounded-2xl border border-[#c9828e]/15 p-6 sm:p-8">
+      <div className="hidden md:block bg-white rounded-2xl border border-[#e2e8f0]/15 p-6 sm:p-8">
         <h2
-          className="text-xl font-medium text-[#2c1810] mb-6 border-b border-[#c9828e]/10 pb-4 flex items-center gap-2"
+          className="text-xl font-medium text-[#1e293b] mb-6 border-b border-[#e2e8f0]/10 pb-4 flex items-center gap-2"
           style={{ fontFamily: "'EB Garamond', serif" }}
         >
-          <BookOpen size={20} className="text-[#8b3a52]" /> Lời chúc đã
+          <BookOpen size={20} className="text-[#1b365d]" /> Lời chúc đã
           nhận
         </h2>
 
         {guestbookList.length === 0 ? (
-          <div className="text-center py-12 text-[#7a5c4f]/60 text-sm">
+          <div className="text-center py-12 text-[#475569]/60 text-sm">
             Chưa có lời chúc nào được gửi qua thiệp cưới.
           </div>
         ) : (
@@ -91,20 +91,20 @@ export function GuestbookTab({
             {guestbookList.map((msg: any) => (
               <div
                 key={msg._id}
-                className="p-5 rounded-2xl bg-[#faf5f0]/40 border border-[#c9828e]/10 relative hover:border-[#8b3a52]/30 transition-all animate-fade-in"
+                className="p-5 rounded-2xl bg-[#f8fafc]/40 border border-[#e2e8f0]/10 relative hover:border-[#1b365d]/30 transition-all animate-fade-in"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-semibold text-sm text-[#2c1810]">
+                  <h4 className="font-semibold text-sm text-[#1e293b]">
                     {msg.name}
                   </h4>
-                  <span className="text-2xs text-[#7a5c4f]/50 font-mono">
+                  <span className="text-2xs text-[#475569]/50 font-mono">
                     {new Date(msg.createdAt).toLocaleString("vi-VN", {
                       dateStyle: "short",
                       timeStyle: "short",
                     })}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-[#7a5c4f] whitespace-pre-wrap">
+                <p className="text-sm leading-relaxed text-[#475569] whitespace-pre-wrap">
                   {msg.message}
                 </p>
               </div>
