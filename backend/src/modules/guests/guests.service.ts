@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Guest, GuestDocument } from './schemas/guest.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
+import { SocketGateway } from '../socket/socket.gateway';
 
 @Injectable()
 export class GuestsService {
@@ -11,6 +12,7 @@ export class GuestsService {
     private readonly guestModel: Model<GuestDocument>,
     @InjectModel(Wedding.name)
     private readonly weddingModel: Model<WeddingDocument>,
+    private readonly socketGateway: SocketGateway,
   ) {}
 
   private async getWeddingIdBySlug(slug: string): Promise<Types.ObjectId> {
@@ -30,6 +32,7 @@ export class GuestsService {
     const weddingId = await this.getWeddingIdBySlug(slug);
     const normalizedName = rsvpData.name.trim().toLowerCase();
 
+    let savedGuest: Guest;
     const guest = await this.guestModel
       .findOne({
         weddingId,
@@ -43,7 +46,7 @@ export class GuestsService {
       guest.guestsCount =
         rsvpData.attend === 'yes' ? Number(rsvpData.guests || 1) : 0;
       guest.note = rsvpData.message;
-      return guest.save();
+      savedGuest = await guest.save();
     } else {
       const newGuest = new this.guestModel({
         weddingId,
@@ -53,8 +56,13 @@ export class GuestsService {
           rsvpData.attend === 'yes' ? Number(rsvpData.guests || 1) : 0,
         note: rsvpData.message,
       });
-      return newGuest.save();
+      savedGuest = await newGuest.save();
     }
+
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guests-updated');
+
+    return savedGuest;
   }
 
   async findRsvps(slug: string): Promise<Guest[]> {
@@ -76,7 +84,12 @@ export class GuestsService {
       ...guestData,
       weddingId,
     });
-    return guest.save();
+    const saved = await guest.save();
+
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guests-updated');
+
+    return saved;
   }
 
   async findGuests(slug: string): Promise<Guest[]> {
@@ -99,6 +112,10 @@ export class GuestsService {
         `Guest với ID "${id}" không tồn tại hoặc đã bị xóa`,
       );
     }
+
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guests-updated');
+
     return guest;
   }
 
@@ -117,6 +134,10 @@ export class GuestsService {
         `Guest với ID "${id}" không tồn tại hoặc đã bị xóa`,
       );
     }
+
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guests-updated');
+
     return { success: true };
   }
 }

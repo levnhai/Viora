@@ -148,8 +148,8 @@ export function OverviewTab({
         </div>
 
         {/* Banner Rose Gold hồng nhạt */}
-        <div className="bg-white rounded-2xl p-6 relative overflow-hidden flex justify-between items-center shadow-3xs border border-[#1b365d]/5 min-h-[240px]">
-          <div className="flex-1 flex flex-col justify-between min-h-[188px] z-10 min-w-3 pr-[35%]">
+        <div className="bg-white rounded-2xl p-5 relative overflow-hidden flex justify-between items-center shadow-3xs border border-[#1b365d]/5 min-h-[200px]">
+          <div className="flex-1 flex flex-col justify-between min-h-[150px] z-10 min-w-3 pr-[25%]">
             <div>
               <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-green-50 text-green-700 border border-green-200">
                 Đã xuất bản
@@ -181,21 +181,21 @@ export function OverviewTab({
               </svg>
             </a>
 
-            <div className="flex gap-2 pt-1">
+            <div className="flex gap-2 pt-1 w-full">
               <a
                 href={`/w/${weddingSlug}`}
                 target="_blank"
                 rel="noreferrer"
-                className="px-5 py-2 bg-white text-stone-850 rounded-lg text-[10px] font-extrabold border border-stone-100 shadow-3xs flex items-center gap-1.5 no-underline active:scale-95 transition-transform"
+                className="flex-1 justify-center whitespace-nowrap px-3 py-2 bg-white text-stone-800 rounded-xl text-[11px] font-bold border border-stone-200/60 shadow-3xs flex items-center gap-1.5 no-underline active:scale-95 transition-transform"
               >
-                <Eye size={12} className="text-stone-500" />
+                <Eye size={13} className="text-stone-500 shrink-0" />
                 Xem thiệp
               </a>
               <button
                 onClick={() => setIsShareModalOpen(true)}
-                className="px-5 py-2 bg-white text-stone-850 rounded-lg text-[10px] font-extrabold border border-stone-100 shadow-3xs flex items-center gap-1.5 active:scale-95 transition-transform cursor-pointer"
+                className="flex-1 justify-center whitespace-nowrap px-3 py-2 bg-white text-stone-800 rounded-xl text-[11px] font-bold border border-stone-200/60 shadow-3xs flex items-center gap-1.5 active:scale-95 transition-transform cursor-pointer"
               >
-                <Share2 size={12} className="text-stone-500" />
+                <Share2 size={13} className="text-stone-500 shrink-0" />
                 Chia sẻ
               </button>
             </div>
@@ -221,221 +221,87 @@ export function OverviewTab({
         </div>
 
         {/* Hàng 2: Thống kê tổng quan to */}
-        <div className="bg-white rounded-2xl border border-pink-50/60 p-7 shadow-3xs flex flex-col relative">
+        <div className="bg-white rounded-2xl border border-pink-50/60 p-5 shadow-3xs flex flex-col relative">
           {/* Header */}
           <div className="flex justify-between items-center mb-6 z-10">
             <h2 className="text-base font-black text-stone-900 tracking-tight">
-              Thống kê tổng quan
+              Lượt xem
             </h2>
           </div>
 
-          {/* Bộ Stats 4 cột vuông dạng grid 2x2 trên mobile */}
-          <div className="grid grid-cols-2 gap-3">
-            {/* Lượt xem */}
-            <div className="bg-white rounded-2xl border border-stone-100 p-3 flex items-center justify-between shadow-3xs overflow-hidden relative min-h-[76px] transition-transform active:scale-98">
-              <div className="w-7 h-7 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0">
-                <Eye size={13} />
-              </div>
-              <div className="mt-1 z-10 text-right">
-                <h4 className="text-sm font-extrabold text-[#1e293b] font-mono leading-none tracking-tight">
-                  {weddingData.views || 0}
-                </h4>
-                <p className="text-[9px] text-[#475569]/85 font-semibold mt-1">
-                  Lượt xem
-                </p>
-              </div>
-            </div>
-
-            {/* Lời mời */}
-            <div className="bg-white rounded-2xl border border-stone-100 p-3 flex items-center justify-between shadow-3xs overflow-hidden relative min-h-[76px] transition-transform active:scale-98">
-              <div className="w-7 h-7 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0">
-                <Mail size={13} />
-              </div>
-              <div className="mt-1 z-10 text-right">
-                <h4 className="text-sm font-extrabold text-[#1e293b] font-mono leading-none tracking-tight">
-                  {totalGuests || 0}
-                </h4>
-                <p className="text-[9px] text-[#475569]/85 font-semibold mt-1">
-                  Lời mời
-                </p>
-              </div>
-            </div>
-
-            {/* Khách xác nhận */}
-            <div className="bg-white rounded-2xl border border-stone-100 p-3 flex items-center justify-between shadow-3xs overflow-hidden relative min-h-[76px] transition-transform active:scale-98">
-              <div className="w-7 h-7 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0">
-                <Heart size={13} fill="currentColor" strokeWidth={0} />
-              </div>
-              <div className="mt-1 z-10 text-right">
-                <h4 className="text-sm font-extrabold text-[#1e293b] font-mono leading-none tracking-tight">
-                  {confirmedGuests || 0}
-                </h4>
-                <p className="text-[9px] text-[#475569]/85 font-semibold mt-1">
-                  Xác nhận
-                </p>
-              </div>
-            </div>
-
-            {/* Lời chúc */}
-            <div className="bg-white rounded-2xl border border-stone-100 p-3 flex items-center justify-between shadow-3xs overflow-hidden relative min-h-[76px] transition-transform active:scale-98">
-              <div className="w-7 h-7 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0">
-                <MessageSquare size={13} />
-              </div>
-              <div className="mt-1 z-10 text-right">
-                <h4 className="text-sm font-extrabold text-[#1e293b] font-mono leading-none tracking-tight">
-                  {guestbookList.length || 0}
-                </h4>
-                <p className="text-[9px] text-[#475569]/85 font-semibold mt-1">
-                  Lời chúc
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Chart Area */}
-          <div className="h-[250px] w-full relative z-10 -ml-2 mt-10">
-            {/* Trục y label */}
-            <div className="absolute left-0 top-0 bottom-6 w-8 flex flex-col justify-between text-[10px] font-mono font-medium text-stone-400 pb-1">
-              <span>2K</span>
-              <span>1.5K</span>
-              <span>1K</span>
-              <span>500</span>
-              <span>0</span>
-            </div>
-            {/* Trục X label */}
-            <div className="absolute left-10 right-0 bottom-0 h-6 flex justify-between items-end text-[10px] font-mono font-medium text-stone-400 px-1">
-              <span>17/05</span>
-              <span>18/05</span>
-              <span>19/05</span>
-              <span>20/05</span>
-              <span>21/05</span>
-              <span>22/05</span>
-              <span>23/05</span>
-            </div>
-
-            {/* Vùng grid lines và chart */}
-            <div className="absolute left-10 right-0 top-2 bottom-8 group cursor-crosshair">
-              {/* Grid lines ngang */}
-              <div className="absolute inset-0 flex flex-col justify-between z-0 pointer-events-none">
-                <div className="border-b border-stone-100/80 w-full h-0 border-dashed"></div>
-                <div className="border-b border-stone-100/80 w-full h-0 border-dashed"></div>
-                <div className="border-b border-stone-100/80 w-full h-0 border-dashed"></div>
-                <div className="border-b border-stone-100/80 w-full h-0 border-dashed"></div>
-                <div className="border-b border-stone-100/80 w-full h-0 border-dashed"></div>
-              </div>
-
-              {/* SVG Curve Line & Area */}
-              <svg
-                className="w-full h-full absolute inset-0 z-10 pointer-events-none"
-                viewBox="0 0 1000 200"
-                preserveAspectRatio="none"
+          <div className="h-[200px] w-full relative z-10 -ml-4 mt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
               >
                 <defs>
-                  <linearGradient
-                    id="area-gradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="0%"
-                    y2="100%"
-                  >
-                    <stop offset="0%" stopColor="#1b365d" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#1b365d" stopOpacity="0" />
+                  <linearGradient id="colorViewsMobile" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#1b365d" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#1b365d" stopOpacity={0} />
                   </linearGradient>
-
-                  {/* Drop shadow cho line */}
-                  <filter
-                    id="shadow"
-                    x="-10%"
-                    y="-10%"
-                    width="120%"
-                    height="120%"
-                  >
-                    <feDropShadow
-                      dx="0"
-                      dy="4"
-                      stdDeviation="4"
-                      floodColor="#1b365d"
-                      floodOpacity="0.3"
-                    />
-                  </filter>
                 </defs>
-
-                {/* Đường dẫn cho area chart (background đổ màu mờ) */}
-                <path
-                  d="M0,120 C50,120 100,160 166,160 C232,160 280,100 333,100 C386,100 450,20 500,20 C550,20 616,130 666,130 C716,130 780,150 833,150 C886,150 950,30 1000,30 L1000,200 L0,200 Z"
-                  fill="url(#area-gradient)"
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#f5f5f4"
                 />
-
-                {/* Đường line chính */}
-                <path
-                  d="M0,120 C50,120 100,160 166,160 C232,160 280,100 333,100 C386,100 450,20 500,20 C550,20 616,130 666,130 C716,130 780,150 833,150 C886,150 950,30 1000,30"
-                  fill="none"
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{
+                    fontSize: 9,
+                    fill: "#a8a29e",
+                    fontFamily: "monospace",
+                    fontWeight: 500,
+                  }}
+                  dy={8}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{
+                    fontSize: 9,
+                    fill: "#a8a29e",
+                    fontFamily: "monospace",
+                    fontWeight: 500,
+                  }}
+                  dx={-8}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow:
+                      "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                    fontSize: "11px",
+                    fontWeight: "bold",
+                    color: "#1e293b",
+                  }}
+                  itemStyle={{ color: "#1b365d" }}
+                  labelStyle={{ color: "#475569", marginBottom: "2px" }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="views"
+                  name="Lượt xem"
                   stroke="#1b365d"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  filter="url(#shadow)"
+                  strokeWidth={2.5}
+                  fillOpacity={1}
+                  fill="url(#colorViewsMobile)"
+                  activeDot={{
+                    r: 5,
+                    fill: "#1b365d",
+                    stroke: "#fff",
+                    strokeWidth: 2,
+                  }}
                 />
-
-                {/* Các điểm dot tròn tại các mốc (166px/bước) */}
-                <circle
-                  cx="0"
-                  cy="120"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="166"
-                  cy="160"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="333"
-                  cy="100"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="500"
-                  cy="20"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="666"
-                  cy="130"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="833"
-                  cy="150"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="1000"
-                  cy="30"
-                  r="4.5"
-                  fill="#1b365d"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-              </svg>
-            </div>
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
+        </div>
         </div>
 
         {/* Cột 2: Đếm ngược */}
@@ -612,14 +478,7 @@ export function OverviewTab({
               <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
                 {weddingData?.views || 0}
               </h3>
-              <p className="text-[9px] font-bold flex items-center gap-1">
-                <span className="text-green-500 bg-green-50 px-1 py-0.5 rounded flex items-center gap-0.5">
-                  ▲ 18.2%
-                </span>
-                <span className="text-stone-400 font-medium">
-                  so với 7 ngày trước
-                </span>
-              </p>
+
             </div>
             {/* SVG line chart mini */}
             <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
@@ -663,14 +522,7 @@ export function OverviewTab({
               <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
                 {confirmedGuests || 0}
               </h3>
-              <p className="text-[9px] font-bold flex items-center gap-1">
-                <span className="text-green-500 bg-green-50 px-1 py-0.5 rounded flex items-center gap-0.5">
-                  ▲ 12.4%
-                </span>
-                <span className="text-stone-400 font-medium">
-                  so với 7 ngày trước
-                </span>
-              </p>
+
             </div>
             <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
               <svg
@@ -708,14 +560,7 @@ export function OverviewTab({
               <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
                 {guestbookList?.length || 0}
               </h3>
-              <p className="text-[9px] font-bold flex items-center gap-1">
-                <span className="text-green-500 bg-green-50 px-1 py-0.5 rounded flex items-center gap-0.5">
-                  ▲ 8.1%
-                </span>
-                <span className="text-stone-400 font-medium">
-                  so với 7 ngày trước
-                </span>
-              </p>
+
             </div>
             <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
               <svg
@@ -752,14 +597,7 @@ export function OverviewTab({
               <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
                 {totalGuests || 0}
               </h3>
-              <p className="text-[9px] font-bold flex items-center gap-1">
-                <span className="text-green-500 bg-green-50 px-1 py-0.5 rounded flex items-center gap-0.5">
-                  ▲ 10.5%
-                </span>
-                <span className="text-stone-400 font-medium">
-                  so với 7 ngày trước
-                </span>
-              </p>
+
             </div>
             <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
               <svg
@@ -789,7 +627,7 @@ export function OverviewTab({
           {/* Header */}
           <div className="flex justify-between items-center mb-6 z-10">
             <h2 className="text-base font-black text-stone-900 tracking-tight">
-              Thống kê tổng quan
+              Lượt xem
             </h2>
             <div className="relative">
               <button
@@ -838,49 +676,6 @@ export function OverviewTab({
                   ))}
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* 3 thông số summary */}
-          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-6 mb-8 border border-slate-100 shadow-sm z-10">
-            <div className="border-r border-slate-100">
-              <p className="text-xs text-stone-500 font-medium mb-1.5">
-                Lượt xem
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[28px] font-black text-stone-900 font-mono tracking-tight leading-none">
-                  {weddingData?.views || 0}
-                </span>
-                <span className="text-[10px] text-green-500 font-bold flex items-center gap-1">
-                  ▲ 18.2%
-                </span>
-              </div>
-            </div>
-            <div className="border-r border-slate-100 pl-2">
-              <p className="text-xs text-stone-500 font-medium mb-1.5">
-                Lượt xem duy nhất
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[28px] font-black text-stone-900 font-mono tracking-tight leading-none">
-                  {Math.floor((weddingData?.views || 0) * 0.65)}
-                </span>
-                <span className="text-[10px] text-green-500 font-bold flex items-center gap-1">
-                  ▲ 15.6%
-                </span>
-              </div>
-            </div>
-            <div className="pl-2">
-              <p className="text-xs text-stone-500 font-medium mb-1.5">
-                Khách đến dự
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[28px] font-black text-stone-900 font-mono tracking-tight leading-none">
-                  {confirmedGuests || 0}
-                </span>
-                <span className="text-[10px] text-green-500 font-bold flex items-center gap-1">
-                  ▲ 9.3%
-                </span>
-              </div>
             </div>
           </div>
 
@@ -961,11 +756,11 @@ export function OverviewTab({
         {/* Hàng 3: Khách xác nhận mới nhất & Lời chúc mới nhất */}
         <div className="grid grid-cols-2 gap-6 mt-6">
           {/* Cột 1: Khách xác nhận mới nhất */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-6 shadow-3xs flex flex-col justify-between min-h-[160px]">
-            <div>
-              <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-3xl border border-pink-50/60 p-6 shadow-3xs flex flex-col justify-between h-[380px]">
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex justify-between items-center mb-4 shrink-0">
                 <h3 className="text-xs font-black text-[#1b365d] uppercase tracking-wider">
-                  Khách xác nhận mới nhất
+                  Khách đã xác nhận
                 </h3>
                 <span className="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-bold">
                   Đồng ý tham dự
@@ -973,27 +768,38 @@ export function OverviewTab({
               </div>
 
               {(() => {
-                const recentGuest = guestList?.find(
+                const confirmedGuests = guestList?.filter(
                   (g: any) => g.rsvpStatus === "confirmed",
-                );
-                return recentGuest ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0 text-sm font-black font-mono">
-                      {recentGuest.name?.charAt(0)?.toUpperCase() || "G"}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-extrabold text-stone-900 truncate">
-                        {recentGuest.name}
-                      </h4>
-                      <p className="text-xs text-stone-500 font-medium mt-1 flex gap-2">
-                        <span>📞 {recentGuest.phone || "Không có SĐT"}</span>
-                        <span>•</span>
-                        <span>👥 {recentGuest.relationship || "Bạn bè"}</span>
-                      </p>
-                    </div>
+                ) || [];
+                
+                const sortedGuests = [...confirmedGuests].sort((a: any, b: any) => {
+                  const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+                  const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+                  return dateB - dateA;
+                });
+
+                return sortedGuests.length > 0 ? (
+                  <div className="flex-1 overflow-y-auto pr-1 space-y-3.5">
+                    {sortedGuests.map((guest: any) => (
+                      <div key={guest._id} className="flex items-center gap-3 pb-3 border-b border-stone-50 last:pb-0 last:border-b-0">
+                        <div className="w-9 h-9 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0 text-xs font-black font-mono">
+                          {guest.name?.charAt(0)?.toUpperCase() || "G"}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm font-extrabold text-stone-900 truncate">
+                            {guest.name}
+                          </h4>
+                          <p className="text-[11px] text-stone-500 font-medium mt-0.5 flex gap-2">
+                            <span>📞 {guest.phone || "Không có SĐT"}</span>
+                            <span>•</span>
+                            <span>👥 {guest.relationship || "Bạn bè"}</span>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-4 text-stone-400">
+                  <div className="flex-1 flex flex-col items-center justify-center py-4 text-stone-400">
                     <Users size={24} className="opacity-40 mb-1" />
                     <p className="text-xs italic">
                       Chưa có khách xác nhận tham gia
@@ -1002,7 +808,7 @@ export function OverviewTab({
                 );
               })()}
             </div>
-            <div className="border-t border-stone-50 pt-3 mt-4 flex justify-between items-center">
+            <div className="border-t border-stone-50 pt-3 mt-4 flex justify-between items-center shrink-0">
               <span className="text-[10px] text-stone-400 font-semibold uppercase">
                 Cập nhật: Gần đây
               </span>
@@ -1019,11 +825,11 @@ export function OverviewTab({
           </div>
 
           {/* Cột 2: Lời chúc mới nhất */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-6 shadow-3xs flex flex-col justify-between min-h-[160px]">
-            <div>
-              <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-3xl border border-pink-50/60 p-6 shadow-3xs flex flex-col justify-between h-[380px]">
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex justify-between items-center mb-4 shrink-0">
                 <h3 className="text-xs font-black text-[#1b365d] uppercase tracking-wider">
-                  Lời chúc mới nhất
+                  Lời chúc đã nhận
                 </h3>
                 <span className="text-[10px] text-[#1b365d] bg-[#1b365d]/5 px-2 py-0.5 rounded-full font-bold">
                   Guestbook
@@ -1031,27 +837,41 @@ export function OverviewTab({
               </div>
 
               {guestbookList && guestbookList.length > 0 ? (
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0 text-sm font-black font-mono">
-                    {guestbookList[0].name?.charAt(0)?.toUpperCase() || "W"}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-sm font-extrabold text-stone-900 truncate">
-                      {guestbookList[0].name}
-                    </h4>
-                    <p className="text-xs text-stone-600 italic mt-1.5 leading-relaxed line-clamp-2">
-                      "{guestbookList[0].message}"
-                    </p>
-                  </div>
-                </div>
+                (() => {
+                  const sortedWishes = [...guestbookList].sort((a: any, b: any) => {
+                    const dateA = new Date(a.createdAt || 0).getTime();
+                    const dateB = new Date(b.createdAt || 0).getTime();
+                    return dateB - dateA;
+                  });
+
+                  return (
+                    <div className="flex-1 overflow-y-auto pr-1 space-y-3.5">
+                      {sortedWishes.map((wish: any) => (
+                        <div key={wish._id} className="flex items-start gap-3 pb-3 border-b border-stone-50 last:pb-0 last:border-b-0">
+                          <div className="w-9 h-9 rounded-full bg-[#1b365d]/5 flex items-center justify-center text-[#1b365d] shrink-0 text-xs font-black font-mono mt-0.5">
+                            {wish.name?.charAt(0)?.toUpperCase() || "W"}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="text-sm font-extrabold text-stone-900 truncate">
+                              {wish.name}
+                            </h4>
+                            <p className="text-xs text-stone-600 italic mt-1 leading-relaxed">
+                              "{wish.message}"
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()
               ) : (
-                <div className="flex flex-col items-center justify-center py-4 text-stone-400">
+                <div className="flex-1 flex flex-col items-center justify-center py-4 text-stone-400">
                   <MessageSquare size={24} className="opacity-40 mb-1" />
                   <p className="text-xs italic">Chưa có lời chúc nào mới</p>
                 </div>
               )}
             </div>
-            <div className="border-t border-stone-50 pt-3 mt-4 flex justify-between items-center">
+            <div className="border-t border-stone-50 pt-3 mt-4 flex justify-between items-center shrink-0">
               <span className="text-[10px] text-stone-400 font-semibold uppercase">
                 Trạng thái: Đã duyệt
               </span>

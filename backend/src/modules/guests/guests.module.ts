@@ -4,6 +4,7 @@ import { GuestsController } from './guests.controller';
 import { GuestsService } from './guests.service';
 import { Guest, GuestSchema } from './schemas/guest.schema';
 import { Wedding, WeddingSchema } from '../weddings/schemas/wedding.schema';
+import { SocketModule } from '../socket/socket.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { Wedding, WeddingSchema } from '../weddings/schemas/wedding.schema';
       { name: Guest.name, schema: GuestSchema },
       { name: Wedding.name, schema: WeddingSchema },
     ]),
+    SocketModule,
   ],
   controllers: [GuestsController],
   providers: [GuestsService],

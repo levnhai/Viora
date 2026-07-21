@@ -143,7 +143,7 @@ export function LiveView({
                 guestName={guestName}
               />
             </GsapReveal>
-            <div className="relative pt-8 pb-12 mb-16">
+            <div className="relative pt-8">
               {/* thông tin tiệc cưới */}
               <GsapReveal direction="up" distance={40}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />

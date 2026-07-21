@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Guestbook, GuestbookDocument } from './schemas/guestbook.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
+import { SocketGateway } from '../socket/socket.gateway';
 
 @Injectable()
 export class GuestbooksService {
@@ -11,6 +12,7 @@ export class GuestbooksService {
     private readonly guestbookModel: Model<GuestbookDocument>,
     @InjectModel(Wedding.name)
     private readonly weddingModel: Model<WeddingDocument>,
+    private readonly socketGateway: SocketGateway,
   ) {}
 
   private async getWeddingIdBySlug(slug: string): Promise<Types.ObjectId> {
@@ -31,7 +33,12 @@ export class GuestbooksService {
       ...guestbookData,
       weddingId,
     });
-    return gb.save();
+    const savedGb = await gb.save();
+    
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guestbook-updated');
+
+    return savedGb;
   }
 
   async findGuestbook(slug: string): Promise<Guestbook[]> {

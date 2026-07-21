@@ -94,17 +94,6 @@ export function BuyerDashboardPage() {
     }
   }, [actionParam, router]);
 
-  // Realtime Polling: refetch every 5 seconds to update lists and stats automatically in background
-  useEffect(() => {
-    if (!weddingSlug) return;
-
-    const interval = setInterval(() => {
-      refetch();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [weddingSlug, refetch]);
-
   const handleCopyLink = (name: string, id: string) => {
     const baseUrl = window.location.origin;
     const personalizedUrl = `${baseUrl}/w/${weddingSlug}?to=${encodeURIComponent(name)}`;

@@ -206,9 +206,15 @@ export class WeddingsService {
         .findOne({ id: templateId, deletedAt: null })
         .exec();
     } else {
-      targetTemplate = await this.templateModel
-        .findOne({ _id: templateId, deletedAt: null })
-        .exec();
+      if (Types.ObjectId.isValid(templateId)) {
+        targetTemplate = await this.templateModel
+          .findOne({ _id: templateId, deletedAt: null })
+          .exec();
+      } else {
+        targetTemplate = await this.templateModel
+          .findOne({ code: templateId, deletedAt: null })
+          .exec();
+      }
     }
     if (!targetTemplate) throw new NotFoundException(`Template không hợp lệ`);
 
@@ -455,14 +461,21 @@ export class WeddingsService {
 
     let targetTemplate: TemplateDocument | null = null;
     if (templateId !== undefined) {
-      if (typeof templateId === 'number')
+      if (typeof templateId === 'number') {
         targetTemplate = await this.templateModel
           .findOne({ id: templateId, deletedAt: null })
           .exec();
-      else
-        targetTemplate = await this.templateModel
-          .findOne({ _id: templateId, deletedAt: null })
-          .exec();
+      } else {
+        if (Types.ObjectId.isValid(templateId)) {
+          targetTemplate = await this.templateModel
+            .findOne({ _id: templateId, deletedAt: null })
+            .exec();
+        } else {
+          targetTemplate = await this.templateModel
+            .findOne({ code: templateId, deletedAt: null })
+            .exec();
+        }
+      }
     }
 
     const session = await this.connection.startSession();

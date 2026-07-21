@@ -131,19 +131,19 @@ export function MinimalCoupleSpotlight({
               Ông Bà
             </p>
             <h3
-              className="text-[14px] sm:text-[15px] font-bold mb-1"
+              className="text-[14px] capitalize sm:text-[15px] font-bold mb-1"
               style={{ color: textColor }}
             >
               {groomFatherName || "Lê Văn Bình"}
             </h3>
             <h3
-              className="text-[14px] sm:text-[15px] font-bold mb-2"
+              className="text-[14px] capitalize sm:text-[15px] font-bold mb-2"
               style={{ color: textColor }}
             >
               {groomMotherName || "Trần Thị Hằng"}
             </h3>
             <p
-              className="text-[10px] sm:text-[11px] leading-tight mx-auto max-w-[120px]"
+              className="text-[10px] capitalize sm:text-[11px] leading-tight mx-auto max-w-[120px]"
               style={{ color: textColor }}
             >
               {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
@@ -162,19 +162,19 @@ export function MinimalCoupleSpotlight({
               Ông Bà
             </p>
             <h3
-              className="text-[14px] sm:text-[15px] font-bold mb-1"
+              className="text-[14px] capitalize sm:text-[15px] font-bold mb-1"
               style={{ color: textColor }}
             >
               {brideFatherName || "Nguyễn Văn Lợi"}
             </h3>
             <h3
-              className="text-[14px] sm:text-[15px] font-bold mb-2"
+              className="text-[14px] capitalize sm:text-[15px] font-bold mb-2"
               style={{ color: textColor }}
             >
               {brideMotherName || "Vũ Thị Thanh"}
             </h3>
             <p
-              className="text-[10px] sm:text-[11px] leading-tight mx-auto max-w-[120px]"
+              className="text-[10px] capitalize sm:text-[11px] leading-tight mx-auto max-w-[120px]"
               style={{ color: textColor }}
             >
               {brideAddress || "Quận 3, TP. Hồ Chí Minh"}

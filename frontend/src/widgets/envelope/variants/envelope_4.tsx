@@ -136,7 +136,7 @@ export function Envelope_4({
                 className="mb-2 flex flex-col items-center leading-tight text-4xl sm:text-5xl md:text-[3.5rem]"
                 style={{
                   color: textColor,
-                  textShadow: `0 2px 8px ${textColor}20` // Add a very subtle shadow for extra pop
+                  textShadow: `0 2px 8px ${textColor}20`, // Add a very subtle shadow for extra pop
                 }}
               >
                 <span
@@ -193,25 +193,25 @@ export function Envelope_4({
               </div>
 
               {guestName && (
-                <div className="mb-6 flex flex-col items-center animate-fade-in-up delay-500">
-                  <p
-                    className="text-[18px] mb-2 font-light"
+                <div className="mb-6 flex items-center justify-center gap-2.5 animate-fade-in-up delay-500">
+                  <span
+                    className="text-[17px] sm:text-[18px] font-light"
                     style={{
                       color: "rgba(124, 106, 96, 0.72)",
                       fontFamily: '"Lora", "Times New Roman", serif',
                     }}
                   >
-                    Thân Mời
-                  </p>
-                  <p
-                    className="text-xl sm:text-2xl capitalize font-medium"
+                    Thân Mời:
+                  </span>
+                  <span
+                    className="text-[22px] sm:text-[26px] capitalize font-bold tracking-wide px-3 py-0.5 rounded-md bg-stone-50 border border-stone-200/60 shadow-xs"
                     style={{
                       color: textColor,
                       fontFamily: '"Fz Qellia", serif',
                     }}
                   >
                     {guestName}
-                  </p>
+                  </span>
                 </div>
               )}
 

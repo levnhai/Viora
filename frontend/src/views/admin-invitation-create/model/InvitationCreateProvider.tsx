@@ -142,7 +142,7 @@ export function InvitationCreateProvider({
   const [activeTemplate, setActiveTemplate] = useState<Template | null>(() => {
     if (initialData?.template?.code) {
       const found = TEMPLATES.find(t => t.code === initialData.template.code);
-      if (found) return { ...initialData.template, schema: found.schema };
+      if (found) return { ...initialData.template, id: found.id, schema: found.schema };
     }
     return null;
   });
