@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           wd.seo?.description ||
           `Trân trọng kính mời quý khách tham dự lễ thành hôn của ${groomName} & ${brideName}${dateStr}. Bấm để xem thiệp mời chi tiết và gửi lời chúc!`;
 
-        let ogImage =
+        let rawOgImage =
           wd.seo?.ogImage ||
           wd.coverImage ||
           wd.heroImage ||
@@ -48,10 +48,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           wd.brideAvatarUrl ||
           (Array.isArray(wd.galleryImages) && wd.galleryImages.length > 0 ? wd.galleryImages[0] : null);
 
-        if (!ogImage) {
-          ogImage = defaultOgImage;
-        } else if (!ogImage.startsWith('http://') && !ogImage.startsWith('https://')) {
-          ogImage = ogImage.startsWith('/') ? `${baseUrl}${ogImage}` : `${baseUrl}/${ogImage}`;
+        let ogImage = defaultOgImage;
+        if (rawOgImage) {
+          if (!rawOgImage.startsWith('http://') && !rawOgImage.startsWith('https://')) {
+            ogImage = rawOgImage.startsWith('/') ? `${baseUrl}${rawOgImage}` : `${baseUrl}/${rawOgImage}`;
+          } else {
+            ogImage = rawOgImage;
+          }
+
+          // Tự động cắt cúp chuẩn 1200x630 cho Zalo/Facebook nếu là ảnh Cloudinary (tránh lỗi ảnh dọc không hiện card)
+          if (ogImage.includes('res.cloudinary.com') && ogImage.includes('/upload/')) {
+            if (!ogImage.includes('/c_fill') && !ogImage.includes('/w_1200')) {
+              ogImage = ogImage.replace('/upload/', '/upload/c_fill,g_auto,w_1200,h_630/');
+            }
+          }
         }
 
         const pageUrl = `${baseUrl}/w/${weddingSlug}`;
@@ -67,9 +77,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             images: [
               {
                 url: ogImage,
+                secureUrl: ogImage,
                 width: 1200,
                 height: 630,
                 alt: title,
+                type: ogImage.endsWith('.png') ? 'image/png' : 'image/jpeg',
               },
             ],
             type: 'website',
@@ -80,6 +92,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             title,
             description,
             images: [ogImage],
+          },
+          other: {
+            'og:image:secure_url': ogImage,
+            'zalo:image': ogImage,
           },
         };
       }
@@ -95,7 +111,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: 'Thiệp Cưới Trực Tuyến - Viora Studio',
       description: 'Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!',
       url: `${baseUrl}/w/${weddingSlug}`,
-      images: [defaultOgImage],
+      images: [
+        {
+          url: defaultOgImage,
+          secureUrl: defaultOgImage,
+          width: 1200,
+          height: 630,
+          alt: 'Thiệp Cưới Trực Tuyến - Viora Studio',
+        },
+      ],
+    },
+    other: {
+      'og:image:secure_url': defaultOgImage,
+      'zalo:image': defaultOgImage,
     },
   };
 }
