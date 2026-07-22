@@ -4,12 +4,37 @@ import { Suspense } from 'react';
 import GoogleOAuthProviderWrapper from './GoogleOAuthProviderWrapper';
 import { BottomNav } from '@/widgets/bottom-nav/ui/BottomNav';
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://thiepcuoionline-nine.vercel.app';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
   description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
   robots: {
     index: false,
     follow: false,
+  },
+  openGraph: {
+    title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
+    description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
+    siteName: 'Viora Studio',
+    url: siteUrl,
+    images: [
+      {
+        url: '/og-banner.png',
+        width: 1200,
+        height: 630,
+        alt: 'Viora Studio - Thiệp Cưới Trực Tuyến',
+      },
+    ],
+    type: 'website',
+    locale: 'vi_VN',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
+    description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
+    images: ['/og-banner.png'],
   },
 };
 
