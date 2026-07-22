@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
   description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
   openGraph: {
     title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
