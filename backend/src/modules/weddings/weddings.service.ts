@@ -422,7 +422,9 @@ export class WeddingsService {
       .find({ weddingId: wedding._id, type: 'gallery', deletedAt: null })
       .sort({ order: 1 })
       .exec();
-    const galleryImages = mediaImages.map((m) => m.url);
+    const galleryImages = mediaImages.length > 0 
+      ? mediaImages.map((m) => m.url) 
+      : (wedding.galleryImages || []);
 
     const themeSettings = await this.weddingThemeSettingModel
       .findOne({ weddingId: wedding._id })

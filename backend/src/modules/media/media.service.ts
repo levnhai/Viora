@@ -3,12 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { Model, Types } from 'mongoose';
 import { Media, MediaDocument } from './schemas/media.schema';
+import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class MediaService {
   constructor(
     @InjectModel(Media.name) private readonly mediaModel: Model<MediaDocument>,
+    @InjectModel(Wedding.name) private readonly weddingModel: Model<WeddingDocument>,
     private readonly cloudinaryService: CloudinaryService,
     private readonly configService: ConfigService,
   ) {}
@@ -18,15 +20,26 @@ export class MediaService {
     ownerId: string,
     type: string,
     weddingId?: string,
+    slug?: string,
   ): Promise<Media> {
     try {
       const basePath = this.configService.get<string>('CLOUDINARY_FOLDER') || 'viora';
-      const folderName = `${basePath}/${type}s`;
+      let weddingSlug = slug;
+
+      if (!weddingSlug && weddingId && Types.ObjectId.isValid(weddingId)) {
+        const wedding = await this.weddingModel.findById(weddingId).exec();
+        if (wedding?.slug) {
+          weddingSlug = wedding.slug;
+        }
+      }
+
+      // Lưu trực tiếp vào thiepmoionline/[slug] (hoặc thiepmoionline/temp nếu chưa có slug)
+      const folderName = weddingSlug ? `${basePath}/${weddingSlug}` : `${basePath}/temp`;
       const uploadResult = await this.cloudinaryService.uploadFile(file, folderName);
 
       const newMedia = new this.mediaModel({
         ownerId: new Types.ObjectId(ownerId),
-        weddingId: weddingId ? new Types.ObjectId(weddingId) : undefined,
+        weddingId: weddingId && Types.ObjectId.isValid(weddingId) ? new Types.ObjectId(weddingId) : undefined,
         type: type,
         url: uploadResult.secure_url,
         size: uploadResult.bytes,
@@ -37,6 +50,7 @@ export class MediaService {
 
       return await newMedia.save();
     } catch (error) {
+      console.error('Cloudinary upload error:', error);
       throw new InternalServerErrorException('Lỗi khi tải ảnh lên Cloudinary');
     }
   }

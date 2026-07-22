@@ -67,8 +67,9 @@ export function InvitationPreview() {
       description: t.description,
       imageUrl: mockGalleryImages[index % mockGalleryImages.length],
     })),
+    coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : undefined),
     templateConfig: {
-      coverImage: basicInfo.coverImage || mockCoverImage,
+      coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : mockCoverImage),
     },
   };
 

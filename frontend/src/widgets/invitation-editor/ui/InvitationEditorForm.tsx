@@ -41,6 +41,7 @@ export function InvitationEditorForm() {
     setEditorActiveTab,
     basicInfo,
     setBasicInfo,
+    publishSettings,
     story,
     setStory,
     giftInfo,
@@ -248,6 +249,8 @@ export function InvitationEditorForm() {
     setGiftInfo,
   ]);
 
+  const getTargetSlug = () => publishSettings?.urlSlug || (basicInfo as any)?.slug;
+
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: "groomQrUrl" | "brideQrUrl",
@@ -259,6 +262,10 @@ export function InvitationEditorForm() {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("type", "qr");
+        const slug = getTargetSlug();
+        if (slug) {
+          formData.append("slug", slug);
+        }
 
         const res = await fetch(`${API_URL}/api/media/upload`, {
           method: "POST",
@@ -293,6 +300,10 @@ export function InvitationEditorForm() {
           const formData = new FormData();
           formData.append("file", file);
           formData.append("type", "gallery");
+          const slug = getTargetSlug();
+          if (slug) {
+            formData.append("slug", slug);
+          }
 
           const res = await fetch(`${API_URL}/api/media/upload`, {
             method: "POST",
@@ -324,7 +335,11 @@ export function InvitationEditorForm() {
       try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("type", "audio"); // Assuming backend handles this or just stores it
+        formData.append("type", "audio");
+        const slug = getTargetSlug();
+        if (slug) {
+          formData.append("slug", slug);
+        }
 
         const res = await fetch(`${API_URL}/api/media/upload`, {
           method: "POST",
@@ -357,6 +372,10 @@ export function InvitationEditorForm() {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("type", "image");
+        const slug = getTargetSlug();
+        if (slug) {
+          formData.append("slug", slug);
+        }
 
         const res = await fetch(`${API_URL}/api/media/upload`, {
           method: "POST",

@@ -28,6 +28,7 @@ export class MediaController {
     @Req() req: any,
     @Body('type') type: string,
     @Body('weddingId') weddingId?: string,
+    @Body('slug') slug?: string,
   ) {
     if (!file) {
       throw new BadRequestException('Vui lòng chọn file để upload');
@@ -37,7 +38,7 @@ export class MediaController {
     const mediaType = type || 'gallery';
     const ownerId = req.user._id || req.user.id;
 
-    return this.mediaService.uploadMedia(file, ownerId, mediaType, weddingId);
+    return this.mediaService.uploadMedia(file, ownerId, mediaType, weddingId, slug);
   }
 
   @Get('my-media')

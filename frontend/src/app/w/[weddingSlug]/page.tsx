@@ -1,15 +1,19 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
 import { WeddingInvitationPage } from "@/views/wedding-invitation/ui/WeddingInvitationPage";
 
 type PageProps = {
   params: Promise<{ weddingSlug: string }> | { weddingSlug: string };
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const weddingSlug = resolvedParams.weddingSlug;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://thiepcuoionline-nine.vercel.app';
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "https://thiepcuoionline-nine.vercel.app";
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
   const defaultOgImage = `${baseUrl}/og-banner.png`;
 
   try {
@@ -22,11 +26,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       if (json.success && json.data) {
         const wd = json.data;
 
-        const groomName = wd.groomName || 'Chú Rể';
-        const brideName = wd.brideName || 'Cô Dâu';
-        const title = wd.seo?.title || `Thiệp Cưới: ${groomName} ❤️ ${brideName} | Viora Studio`;
+        const groomName = wd.groomName || "Chú Rể";
+        const brideName = wd.brideName || "Cô Dâu";
+        const title =
+          wd.seo?.title || `Thiệp Cưới: ${groomName} ❤️ ${brideName}`;
 
-        let dateStr = '';
+        let dateStr = "";
         if (wd.weddingDate) {
           try {
             const d = new Date(wd.weddingDate);
@@ -46,20 +51,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           wd.heroImage ||
           wd.groomAvatarUrl ||
           wd.brideAvatarUrl ||
-          (Array.isArray(wd.galleryImages) && wd.galleryImages.length > 0 ? wd.galleryImages[0] : null);
+          (Array.isArray(wd.galleryImages) && wd.galleryImages.length > 0
+            ? wd.galleryImages[0]
+            : null);
 
         let ogImage = defaultOgImage;
         if (rawOgImage) {
-          if (!rawOgImage.startsWith('http://') && !rawOgImage.startsWith('https://')) {
-            ogImage = rawOgImage.startsWith('/') ? `${baseUrl}${rawOgImage}` : `${baseUrl}/${rawOgImage}`;
+          if (
+            !rawOgImage.startsWith("http://") &&
+            !rawOgImage.startsWith("https://")
+          ) {
+            ogImage = rawOgImage.startsWith("/")
+              ? `${baseUrl}${rawOgImage}`
+              : `${baseUrl}/${rawOgImage}`;
           } else {
             ogImage = rawOgImage;
           }
 
           // Tự động cắt cúp chuẩn 1200x630 cho Zalo/Facebook nếu là ảnh Cloudinary (tránh lỗi ảnh dọc không hiện card)
-          if (ogImage.includes('res.cloudinary.com') && ogImage.includes('/upload/')) {
-            if (!ogImage.includes('/c_fill') && !ogImage.includes('/w_1200')) {
-              ogImage = ogImage.replace('/upload/', '/upload/c_fill,g_auto,w_1200,h_630/');
+          if (
+            ogImage.includes("res.cloudinary.com") &&
+            ogImage.includes("/upload/")
+          ) {
+            if (!ogImage.includes("/c_fill") && !ogImage.includes("/w_1200")) {
+              ogImage = ogImage.replace(
+                "/upload/",
+                "/upload/c_fill,g_auto,w_1200,h_630/",
+              );
             }
           }
         }
@@ -77,7 +95,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             title,
             description,
             url: pageUrl,
-            siteName: 'Viora Studio',
+            siteName: "Viora Studio",
             images: [
               {
                 url: ogImage,
@@ -85,35 +103,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 width: 1200,
                 height: 630,
                 alt: title,
-                type: ogImage.endsWith('.png') ? 'image/png' : 'image/jpeg',
+                type: ogImage.endsWith(".png") ? "image/png" : "image/jpeg",
               },
             ],
-            type: 'website',
-            locale: 'vi_VN',
+            type: "website",
+            locale: "vi_VN",
           },
           twitter: {
-            card: 'summary_large_image',
+            card: "summary_large_image",
             title,
             description,
             images: [ogImage],
           },
           other: {
-            'og:image:secure_url': ogImage,
-            'zalo:image': ogImage,
+            "og:image:secure_url": ogImage,
+            "zalo:image": ogImage,
           },
         };
       }
     }
   } catch (error) {
-    console.error('Lỗi khi tải metadata thiệp cưới:', error);
+    console.error("Lỗi khi tải metadata thiệp cưới:", error);
   }
 
   return {
-    title: 'Thiệp Cưới Trực Tuyến - Viora Studio',
-    description: 'Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!',
+    title: "Thiệp Cưới Trực Tuyến - Viora Studio",
+    description:
+      "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!",
     openGraph: {
-      title: 'Thiệp Cưới Trực Tuyến - Viora Studio',
-      description: 'Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!',
+      title: "Thiệp Cưới Trực Tuyến - Viora Studio",
+      description:
+        "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!",
       url: `${baseUrl}/w/${weddingSlug}`,
       images: [
         {
@@ -121,13 +141,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           secureUrl: defaultOgImage,
           width: 1200,
           height: 630,
-          alt: 'Thiệp Cưới Trực Tuyến - Viora Studio',
+          alt: "Thiệp Cưới Trực Tuyến - Viora Studio",
         },
       ],
     },
     other: {
-      'og:image:secure_url': defaultOgImage,
-      'zalo:image': defaultOgImage,
+      "og:image:secure_url": defaultOgImage,
+      "zalo:image": defaultOgImage,
     },
   };
 }
@@ -135,4 +155,3 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default function WeddingInvitationRoute() {
   return <WeddingInvitationPage />;
 }
-

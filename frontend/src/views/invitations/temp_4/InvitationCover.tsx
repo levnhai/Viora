@@ -25,10 +25,9 @@ export function InvitationCover({
 
   // Use coverImage from templateConfig if available, else fallback to first gallery image, else hardcoded demo
   const coverImage =
+    weddingData.coverImage ||
     templateConfig?.coverImage ||
-    (galleryImages && galleryImages.length > 0
-      ? "https://i.pinimg.com/736x/0c/c6/cb/0cc6cb0151fd35b05d33c506061e46a6.jpg"
-      : galleryImages[0]);
+    (galleryImages && galleryImages.length > 0 ? galleryImages[0] : null);
 
   return (
     <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pb-12 pt-16 bg-transparent">
