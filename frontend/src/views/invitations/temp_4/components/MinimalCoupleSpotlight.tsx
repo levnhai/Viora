@@ -124,26 +124,29 @@ export function MinimalCoupleSpotlight({
         >
           {/* Groom Side */}
           <div className="flex-1 text-center pr-4">
+            <span className="text-[11px] uppercase tracking-widest font-semibold px-3 py-0.5 rounded-full bg-[#826639]/15 text-[#6e542c] inline-block mb-2">
+              NHÀ TRAI
+            </span>
             <p
-              className="text-[12px] font-medium mb-1"
+              className="text-[12px] font-medium mb-1 opacity-80"
               style={{ color: textColor }}
             >
               Ông Bà
             </p>
             <h3
-              className="text-[14px] capitalize sm:text-[15px] font-bold mb-1"
+              className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
               style={{ color: textColor }}
             >
               {groomFatherName || "Lê Văn Bình"}
             </h3>
             <h3
-              className="text-[14px] capitalize sm:text-[15px] font-bold mb-2"
+              className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
               style={{ color: textColor }}
             >
               {groomMotherName || "Trần Thị Hằng"}
             </h3>
             <p
-              className="text-[10px] capitalize sm:text-[11px] leading-tight mx-auto max-w-[120px]"
+              className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
               style={{ color: textColor }}
             >
               {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
@@ -151,30 +154,33 @@ export function MinimalCoupleSpotlight({
           </div>
 
           {/* Divider */}
-          <div className="w-[1px] bg-[#7c6a60] opacity-20"></div>
+          <div className="w-[1px] bg-[#7c6a60] opacity-25"></div>
 
           {/* Bride Side */}
           <div className="flex-1 text-center pl-4">
+            <span className="text-[11px] uppercase tracking-widest font-semibold px-3 py-0.5 rounded-full bg-[#826639]/15 text-[#6e542c] inline-block mb-2">
+              NHÀ GÁI
+            </span>
             <p
-              className="text-[12px] font-medium mb-1"
+              className="text-[12px] font-medium mb-1 opacity-80"
               style={{ color: textColor }}
             >
               Ông Bà
             </p>
             <h3
-              className="text-[14px] capitalize sm:text-[15px] font-bold mb-1"
+              className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
               style={{ color: textColor }}
             >
               {brideFatherName || "Nguyễn Văn Lợi"}
             </h3>
             <h3
-              className="text-[14px] capitalize sm:text-[15px] font-bold mb-2"
+              className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
               style={{ color: textColor }}
             >
               {brideMotherName || "Vũ Thị Thanh"}
             </h3>
             <p
-              className="text-[10px] capitalize sm:text-[11px] leading-tight mx-auto max-w-[120px]"
+              className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
               style={{ color: textColor }}
             >
               {brideAddress || "Quận 3, TP. Hồ Chí Minh"}

@@ -30,7 +30,7 @@ export function InvitationCover({
     (galleryImages && galleryImages.length > 0 ? galleryImages[0] : null);
 
   return (
-    <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pb-12 pt-16 bg-transparent">
+    <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pt-16 bg-transparent">
       <style>{`
         .wax-seal {
           background: radial-gradient(circle at 30% 30%, #dbba82, #b5925a 60%, #826639);
@@ -203,32 +203,81 @@ export function InvitationCover({
         </div>
       </GsapReveal>
 
-      {guestName && (
-        <GsapReveal
-          delay={0.6}
-          direction="up"
-          distance={30}
-          className="mt-16 z-10"
+      {/* Khung Thân Mời Khách Nổi Bật */}
+      <GsapReveal
+        delay={0.6}
+        direction="up"
+        distance={30}
+        className="mt-12 z-30 w-full max-w-sm sm:max-w-md px-4"
+      >
+        <div
+          className="relative group p-6 sm:p-7 rounded-2xl text-center transition-all duration-500 hover:scale-[1.02]"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255, 253, 249, 0.95), rgba(246, 236, 225, 0.9))",
+            backdropFilter: "blur(10px)",
+            border: "1.5px solid rgba(200, 169, 126, 0.5)",
+            boxShadow:
+              "0 12px 32px -5px rgba(124, 106, 96, 0.18), 0 0 0 4px rgba(255, 255, 255, 0.6), inset 0 0 15px rgba(200, 169, 126, 0.1)",
+          }}
         >
-          <div className="flex flex-col items-center">
-            <p
-              className="text-[16px] mb-1 font-light"
+          {/* Decorative Corner Lines */}
+          <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-[#b5925a]/70 rounded-tl-sm pointer-events-none"></div>
+          <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-[#b5925a]/70 rounded-tr-sm pointer-events-none"></div>
+          <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-[#b5925a]/70 rounded-bl-sm pointer-events-none"></div>
+          <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-[#b5925a]/70 rounded-br-sm pointer-events-none"></div>
+
+          {/* Header Flourish */}
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span
+              className="h-[1px] w-8 sm:w-12"
               style={{
-                color: "rgba(124, 106, 96, 0.72)",
+                background:
+                  "linear-gradient(90deg, transparent, rgba(181, 146, 90, 0.7))",
+              }}
+            ></span>
+            <span
+              className="text-[12px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold"
+              style={{
+                color: "#826639",
                 fontFamily: '"Lora", "Times New Roman", serif',
               }}
             >
-              Thân Mời
-            </p>
-            <p
-              className="text-xl capitalize font-medium"
-              style={{ color: textColor, fontFamily: '"Fz Qellia", serif' }}
-            >
-              {guestName}
-            </p>
+              TRÂN TRỌNG KÍNH MỜI
+            </span>
+            <span
+              className="h-[1px] w-8 sm:w-12"
+              style={{
+                background:
+                  "linear-gradient(-90deg, transparent, rgba(181, 146, 90, 0.7))",
+              }}
+            ></span>
           </div>
-        </GsapReveal>
-      )}
+
+          {/* Guest Name */}
+          <h2
+            className="text-3xl sm:text-4xl lg:text-[42px] capitalize font-bold tracking-wide my-2 leading-tight drop-shadow-sm"
+            style={{
+              color: "#5c4a3e",
+              fontFamily: '"Fz Qellia", serif',
+              textShadow: "0 2px 8px rgba(181, 146, 90, 0.2)",
+            }}
+          >
+            {guestName || "Quý Khách"}
+          </h2>
+
+          {/* Subtitle */}
+          <p
+            className="text-[12px] sm:text-[13px] font-medium tracking-wide mt-2 opacity-85"
+            style={{
+              color: "#7c6a60",
+              fontFamily: '"Lora", "Times New Roman", serif',
+            }}
+          >
+            Tới dự buổi tiệc chung vui cùng gia đình chúng tôi
+          </p>
+        </div>
+      </GsapReveal>
 
       {/* Extra space at bottom to transition into next section smoothly */}
       <div className="h-[80px] w-full"></div>
