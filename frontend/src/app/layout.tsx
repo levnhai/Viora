@@ -1,8 +1,15 @@
 import './styles/index.css';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import GoogleOAuthProviderWrapper from './GoogleOAuthProviderWrapper';
 import { BottomNav } from '@/widgets/bottom-nav/ui/BottomNav';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://thiepcuoionline-nine.vercel.app';
 

@@ -30,7 +30,7 @@ export function Guestbook_4({
   }
 
   return (
-    <section className="pb-16 sm:py-24 px-4 relative">
+    <section className="py-16 sm:py-24 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <GsapReveal delay={0.2} direction="up" distance={40}>
           <div className="max-w-xl mx-auto bg-[#f4efe6] p-6 sm:p-8 rounded-2xl shadow-md relative">
@@ -50,7 +50,7 @@ export function Guestbook_4({
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="Nhập tên*"
-                  className="w-full px-4 py-3 bg-transparent border rounded-xl text-sm transition-colors outline-none"
+                  className="w-full px-4 py-3 bg-transparent border rounded-xl text-base sm:text-sm transition-colors outline-none"
                   style={{ color: pColor, borderColor: `${pColor}80` }}
                   onFocus={(e) => (e.target.style.borderColor = pColor)}
                   onBlur={(e) => (e.target.style.borderColor = `${pColor}80`)}
@@ -63,7 +63,7 @@ export function Guestbook_4({
                   onChange={(e) => setGuestMsg(e.target.value)}
                   placeholder="Nhập lời chúc*"
                   rows={2}
-                  className="w-full px-4 py-3 bg-transparent border rounded-xl text-sm transition-colors resize-none outline-none"
+                  className="w-full px-4 py-3 bg-transparent border rounded-xl text-base sm:text-sm transition-colors resize-none outline-none"
                   style={{ color: pColor, borderColor: `${pColor}80` }}
                   onFocus={(e) => (e.target.style.borderColor = pColor)}
                   onBlur={(e) => (e.target.style.borderColor = `${pColor}80`)}

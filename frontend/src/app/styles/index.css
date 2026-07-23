@@ -1,3 +1,10 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+
+/* Ngăn trình duyệt di động (iOS/Safari) tự động phóng to giao diện khi focus vào ô nhập liệu */
+@media screen and (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
