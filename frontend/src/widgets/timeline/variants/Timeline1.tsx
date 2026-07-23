@@ -66,7 +66,6 @@ export function Timeline1({ weddingData }: Timeline1Props) {
           style={{
             backgroundColor: "rgb(246, 234, 221)",
             backgroundImage: `url(${bgPaper.src})`,
-            backgroundBlendMode: "multiply",
           }}
         >
           {/* Header */}

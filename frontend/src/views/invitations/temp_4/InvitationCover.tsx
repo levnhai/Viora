@@ -32,20 +32,93 @@ export function InvitationCover({
   return (
     <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pt-16 bg-transparent">
       <style>{`
+        @keyframes anim-top-down {
+          0% {
+            opacity: 0;
+            transform: translateY(-24px) translateZ(0);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+          }
+        }
+        @keyframes anim-left-in {
+          0% {
+            opacity: 0;
+            transform: translateX(-40px) translateZ(0);
+          }
+          100% {
+            opacity: 1;
+            transform: translateX(0) translateZ(0);
+          }
+        }
+        @keyframes anim-right-in {
+          0% {
+            opacity: 0;
+            transform: translateX(40px) translateZ(0);
+          }
+          100% {
+            opacity: 1;
+            transform: translateX(0) translateZ(0);
+          }
+        }
+        @keyframes anim-fade-in {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes anim-zoom-in {
+          0% {
+            opacity: 0;
+            transform: scale(0.82) rotate(-2deg) translateZ(0);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(-2deg) translateZ(0);
+          }
+        }
+        @keyframes anim-up-in {
+          0% {
+            opacity: 0;
+            transform: translateY(30px) translateZ(0);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+          }
+        }
+
+        .animate-top-down {
+          animation: anim-top-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: transform, opacity;
+        }
+        .animate-left-in {
+          animation: anim-left-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+        .animate-right-in {
+          animation: anim-right-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+        .animate-fade-in {
+          animation: anim-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+          opacity: 0;
+        }
+        .animate-zoom-in {
+          animation: anim-zoom-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+        .animate-up-in {
+          animation: anim-up-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
         .wax-seal {
           background: radial-gradient(circle at 30% 30%, #dbba82, #b5925a 60%, #826639);
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.2);
-        }
-        .wax-seal::after {
-          content: '';
-          position: absolute;
-          top: 4px;
-          left: 4px;
-          right: 4px;
-          bottom: 4px;
-          border-radius: 50%;
-          border: 1px solid rgba(255,255,255,0.3);
-          box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+          box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.4);
         }
       `}</style>
 
@@ -84,16 +157,11 @@ export function InvitationCover({
         />
       </div>
 
-      <GsapReveal
-        direction="up"
-        distance={30}
-        duration={0.8}
-        className="z-10 flex flex-col items-center w-full"
-      >
+      <div className="z-10 flex flex-col items-center w-full">
         {/* Header Names */}
         <div className="flex flex-col items-center w-full max-w-md px-4">
           <p
-            className="uppercase tracking-[0.25em] text-[12px] font-medium mb-3"
+            className="animate-top-down uppercase tracking-[0.25em] text-[12px] font-medium mb-3"
             style={{
               color: "rgba(124, 106, 96, 0.7)",
               fontFamily: '"Lora", "Times New Roman", serif',
@@ -103,10 +171,11 @@ export function InvitationCover({
           </p>
 
           <h1
-            className="flex items-center justify-center capitalize gap-3 leading-tight text-[36px] sm:text-[36px]"
+            className="flex items-center justify-center capitalize gap-3 leading-tight text-[36px] sm:text-[36px] overflow-hidden py-1"
             style={{ color: textColor }}
           >
             <span
+              className="animate-left-in inline-block"
               style={{
                 fontFamily: '"Times New Roman", serif',
                 fontStyle: "italic",
@@ -116,7 +185,7 @@ export function InvitationCover({
               {getLastTwoNames(groomName) || "Hoàng Nam"}
             </span>
             <span
-              className="text-[30px] -mt-1"
+              className="animate-fade-in text-[30px] -mt-1 inline-block"
               style={{
                 fontFamily: '"The Nautigal", cursive',
                 color: "rgba(218, 63, 192, 1)",
@@ -125,6 +194,7 @@ export function InvitationCover({
               &amp;
             </span>
             <span
+              className="animate-right-in inline-block"
               style={{
                 fontFamily: '"Times New Roman", serif',
                 fontStyle: "italic",
@@ -137,10 +207,10 @@ export function InvitationCover({
         </div>
 
         {/* Polaroid Section */}
-        <div className="relative mt-10 z-20 w-[75%] max-w-[320px] sm:max-w-[380px]">
+        <div className="animate-zoom-in relative mt-10 z-20 w-[75%] max-w-[320px] sm:max-w-[380px]">
           <div
             className="bg-white p-3 pb-12 shadow-xl relative"
-            style={{ transform: "rotate(-2deg) translateZ(0)", willChange: "transform" }}
+            style={{ transform: "rotate(-2deg) translateZ(0)" }}
           >
             {/* Masking tape */}
             <div
@@ -208,7 +278,7 @@ export function InvitationCover({
         </div>
 
         {/* Khung Thân Mời Khách Nổi Bật */}
-        <div className="mt-10 z-30 w-full max-w-sm sm:max-w-md px-4">
+        <div className="animate-up-in mt-10 z-30 w-full max-w-sm sm:max-w-md px-4">
           <div
             className="relative group p-6 sm:p-7 rounded-2xl text-center transition-transform duration-300 hover:scale-[1.02]"
             style={{
@@ -276,7 +346,7 @@ export function InvitationCover({
             </p>
           </div>
         </div>
-      </GsapReveal>
+      </div>
 
       {/* Extra space at bottom to transition into next section smoothly */}
       <div className="h-[80px] w-full"></div>

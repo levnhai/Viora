@@ -74,7 +74,6 @@ export function LiveView({
       style={{
         backgroundColor: "rgb(255, 247, 243)",
         backgroundImage: `url(${bgPaper.src})`,
-        backgroundBlendMode: "multiply",
       }}
     >
       {/* phong bì */}

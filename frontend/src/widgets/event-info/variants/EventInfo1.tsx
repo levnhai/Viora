@@ -71,7 +71,6 @@ export function EventInfo1({ weddingData, onOpenRsvpModal }: EventInfo1Props) {
       style={{
         backgroundColor: "rgb(246, 234, 221)",
         backgroundImage: `url(${bgPaper.src})`,
-        backgroundBlendMode: "multiply",
       }}
     >
       {/* Decorative Leaves - Top Right */}
