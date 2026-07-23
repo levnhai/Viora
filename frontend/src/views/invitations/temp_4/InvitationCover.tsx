@@ -54,7 +54,9 @@ export function InvitationCover({
         <img
           src={img_11.src || (img_11 as unknown as string)}
           alt=""
+          decoding="async"
           className="w-full h-auto object-contain"
+          style={{ transform: "translateZ(0)" }}
         />
       </div>
 
@@ -63,18 +65,21 @@ export function InvitationCover({
         <img
           src={img_heart_1.src || (img_heart_1 as unknown as string)}
           alt=""
+          decoding="async"
           className="w-full h-auto object-contain"
+          style={{ transform: "translateZ(0)" }}
         />
       </div>
 
       {/* Faded leaf decoration background (bottom-right) */}
       <div
         className="absolute top-[50%] -right-[150px] w-[400px] opacity-[0.05] pointer-events-none"
-        style={{ transform: "rotate(-45deg)" }}
+        style={{ transform: "rotate(-45deg) translateZ(0)" }}
       >
         <img
           src={img_5.src || (img_5 as unknown as string)}
           alt=""
+          decoding="async"
           className="w-full h-auto"
         />
       </div>
@@ -211,14 +216,14 @@ export function InvitationCover({
         className="mt-12 z-30 w-full max-w-sm sm:max-w-md px-4"
       >
         <div
-          className="relative group p-6 sm:p-7 rounded-2xl text-center transition-all duration-500 hover:scale-[1.02]"
+          className="relative group p-6 sm:p-7 rounded-2xl text-center transition-transform duration-300 hover:scale-[1.02]"
           style={{
             background:
-              "linear-gradient(135deg, rgba(255, 253, 249, 0.95), rgba(246, 236, 225, 0.9))",
-            backdropFilter: "blur(10px)",
+              "linear-gradient(135deg, rgba(255, 253, 249, 0.98), rgba(246, 236, 225, 0.96))",
             border: "1.5px solid rgba(200, 169, 126, 0.5)",
             boxShadow:
               "0 12px 32px -5px rgba(124, 106, 96, 0.18), 0 0 0 4px rgba(255, 255, 255, 0.6), inset 0 0 15px rgba(200, 169, 126, 0.1)",
+            transform: "translateZ(0)",
           }}
         >
           {/* Decorative Corner Lines */}

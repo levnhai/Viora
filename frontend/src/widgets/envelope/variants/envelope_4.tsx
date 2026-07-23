@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
 import img_5 from "@/shared/assets/image/flower/img_5.webp";
 
@@ -24,6 +25,16 @@ export function Envelope_4({
   primaryColor = "#e8d5c4",
   textColor = "#7c6a60",
 }: Envelope_4Props) {
+  const [isOpening, setIsOpening] = useState(false);
+
+  const handleOpen = () => {
+    if (isOpening) return;
+    setIsOpening(true);
+    setTimeout(() => {
+      onOpen();
+    }, 400);
+  };
+
   const weddingDateLabel = formatVietnameseDate(weddingDate, {
     includeWeekday: true,
     time: weddingTime,
@@ -31,7 +42,9 @@ export function Envelope_4({
 
   return (
     <div
-      className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden`}
+      className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden transition-all duration-500 ease-out ${
+        isOpening ? "opacity-0 scale-105 pointer-events-none" : "opacity-100 scale-100"
+      }`}
       style={{
         background:
           "linear-gradient(to bottom right, #f3e6da, #e8d5c4, #dcc6b2)",
@@ -216,7 +229,7 @@ export function Envelope_4({
               )}
 
               <button
-                onClick={onOpen}
+                onClick={handleOpen}
                 className="relative mt-2 px-8 py-2.5 text-lg font-medium rounded-full shadow-lg flex items-center justify-center overflow-hidden transition-transform hover:scale-105 active:scale-95 animate-fade-in-up delay-600"
                 style={{
                   backgroundColor: textColor,

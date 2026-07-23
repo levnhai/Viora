@@ -98,12 +98,12 @@ export function LiveView({
         <div className="relative z-10 w-full bg-transparent">
           <div className="max-w-3xl mx-auto min-h-screen relative z-10 pb-20">
             <style>{`
-              @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-              @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(25px); } }
-              .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; }
-              .animate-float-2 { animation: float-flower-2 9s ease-in-out infinite; }
-              .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; }
-              .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; }
+              @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
+              @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(25px) translateZ(0); } }
+              .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; will-change: transform; }
+              .animate-float-2 { animation: float-float-2 9s ease-in-out infinite; will-change: transform; }
+              .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; will-change: transform; }
+              .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; will-change: transform; }
             `}</style>
 
             {/* Scrollable background accents */}
@@ -111,6 +111,7 @@ export function LiveView({
               <img
                 src={img_6.src || (img_6 as unknown as string)}
                 alt=""
+                decoding="async"
                 className="w-full rotate-[15deg]"
               />
             </div>
@@ -118,6 +119,7 @@ export function LiveView({
               <img
                 src={img_7.src || (img_7 as unknown as string)}
                 alt=""
+                decoding="async"
                 className="w-full -rotate-[20deg]"
               />
             </div>
@@ -125,6 +127,7 @@ export function LiveView({
               <img
                 src={img_8.src || (img_8 as unknown as string)}
                 alt=""
+                decoding="async"
                 className="w-full rotate-[35deg]"
               />
             </div>
@@ -132,6 +135,7 @@ export function LiveView({
               <img
                 src={img_9.src || (img_9 as unknown as string)}
                 alt=""
+                decoding="async"
                 className="w-full -rotate-[10deg]"
               />
             </div>
