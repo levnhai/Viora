@@ -6,11 +6,20 @@ import { Download, X } from "lucide-react";
 
 interface MinimalRegistryProps {
   weddingData: WeddingData;
+  primaryColor?: string;
+  textColor?: string;
 }
 
-export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
+export function MinimalRegistry({
+  weddingData,
+  primaryColor,
+  textColor,
+}: MinimalRegistryProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const bg = primaryColor || "#001A08";
+  const text = textColor || "#E1BC7C";
 
   useEffect(() => {
     setMounted(true);
@@ -130,25 +139,38 @@ export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
                 onClick={() => setModalOpen(false)}
               />
 
-              <div className="bg-[rgb(0,26,8)] rounded-3xl w-full max-w-xl relative flex flex-col max-h-[90vh] overflow-hidden shadow-[0_0_40px_rgba(225,188,124,0.2)] animate-in fade-in zoom-in duration-300 border border-[rgb(225,188,124)]/50">
+              <div
+                className="rounded-3xl w-full max-w-xl relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 border border-current/40"
+                style={{ backgroundColor: bg, color: text }}
+              >
                 {/* Header */}
-                <div className="p-4 sm:p-6 flex justify-between items-center shrink-0 border-b border-[rgb(225,188,124)]/20 relative">
+                <div className="p-4 sm:p-6 flex justify-between items-center shrink-0 border-b border-current/20 relative">
                   <div className="w-8" /> {/* spacer for centering */}
-                  <h3 className="text-xl sm:text-2xl text-[rgb(225,188,124)] font-serif tracking-widest font-semibold uppercase text-center flex-1 drop-shadow-sm">
+                  <h3
+                    className="text-xl sm:text-2xl font-serif tracking-widest font-semibold uppercase text-center flex-1 drop-shadow-sm"
+                    style={{ color: text }}
+                  >
                     Mừng Cưới
                   </h3>
                   <button
                     onClick={() => setModalOpen(false)}
-                    className="w-8 h-8 flex items-center justify-center text-[rgb(225,188,124)]/50 hover:text-[rgb(225,188,124)] hover:bg-[rgb(225,188,124)]/10 rounded-full transition-all"
+                    className="w-8 h-8 flex items-center justify-center opacity-70 hover:opacity-100 rounded-full transition-all"
+                    style={{ color: text }}
                   >
                     <X size={24} />
                   </button>
                 </div>
 
                 {/* Content / Scrollable */}
-                <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 text-center bg-[rgb(0,26,8)]">
+                <div
+                  className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 text-center"
+                  style={{ backgroundColor: bg }}
+                >
                   {registries.length === 0 ? (
-                    <div className="text-[rgb(225,188,124)] font-serif italic py-10 opacity-70 w-full">
+                    <div
+                      className="font-serif italic py-10 opacity-70 w-full"
+                      style={{ color: text }}
+                    >
                       Gia đình chưa cập nhật thông tin tài khoản
                     </div>
                   ) : (
@@ -164,7 +186,11 @@ export function MinimalRegistry({ weddingData }: MinimalRegistryProps) {
                       return (
                         <div
                           key={idx}
-                          className="flex flex-col items-center flex-1 bg-[rgb(0,35,12)] p-4 sm:p-5 rounded-2xl shadow-sm border border-[rgb(225,188,124)]/20 relative overflow-hidden group hover:shadow-[0_0_20px_rgba(225,188,124,0.1)] transition-shadow"
+                          className="flex flex-col items-center flex-1 p-4 sm:p-5 rounded-2xl shadow-sm border border-current/20 relative overflow-hidden group transition-shadow"
+                          style={{
+                            backgroundColor: bg,
+                            filter: "brightness(1.15)",
+                          }}
                         >
                           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[rgb(225,188,124)]/20 via-[rgb(225,188,124)]/60 to-[rgb(225,188,124)]/20" />
 

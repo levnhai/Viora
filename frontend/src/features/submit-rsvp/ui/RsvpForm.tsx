@@ -9,6 +9,8 @@ interface RsvpFormProps {
   prefilledName?: string;
   theme?: "default" | "minimal" | "temp4";
   hideMessage?: boolean;
+  primaryColor?: string;
+  textColor?: string;
 }
 
 export function RsvpForm({
@@ -16,6 +18,8 @@ export function RsvpForm({
   prefilledName,
   theme = "default",
   hideMessage = false,
+  primaryColor,
+  textColor,
 }: RsvpFormProps) {
   const [rsvpData, setRsvpData] = useState({
     name: prefilledName || "",
@@ -69,15 +73,31 @@ export function RsvpForm({
   const isCustom = isMinimal || isTemp4;
 
   const t = {
-    primary: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
-    primaryAlpha: isTemp4 ? "rgba(124,106,96,0.8)" : "rgba(225,188,124,0.8)",
-    primaryLight: isTemp4 ? "rgba(124,106,96,0.1)" : "rgba(225,188,124,0.1)",
-    border: isTemp4 ? "rgba(124,106,96,0.3)" : "rgba(225,188,124,0.3)",
-    text: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
-    textLight: isTemp4 ? "rgba(124,106,96,0.6)" : "rgba(225,188,124,0.6)",
-    selectBg: isTemp4 ? "transparent" : "rgb(0,26,8)",
-    btnBg: isTemp4 ? "#7c6a60" : "rgb(225,188,124)",
-    btnText: isTemp4 ? "#fdfbf6" : "rgb(0,26,8)",
+    primary: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+    primaryAlpha: textColor
+      ? `${textColor}cc`
+      : isTemp4
+        ? "rgba(124,106,96,0.8)"
+        : "rgba(225,188,124,0.8)",
+    primaryLight: textColor
+      ? `${textColor}1a`
+      : isTemp4
+        ? "rgba(124,106,96,0.1)"
+        : "rgba(225,188,124,0.1)",
+    border: textColor
+      ? `${textColor}4d`
+      : isTemp4
+        ? "rgba(124,106,96,0.3)"
+        : "rgba(225,188,124,0.3)",
+    text: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+    textLight: textColor
+      ? `${textColor}99`
+      : isTemp4
+        ? "rgba(124,106,96,0.6)"
+        : "rgba(225,188,124,0.6)",
+    selectBg: "transparent",
+    btnBg: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+    btnText: primaryColor || (isTemp4 ? "#fdfbf6" : "rgb(0,26,8)"),
   };
 
   return (
@@ -268,7 +288,18 @@ export function RsvpForm({
                   }
                 >
                   {["1", "2", "3", "4", "5+"].map((n) => (
-                    <option key={n} value={n}>
+                    <option
+                      key={n}
+                      value={n}
+                      style={
+                        isCustom
+                          ? {
+                              backgroundColor: primaryColor || (isTemp4 ? "#1a1a1a" : "#001A08"),
+                              color: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+                            }
+                          : {}
+                      }
+                    >
                       {n} người
                     </option>
                   ))}

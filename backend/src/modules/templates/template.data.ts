@@ -74,10 +74,10 @@ export const DEFAULT_TEMPLATES = [
   {
     id: 1,
     code: 'temp_1',
-    name: 'Hoàng Kim Xanh',
+    name: 'Song Hỷ - Xanh',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
-    price: 560000,
+    price: 99000,
     version: '1.0.0',
     status: 'active',
     active: true,
@@ -86,10 +86,10 @@ export const DEFAULT_TEMPLATES = [
   {
     id: 2,
     code: 'temp_2',
-    name: 'Long Phụng',
+    name: 'Song Hỷ - đỏ',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
-    price: 560000,
+    price: 99000,
     version: '1.0.0',
     status: 'active',
     active: true,
@@ -101,7 +101,7 @@ export const DEFAULT_TEMPLATES = [
     name: 'Long Phụng',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
-    price: 560000,
+    price: 149000,
     version: '1.0.0',
     status: 'active',
     active: true,

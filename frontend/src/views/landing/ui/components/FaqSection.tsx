@@ -31,24 +31,24 @@ export function FaqSection() {
   ];
 
   return (
-    <section id="faq" className="py-20 md:py-32 bg-slate-50/70 dark:bg-slate-900/40 relative border-b border-border/40">
+    <section id="faq" className="py-16 sm:py-24 md:py-32 bg-slate-50/70 dark:bg-slate-900/40 relative border-b border-slate-200/60 dark:border-slate-800/60">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span className="inline-block text-xs uppercase tracking-widest font-bold text-[#db2777] bg-pink-100/80 dark:bg-pink-950/50 px-3.5 py-1.5 rounded-full border border-pink-200/60">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16 space-y-3 sm:space-y-4">
+          <span className="inline-block text-[11px] sm:text-xs uppercase tracking-widest font-extrabold text-[#db2777] bg-pink-50 dark:bg-pink-950/50 px-4 py-1.5 rounded-full border border-pink-200/80 dark:border-pink-800/50">
             Giải Đáp Thắc Mắc
           </span>
-          <h2 className="text-lg sm:text-2xl md:text-4xl font-black text-foreground tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight font-sans">
             Câu Hỏi Thường Gặp
           </h2>
-          <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+          <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-xl mx-auto">
             Mọi thông tin bạn cần biết trước khi bắt đầu sở hữu thiệp cưới số cùng Viora.
           </p>
         </div>
 
         {/* Accordions List */}
-        <div className="space-y-4">
+        <div className="space-y-3.5 sm:space-y-4">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
@@ -58,19 +58,21 @@ export function FaqSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
-                className="bg-card rounded-2xl border border-border/80 overflow-hidden shadow-xs hover:border-[#db2777]/50 transition-colors"
+                className="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 overflow-hidden shadow-xs hover:border-[#db2777]/40 transition-all duration-200"
               >
                 <button
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full p-6 sm:p-7 text-left flex items-center justify-between gap-4 font-bold text-base text-foreground hover:text-[#db2777] transition-colors cursor-pointer"
+                  className="w-full p-4 sm:p-6 text-left flex items-start justify-between gap-3 sm:gap-4 font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-100 hover:text-[#db2777] dark:hover:text-[#ff007a] transition-colors cursor-pointer"
                 >
-                  <span className="flex items-center gap-3.5">
-                    <HelpCircle size={20} className="text-[#db2777] shrink-0" />
-                    <span className="leading-snug">{faq.q}</span>
+                  <span className="flex items-start gap-3 sm:gap-3.5 pr-2">
+                    <HelpCircle size={18} className="text-[#db2777] shrink-0 mt-0.5" />
+                    <span className="leading-snug sm:leading-normal font-semibold font-sans text-slate-800 dark:text-slate-100">
+                      {faq.q}
+                    </span>
                   </span>
                   <ChevronDown
-                    size={20}
-                    className={`shrink-0 transition-transform duration-300 text-slate-400 ${
+                    size={18}
+                    className={`shrink-0 transition-transform duration-300 text-slate-400 mt-0.5 ${
                       isOpen ? "rotate-180 text-[#db2777]" : ""
                     }`}
                   />
@@ -82,9 +84,9 @@ export function FaqSection() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
                     >
-                      <div className="px-7 pb-6 pt-0 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-border/40 my-1 pt-4 font-normal">
+                      <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800/80 font-normal font-sans">
                         {faq.a}
                       </div>
                     </motion.div>

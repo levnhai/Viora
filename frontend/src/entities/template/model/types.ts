@@ -8,6 +8,7 @@ export interface TemplatePackage {
     weddingData: WeddingData;
     guestName?: string;
     previewMode?: "envelope" | "invitation";
+    config?: TemplateConfig;
   }>;
   EditView: ComponentType<{
     weddingData: WeddingData;

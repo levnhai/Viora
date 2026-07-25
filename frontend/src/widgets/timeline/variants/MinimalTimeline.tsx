@@ -64,7 +64,7 @@ export function MinimalTimeline({
 
                 {/* Dot */}
                 <div
-                  className="absolute left-[40%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full ring-4 ring-[rgb(0,26,8)]"
+                  className="absolute left-[40%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full ring-4 ring-inherit"
                   style={{ backgroundColor: pColor }}
                 />
 

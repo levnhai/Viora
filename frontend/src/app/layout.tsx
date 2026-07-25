@@ -3,6 +3,7 @@ import { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import GoogleOAuthProviderWrapper from './GoogleOAuthProviderWrapper';
 import { BottomNav } from '@/widgets/bottom-nav/ui/BottomNav';
+import { FloatingZaloContact } from '@/widgets/zalo-contact/ui/FloatingZaloContact';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -59,6 +60,7 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <BottomNav />
             </Suspense>
+            <FloatingZaloContact />
           </GoogleOAuthProviderWrapper>
         </div>
       </body>

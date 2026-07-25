@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { TemplatePackage } from "./types";
 import { TEMPLATES } from "./templates";
 import { LiveView as MinimalLiveView } from "@/views/invitations/minimal/LiveView";
@@ -12,15 +13,10 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
 
   switch (code) {
     case "temp_1":
-      return {
-        config,
-        LiveView: MinimalLiveView,
-        EditView: LegacyMockEditView,
-      };
     case "temp_2":
       return {
         config,
-        LiveView: FloralLiveView,
+        LiveView: (props) => createElement(MinimalLiveView, { ...props, config }),
         EditView: LegacyMockEditView,
       };
     case "temp_3":

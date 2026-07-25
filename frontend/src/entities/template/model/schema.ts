@@ -51,6 +51,8 @@ export interface TemplateConfig {
   price: number;
   popular?: boolean;
   accentColor: string;
+  bgColor?: string;
+  textColor?: string;
   schema: TemplateSchema;
   envelopeKey?: "royal" | "minimal" | "lavender";
   timelineKey?: "vertical" | "slider" | "simple";
