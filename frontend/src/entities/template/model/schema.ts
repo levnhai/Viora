@@ -55,4 +55,7 @@ export interface TemplateConfig {
   envelopeKey?: "royal" | "minimal" | "lavender";
   timelineKey?: "vertical" | "slider" | "simple";
   galleryKey?: "masonry" | "grid";
+  tags?: string[];
+  isNew?: boolean;
+  isHot?: boolean;
 }

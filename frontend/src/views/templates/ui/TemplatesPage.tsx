@@ -422,41 +422,13 @@ export function TemplatesPage() {
                   </h2>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  {/* Nút lọc cho Mobile */}
-                  <button
-                    onClick={() => setMobileFilterOpen(true)}
-                    className="md:hidden flex items-center gap-2 border border-[#e2d8cf] px-4 py-2 rounded-full text-xs font-semibold text-[#7a5c4f] hover:border-[#db2777]/30 hover:text-[#db2777] cursor-pointer bg-white"
-                  >
-                    <SlidersHorizontal size={12} /> Lọc
-                  </button>
-
-                  {/* Sắp xếp */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#7a5c4f]/60 font-semibold uppercase tracking-wider font-sans">Sắp xếp:</span>
-                    <div className="relative">
-                      <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                        className="appearance-none bg-white border border-[#e2d8cf] hover:border-[#db2777]/30 rounded-lg px-3 py-1.5 pr-8 text-xs font-semibold text-[#2c1810] focus:outline-none cursor-pointer font-sans shadow-sm"
-                      >
-                        <option value="newest">Mới nhất</option>
-                        <option value="popular">Phổ biến nhất</option>
-                        <option value="price-asc">Giá tăng dần</option>
-                        <option value="price-desc">Giá giảm dần</option>
-                      </select>
-                      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#7a5c4f]">
-                        <ChevronDown size={14} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Đã ẩn thanh sắp xếp và nút lọc theo yêu cầu */}
               </div>
 
               {/* Grid mẫu thiệp */}
               {sortedTemplates.length > 0 ? (
                 <div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
                     {visibleTemplates.map((tpl) => (
                       <TemplateCard
                         key={tpl.id}

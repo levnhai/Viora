@@ -4,8 +4,10 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 1,
     code: "temp_1",
-    name: "Hoàng Kim Xanh",
-    style: "Hoàng gia",
+    name: "Song Hỷ - Xanh",
+    style: "Truyền thống",
+    tags: ["Truyền thống", "Chữ Hỷ"],
+    isHot: true,
     preview:
       "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-pink",
@@ -33,8 +35,11 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 2,
     code: "minimal-green",
-    name: "Minimal Green",
-    style: "Tinh giản",
+    name: "Minimalism - Nâu",
+    style: "Tối giản",
+    tags: ["Tối giản", "Thanh lịch"],
+    isNew: true,
+    isHot: true,
     preview:
       "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-green",
@@ -62,8 +67,10 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 3,
     code: "classic-white",
-    name: "Classic White",
-    style: "Cổ điển",
+    name: "Hoa Mộc - Xanh",
+    style: "Hoa lá",
+    tags: ["Hoa lá", "Lãng mạn"],
+    isHot: true,
     preview:
       "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-modern",
@@ -91,10 +98,12 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 4,
     code: "temp_4",
-    name: "temp_4",
-    style: "Cổ điển",
+    name: "Song Hỷ - Đỏ",
+    style: "Truyền thống",
+    tags: ["Truyền thống", "Đỏ rực"],
+    isHot: true,
     preview:
-      "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
     themeClass: "theme-modern",
     tier: "basic",
     price: 460000,

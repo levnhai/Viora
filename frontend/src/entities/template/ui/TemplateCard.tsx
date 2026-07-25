@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Heart, Eye } from "lucide-react";
+import { Eye, PhoneCall } from "lucide-react";
 import { TemplateConfig } from "../model/schema";
 
 interface TemplateCardProps {
   tpl: TemplateConfig;
-  onPreviewDemo: (tplId: number) => void;
-  onUseTemplate: (tplId: number) => void;
+  onPreviewDemo: (tpl: TemplateConfig) => void;
+  onUseTemplate: (tplId: string) => void;
 }
 
 export function TemplateCard({
@@ -15,69 +14,75 @@ export function TemplateCard({
   onPreviewDemo,
   onUseTemplate,
 }: TemplateCardProps) {
-  const [isLiked, setIsLiked] = useState(false);
+  const displayTags = tpl.tags && tpl.tags.length > 0 ? tpl.tags : [tpl.style, "Nổi bật"];
 
   return (
     <div
-      onClick={() => onPreviewDemo(tpl.id)}
-      className="group bg-white rounded-2xl overflow-hidden border border-[#e2d8cf]/50 hover:shadow-md transition-all duration-300 flex flex-col w-full aspect-[2/3] cursor-pointer shadow-sm relative"
+      onClick={() => onPreviewDemo(tpl)}
+      className="group bg-slate-950 rounded-2xl sm:rounded-3xl overflow-hidden aspect-[9/16] relative cursor-pointer shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-pink-500/20 w-full"
     >
-      {/* Container ảnh xem trước */}
-      <div className="relative flex-1 overflow-hidden bg-[#fdf6ef]">
-        <img
-          src={tpl.preview}
-          alt={tpl.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+      {/* Background Preview Image Full Cover */}
+      <img
+        src={tpl.preview}
+        alt={tpl.name}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
 
-        {/* Huy hiệu vương miện đỏ ở góc trên bên phải ảnh */}
-        <div className="absolute top-2.5 right-2.5 z-10 bg-[#e11d48] text-white w-6 h-7 rounded-b-md shadow-sm flex items-center justify-center">
-          <svg
-            className="w-3.5 h-3.5 fill-current text-white"
-            viewBox="0 0 24 24"
-          >
-            <path d="M2 4l3 6 7-7 7 7 3-6v16h-20v-16z" />
-          </svg>
-        </div>
-
-        {/* Hover overlay để hiện nút xem chi tiết ở giữa */}
-        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <span className="bg-white/95 backdrop-blur-sm text-[#db2777] px-4 py-2 rounded-full text-xs font-semibold shadow-md flex items-center gap-1.5 transition-all transform scale-90 group-hover:scale-100">
-            <Eye size={12} /> Xem chi tiết
+      {/* Top Badges (Góc trên bên phải) */}
+      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+        {tpl.isNew && (
+          <span className="bg-[#ff0055] text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-md">
+            Mới
           </span>
-        </div>
+        )}
+        {(tpl.isHot || tpl.tier === "premium") && (
+          <span className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-md">
+            Hot
+          </span>
+        )}
       </div>
 
-      {/* Thông tin mẫu thiệp nền trắng bên dưới */}
-      <div className="p-4 bg-white flex flex-col text-left">
-        <h3 className="text-[14px] font-bold text-[#2c1810] line-clamp-1 font-sans transition-colors group-hover:text-[#db2777]">
-          {tpl.name}
-        </h3>
-
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-[13px] font-bold text-[#7a5c4f] font-sans">
-            {tpl.price === 0
-              ? "Miễn phí"
-              : `${tpl.price.toLocaleString("vi-VN")}đ`}
-          </span>
-
+      {/* Hover Backdrop Overlay */}
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 z-20">
+        <div className="flex flex-col gap-2 w-full max-w-[160px] transform scale-90 group-hover:scale-100 transition-transform duration-300">
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsLiked(!isLiked);
+              onPreviewDemo(tpl);
             }}
-            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer border border-[#e2d8cf]/80 hover:border-[#db2777]/30 hover:bg-pink-50/50 ${
-              isLiked
-                ? "bg-pink-50 border-pink-200 text-[#db2777]"
-                : "bg-white text-[#7a5c4f]/60 hover:text-[#db2777]"
-            }`}
-            aria-label={isLiked ? "Unlike template" : "Like template"}
+            className="w-full py-2 rounded-full bg-white text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg hover:bg-slate-100 transition-colors"
           >
-            <Heart
-              size={13}
-              className={isLiked ? "fill-current text-[#db2777]" : ""}
-            />
+            <Eye size={13} /> Xem Demo
           </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onUseTemplate(tpl.code);
+            }}
+            className="w-full py-2 rounded-full bg-[#ff007a] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg hover:bg-pink-600 transition-colors"
+          >
+            <PhoneCall size={13} /> Chọn Mẫu
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Dark Gradient Overlay (Nền tối gradient bên dưới) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-3.5 sm:p-4 text-left z-10 pointer-events-none">
+        {/* Tên mẫu thiệp */}
+        <h3 className="text-sm sm:text-base font-bold text-white leading-tight drop-shadow-sm line-clamp-1">
+          {tpl.name}
+        </h3>
+
+        {/* Các thẻ phong cách (Pill Badges) */}
+        <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+          {displayTags.map((tag, idx) => (
+            <span
+              key={idx}
+              className="bg-white/20 backdrop-blur-md text-[10px] font-medium text-white/90 px-2.5 py-0.5 rounded-full border border-white/10"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </div>

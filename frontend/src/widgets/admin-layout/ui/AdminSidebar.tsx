@@ -30,6 +30,7 @@ export function AdminSidebar() {
 
   const isDashboardActive = pathname === "/admin";
   const isCreateInvitationActive = pathname === "/admin/invitations/create";
+  const isTemplateRequestsActive = pathname === "/admin/template-requests";
   const isInvitationListActive = pathname.startsWith("/admin/invitations") && !isCreateInvitationActive;
 
 
@@ -141,10 +142,14 @@ export function AdminSidebar() {
                   <div className="w-4" /> Tạo thiệp mới
                 </Link>
                 <Link
-                  href="#"
-                  className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  href="/admin/template-requests"
+                  className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                    isTemplateRequestsActive
+                      ? "text-pink-500 bg-pink-500/10 font-medium"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
                 >
-                  <div className="w-4" /> Template
+                  <div className="w-4" /> Yêu cầu tạo thiệp
                 </Link>
               </div>
             )}

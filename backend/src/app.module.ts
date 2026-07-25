@@ -15,6 +15,7 @@ import { MediaModule } from './modules/media/media.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { NewsModule } from './modules/news/news.module';
 import { SocketModule } from './modules/socket/socket.module';
+import { TemplateRequestsModule } from './modules/template-requests/template-requests.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { SocketModule } from './modules/socket/socket.module';
     PaymentsModule,
     NewsModule,
     SocketModule,
+    TemplateRequestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
