@@ -1,5 +1,6 @@
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
 import img_1 from "@/shared/assets/image/flower/img_1.png";
+import { getLastTwoNames } from "@/shared/lib/utils/string";
 
 interface MinimalEnvelopeProps {
   guestName?: string;
@@ -100,14 +101,14 @@ export function MinimalEnvelope({
                   color: textColor,
                 }}
               >
-                <span className="block w-full text-center">
-                  {groomName || "Tên chú rể"}
+                <span className="block w-full text-center capitalize">
+                  {getLastTwoNames(groomName) || "Tên chú rể"}
                 </span>
                 <span className="block w-full text-center text-2xl leading-none my-2 font-serif">
                   &amp;
                 </span>
-                <span className="block w-full text-center">
-                  {brideName || "Tên cô dâu"}
+                <span className="block w-full text-center capitalize">
+                  {getLastTwoNames(brideName) || "Tên cô dâu"}
                 </span>
               </h1>
 
@@ -143,10 +144,10 @@ export function MinimalEnvelope({
                 <div className="mb-8">
                   <p
                     className="text-[14px] sm:text-[15px] font-serif border rounded-full px-6 py-2 tracking-widest uppercase inline-block"
-                    style={{ 
-                      borderColor: `${textColor}40`, 
-                      color: textColor, 
-                      backgroundColor: `${textColor}0A` 
+                    style={{
+                      borderColor: `${textColor}40`,
+                      color: textColor,
+                      backgroundColor: `${textColor}0A`,
                     }}
                   >
                     Thân Mời:{" "}
