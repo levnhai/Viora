@@ -56,6 +56,7 @@ export interface PublishSettings {
   allowComments: boolean;
   showRsvp: boolean;
   passwordProtect: boolean;
+  source: string;
 }
 
 export interface GiftInfo {
@@ -202,6 +203,7 @@ export function InvitationCreateProvider({
     allowComments: true,
     showRsvp: true,
     passwordProtect: false,
+    source: initialData?.wedding?.source || "fb",
   });
 
   const [isSlugEdited, setIsSlugEdited] = useState(isEditMode);

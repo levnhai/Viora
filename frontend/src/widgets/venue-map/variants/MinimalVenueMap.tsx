@@ -26,7 +26,7 @@ export function MinimalVenueMap({
   const mapUrl = extractIframeSrc(rawMapUrl);
 
   return (
-    <section className="py-16 sm:py-24 px-4 text-center">
+    <section className="sm:py-24 px-4 text-center">
       <GsapReveal direction="up" distance={30}>
         <h2
           className="text-xl font-serif font-bold uppercase tracking-widest mb-2"

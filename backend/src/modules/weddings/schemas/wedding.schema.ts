@@ -146,6 +146,9 @@ export class Wedding {
   @Prop({ required: true, default: 'draft', index: true })
   status: string; // 'draft' | 'published' | 'hidden'
 
+  @Prop({ default: 'fb', index: true })
+  source?: string; // 'fb' | 'zalo' | 'ins' | 'tiktok' | 'demo' | 'other'
+
   @Prop({ default: 0 })
   views: number;
 

@@ -27,6 +27,25 @@ export function AdminInvitationsTable({
     }
   };
 
+  const getSourceBadge = (source?: string) => {
+    switch (source) {
+      case 'fb':
+      case 'facebook':
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-200">📘 Facebook</span>;
+      case 'zalo':
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">💬 Zalo</span>;
+      case 'ins':
+      case 'instagram':
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-pink-50 text-pink-600 border border-pink-200">📸 Instagram</span>;
+      case 'tiktok':
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-900 text-white">🎵 TikTok</span>;
+      case 'demo':
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-600 border border-amber-200">🧪 Demo</span>;
+      default:
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">🌐 Khác</span>;
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
       <div className="overflow-x-auto">
@@ -35,6 +54,7 @@ export function AdminInvitationsTable({
             <tr className="border-b border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-600 uppercase tracking-wider">
               <th className="px-6 py-4">Thiệp cưới</th>
               <th className="px-6 py-4">Cô dâu & Chú rể</th>
+              <th className="px-6 py-4">Nguồn</th>
               <th className="px-6 py-4">Ngày cưới</th>
               <th className="px-6 py-4">Lượt xem</th>
               <th className="px-6 py-4">Trạng thái</th>
@@ -45,7 +65,7 @@ export function AdminInvitationsTable({
           <tbody className="divide-y divide-slate-100 text-sm">
             {invitations.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-10 text-center text-slate-500">
+                <td colSpan={8} className="px-6 py-10 text-center text-slate-500">
                   Không tìm thấy thiệp cưới nào.
                 </td>
               </tr>
@@ -69,6 +89,9 @@ export function AdminInvitationsTable({
                 </td>
                 <td className="px-6 py-4 text-slate-700 font-medium">
                   {item.groomName} & {item.brideName}
+                </td>
+                <td className="px-6 py-4">
+                  {getSourceBadge(item.source)}
                 </td>
                 <td className="px-6 py-4">
                   <p className="text-slate-800 font-medium">{formattedDate}</p>

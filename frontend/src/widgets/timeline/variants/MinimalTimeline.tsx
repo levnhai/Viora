@@ -24,7 +24,7 @@ export function MinimalTimeline({
   ];
 
   return (
-    <section className="pt-16 pb-16 sm:pt-24 sm:pb-32 px-4 relative">
+    <section className="pb-16 sm:pt-24 sm:pb-32 px-4 relative">
       <div className="max-w-xl mx-auto">
         <GsapReveal direction="up" distance={30}>
           <div className="text-center mb-16 space-y-4">

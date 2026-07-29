@@ -1,8 +1,16 @@
-import { Cinzel, Great_Vibes, EB_Garamond, Montserrat, Playfair_Display } from "next/font/google";
+import {
+  Cinzel,
+  Great_Vibes,
+  EB_Garamond,
+  Montserrat,
+  Playfair_Display,
+  Dancing_Script,
+  Cormorant_Garamond,
+} from "next/font/google";
 
 export const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -13,14 +21,14 @@ export const greatVibes = Great_Vibes({
 });
 
 export const ebGaramond = EB_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 export const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["200", "400", "600"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["200", "300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -29,3 +37,16 @@ export const playfairDisplay = Playfair_Display({
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
+
+export const dancingScript = Dancing_Script({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+export const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+

@@ -65,7 +65,7 @@ export class WeddingsService {
   ) {}
 
   async findAll(query: any, user: any): Promise<any> {
-    const { page = 1, limit = 10, status, search, templateId } = query;
+    const { page = 1, limit = 10, status, search, templateId, source } = query;
     const skip = (Number(page) - 1) * Number(limit);
 
     // Xây dựng query cơ bản
@@ -82,6 +82,11 @@ export class WeddingsService {
     // Lọc theo trạng thái
     if (status) {
       filter.status = status;
+    }
+
+    // Lọc theo nguồn thiệp (source)
+    if (source) {
+      filter.source = source;
     }
 
     // Lọc theo template
@@ -187,7 +192,9 @@ export class WeddingsService {
       .findOne({ slug: createDto.slug, deletedAt: null })
       .exec();
     if (existing) {
-      return this.update(createDto.slug, createDto);
+      throw new BadRequestException(
+        `Mã đường dẫn thiệp (Slug) "${createDto.slug}" đã tồn tại trong hệ thống. Vui lòng chọn đường dẫn khác!`,
+      );
     }
 
     const {
@@ -265,6 +272,7 @@ export class WeddingsService {
         templateVersion: targetTemplate.version,
         weddingDate: new Date(createDto.weddingDate),
         galleryImages: galleryImages || [],
+        source: createDto.source || 'fb',
         status: 'published',
       });
       const saved = await created.save({ session });

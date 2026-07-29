@@ -10,7 +10,11 @@ export interface MinimalCountdownProps {
   textColor?: string;
 }
 
-export function MinimalCountdown({ weddingData, primaryColor, textColor }: MinimalCountdownProps) {
+export function MinimalCountdown({
+  weddingData,
+  primaryColor,
+  textColor,
+}: MinimalCountdownProps) {
   const targetDateMs = useMemo(() => {
     let ms = Date.now() + 86400000 * 30; // fallback to 30 days
     try {
@@ -45,24 +49,31 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
   const color = textColor || "rgb(225,188,124)";
 
   return (
-    <section className="py-16 sm:py-24 px-4">
+    <section className="pt-16 sm:py-24 px-4">
       <div className="max-w-4xl mx-auto">
-        <GsapReveal direction="up" distance={30} className="text-center space-y-4 mb-10">
-          <h2 
+        <GsapReveal
+          direction="up"
+          distance={30}
+          className="text-center space-y-4 mb-10"
+        >
+          <h2
             className="text-2xl font-serif uppercase tracking-widest"
             style={{ color }}
           >
             ĐẾM NGƯỢC THỜI GIAN
           </h2>
-          <p 
-            className="font-serif text-sm opacity-70"
-            style={{ color }}
-          >
+          <p className="font-serif text-sm opacity-70" style={{ color }}>
             {formattedDate}
           </p>
         </GsapReveal>
 
-        <GsapReveal stagger={0.15} delay={0.2} direction="up" distance={30} className="flex justify-center gap-4 sm:gap-8">
+        <GsapReveal
+          stagger={0.15}
+          delay={0.2}
+          direction="up"
+          distance={30}
+          className="flex justify-center gap-4 sm:gap-8"
+        >
           {[
             { label: "Ngày", value: countdown.days },
             { label: "Giờ", value: countdown.hours },
@@ -70,15 +81,18 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
             { label: "Giây", value: countdown.seconds },
           ].map((item, idx) => (
             <div key={idx} className="flex flex-col items-center">
-              <div 
+              <div
                 className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border flex items-center justify-center shadow-[0_0_20px_rgba(225,188,124,0.1)] mb-3 relative overflow-hidden group"
-                style={{ borderColor: `${color}80`, backgroundColor: `${color}0D` }}
+                style={{
+                  borderColor: `${color}80`,
+                  backgroundColor: `${color}0D`,
+                }}
               >
-                <div 
+                <div
                   className="absolute inset-0 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500"
                   style={{ backgroundColor: `${color}1A` }}
                 ></div>
-                <span 
+                <span
                   className="text-2xl sm:text-3xl font-serif relative z-10"
                   style={{ color }}
                 >
@@ -87,7 +101,7 @@ export function MinimalCountdown({ weddingData, primaryColor, textColor }: Minim
                     : item.value.toString().padStart(2, "0")}
                 </span>
               </div>
-              <span 
+              <span
                 className="text-[11px] sm:text-xs uppercase tracking-[0.2em] opacity-70 font-sans font-semibold"
                 style={{ color }}
               >

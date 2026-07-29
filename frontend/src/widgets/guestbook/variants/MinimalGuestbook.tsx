@@ -30,11 +30,11 @@ export function MinimalGuestbook({
   }
 
   return (
-    <section className="py-16 sm:py-24 px-4 relative">
+    <section className="sm:py-24 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <GsapReveal direction="up" distance={30}>
           <div className="text-center mb-12 space-y-4">
-            <h2 
+            <h2
               className="text-2xl font-serif uppercase tracking-widest"
               style={{ color: pColor }}
             >
@@ -44,7 +44,7 @@ export function MinimalGuestbook({
         </GsapReveal>
 
         <GsapReveal delay={0.2} direction="up" distance={40}>
-          <div 
+          <div
             className="max-w-xl mx-auto border p-8 rounded-xl relative"
             style={{ borderColor: pColor }}
           >
@@ -84,7 +84,12 @@ export function MinimalGuestbook({
         </GsapReveal>
 
         {messages && messages.length > 0 && (
-          <GsapReveal delay={0.4} direction="up" distance={40} className="mt-16 max-w-2xl mx-auto">
+          <GsapReveal
+            delay={0.4}
+            direction="up"
+            distance={40}
+            className="mt-16 max-w-2xl mx-auto"
+          >
             <style>{`
               .guestbook-mask {
                 -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
@@ -121,9 +126,12 @@ export function MinimalGuestbook({
                     <div
                       key={idx}
                       className="border rounded-2xl p-3 sm:p-4 relative transition-all duration-300 shadow-sm shrink-0"
-                      style={{ borderColor: pColor, backgroundColor: pColor + '0A' }} // 0A is very low opacity
+                      style={{
+                        borderColor: pColor,
+                        backgroundColor: pColor + "0A",
+                      }} // 0A is very low opacity
                     >
-                      <div 
+                      <div
                         className="absolute top-0 right-4 font-serif text-5xl pointer-events-none select-none opacity-20"
                         style={{ color: pColor }}
                       >
@@ -131,24 +139,24 @@ export function MinimalGuestbook({
                       </div>
                       <div className="relative z-10">
                         <div className="flex items-baseline justify-between mb-2 gap-2">
-                          <h4 
+                          <h4
                             className="font-serif text-lg sm:text-xl font-medium truncate"
                             style={{ color: pColor }}
                           >
                             {msg.name}
                           </h4>
-                          <span 
+                          <span
                             className="text-[10px] tracking-wider uppercase shrink-0 opacity-50"
                             style={{ color: pColor }}
                           >
                             {msg.time}
                           </span>
                         </div>
-                        <div 
+                        <div
                           className="w-10 h-px mb-3 opacity-20"
                           style={{ backgroundColor: pColor }}
                         />
-                        <p 
+                        <p
                           className="text-sm sm:text-base font-light leading-relaxed italic whitespace-pre-wrap opacity-90"
                           style={{ color: pColor }}
                         >

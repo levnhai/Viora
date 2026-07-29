@@ -1,7 +1,7 @@
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import img_1 from "@/shared/assets/image/flower/img_1.png";
-
+import { getLastTwoNames } from "@/shared/lib/utils/string";
 interface InvitationCoverProps {
   weddingData: WeddingData;
   guestName?: string;
@@ -35,13 +35,13 @@ export function InvitationCover({
         </p>
 
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl mt-17 text-left w-full"
+          className="text-5xl sm:text-7xl md:text-8xl mt-17 text-left w-full capitalize"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
           }}
         >
-          {groomName || "Trung Hiếu"}
+          {getLastTwoNames(groomName) || "Trung Hiếu"}
         </h1>
 
         <div className="text-6xl sm:text-7xl font-cursive my-2 opacity-80">
@@ -49,13 +49,13 @@ export function InvitationCover({
         </div>
 
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl mt-6 text-right w-full"
+          className="text-5xl sm:text-7xl md:text-8xl mt-6 text-right w-full capitalize"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
           }}
         >
-          {brideName || "Như Ý"}
+          {getLastTwoNames(brideName) || "Như Ý"}
         </h1>
       </GsapReveal>
 

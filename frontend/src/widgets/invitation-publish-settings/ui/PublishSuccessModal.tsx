@@ -5,11 +5,9 @@ import {
   CheckCircle2,
   Copy,
   Download,
-  Facebook,
-  Twitter,
-  Mail,
   X,
   Eye,
+  ExternalLink,
 } from "lucide-react";
 
 import { useState, useEffect } from "react";
@@ -26,12 +24,45 @@ export function PublishSuccessModal({
     publishSettings,
   } = useInvitationCreate();
   const [mounted, setMounted] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!isPublishSuccessModalOpen || !mounted) return null;
+
+  const fullUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/w/${publishSettings.urlSlug}`
+      : `https://wedding.com/w/${publishSettings.urlSlug}`;
+
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
+    fullUrl,
+  )}`;
+
+  const copyToClipboard = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldName);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const handleDownloadQr = async () => {
+    try {
+      const response = await fetch(qrCodeUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `QR-${publishSettings.urlSlug}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch {
+      window.open(qrCodeUrl, "_blank");
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
@@ -50,152 +81,143 @@ export function PublishSuccessModal({
           <X size={20} />
         </button>
 
-        <div className="p-8 pb-6 flex flex-col items-center text-center">
-          <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-6 border-8 border-green-50">
-            <CheckCircle2 size={40} strokeWidth={2.5} />
+        <div className="p-6 pb-4 flex flex-col items-center text-center">
+          <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-3 border-4 border-green-50">
+            <CheckCircle2 size={32} strokeWidth={2.5} />
           </div>
 
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            Xuất bản thành công!
+          <h2 className="text-xl font-bold text-slate-800 mb-1">
+            Xuất bản thiệp thành công!
           </h2>
-          <p className="text-sm text-slate-500">
-            Thiệp cưới của bạn đã được xuất bản và sẵn sàng chia sẻ
+          <p className="text-xs text-slate-500">
+            Dưới đây là thông tin đường dẫn, mã QR và tài khoản quản lý thiệp
           </p>
         </div>
 
-        <div className="px-8 pb-8 space-y-6">
-          {/* Link website */}
+        <div className="px-6 pb-6 space-y-4">
+          {/* 1. Slug & Link */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">
-              Link website
+            <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+              1. Mã đường dẫn thiệp (Slug & Link)
             </label>
-            <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-slate-200 rounded-xl">
-              <div className="flex-1 px-3 text-sm text-slate-600 truncate">
-                {typeof window !== "undefined"
-                  ? `${window.location.origin}/w/${publishSettings.urlSlug}`
-                  : `https://wedding.com/w/${publishSettings.urlSlug}`}
+            <div className="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+              <div className="flex-1 px-2 text-xs font-mono text-slate-700 truncate">
+                {fullUrl}
               </div>
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors shrink-0"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    `${window.location.origin}/w/${publishSettings.urlSlug}`,
-                  );
-                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 rounded-lg text-xs font-semibold transition-colors shrink-0"
+                onClick={() => copyToClipboard(fullUrl, "link")}
               >
-                <Copy size={16} /> Sao chép
+                <Copy size={14} />
+                {copiedField === "link" ? "Đã chép!" : "Sao chép"}
               </button>
             </div>
           </div>
 
-          {/* QR Code */}
+          {/* 2. QR Code */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">
-              QR Code
+            <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+              2. Mã QR Truy cập
             </label>
-            <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-              <div className="w-16 h-16 bg-white p-1 rounded-lg border border-slate-200 shrink-0">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${typeof window !== "undefined" ? `${window.location.origin}/w/${publishSettings.urlSlug}` : `https://wedding.com/w/${publishSettings.urlSlug}`}`}
-                  alt="QR"
-                  className="w-full h-full"
-                />
+            <div className="flex items-center gap-4 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div className="w-20 h-20 bg-white p-1 rounded-lg border border-slate-200 shrink-0 flex items-center justify-center">
+                <img src={qrCodeUrl} alt="QR Code" className="w-full h-full" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-slate-600 mb-2">
-                  Quét mã QR để truy cập thiệp
+                <p className="text-xs text-slate-600 mb-2">
+                  Quét mã QR bằng điện thoại để mở trực tiếp thiệp cưới
                 </p>
-                <button className="flex items-center gap-2 text-rose-600 text-sm font-semibold hover:text-rose-700">
-                  <Download size={16} /> Tải xuống
+                <button
+                  onClick={handleDownloadQr}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition-colors"
+                >
+                  <Download size={14} /> Tải ảnh QR Code (.png)
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Credentials */}
+          {/* 3 & 4. Email & Password */}
           {credentials && (
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider text-rose-600">
-                Thông tin tài khoản
+              <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                3. Tài khoản khách hàng (Email & Password)
               </label>
-              <div className="flex flex-col gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl">
+              <div className="p-3 bg-rose-50/60 border border-rose-200/80 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">
+                  <span className="text-xs font-semibold text-slate-600">
                     Email:
                   </span>
-                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">
-                    {credentials.email}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 font-semibold">
+                      {credentials.email}
+                    </span>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(credentials.email, "email")
+                      }
+                      className="text-rose-600 hover:text-rose-700 p-1"
+                      title="Sao chép Email"
+                    >
+                      <Copy size={14} />
+                    </button>
+                  </div>
                 </div>
+
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">
+                  <span className="text-xs font-semibold text-slate-600">
                     Mật khẩu:
                   </span>
-                  <span className="text-sm font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100">
-                    {credentials.password}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 font-semibold">
+                      {credentials.password}
+                    </span>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(credentials.password, "password")
+                      }
+                      className="text-rose-600 hover:text-rose-700 p-1"
+                      title="Sao chép Mật khẩu"
+                    >
+                      <Copy size={14} />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-700">
-                    Link quản trị:
-                  </span>
-                  <span className="text-xs font-mono text-slate-800 bg-white px-2 py-1 rounded border border-rose-100 truncate max-w-[200px]">
-                    {typeof window !== "undefined"
-                      ? `${window.location.origin}/login`
-                      : `https://wedding.com/login`}
-                  </span>
-                </div>
+
                 <button
-                  className="mt-2 flex items-center justify-center gap-2 px-4 py-2 bg-white text-rose-600 border border-rose-200 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      `Tài khoản quản lý thiệp cưới:\nLink: ${window.location.origin}/w/${publishSettings.urlSlug}\nEmail: ${credentials.email}\nMật khẩu: ${credentials.password}\nĐăng nhập tại: ${window.location.origin}/login`,
-                    );
-                    alert("Đã sao chép thông tin tài khoản!");
-                  }}
+                  className="w-full mt-1 flex items-center justify-center gap-2 px-3 py-1.5 bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 rounded-lg text-xs font-semibold transition-colors"
+                  onClick={() =>
+                    copyToClipboard(
+                      `Tài khoản thiệp cưới:\nLink: ${fullUrl}\nEmail: ${credentials.email}\nMật khẩu: ${credentials.password}`,
+                      "full",
+                    )
+                  }
                 >
-                  <Copy size={16} /> Sao chép
+                  <Copy size={14} />
+                  {copiedField === "full"
+                    ? "Đã sao chép tất cả!"
+                    : "Sao chép toàn bộ thông tin bàn giao"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* Chia sẻ nhanh */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-3 uppercase tracking-wider">
-              Chia sẻ nhanh
-            </label>
-            <div className="grid grid-cols-4 gap-3">
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors text-slate-600 text-sm font-medium">
-                <Facebook size={18} />
-              </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-sky-50 hover:text-sky-500 hover:border-sky-200 transition-colors text-slate-600 text-sm font-medium">
-                <span className="font-bold">Zalo</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-colors text-slate-600 text-sm font-medium">
-                <span className="font-bold">Msg</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors text-slate-600 text-sm font-medium">
-                <Mail size={18} />
-              </button>
-            </div>
-          </div>
-
+          {/* Bottom Action Buttons */}
           <div className="pt-2 flex gap-3">
-            <button
-              onClick={() => {
-                setIsPublishSuccessModalOpen(false);
-              }}
-              className="flex-1 py-3 text-sm font-semibold text-slate-600 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition-all"
+            <a
+              href={fullUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 py-2.5 text-center text-xs font-semibold text-slate-700 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition-all flex items-center justify-center gap-1.5"
             >
-              <Eye size={18} className="inline-block mr-2" /> Xem website
-            </button>
+              <Eye size={16} /> Xem website thiệp
+            </a>
             <button
               onClick={() => {
                 setIsPublishSuccessModalOpen(false);
                 setStep("select_template");
               }}
-              className="flex-1 py-3 text-sm font-semibold text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-md shadow-rose-500/20 transition-all"
+              className="flex-1 py-2.5 text-xs font-semibold text-white bg-rose-500 hover:bg-rose-600 rounded-xl shadow-md shadow-rose-500/20 transition-all flex items-center justify-center gap-1.5"
             >
               Quản lý thiệp
             </button>

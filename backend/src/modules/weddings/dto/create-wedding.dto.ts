@@ -205,4 +205,8 @@ export class CreateWeddingDto {
   @IsOptional()
   @IsString()
   musicUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  source?: string;
 }

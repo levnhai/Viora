@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { cinzel, greatVibes, ebGaramond } from "@/shared/lib/fonts";
+import { formatDateToDDMMYYYY } from "@/shared/lib/utils/date";
 
 import img4Svg from "@/shared/assets/image/envelope/img_4.svg";
 import polaroid1 from "@/shared/assets/image/polaroid/1.svg";
 import polaroid3 from "@/shared/assets/image/polaroid/3.svg";
-import { formatDate, formatDateToDDMMYYYY } from "@/shared/lib/utils/date";
-import { getValidImage } from "@/shared/lib/utils/image";
+import img1Webp from "@/shared/assets/image/hy/img_1.webp";
+import img2Webp from "@/shared/assets/image/hy/img_2.webp";
 
 interface InvitationCoverProps {
-  onScrollNext: () => void;
+  onScrollNext?: () => void;
   groomName: string;
   brideName: string;
   weddingDate: string;
@@ -25,30 +26,31 @@ export function InvitationCover({
   galleryImages = [],
   guestName,
 }: InvitationCoverProps) {
-  // Use image placeholders if not provided
-  // const leftPhoto = getValidImage(
-  //   galleryImages[1],
-  //   "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&fit=crop",
-  // );
-  // const rightPhoto = getValidImage(
-  //   galleryImages[2],
-  //   "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&fit=crop",
-  // );
+  const leftPhotoSrc = galleryImages[0] || img1Webp;
+  const rightPhotoSrc = galleryImages[1] || galleryImages[0] || img2Webp;
+  const formattedDate = formatDateToDDMMYYYY(weddingDate || "2026-05-23");
 
   return (
     <section
       onClick={onScrollNext}
-      className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[#fbf9fc] cursor-pointer hover:opacity-[0.99] transition-all"
+      className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[#fbf9fc] cursor-pointer hover:opacity-[0.99] transition-all px-4 py-8 select-none"
     >
       {/* Background patterns nhạt thanh lịch */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] [background-size:20px_20px]" />
+      <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] [background-size:24px_24px]" />
+
+      {/* Dòng chữ Nhấp để mở / cuộn xuống */}
+      <div className="z-20 mb-3 animate-bounce">
+        <p className={`${ebGaramond.className} text-[#786470] text-sm sm:text-base tracking-widest italic opacity-85`}>
+          Nhấp để mở !!!
+        </p>
+      </div>
 
       {/* Container chính cho SVG trang trí ở giữa màn hình */}
-      <div className="relative w-[95%] sm:w-[480px] aspect-[0.71] z-10 flex flex-col items-center justify-center select-none filter drop-shadow-[0_6px_14px_rgba(0,0,0,0.08)]">
+      <div className="relative w-[95%] sm:w-[480px] aspect-[0.71] z-10 flex flex-col items-center justify-center select-none filter drop-shadow-[0_8px_20px_rgba(0,0,0,0.08)]">
         {/* Left Polaroid Photo */}
         <div className="absolute left-[20%] top-[12.5%] w-[32%] aspect-[0.8] z-1 rotate-[-10.5deg]">
           <div
-            className="absolute overflow-hidden bg-stone-100"
+            className="absolute overflow-hidden bg-stone-100 rounded-sm"
             style={{
               top: "15.4%",
               bottom: "15.4%",
@@ -56,11 +58,13 @@ export function InvitationCover({
               right: "19.5%",
             }}
           >
-            {/* <img
-              src={leftPhoto}
+            <Image
+              src={leftPhotoSrc}
               alt="Groom Photo"
-              className="w-full h-full object-cover"
-            /> */}
+              fill
+              className="object-cover"
+              unoptimized={typeof leftPhotoSrc === "string"}
+            />
           </div>
           <Image
             src={polaroid1}
@@ -74,7 +78,7 @@ export function InvitationCover({
         {/* Right Polaroid Photo */}
         <div className="absolute left-[20%] top-[-4.5%] w-[60%] aspect-[0.8] z-1 rotate-[5.5deg]">
           <div
-            className="absolute overflow-hidden bg-stone-100"
+            className="absolute overflow-hidden bg-stone-100 rounded-sm"
             style={{
               top: "30.0%",
               bottom: "30.1%",
@@ -82,11 +86,13 @@ export function InvitationCover({
               right: "33.8%",
             }}
           >
-            {/* <img
-              src={rightPhoto}
+            <Image
+              src={rightPhotoSrc}
               alt="Bride Photo"
-              className="w-full h-full object-cover"
-            /> */}
+              fill
+              className="object-cover"
+              unoptimized={typeof rightPhotoSrc === "string"}
+            />
           </div>
           <Image
             src={polaroid3}
@@ -112,21 +118,21 @@ export function InvitationCover({
         >
           {/* Left vertical text */}
           <div className="w-[40%] h-full flex items-center justify-center border-r border-dashed border-[#786470]/30 select-none">
-            <span className="text-[7px] sm:text-[9px] font-bold uppercase tracking-widest whitespace-nowrap rotate-[-90deg] origin-center opacity-70">
+            <span className="text-[7px] sm:text-[9px] font-bold uppercase tracking-widest whitespace-nowrap rotate-[-90deg] origin-center opacity-75">
               {groomName} - {brideName}
             </span>
           </div>
 
           {/* Right main text */}
-          <div className="w-[80%] h-full flex flex-col items-center justify-center text-center p-2 space-y-0.5">
+          <div className="w-[80%] h-full flex flex-col items-center justify-center text-center p-1.5 space-y-0.5">
             <p
               className="text-[7px] sm:text-[9px] tracking-[0.2em] font-semibold opacity-85 uppercase"
               style={{ fontFamily: "sans-serif" }}
             >
               Save Our Date
             </p>
-            <h2 className="text-sm sm:text-lg font-bold tracking-wide text-[#594852] my-0 leading-none">
-              {formatDateToDDMMYYYY(weddingDate)}
+            <h2 className="text-sm sm:text-base font-bold tracking-wide text-[#594852] my-0 leading-none">
+              {formattedDate}
             </h2>
             <p
               className={`${greatVibes.className} text-xs sm:text-sm italic text-[#786470] font-normal mt-0.5`}
@@ -152,3 +158,4 @@ export function InvitationCover({
     </section>
   );
 }
+

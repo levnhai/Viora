@@ -69,7 +69,7 @@ export const TEMPLATES: TemplateConfig[] = [
   },
   {
     id: 3,
-    code: "classic-white",
+    code: "temp_3",
     name: "Hoa Mộc - Xanh",
     style: "Hoa lá",
     tags: ["Hoa lá", "Lãng mạn"],

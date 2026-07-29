@@ -2,7 +2,10 @@ import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { Heart } from "lucide-react";
 import React from "react";
-import { getVietnameseWeekday, getVietnameseLunarDate } from "@/shared/lib/utils/date";
+import {
+  getVietnameseWeekday,
+  getVietnameseLunarDate,
+} from "@/shared/lib/utils/date";
 
 interface MinimalEventInfoProps {
   weddingData: WeddingData;
@@ -29,7 +32,7 @@ export function MinimalEventInfo({
   const pColor15 = pColor + "26"; // 15% opacity
 
   return (
-    <section className="pt-12 pb-12 sm:pt-24 sm:pb-24 px-4 relative">
+    <section className="pt-12 sm:pt-24 sm:pb-24 px-4 relative">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col gap-24">
           {events.map((ev, i) => {
@@ -52,9 +55,11 @@ export function MinimalEventInfo({
             const monthYear = month ? `THÁNG ${month}` : "";
             const yearStr = year || "2026";
 
-            const isoDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            const isoDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
             const weekday = getVietnameseWeekday(isoDate) || "CHỦ NHẬT";
-            const lunarDate = getVietnameseLunarDate(isoDate) || "(Tức ngày 15/04 năm Bính Ngọ)";
+            const lunarDate =
+              getVietnameseLunarDate(isoDate) ||
+              "(Tức ngày 15/04 năm Bính Ngọ)";
 
             return (
               <GsapReveal key={i} delay={i * 0.1} direction="up" distance={40}>
