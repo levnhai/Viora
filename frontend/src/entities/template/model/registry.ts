@@ -2,9 +2,9 @@ import { createElement } from "react";
 import { TemplatePackage } from "./types";
 import { TEMPLATES } from "./templates";
 import { LiveView as MinimalLiveView } from "@/views/invitations/minimal/LiveView";
-// import { LiveView as temp_3 } from "@/views/invitations/floral/LiveView";
 import { LiveView as temp_3 } from "@/views/invitations/luxury/LiveView";
 import { LiveView as Temp_4 } from "@/views/invitations/temp_4/LiveView";
+import { LiveView as temp_5 } from "@/views/invitations/floral/LiveView";
 
 const LegacyMockEditView = () => null;
 
@@ -30,6 +30,12 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
       return {
         config,
         LiveView: Temp_4,
+        EditView: LegacyMockEditView,
+      };
+    case "temp_5":
+      return {
+        config,
+        LiveView: temp_5,
         EditView: LegacyMockEditView,
       };
     default:

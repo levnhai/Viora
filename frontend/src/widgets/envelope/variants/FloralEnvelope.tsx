@@ -1,14 +1,14 @@
-import React from "react";
-import { formatDate } from "@/shared/lib/utils/date";
-import hyImg from "@/shared/assets/image/hy/img_1.webp";
+import React, { useState } from "react";
 import bgImg1 from "@/shared/assets/image/hy/img_2.webp";
 import bgImg2 from "@/shared/assets/image/hy/img_3.webp";
+import sealImg from "@/shared/assets/image/seal/img_3.svg";
 
 interface FloralEnvelopeProps {
   guestName?: string;
   groomName: string;
   brideName: string;
   weddingDate: string;
+  weddingTime?: string;
   onOpen: () => void;
   isFixed?: boolean;
 }
@@ -18,176 +18,115 @@ export function FloralEnvelope({
   groomName,
   brideName,
   weddingDate,
+  weddingTime,
   onOpen,
   isFixed = true,
 }: FloralEnvelopeProps) {
-  const characters = [
-    { left: "31.55%", size: "13.55px", sway: "14.64px", dur: "11.4s", delay: "1.92s" },
-    { left: "57.77%", size: "14.06px", sway: "-8.92px", dur: "9.46s", delay: "1.74s" },
-    { left: "13.78%", size: "22.68px", sway: "-8.91px", dur: "8.36s", delay: "1.64s", color: "#FF9B4A" },
-    { left: "5.27%", size: "17.09px", sway: "23.71px", dur: "8.56s", delay: "1.94s" },
-    { left: "89.57%", size: "17.46px", sway: "-2.3px", dur: "8.19s", delay: "1.37s" },
-    { left: "53.16%", size: "14.27px", sway: "-18.51px", dur: "9.96s", delay: "1.33s" },
-    { left: "88.73%", size: "18.14px", sway: "-17.91px", dur: "8.47s", delay: "0.15s", color: "#FFBE89" },
-    { left: "78.71%", size: "18.04px", sway: "19.41px", dur: "12.2s", delay: "0.36s", color: "#FF9B4A" },
-    { left: "5.55%", size: "12.78px", sway: "-6.1px", dur: "12.56s", delay: "0.99s" },
-    { left: "93.74%", size: "23.18px", sway: "7.81px", dur: "10.84s", delay: "0.8s", color: "#710001" },
-    { left: "65.28%", size: "12.26px", sway: "19.24px", dur: "12.87s", delay: "0.79s", color: "#FFBE89" },
-    { left: "93.16%", size: "19.74px", sway: "-27.12px", dur: "9.64s", delay: "1.73s", color: "#710001" },
-  ];
+  const [isOpening, setIsOpening] = useState(false);
+
+  const handleOpen = () => {
+    if (isOpening) return;
+    setIsOpening(true);
+    setTimeout(() => {
+      onOpen();
+    }, 800);
+  };
 
   return (
     <div
-      style={{ background: "linear-gradient(to bottom right, #710001, #5a0001, #450001)" }}
-      className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden`}
+      onClick={handleOpen}
+      className={`${
+        isFixed ? "fixed" : "absolute"
+      } inset-0 z-50 flex w-full h-full overflow-hidden bg-transparent cursor-pointer ${
+        isOpening ? "pointer-events-none" : ""
+      }`}
     >
-      <div style={{ zIndex: 1 }} className="absolute inset-0 pointer-events-none overflow-hidden">
-        {characters.map((char, i) => (
-          <div
-            key={i}
-            style={{
-              left: char.left,
-              top: "auto",
-              bottom: "-30px",
-              color: char.color || "#FFD4A8",
-              fontSize: char.size,
-              "--sway": char.sway,
-              animation: `ambient-rise ${char.dur} ease-in-out ${char.delay} infinite`,
-            } as React.CSSProperties}
-            className="absolute"
-          >
-            囍
-          </div>
-        ))}
+      <style>{`
+        @keyframes expand-left {
+          0% {
+            transform: scaleX(0);
+            opacity: 0;
+          }
+          100% {
+            transform: scaleX(1);
+            opacity: 1;
+          }
+        }
+        @keyframes expand-right {
+          0% {
+            transform: scaleX(0);
+            opacity: 0;
+          }
+          100% {
+            transform: scaleX(1);
+            opacity: 1;
+          }
+        }
+        .animate-expand-left {
+          animation: expand-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          transform-origin: right center;
+        }
+        .animate-expand-right {
+          animation: expand-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          transform-origin: left center;
+        }
+      `}</style>
+
+      {/* Left Div - 70% Ratio */}
+      <div
+        className={`w-[70%] h-full animate-expand-left relative flex flex-col items-center justify-center p-6 md:p-12 border-r border-[#d4af37]/40 shadow-[10px_0_30px_rgba(0,0,0,0.5)] overflow-hidden transition-transform duration-800 ease-in-out ${
+          isOpening ? "-translate-x-full" : "translate-x-0"
+        }`}
+        style={{
+          background:
+            "linear-gradient(135deg, #710001 0%, #5a0001 50%, #3e0001 100%)",
+        }}
+      >
+        {/* Background Overlay Motifs */}
+        <img
+          src={bgImg1.src}
+          alt=""
+          className="absolute top-[-10%] left-[-10%] w-[350px] md:w-[500px] opacity-15 mix-blend-screen pointer-events-none"
+        />
+        <img
+          src={bgImg2.src}
+          alt=""
+          className="absolute bottom-[-10%] right-[-10%] w-[350px] md:w-[500px] opacity-15 mix-blend-screen pointer-events-none"
+        />
       </div>
 
-      <div style={{ zIndex: 10 }} className="relative">
-        <div className="relative w-[310px] sm:w-[340px] md:w-[520px] lg:w-[600px]">
-          
-          <div
-            style={{
-              top: "50px",
-              width: "64px",
-              height: "64px",
-              transform: "translate(-50%, -50%)",
-              background: "transparent",
-              boxShadow: "none",
-              zIndex: 30,
-              animation: "seal-pulse 2s ease-in-out infinite",
-            }}
-            className="absolute left-1/2 rounded-full flex items-center justify-center"
-          >
-            <img
-              src={hyImg.src}
-              alt=""
-              style={{ transformOrigin: "center" }}
-              className="w-[52px] h-[52px] object-contain"
-            />
-          </div>
+      {/* Right Div - 30% Ratio */}
+      <div
+        className={`w-[30%] h-full animate-expand-right relative flex flex-col items-center justify-center p-4 border-l border-[#d4af37]/20 shadow-inner overflow-hidden transition-transform duration-800 ease-in-out ${
+          isOpening ? "translate-x-full" : "translate-x-0"
+        }`}
+        style={{
+          background:
+            "linear-gradient(135deg, #5a0001 0%, #450001 50%, #2a0001 100%)",
+        }}
+      >
+        {/* Background Overlay */}
+        <img
+          src={bgImg2.src}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen pointer-events-none"
+        />
+      </div>
 
-          <div
-            style={{
-              boxShadow:
-                "0 25px 60px -12px rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 40px rgba(255, 190, 137, 0.15)",
-            }}
-            className="relative rounded-lg"
-          >
-            <div
-              style={{
-                background: "rgba(255, 190, 137, 0.1)",
-                border: "1px solid rgba(255, 190, 137, 0.15)",
-                clipPath: "inset(0 round 8px)",
-              }}
-              className="absolute inset-0 rounded-lg overflow-hidden"
-            >
-              <img
-                src={bgImg1.src}
-                alt=""
-                aria-hidden="true"
-                className="absolute pointer-events-none w-[230px] md:w-[320px] top-[10px] -left-[20px] md:top-[0px] md:-left-[30px] opacity-80 rotate-[20deg]"
-              />
-              <img
-                src={bgImg2.src}
-                alt=""
-                aria-hidden="true"
-                className="absolute pointer-events-none w-[230px] md:w-[320px] bottom-[10px] -right-[20px] md:bottom-[0px] md:-right-[30px] opacity-80 -rotate-[20deg]"
-              />
-            </div>
-            
-            <div className="relative z-10 text-center px-6 pt-28 pb-14 md:pt-24 md:pb-8">
-              <h1
-                style={{
-                  color: "#FFBE89",
-                  fontFamily: "'Playfair Display', serif",
-                }}
-                className="mb-2 flex flex-col items-center leading-tight text-3xl sm:text-4xl"
-              >
-                <span className="block w-full text-center">{groomName}</span>
-                <span className="block w-full text-center text-lg leading-none sm:text-xl my-1">
-                  &amp;
-                </span>
-                <span className="block w-full text-center">{brideName}</span>
-              </h1>
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <div
-                  style={{ background: "linear-gradient(to right, transparent, #FFBE89)" }}
-                  className="w-10 h-px"
-                ></div>
-                <span style={{ color: "#FFBE89", opacity: 0.7 }} className="text-sm">
-                  ❦
-                </span>
-                <div
-                  style={{ background: "linear-gradient(to left, transparent, #FFBE89)" }}
-                  className="w-10 h-px"
-                ></div>
-              </div>
-              
-              <div
-                style={{
-                  color: "rgba(255, 190, 137, 0.8)",
-                  fontFamily: "'Lora', serif",
-                }}
-                className="text-[18px] mb-5 flex flex-col items-center"
-              >
-                <span dir="auto">{formatDate(weddingDate)}</span>
-              </div>
-              
-              <div className="mb-6">
-                <p
-                  style={{
-                    color: "rgba(255, 190, 137, 0.8)",
-                    fontFamily: "'Lora', serif",
-                  }}
-                  className="text-[18px] font-light mb-2"
-                >
-                  <span dir="auto">Thân Mời</span>
-                  {guestName && <span className="block mt-2 font-bold text-[#FFBE89]">{guestName}</span>}
-                </p>
-              </div>
-              
-              <button
-                onClick={onOpen}
-                style={{
-                  backgroundColor: "#FFBE89",
-                  color: "#710001",
-                  boxShadow: "0 4px 14px rgba(255, 190, 137, 0.35)",
-                  fontFamily: "'Lora', serif",
-                }}
-                className="relative px-8 py-2.5 text-lg font-semibold sm:font-medium rounded-full shadow-lg flex items-center justify-center mx-auto overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-              >
-                <span dir="auto">Mở thiệp</span>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-                    animation: "shine 3s ease-in-out infinite",
-                  }}
-                  className="absolute top-0 h-full w-8 pointer-events-none"
-                ></div>
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Wax Seal on the seam line between the 2 divs */}
+      <div
+        className={`absolute -translate-x-1/2 z-30 transition-all duration-800 cubic-bezier(0.4, 0, 0.2, 1) pointer-events-none w-[200px] sm:w-[380px] md:w-[480px] ${
+          isOpening
+            ? "top-0 -translate-y-full opacity-0 scale-90"
+            : "top-1/2 -translate-y-1/2 opacity-100 scale-100"
+        }`}
+        style={{ left: "70%" }}
+      >
+        <img
+          src={sealImg.src || sealImg}
+          alt="Wax Seal"
+          className="w-full h-auto object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]"
+        />
       </div>
     </div>
   );

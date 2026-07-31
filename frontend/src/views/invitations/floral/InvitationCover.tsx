@@ -1,138 +1,105 @@
-import { ChevronDown } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { formatDate } from "@/shared/lib/utils/date";
-import { playfairDisplay } from "@/shared/lib/fonts";
-import bgImg1 from "@/shared/assets/image/hy/img_2.webp";
-import bgImg2 from "@/shared/assets/image/hy/img_3.webp";
+import { cormorantGaramond } from "@/shared/lib/fonts";
+import { WeddingData } from "@/entities/invitation/model/types";
 
 interface InvitationCoverProps {
-  onScrollNext: () => void;
-  groomName: string;
-  brideName: string;
-  weddingDate: string;
-  coverImageUrl?: string;
-  guestName?: string;
+  weddingData: WeddingData;
+  isOpened?: boolean;
 }
 
 export function InvitationCover({
-  onScrollNext,
-  groomName,
-  brideName,
-  weddingDate,
-  coverImageUrl,
-  guestName,
+  weddingData,
+  isOpened = false,
 }: InvitationCoverProps) {
-  // Format date to DD · MM · YYYY
-  const dateObj = new Date(weddingDate);
-  const formattedDate = !isNaN(dateObj.getTime())
-    ? `${String(dateObj.getDate()).padStart(2, "0")} · ${String(
-        dateObj.getMonth() + 1
-      ).padStart(2, "0")} · ${dateObj.getFullYear()}`
-    : weddingDate.replace(/\//g, " · ").replace(/-/g, " · ");
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    if (isOpened) {
+      const timer = setTimeout(() => {
+        setAnimate(true);
+      }, 350);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimate(false);
+    }
+  }, [isOpened]);
+
+  const heroImage =
+    weddingData.coverImage ||
+    weddingData.galleryImages?.[0] ||
+    "https://i.pinimg.com/736x/d5/65/1d/d5651d80c2672de9c2c8a081746e51e9.jpg";
 
   return (
-    <section
-      className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center overflow-hidden bg-[#91000b] selection:bg-[#d4af37] selection:text-[#91000b]"
-    >
-      {/* Background & Patterns */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Dragon/Phoenix patterns in corners */}
+    <section className="relative w-full h-[100dvh] bg-[#f8f6f0] overflow-hidden select-none">
+      {/* ── hình ảnh ── */}
+      <div className="relative w-full h-full overflow-hidden">
+        {/* Cover Photo */}
         <img
-          src="https://chungdoi.com/images/themes/longphung-v3-red/rong.webp"
-          alt="Dragon"
-          className="absolute top-[5%] left-[-10%] w-[80%] max-w-[400px] opacity-[0.15] mix-blend-screen"
+          src={heroImage}
+          alt={`${weddingData.groomName} & ${weddingData.brideName}`}
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <img
-          src="https://chungdoi.com/images/themes/longphung-v3-red/phuong.webp"
-          alt="Phoenix"
-          className="absolute bottom-[5%] right-[-10%] w-[80%] max-w-[400px] opacity-[0.15] mix-blend-screen"
-        />
-        
-        {coverImageUrl && (
-          <div className="absolute inset-0 opacity-10 mix-blend-overlay flex items-center justify-center">
-            <img
-              src={coverImageUrl}
-              alt="Background"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
-      </div>
 
-      <div className="relative z-10 px-6 w-full max-w-md mx-auto flex flex-col items-center pt-8 pb-24">
-        {/* Hỷ Icon Top */}
-        <div className="mb-10 mt-4">
-          <div className="w-[70px] h-[70px] border border-[#d4af37] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.2)] bg-[#91000b]/50 backdrop-blur-sm">
-            <span className={`${playfairDisplay.className} text-[#d4af37] text-3xl font-medium tracking-wide`}>
-              Hỷ
+        {/* Gradient Overlay for Text Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+
+        {/* tên cô dâu và chú rễ*/}
+        <div className="absolute bottom-8 left-6 sm:left-10 right-6 sm:right-10 text-white z-10 flex flex-col space-y-1 sm:space-y-2">
+          {/* Groom Name (Slide from Left) */}
+          <div
+            className={`self-start text-left pl-2 sm:pl-6 transition-all duration-1000 ease-out delay-200 ${
+              animate
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-16 sm:-translate-x-24"
+            }`}
+          >
+            <h1 className="font-wedding-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)] leading-relaxed tracking-wide">
+              {weddingData.groomName}
+            </h1>
+          </div>
+
+          {/* Ampersand (Fade and Scale in center) */}
+          <div
+            className={`self-center my-[-12px] sm:my-[-16px] transition-all duration-1000 ease-out delay-500 ${
+              animate ? "opacity-100 scale-100" : "opacity-0 scale-50"
+            }`}
+          >
+            <span className="italic font-serif text-[#f3e5c8] text-3xl sm:text-5xl md:text-6xl font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              &amp;
             </span>
           </div>
-        </div>
 
-        {/* Couple Names - Using Playfair Display */}
-        <div className="flex flex-col items-center w-full mb-8">
-          <h1
-            className={`${playfairDisplay.className} text-[#ffd700] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]`}
-            style={{
-              fontSize: "clamp(3rem, 12vw, 4.5rem)",
-              lineHeight: "1.2",
-              fontWeight: 500,
-            }}
+          {/* Bride Name (Slide from Right) */}
+          <div
+            className={`self-end text-right pr-2 sm:pr-6 transition-all duration-1000 ease-out delay-700 ${
+              animate
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-16 sm:translate-x-24"
+            }`}
           >
-            {groomName}
-          </h1>
-          
-          <div className="flex items-center justify-center gap-4 my-2 w-[180px]">
-            <div className="h-[1px] flex-1 bg-[#d4af37]/40" />
-            <span className={`${playfairDisplay.className} text-[#d4af37] text-2xl italic`}>&</span>
-            <div className="h-[1px] flex-1 bg-[#d4af37]/40" />
+            <h1 className="font-wedding-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)] leading-relaxed tracking-wide">
+              {weddingData.brideName}
+            </h1>
           </div>
 
-          <h1
-            className={`${playfairDisplay.className} text-[#ffd700] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]`}
-            style={{
-              fontSize: "clamp(3rem, 12vw, 4.5rem)",
-              lineHeight: "1.2",
-              fontWeight: 500,
-            }}
+          {/* Wedding Date Display (Slide up from Bottom) */}
+          <div
+            className={`pt-4 sm:pt-6 flex items-center justify-center gap-3 sm:gap-4 self-center w-full transition-all duration-1000 ease-out delay-1000 ${
+              animate
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8 sm:translate-y-12"
+            }`}
           >
-            {brideName}
-          </h1>
-        </div>
-
-        {/* Date Divider */}
-        <div className="w-full max-w-[280px] border-y border-[#d4af37]/30 py-4 mb-10">
-          <p className={`${playfairDisplay.className} text-base sm:text-lg text-[#d4af37] tracking-[0.3em] font-bold uppercase`}>
-            {formattedDate}
-          </p>
-        </div>
-
-        {/* Invitation Text */}
-        <div className="flex flex-col items-center space-y-5">
-          <div className="border border-[#d4af37]/60 rounded-full px-6 py-2.5 bg-[#660000]/30 shadow-inner">
-            <p className="text-[11px] sm:text-[13px] uppercase tracking-[0.2em] font-medium text-[#d4af37] font-sans">
-              {guestName ? `Thân mời: ${guestName}` : "Trân trọng kính mời"}
+            <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#f3e5c8]" />
+            <p
+              className={`${cormorantGaramond.className} text-[#f3e5c8] text-xl sm:text-2xl md:text-3xl tracking-[0.3em] font-light uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]`}
+            >
+              {formatDate(weddingData.weddingDate)}
             </p>
+            <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#f3e5c8]" />
           </div>
-
-          <p className="text-[13px] sm:text-[15px] leading-[1.8] text-[#fdf5e6] font-light max-w-[300px] text-center font-sans opacity-90">
-            {guestName
-              ? `Sự hiện diện của ${guestName} là niềm vinh hạnh cho gia đình chúng tôi.`
-              : "Sự hiện diện của quý vị là niềm vinh hạnh cho gia đình chúng tôi."}
-          </p>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center">
-        <span className="text-[#d4af37] text-[10px] uppercase tracking-[0.2em] mb-3 font-sans opacity-80">
-          Mở thiệp
-        </span>
-        <button
-          onClick={onScrollNext}
-          className="text-[#d4af37] border border-[#d4af37] w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-[#d4af37]/10 transition-colors shadow-[0_0_15px_rgba(212,175,55,0.2)] animate-bounce"
-        >
-          <ChevronDown size={24} strokeWidth={1.5} />
-        </button>
       </div>
     </section>
   );

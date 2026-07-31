@@ -1,6 +1,10 @@
 import {
   Cinzel,
+  Cinzel_Decorative,
   Great_Vibes,
+  Alex_Brush,
+  Pinyon_Script,
+  Monsieur_La_Doulaise,
   EB_Garamond,
   Montserrat,
   Playfair_Display,
@@ -8,9 +12,33 @@ import {
   Cormorant_Garamond,
 } from "next/font/google";
 
+export const pinyonScript = Pinyon_Script({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+export const monsieurLaDoulaise = Monsieur_La_Doulaise({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
+  display: "swap",
+});
+
+export const cinzelDecorative = Cinzel_Decorative({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+
+export const alexBrush = Alex_Brush({
+  subsets: ["latin"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -49,4 +77,5 @@ export const cormorantGaramond = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
+
 

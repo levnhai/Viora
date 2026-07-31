@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { getDemoWeddingData } from "@/entities/invitation/model/mockData";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { getTemplatePackage } from "@/entities/template/model/registry";
 import { API_URL } from "@/shared/lib/config";
@@ -54,36 +55,9 @@ export function WeddingInvitationDemoPage({
     const demoSlug = getDemoSlug(tId);
     setLoading(true);
 
-    // Mock data dự phòng khi DB chưa có dữ liệu demo (404)
-    const mockWeddingData: WeddingData = {
-      slug: demoSlug || "demo",
-      templateId: "temp_1",
-      groomName: "Văn An",
-      brideName: "Thị Bình",
-      weddingDate: "2024-12-31T00:00:00.000Z",
-      events: [
-        {
-          title: "Lễ Tiệc Cưới",
-          time: "11:00",
-          date: "31/12/2024",
-          locationName: "Ninh Bình Legend",
-          address: "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
-        },
-      ],
-      timeline: [
-        {
-          year: "2020",
-          title: "Lần đầu gặp gỡ",
-          description: "Chúng mình gặp nhau tại một quán cà phê nhỏ.",
-          imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format"
-        },
-      ],
-      galleryImages: [
-        "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
-        "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format"
-      ],
-    };
+    // Dữ liệu demo dùng chung
+    const mockWeddingData = getDemoWeddingData(tId || "temp_1");
+    mockWeddingData.slug = demoSlug;
 
     // Fetch wedding details
     fetch(`${API_URL}/api/weddings/${demoSlug}`)
@@ -111,11 +85,7 @@ export function WeddingInvitationDemoPage({
       })
       .catch((err) => {
         console.warn("Lỗi khi tải demo (có thể DB trống), dùng mock data:", err);
-        const fallbackData = { ...mockWeddingData };
-        if (tId) {
-          fallbackData.templateId = tId;
-        }
-        setWeddingData(fallbackData);
+        setWeddingData(mockWeddingData);
       })
       .finally(() => setLoading(false));
   }, []);

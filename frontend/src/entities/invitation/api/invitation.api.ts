@@ -40,3 +40,26 @@ export const fetchInvitationDetail = async (slug: string) => {
   const result = await res.json();
   return result.data;
 };
+
+export const submitRsvpApi = async (
+  slug: string,
+  payload: { name: string; attend: string; guests?: number; message?: string }
+) => {
+  const url = `${API_URL}/api/weddings/${slug}/rsvp`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to submit RSVP");
+  }
+
+  return await res.json();
+};
+

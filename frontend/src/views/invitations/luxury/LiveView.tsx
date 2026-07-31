@@ -19,8 +19,6 @@ export function LiveView({
   const [playing, setPlaying] = useState(false);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
   useEffect(() => {
     if (previewMode) {
       setEnvelopeOpen(previewMode === "invitation");
