@@ -41,6 +41,16 @@ export class WeddingsController {
     };
   }
 
+  // API lấy danh sách thiệp mẫu demo mới nhất (Công khai - Public)
+  @Get('public/demos')
+  async getPublicDemos() {
+    const data = await this.weddingsService.getPublicDemos();
+    return {
+      success: true,
+      data,
+    };
+  }
+
   // API render mới - Tối ưu hóa render cho Frontend chỉ với 1 API duy nhất
   @Get(':slug/render')
   async getRenderData(@Param('slug') slug: string) {

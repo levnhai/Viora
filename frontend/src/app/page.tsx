@@ -1,7 +1,5 @@
-"use client";
-
-import { LandingPage } from "@/views/landing/ui/LandingPage";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <LandingPage />;
+  redirect("/dashboard");
 }

@@ -38,7 +38,7 @@ export const DEFAULT_DEMO_WEDDING_DATA: WeddingData = {
       year: "2020",
       title: "Lần đầu gặp gỡ",
       description:
-        "Chúng mình vô tình gặp nhau trong một buổi chiều thu định mệnh.",
+        "Chúng mình vô tình gặp nhau trong một buổi chiều thu định mệnh.",  
     },
     {
       year: "2022",

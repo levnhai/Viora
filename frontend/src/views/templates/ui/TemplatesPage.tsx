@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, SlidersHorizontal, ArrowRight, X, ChevronDown, Check, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/widgets/header/ui/Header";
@@ -8,6 +8,8 @@ import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
+import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
+import { fetchTemplates } from "@/entities/template/api/template.api";
 import tempBanner from "@/shared/assets/image/banner/temp_banner.png";
 
 const CATEGORIES = [
@@ -70,6 +72,44 @@ export function TemplatesPage() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [previewTpl, setPreviewTpl] = useState<TemplateConfig | null>(null);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [demos, setDemos] = useState<any[]>([]);
+  const [dbTemplates, setDbTemplates] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Call API lấy danh sách Template trực tiếp từ Database MongoDB (/api/templates)
+    fetchTemplates()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDbTemplates(data);
+        }
+      })
+      .catch((err) => console.error("Lỗi khi gọi API database templates:", err));
+
+    // Call API lấy danh sách thiệp demo thực từ Database (/api/weddings/public/demos)
+    fetchDemoInvitations()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDemos(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Lỗi khi kết nối API thiệp mẫu:", err);
+      });
+  }, []);
+
+  const templatesToUse = dbTemplates.length > 0
+    ? dbTemplates.map((dbTpl, idx) => {
+        const match = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id) || TEMPLATES[idx % TEMPLATES.length];
+        return {
+          ...match,
+          id: dbTpl.id || match.id,
+          code: dbTpl.code || match.code,
+          name: dbTpl.name || match.name,
+          price: dbTpl.price ?? match.price,
+          style: dbTpl.category || match.style,
+        };
+      })
+    : TEMPLATES;
 
   const navigate = (path: string) => router.push(path);
 
@@ -110,8 +150,8 @@ export function TemplatesPage() {
     setSelectedFeatures([]);
   };
 
-  // Logic lọc và tìm kiếm mẫu thiệp
-  const filteredTemplates = TEMPLATES.filter((tpl) => {
+  // Logic lọc và tìm kiếm mẫu thiệp lấy trực tiếp từ Database
+  const filteredTemplates = templatesToUse.filter((tpl) => {
     // 1. Tìm kiếm bằng tên hoặc phong cách
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -404,38 +444,31 @@ export function TemplatesPage() {
       {/* Main Content Area */}
       <section className="py-16 bg-[#fffdfb]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex gap-8">
-            {/* Sidebar filter cho Desktop */}
-            <aside className="w-56 flex-shrink-0 hidden md:block border-r border-[#e2d8cf]/20 pr-6">
-              <FilterSidebarContent />
-            </aside>
-
+          <div className="w-full">
             {/* List mẫu thiệp */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between gap-4 mb-8">
-                <div className="text-left">
-                  <h2 className="text-base font-bold text-[#2c1810] font-sans">
-                    Tất cả mẫu thiệp
-                    <span className="text-[11px] font-normal text-[#7a5c4f]/60 ml-2 font-sans">
-                      ({sortedTemplates.length} mẫu thiệp)
-                    </span>
-                  </h2>
-                </div>
-
-                {/* Đã ẩn thanh sắp xếp và nút lọc theo yêu cầu */}
+            <div className="w-full">
+              <div className="flex items-center justify-center gap-4 mb-8 text-center">
+                <h2 className="text-base sm:text-lg font-bold text-[#2c1810] font-sans">
+                  Tất cả mẫu thiệp
+                  <span className="text-xs font-normal text-[#7a5c4f]/60 ml-2 font-sans">
+                    ({sortedTemplates.length} mẫu thiệp)
+                  </span>
+                </h2>
               </div>
 
-              {/* Grid mẫu thiệp */}
+              {/* Flex container canh giữa 100% tất cả các mẫu thiệp */}
               {sortedTemplates.length > 0 ? (
                 <div>
-                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
-                    {visibleTemplates.map((tpl) => (
-                      <TemplateCard
-                        key={tpl.id}
-                        tpl={tpl}
-                        onPreviewDemo={() => setPreviewTpl(tpl)}
-                        onUseTemplate={handleStartCreating}
-                      />
+                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 mx-auto w-full">
+                    {visibleTemplates.map((tpl, idx) => (
+                      <div key={tpl.id} className="w-[240px] sm:w-[260px] md:w-[270px] flex-shrink-0">
+                        <TemplateCard
+                          tpl={tpl}
+                          demoData={demos.find((d) => d.templateId === tpl.code) || demos[idx % (demos.length || 1)]}
+                          onPreviewDemo={() => setPreviewTpl(tpl)}
+                          onUseTemplate={handleStartCreating}
+                        />
+                      </div>
                     ))}
                   </div>
 

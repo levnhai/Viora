@@ -63,3 +63,18 @@ export const submitRsvpApi = async (
   return await res.json();
 };
 
+export const fetchDemoInvitations = async () => {
+  try {
+    const url = `${API_URL}/api/weddings/public/demos`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) {
+      return [];
+    }
+    const result = await res.json();
+    return result.data || [];
+  } catch (err) {
+    return [];
+  }
+};
+
+

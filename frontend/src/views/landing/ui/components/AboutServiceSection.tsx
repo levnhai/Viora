@@ -35,7 +35,7 @@ export function AboutServiceSection() {
               </h3>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                Viora biến mỗi thông điệp thiệp mời thông thường thành một trải nghiệ m tương tác trực tuyến nghệ thuật lãng mạn, lưu giữ trọn vẹn khoảnh khắc thiêng liêng.
+                Viora biến mỗi thông điệp thiệp mời thông thường thành một trải nghiệm tương tác trực tuyến nghệ thuật lãng mạn, lưu giữ trọn vẹn khoảnh khắc thiêng liêng.
               </p>
 
               <div className="space-y-3.5 pt-2">

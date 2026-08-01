@@ -14,16 +14,20 @@ export interface Template {
 }
 
 export const fetchTemplates = async (): Promise<Template[]> => {
-  const response = await fetch(`${API_URL}/api/templates`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const response = await fetch(`${API_URL}/api/templates`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch templates");
+    if (!response.ok) {
+      return [];
+    }
+
+    const result = await response.json();
+    return result.data || [];
+  } catch (err) {
+    return [];
   }
-
-  const result = await response.json();
-  return result.data;
 };

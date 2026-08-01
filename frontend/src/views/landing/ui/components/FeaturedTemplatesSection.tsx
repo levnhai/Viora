@@ -7,18 +7,61 @@ import Link from "next/link";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
+import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
+import { fetchTemplates } from "@/entities/template/api/template.api";
+import { getTemplatePackage } from "@/entities/template/model/registry";
+import { DEFAULT_DEMO_WEDDING_DATA } from "@/entities/invitation/model/mockData";
 
 export function FeaturedTemplatesSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [previewTpl, setPreviewTpl] = useState<TemplateConfig | null>(null);
+  const [demos, setDemos] = useState<any[]>([]);
+  const [dbTemplates, setDbTemplates] = useState<any[]>([]);
 
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Call API lấy danh sách Template trực tiếp từ Database MongoDB (/api/templates)
+    fetchTemplates()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDbTemplates(data);
+        }
+      })
+      .catch((err) => console.error("Lỗi khi gọi API database templates:", err));
+
+    // Call API lấy dữ liệu demo thiệp cưới từ DB (/api/weddings/public/demos)
+    fetchDemoInvitations()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDemos(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Lỗi khi kết nối API thiệp mẫu:", err);
+      });
+  }, []);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     el?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Danh sách Templates lấy trực tiếp từ Database API (/api/templates)
+  const templatesToRender = dbTemplates.length > 0
+    ? dbTemplates.map((dbTpl, idx) => {
+        const matched = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id) || TEMPLATES[idx % TEMPLATES.length];
+        return {
+          ...matched,
+          id: dbTpl._id || dbTpl.id || matched.id,
+          code: dbTpl.code || matched.code,
+          name: dbTpl.name || matched.name,
+          price: dbTpl.price ?? matched.price,
+          style: dbTpl.category || matched.style,
+        };
+      })
+    : TEMPLATES;
 
   // Touch Swipe Handlers for Mobile
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -36,21 +79,21 @@ export function FeaturedTemplatesSection() {
     const minDistance = 40;
     if (distance > minDistance) {
       // Vuốt sang trái -> chuyển mẫu tiếp theo
-      setActiveIndex((prev) => (prev + 1) % TEMPLATES.length);
+      setActiveIndex((prev) => (prev + 1) % templatesToRender.length);
     } else if (distance < -minDistance) {
       // Vuốt sang phải -> chuyển mẫu trước đó
-      setActiveIndex((prev) => (prev - 1 + TEMPLATES.length) % TEMPLATES.length);
+      setActiveIndex((prev) => (prev - 1 + templatesToRender.length) % templatesToRender.length);
     }
   };
 
   // Auto slide every 5s
   useEffect(() => {
-    if (TEMPLATES.length <= 1) return;
+    if (templatesToRender.length <= 1) return;
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % TEMPLATES.length);
+      setActiveIndex((prev) => (prev + 1) % templatesToRender.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [templatesToRender.length]);
 
   return (
     <section id="mau-thiep" className="py-16 md:py-28 bg-[#141313] text-white relative overflow-hidden">
@@ -65,7 +108,7 @@ export function FeaturedTemplatesSection() {
             Mẫu thiệp cưới online <span className="text-[#ff007a] italic font-serif font-black">đẹp nhất</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-            Khám phá những mẫu thiệp cưới được thiết kế tinh tế và hiện đại
+            Khám phá những mẫu thiệp cưới được thiết kế tinh tế và hiện đại từ Database
           </p>
         </div>
 
@@ -77,7 +120,7 @@ export function FeaturedTemplatesSection() {
           onTouchEnd={handleTouchEnd}
         >
           <div className="relative w-full max-w-[280px] sm:max-w-[340px] h-full flex items-center justify-center">
-            {TEMPLATES.map((tpl, idx) => {
+            {templatesToRender.map((tpl, idx) => {
               const offset = idx - activeIndex;
               const absOffset = Math.abs(offset);
 
@@ -93,10 +136,20 @@ export function FeaturedTemplatesSection() {
               }
 
               const isCenter = offset === 0;
+              const templateCode = tpl.code || "temp_1";
+              const LiveViewComp = getTemplatePackage(templateCode).LiveView;
+              
+              // Lấy đúng bản ghi DB có templateId trùng khớp với templateCode này (source = 'demo')
+              const demoForTpl =
+                demos.find((d) => d.templateId === templateCode) || {
+                  ...DEFAULT_DEMO_WEDDING_DATA,
+                  templateId: templateCode,
+                  title: tpl.name,
+                };
 
               return (
                 <motion.div
-                  key={tpl.id}
+                  key={tpl.id || idx}
                   onClick={() => {
                     if (isCenter) {
                       setPreviewTpl(tpl);
@@ -104,15 +157,16 @@ export function FeaturedTemplatesSection() {
                       setActiveIndex(idx);
                     }
                   }}
+                  whileHover="hover"
                   drag="x"
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.2}
                   onDragEnd={(e, info) => {
                     const threshold = 30;
                     if (info.offset.x < -threshold) {
-                      setActiveIndex((prev) => (prev + 1) % TEMPLATES.length);
+                      setActiveIndex((prev) => (prev + 1) % templatesToRender.length);
                     } else if (info.offset.x > threshold) {
-                      setActiveIndex((prev) => (prev - 1 + TEMPLATES.length) % TEMPLATES.length);
+                      setActiveIndex((prev) => (prev - 1 + templatesToRender.length) % templatesToRender.length);
                     }
                   }}
                   animate={{
@@ -132,19 +186,26 @@ export function FeaturedTemplatesSection() {
                     transformStyle: "preserve-3d",
                   }}
                 >
-                  {/* Card Image Preview Full Edge-to-Edge */}
+                  {/* Card Image Preview Full Edge-to-Edge với Live Template từ Database API (Canh giữa 100%, Scroll khi Hover) */}
                   <div className="relative h-full w-full overflow-hidden bg-slate-950">
-                    <img
-                      src={tpl.preview}
-                      alt={tpl.name}
-                      className="w-full h-full object-cover pointer-events-none"
-                    />
+                    <div className="w-[375px] absolute left-1/2 -translate-x-1/2 top-0 origin-top transform scale-[0.80] sm:scale-[0.96] pointer-events-none select-none">
+                      <motion.div
+                        initial="initial"
+                        variants={{
+                          initial: { y: "0%" },
+                          hover: { y: "-65%", transition: { duration: 12, ease: "linear" } },
+                        }}
+                        transition={{ duration: 1, ease: "easeInOut" }}
+                      >
+                        <LiveViewComp weddingData={demoForTpl} previewMode="invitation" />
+                      </motion.div>
+                    </div>
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-black/30 to-transparent flex flex-col justify-end p-5">
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-transparent to-transparent flex flex-col justify-end p-5 pointer-events-none">
                       <div className="flex items-center justify-between mb-2">
                         <span className="bg-[#ff007a] text-white text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md shadow-xs">
-                          {tpl.style}
+                          {tpl.style || "Hiện đại"}
                         </span>
                         {tpl.tier === "premium" && (
                           <span className="bg-amber-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md">
@@ -166,7 +227,7 @@ export function FeaturedTemplatesSection() {
 
         {/* Pagination Dots (Matching Image: Long Hot-Pink Pill for Active Item) */}
         <div className="flex items-center justify-center gap-2 my-8">
-          {TEMPLATES.map((_, idx) => (
+          {templatesToRender.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setActiveIndex(idx)}

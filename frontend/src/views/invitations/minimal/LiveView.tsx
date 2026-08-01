@@ -59,12 +59,13 @@ export function LiveView({
     }
   };
 
+  const events = weddingData?.events || [];
   const primaryEvent =
-    weddingData.events.find(
+    events.find(
       (ev) =>
-        ev.title.toUpperCase().includes("TIỆC") ||
-        ev.title.toUpperCase().includes("HÔN LỄ"),
-    ) || weddingData.events[0];
+        ev?.title?.toUpperCase().includes("TIỆC") ||
+        ev?.title?.toUpperCase().includes("HÔN LỄ"),
+    ) || events[0] || {};
 
   return (
     <div
