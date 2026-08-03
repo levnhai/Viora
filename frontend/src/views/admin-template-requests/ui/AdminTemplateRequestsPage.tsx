@@ -14,10 +14,12 @@ import {
   User,
   FileText,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { AdminLayout } from "@/widgets/admin-layout/ui/AdminLayout";
 import { TemplateRequest } from "@/app/api/template-requests/route";
 
 export function AdminTemplateRequestsPage() {
+  const router = useRouter();
   const [requests, setRequests] = useState<TemplateRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +29,10 @@ export function AdminTemplateRequestsPage() {
     setLoading(true);
     try {
       const res = await fetch("/api/template-requests");
+      if (res.status === 401) {
+        router.push("/admin/login");
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setRequests(data.data || []);

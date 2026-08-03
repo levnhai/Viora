@@ -32,10 +32,12 @@ export const useBuyerDashboard = () => {
     const savedRole = localStorage.getItem("role");
     const savedSlug = localStorage.getItem("weddingSlug");
 
-    if (
-      !savedRole ||
-      (savedRole !== "user" && savedRole !== "staff" && savedRole !== "admin")
-    ) {
+    if (savedRole === "admin") {
+      router.push("/admin");
+      return;
+    }
+
+    if (!savedRole || (savedRole !== "user" && savedRole !== "staff")) {
       localStorage.clear();
       router.push("/login");
       return;

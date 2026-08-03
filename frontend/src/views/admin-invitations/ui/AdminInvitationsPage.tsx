@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { AdminLayout } from "@/widgets/admin-layout/ui/AdminLayout";
 import { AdminInvitationsStats } from "@/widgets/admin-invitations-list/ui/AdminInvitationsStats";
 import { AdminInvitationsFilter } from "@/widgets/admin-invitations-list/ui/AdminInvitationsFilter";
@@ -9,8 +11,15 @@ import { useInvitations } from "@/entities/invitation/model/useInvitations";
 import { Loader2 } from "lucide-react";
 
 export function AdminInvitationsPage() {
+  const router = useRouter();
   const { loading, data, error, query, updateQuery } = useInvitations({ page: 1, limit: 10 });
   
+  useEffect(() => {
+    if (error === "UNAUTHORIZED") {
+      router.push("/admin/login");
+    }
+  }, [error, router]);
+
   const handlePageChange = (newPage: number) => {
     updateQuery({ page: newPage });
   };
@@ -19,10 +28,14 @@ export function AdminInvitationsPage() {
     updateQuery({ ...filters, page: 1 });
   };
 
+  if (error === "UNAUTHORIZED") {
+    return null;
+  }
+
   if (error) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center h-full text-red-500">
+        <div className="flex items-center justify-center h-64 text-red-500 font-medium">
           Có lỗi xảy ra: {error}
         </div>
       </AdminLayout>

@@ -72,6 +72,10 @@ export function LoginPage() {
       const data = await authService.login(emailInput, passInput);
       const { role, weddingSlug, name, email: resEmail } = data;
 
+      if (role === "admin") {
+        throw new Error("tài khoản không tồn tại!");
+      }
+
       saveUserSession({
         role,
         username: resEmail || emailInput,
@@ -196,6 +200,10 @@ export function LoginPage() {
       const data = await authService.loginWithGoogle(token);
       const { role, weddingSlug, name, picture, email: resEmail } = data;
 
+      if (role === "admin") {
+        throw new Error("Tài khoản quản trị viên không thể đăng nhập tại đây!");
+      }
+
       saveUserSession({
         role,
         username: resEmail || "google_user",
@@ -265,6 +273,10 @@ export function LoginPage() {
       }
 
       const { role, weddingSlug, name, email: resEmail } = data;
+
+      if (role === "admin") {
+        throw new Error("Tài khoản quản trị viên không thể đăng nhập tại đây!");
+      }
 
       saveUserSession({
         role,

@@ -8,11 +8,18 @@ export default function WeddingDemo() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
+  const isDemoDisabledInProd =
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PUBLIC_ENABLE_DEMO !== "true";
+
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (isDemoDisabledInProd) {
+      router.replace("/");
+    }
+  }, [router, isDemoDisabledInProd]);
 
-  if (!mounted) {
+  if (!mounted || isDemoDisabledInProd) {
     return null;
   }
 

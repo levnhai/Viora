@@ -21,34 +21,30 @@ export function AdminDashboardPage() {
     }
   }, [error, router]);
 
-  if (loading || error === "UNAUTHORIZED") {
+  if (error === "UNAUTHORIZED") {
+    return null;
+  }
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf8f5] flex flex-col items-center justify-center space-y-4">
-        <Loader2 className="w-10 h-10 animate-spin text-indigo-600" />
-        <p className="text-sm font-medium text-slate-500 animate-pulse">
-          Đang tải hệ thống quản trị...
-        </p>
-      </div>
+      <AdminLayout>
+        <div className="flex flex-col items-center justify-center h-64 space-y-4">
+          <Loader2 className="w-10 h-10 animate-spin text-indigo-600" />
+          <p className="text-sm font-medium text-slate-500 animate-pulse">
+            Đang tải hệ thống quản trị...
+          </p>
+        </div>
+      </AdminLayout>
     );
   }
 
-  if (error) {
+  if (error || !dashboardData) {
     return (
-      <div className="min-h-screen bg-[#faf8f5] flex flex-col items-center justify-center space-y-4">
-        <p className="text-sm font-medium text-red-500">
-          Lỗi tải dữ liệu. Vui lòng thử lại.
-        </p>
-      </div>
-    );
-  }
-
-  if (!dashboardData) {
-    return (
-      <div className="min-h-screen bg-[#faf8f5] flex flex-col items-center justify-center space-y-4">
-        <p className="text-sm font-medium text-red-500">
-          Không có dữ liệu. Vui lòng thử lại.
-        </p>
-      </div>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64 text-red-500 font-medium">
+          {error || "Không có dữ liệu. Vui lòng thử lại."}
+        </div>
+      </AdminLayout>
     );
   }
 

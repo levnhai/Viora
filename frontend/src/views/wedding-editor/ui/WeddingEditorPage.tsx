@@ -601,6 +601,9 @@ export function WeddingEditorPage({
       }
 
       const { role, weddingSlug: userSlug } = resData.data;
+      if (role === "admin") {
+        throw new Error("Tài khoản quản trị viên không thể đăng nhập tại giao diện người dùng!");
+      }
       localStorage.setItem("role", role);
       localStorage.setItem("username", authForm.username);
       if (userSlug) localStorage.setItem("weddingSlug", userSlug);
