@@ -44,8 +44,8 @@ export function InvitationCover({
       <style>{`
         @keyframes slideUpFromBottom {
           0% {
-            transform: translateY(60%) scale(0.92);
-            opacity: 0;
+            transform: translateY(0) scale(1);
+            opacity: 1;
           }
           100% {
             transform: translateY(0) scale(1);

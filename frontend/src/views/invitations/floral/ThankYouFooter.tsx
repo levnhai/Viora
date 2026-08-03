@@ -17,7 +17,7 @@ function AnimatedFooterItem({
   animationType,
   delayMs = 0,
 }: AnimatedFooterItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

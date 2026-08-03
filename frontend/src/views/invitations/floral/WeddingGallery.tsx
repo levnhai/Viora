@@ -21,7 +21,7 @@ function AnimatedGalleryItem({
   className = "",
   onClick,
 }: AnimatedGalleryItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

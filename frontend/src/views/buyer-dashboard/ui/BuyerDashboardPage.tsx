@@ -33,11 +33,18 @@ export function BuyerDashboardPage() {
   const [subTab, setSubTab] = useState<"list" | "rsvp">("list");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUsername(localStorage.getItem("username"));
+    }
+  }, []);
+
   const {
     weddingSlug,
     weddingData,
     guestList,
-    rsvpList,
     guestbookList,
     loading,
     hasMounted,
@@ -156,7 +163,7 @@ export function BuyerDashboardPage() {
                   className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-50 border-0 bg-transparent cursor-pointer transition-all focus:outline-none"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#1b365d] text-white flex items-center justify-center text-xs font-bold font-mono tracking-wider shadow-2xs">
-                    {getInitials(typeof window !== "undefined" ? localStorage.getItem("username") : null)}
+                    {getInitials(username)}
                   </div>
                   <ChevronDown size={14} className="text-slate-450" />
                 </button>
@@ -176,7 +183,7 @@ export function BuyerDashboardPage() {
                           Tài khoản
                         </p>
                         <p className="text-sm font-bold text-slate-800 truncate mt-0.5">
-                          {(typeof window !== "undefined" ? localStorage.getItem("username") : "") || "Người dùng"}
+                          {username || "Người dùng"}
                         </p>
                       </div>
 
@@ -191,7 +198,7 @@ export function BuyerDashboardPage() {
                         <Key size={14} className="text-slate-400" />
                         Đổi mật khẩu
                       </button>
-                      
+
                       <button
                         onClick={() => {
                           setIsUserMenuOpen(false);

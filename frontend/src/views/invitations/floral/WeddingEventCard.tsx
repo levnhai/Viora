@@ -23,7 +23,7 @@ function AnimatedTextLine({
   delayMs = 0,
   className = "",
 }: AnimatedTextLineProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

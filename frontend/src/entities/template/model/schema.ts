@@ -1,4 +1,4 @@
-export type TemplateTier = "free" | "basic" | "premium";
+export type TemplateTier = "basic" | "standard" | "pro";
 
 export interface TemplateCustomField {
   key: string;
@@ -49,6 +49,8 @@ export interface TemplateConfig {
   themeClass: string;
   tier: TemplateTier;
   price: number;
+  originalPrice?: number;
+  features?: string[];
   popular?: boolean;
   accentColor: string;
   bgColor?: string;
@@ -60,4 +62,7 @@ export interface TemplateConfig {
   tags?: string[];
   isNew?: boolean;
   isHot?: boolean;
+  isPinned?: boolean;
+  pinOrder?: number;
+  sortOrder?: number;
 }

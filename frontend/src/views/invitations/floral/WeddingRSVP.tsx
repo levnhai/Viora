@@ -21,7 +21,7 @@ function AnimatedRSVPItem({
   delayMs = 0,
   className = "",
 }: AnimatedRSVPItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

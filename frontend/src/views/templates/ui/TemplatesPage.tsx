@@ -12,16 +12,7 @@ import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
 import { fetchTemplates } from "@/entities/template/api/template.api";
 import tempBanner from "@/shared/assets/image/banner/temp_banner.png";
 
-const CATEGORIES = [
-  "Tất cả mẫu thiệp",
-  "Thiệp hiện đại",
-  "Thiệp sang trọng",
-  "Thiệp cổ điển",
-  "Thiệp tối giản",
-  "Thiệp hoa lá",
-  "Thiệp phong cách Hàn Quốc",
-  "Thiệp theo chủ đề"
-];
+
 
 const COLORS = [
   { id: "pink", value: "#f472b6", label: "Hồng" },
@@ -578,6 +569,10 @@ export function TemplatesPage() {
       {previewTpl && (
         <PreviewModal
           tpl={previewTpl}
+          demoSlug={
+            demos.find((d) => d.templateId === previewTpl.code)?.slug ||
+            "vanan-thibinh"
+          }
           onClose={() => setPreviewTpl(null)}
           onRequestDesign={() => handleStartCreating(previewTpl.code)}
           onSelectTemplate={setPreviewTpl}

@@ -7,7 +7,7 @@ interface SaveTheDateCalendarProps {
 }
 
 export function SaveTheDateCalendar({ weddingData }: SaveTheDateCalendarProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,6 +63,7 @@ export function SaveTheDateCalendar({ weddingData }: SaveTheDateCalendarProps) {
   return (
     <section
       ref={sectionRef}
+      suppressHydrationWarning
       className="w-full bg-[#f8f6f0] py-10 sm:py-16 px-4 sm:px-6 flex flex-col items-center justify-center text-center select-none overflow-hidden"
     >
       {/* ── ELEGANT CALENDAR WRAPPER ── */}

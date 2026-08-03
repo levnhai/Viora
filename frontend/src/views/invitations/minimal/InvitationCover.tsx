@@ -25,17 +25,17 @@ export function InvitationCover({
       </div>
 
       <GsapReveal
-        delay={0.2}
-        direction="up"
-        distance={40}
-        className="z-10 flex flex-col items-center mt-4 mb-6 space-y-4 pt-48 sm:pt-56 w-11/12 sm:w-4/5 md:w-3/5"
+        delay={0}
+        direction="none"
+        distance={0}
+        className="z-10 flex flex-col items-center mt-2 mb-4 space-y-2 pt-24 sm:pt-32 w-11/12 sm:w-4/5 md:w-3/5"
       >
-        <p className="font-serif uppercase tracking-[0.2em] text-[12px] mb-4 opacity-90">
+        <p className="font-serif uppercase tracking-[0.2em] text-[12px] mb-2 opacity-90">
           THE WEDDING OF
         </p>
 
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl mt-17 text-left w-full capitalize"
+          className="text-5xl sm:text-7xl md:text-8xl mt-2 text-left w-full capitalize leading-tight"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
@@ -44,12 +44,12 @@ export function InvitationCover({
           {getLastTwoNames(groomName) || "Trung Hiếu"}
         </h1>
 
-        <div className="text-6xl sm:text-7xl font-cursive my-2 opacity-80">
-          &
+        <div className="text-5xl sm:text-6xl font-cursive my-1 opacity-80">
+          &amp;
         </div>
 
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl mt-6 text-right w-full capitalize"
+          className="text-5xl sm:text-7xl md:text-8xl mt-2 text-right w-full capitalize leading-tight"
           style={{
             fontFamily: "'Great Vibes', cursive",
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",

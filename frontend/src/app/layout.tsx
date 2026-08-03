@@ -52,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi">
-      <body style={{ height: '100%', margin: 0 }}>
+    <html lang="vi" suppressHydrationWarning>
+      <body style={{ height: '100%', margin: 0 }} suppressHydrationWarning>
         <div id="root" style={{ height: '100%' }}>
           <GoogleOAuthProviderWrapper>
             {children}

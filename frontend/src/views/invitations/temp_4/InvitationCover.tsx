@@ -87,34 +87,12 @@ export function InvitationCover({
           }
         }
 
-        .animate-top-down {
-          animation: anim-top-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          will-change: transform, opacity;
-        }
-        .animate-left-in {
-          animation: anim-left-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-          opacity: 0;
-          will-change: transform, opacity;
-        }
-        .animate-right-in {
-          animation: anim-right-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-          opacity: 0;
-          will-change: transform, opacity;
-        }
-        .animate-fade-in {
-          animation: anim-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
-          opacity: 0;
-        }
-        .animate-zoom-in {
-          animation: anim-zoom-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-          opacity: 0;
-          will-change: transform, opacity;
-        }
-        .animate-up-in {
-          animation: anim-up-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
-          opacity: 0;
-          will-change: transform, opacity;
-        }
+        .animate-top-down { opacity: 1; transform: none; }
+        .animate-left-in { opacity: 1; transform: none; }
+        .animate-right-in { opacity: 1; transform: none; }
+        .animate-fade-in { opacity: 1; }
+        .animate-zoom-in { opacity: 1; transform: rotate(-2deg); }
+        .animate-up-in { opacity: 1; transform: none; }
 
         .wax-seal {
           background: radial-gradient(circle at 30% 30%, #dbba82, #b5925a 60%, #826639);

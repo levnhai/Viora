@@ -27,7 +27,7 @@ function AnimatedCountdownItem({
   delayMs = 0,
   className = "",
 }: AnimatedCountdownItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

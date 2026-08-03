@@ -35,7 +35,10 @@ export function TemplateDetailModal() {
         <div className="w-[45%] bg-slate-100 relative shrink-0 p-6 flex items-center justify-center">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10"></div>
           <img
-            src={activeTemplate.thumbnail || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop"}
+            src={
+              activeTemplate.thumbnail ||
+              "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop"
+            }
             alt={activeTemplate.name}
             className="relative z-10 w-full h-full object-cover rounded-xl shadow-lg border-4 border-white"
           />
@@ -80,7 +83,9 @@ export function TemplateDetailModal() {
 
           {/* Features */}
           <div className="mb-8">
-            <h3 className="text-sm font-bold text-slate-800 mb-4">Tính năng nổi bật</h3>
+            <h3 className="text-sm font-bold text-slate-800 mb-4">
+              Tính năng nổi bật
+            </h3>
             <div className="grid grid-cols-2 gap-y-3 gap-x-4">
               {[
                 "Tùy chỉnh nội dung",
@@ -92,7 +97,10 @@ export function TemplateDetailModal() {
                 "Timeline sự kiện",
                 "Chia sẻ mạng xã hội",
               ].map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 text-sm text-slate-600"
+                >
                   <Check size={16} className="text-emerald-500 shrink-0" />
                   <span>{feature}</span>
                 </div>
@@ -103,14 +111,11 @@ export function TemplateDetailModal() {
           {/* QR Code and Info */}
           <div className="flex items-center gap-6 mb-8 p-4 bg-slate-50 rounded-xl border border-slate-100">
             <div className="w-20 h-20 bg-white p-1 rounded-lg shadow-sm border border-slate-200 shrink-0">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wedding.com" alt="QR" className="w-full h-full" />
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed">
-              Quét mã QR để xem demo trực tiếp trên điện thoại.
-              <br />
-              Tạo miễn phí • Thử 3 ngày • Đẹp mãi thanh xuân.
-              <br />
-              Bạn có thể đổi mẫu khác bất cứ lúc nào khi chỉnh sửa.
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wedding.com"
+                alt="QR"
+                className="w-full h-full"
+              />
             </div>
           </div>
 

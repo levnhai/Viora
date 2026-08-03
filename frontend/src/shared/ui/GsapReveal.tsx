@@ -43,7 +43,10 @@ export function GsapReveal({
     const isPreview = typeof window !== "undefined" && (
       window.location.pathname.includes('/admin/invitations') ||
       window.location.pathname.includes('/create') ||
-      window.location.pathname.includes('/edit')
+      window.location.pathname.includes('/edit') ||
+      window.location.pathname === '/' ||
+      window.location.pathname.includes('/templates') ||
+      window.location.pathname.includes('/wedding-demo')
     );
 
     const ctx = gsap.context(() => {

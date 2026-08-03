@@ -91,9 +91,22 @@ export function CreateInvitationModal({
                 Đăng ký tạo thiệp
               </h2>
               {tpl && (
-                <div className="bg-pink-50/70 border border-pink-100 text-xs font-medium text-slate-600 px-3 py-1.5 rounded-xl flex items-center justify-between">
-                  <span>Mẫu đã chọn:</span>
-                  <span className="font-bold text-[#ff007a]">{tpl.name}</span>
+                <div className="bg-pink-50/70 border border-pink-100 text-xs font-medium text-slate-600 px-3.5 py-2 rounded-2xl flex items-center justify-between">
+                  <div>
+                    <span className="block text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Mẫu đã chọn</span>
+                    <span className="font-bold text-slate-900">{tpl.name}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-black uppercase text-white ${
+                      tpl.tier === 'pro' ? 'bg-gradient-to-r from-amber-500 to-pink-600' :
+                      tpl.tier === 'standard' ? 'bg-blue-600' : 'bg-emerald-600'
+                    }`}>
+                      Gói {tpl.tier ? tpl.tier.toUpperCase() : 'BASIC'}
+                    </span>
+                    <span className="block font-black text-[#ff007a] text-sm font-mono mt-0.5">
+                      {tpl.price ? `${tpl.price.toLocaleString('vi-VN')}đ` : '99.000đ'}
+                    </span>
+                  </div>
                 </div>
               )}
               <p className="text-xs text-slate-500 font-sans leading-relaxed pt-0.5">

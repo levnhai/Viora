@@ -8,9 +8,9 @@ interface CouplePolaroidCardsProps {
 
 export function CouplePolaroidCards({ weddingData }: CouplePolaroidCardsProps) {
   // Individual visibility state for each element so animations trigger per scroll position
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const [groomVisible, setGroomVisible] = useState(false);
-  const [brideVisible, setBrideVisible] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
+  const [groomVisible, setGroomVisible] = useState(true);
+  const [brideVisible, setBrideVisible] = useState(true);
 
   const headerRef = useRef<HTMLDivElement>(null);
   const groomRef = useRef<HTMLDivElement>(null);
