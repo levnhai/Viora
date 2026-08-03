@@ -114,7 +114,11 @@ export function TemplatesPage() {
   const navigate = (path: string) => router.push(path);
 
   const handleStartCreating = (tplId: string = "temp_1") => {
-    navigate(`/create?templateId=${tplId}`);
+    const found =
+      templatesToUse.find(
+        (t: any) => t.code === tplId || t.id.toString() === tplId,
+      ) || templatesToUse[0];
+    setPreviewTpl(found);
   };
 
   const toggleColor = (colorId: string) => {

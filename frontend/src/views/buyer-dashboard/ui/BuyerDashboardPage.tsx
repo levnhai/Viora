@@ -231,11 +231,11 @@ export function BuyerDashboardPage() {
             </p>
           </div>
           <button
-            onClick={() => router.push("/create")}
+            onClick={() => router.push("/templates")}
             className="px-6 py-3.5 bg-[#1b365d] text-white rounded-xl text-xs font-semibold hover:opacity-95 active:scale-[0.98] transition-all border-0 cursor-pointer flex items-center gap-2 mx-auto"
           >
             <Plus size={14} />
-            <span>Tạo thiệp cưới đầu tiên</span>
+            <span>Xem mẫu thiệp &amp; Đăng ký</span>
           </button>
         </div>
       </div>

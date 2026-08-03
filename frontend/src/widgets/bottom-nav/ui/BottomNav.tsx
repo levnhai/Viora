@@ -35,8 +35,6 @@ export function BottomNav() {
     } else {
       activeTab = "overview";
     }
-  } else if (pathname.includes("/edit") || pathname.includes("/create")) {
-    activeTab = "wedding";
   } else if (pathname.includes("/account")) {
     activeTab = "account";
   }
