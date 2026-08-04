@@ -158,23 +158,6 @@ export function AllTemplatesSection() {
 
           {/* Search Box & Sort Selector */}
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
-            {/* Sort Selector */}
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full sm:w-auto px-3.5 py-2.5 rounded-2xl bg-white/10 border border-white/10 text-xs text-white focus:outline-none focus:border-[#ff007a] transition-all cursor-pointer font-medium"
-            >
-              <option value="default" className="bg-slate-900 text-white">
-                ✨ Nổi bật & Ghim
-              </option>
-              <option value="price-asc" className="bg-slate-900 text-white">
-                Giá: Thấp đến Cao
-              </option>
-              <option value="price-desc" className="bg-slate-900 text-white">
-                Giá: Cao đến Thấp
-              </option>
-            </select>
-
             {/* Search Box */}
             <div className="relative w-full sm:w-60">
               <Search

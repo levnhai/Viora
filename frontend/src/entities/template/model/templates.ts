@@ -163,9 +163,9 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 5,
     code: "temp_5",
-    name: "Elegant - Nâu",
+    name: "The Golden",
     style: "Sang trọng",
-    tags: ["Sang trọng", "VIP 3D"],
+    tags: ["Sang trọng", "Lãng mạn"],
     isHot: true,
     preview:
       "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
