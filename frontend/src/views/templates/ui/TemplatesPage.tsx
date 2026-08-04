@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Header } from "@/widgets/header/ui/Header";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
-import { TEMPLATES } from "@/entities/template/model/templates";
+import { TEMPLATES, getDemoSlugForTemplate } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
 import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
 import { fetchTemplates } from "@/entities/template/api/template.api";
@@ -569,10 +569,7 @@ export function TemplatesPage() {
       {previewTpl && (
         <PreviewModal
           tpl={previewTpl}
-          demoSlug={
-            demos.find((d) => d.templateId === previewTpl.code)?.slug ||
-            "vanan-thibinh"
-          }
+          demoSlug={getDemoSlugForTemplate(previewTpl, demos)}
           onClose={() => setPreviewTpl(null)}
           onRequestDesign={() => handleStartCreating(previewTpl.code)}
           onSelectTemplate={setPreviewTpl}

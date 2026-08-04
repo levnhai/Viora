@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Search, Sparkles, RefreshCw } from "lucide-react";
-import { TEMPLATES } from "@/entities/template/model/templates";
+import { TEMPLATES, getDemoSlugForTemplate } from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
@@ -204,7 +204,8 @@ export function AllTemplatesSection() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {displayedTemplates.map((tpl) => {
-              const demoForTpl = demos.find((d) => d.templateId === tpl.code);
+              const demoSlug = getDemoSlugForTemplate(tpl, demos);
+              const demoForTpl = demos.find((d) => d.slug === demoSlug);
               return (
                 <TemplateCard
                   key={tpl.code || tpl.id}
@@ -226,10 +227,7 @@ export function AllTemplatesSection() {
       {previewTpl && (
         <PreviewModal
           tpl={previewTpl}
-          demoSlug={
-            demos.find((d) => d.templateId === previewTpl.code)?.slug ||
-            "vanan-thibinh"
-          }
+          demoSlug={getDemoSlugForTemplate(previewTpl, demos)}
           onClose={() => setPreviewTpl(null)}
           onRequestDesign={() => {
             const current = previewTpl;

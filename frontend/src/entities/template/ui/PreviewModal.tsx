@@ -50,12 +50,26 @@ const getTemplateTags = (tpl: TemplateConfig) => {
 export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
   const router = useRouter();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [groomName, setGroomName] = useState("");
+  const [brideName, setBrideName] = useState("");
 
   const targetSlug = demoSlug || "vanan-thibinh";
 
+  const getIframeUrl = () => {
+    let url = `/w/${targetSlug}?embed=true`;
+    if (groomName.trim()) url += `&groom=${encodeURIComponent(groomName.trim())}`;
+    if (brideName.trim()) url += `&bride=${encodeURIComponent(brideName.trim())}`;
+    return url;
+  };
+
   const handlePreviewDemo = () => {
     onClose();
-    window.open(`/w/${targetSlug}`, "_blank");
+    let url = `/w/${targetSlug}`;
+    const params = new URLSearchParams();
+    if (groomName.trim()) params.append("groom", groomName.trim());
+    if (brideName.trim()) params.append("bride", brideName.trim());
+    if (params.toString()) url += `?${params.toString()}`;
+    window.open(url, "_blank");
   };
 
   return (
@@ -101,7 +115,7 @@ export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
               {/* Tag Pills & Price Tag */}
               <div className="flex items-center gap-1.5 pt-1 flex-wrap">
                 <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 text-[10px] font-bold font-sans border border-pink-500/30">
-                  {tpl.price.toLocaleString("vi-VN")}đ
+                  {tpl.price ? `${tpl.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
                 </span>
                 {getTemplateTags(tpl).map((tag, idx) => (
                   <span
@@ -123,10 +137,29 @@ export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
             </button>
           </div>
 
+          {/* Quick Name Sandbox Bar */}
+          <div className="bg-stone-900/90 border border-stone-800/80 rounded-xl p-2 my-1 shrink-0 flex gap-2 items-center text-xs">
+            <span className="text-pink-400 font-medium text-[11px] shrink-0 font-sans pl-1">✍️ Thử nhập tên:</span>
+            <input
+              type="text"
+              placeholder="Tên chú rể"
+              value={groomName}
+              onChange={(e) => setGroomName(e.target.value)}
+              className="w-1/2 bg-stone-950 border border-stone-800 rounded-lg px-2 py-1 text-white placeholder-stone-500 focus:outline-none focus:border-pink-500 text-[11px]"
+            />
+            <input
+              type="text"
+              placeholder="Tên cô dâu"
+              value={brideName}
+              onChange={(e) => setBrideName(e.target.value)}
+              className="w-1/2 bg-stone-950 border border-stone-800 rounded-lg px-2 py-1 text-white placeholder-stone-500 focus:outline-none focus:border-pink-500 text-[11px]"
+            />
+          </div>
+
           {/* Modal Frame Preview (Center Invitation Preview) */}
-          <div className="relative w-full flex-1 min-h-[300px] aspect-[9/16] mx-auto rounded-2xl overflow-hidden shadow-2xl border border-stone-800 bg-[#121110] my-2 sm:my-3">
+          <div className="relative w-full flex-1 min-h-[300px] aspect-[9/16] mx-auto rounded-2xl overflow-hidden shadow-2xl border border-stone-800 bg-[#121110] my-1 sm:my-2">
             <iframe
-              src={`/w/${targetSlug}?embed=true`}
+              src={getIframeUrl()}
               className="w-full h-full border-0"
               title="Wedding Invitation Demo"
             />

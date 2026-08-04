@@ -9,12 +9,16 @@ import { WeddingData } from "@/entities/invitation/model/types";
 import { TEMPLATES } from "@/entities/template/model/templates";
 import { getTemplatePackage } from "@/entities/template/model/registry";
 import { API_URL } from "@/shared/lib/config";
+import { getDemoWeddingData } from "@/entities/invitation/model/mockData";
 
 export function WeddingInvitationPage() {
   const params = useParams();
   const weddingSlug = params?.weddingSlug as string;
   const searchParams = useSearchParams();
   const guestName = searchParams?.get("to") || undefined;
+  const isEmbed = searchParams?.get("embed") === "true";
+  const customGroom = searchParams?.get("groom");
+  const customBride = searchParams?.get("bride");
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,23 +40,33 @@ export function WeddingInvitationPage() {
       })
       .then((data) => {
         if (data.success && data.data) {
-          const wd = data.data;
+          const wd = { ...data.data };
           // Ensure musicUrl is at the root level for templates to consume
           if (wd.themeSettings?.musicUrl) {
             wd.musicUrl = wd.themeSettings.musicUrl;
           }
+          if (customGroom) wd.groomName = customGroom;
+          if (customBride) wd.brideName = customBride;
           setWeddingData(wd);
         } else {
           throw new Error("Không lấy được thông tin đám cưới!");
         }
       })
       .catch((err) => {
-        setError(err.message || "Đã xảy ra lỗi kết nối!");
+        // Nếu ở chế độ embed hoặc slug demo mà DB 404, fallback sang mock data chứ không hiện lỗi hỏng
+        if (isEmbed || weddingSlug.includes("demo") || weddingSlug.includes("vanan") || weddingSlug.includes("leminhhai")) {
+          const fallbackData = getDemoWeddingData("temp_1");
+          if (customGroom) fallbackData.groomName = customGroom;
+          if (customBride) fallbackData.brideName = customBride;
+          setWeddingData(fallbackData);
+        } else {
+          setError(err.message || "Đã xảy ra lỗi kết nối!");
+        }
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [weddingSlug]);
+  }, [weddingSlug, isEmbed, customGroom, customBride]);
 
   if (loading) {
     return (

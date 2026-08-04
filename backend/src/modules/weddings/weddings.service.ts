@@ -814,16 +814,16 @@ export class WeddingsService {
     // Lấy các bản thiệp mới nhất có source = 'demo'
     const demoWeddings = await this.weddingModel
       .find({ source: 'demo', deletedAt: null })
+      .populate('templateId', 'code name _id')
       .sort({ createdAt: -1 })
-      .limit(6)
       .exec();
 
     if (!demoWeddings || demoWeddings.length === 0) {
       // Nếu chưa tìm thấy source = 'demo', trả về các bản thiệp mới nhất làm fallback
       return await this.weddingModel
         .find({ deletedAt: null })
+        .populate('templateId', 'code name _id')
         .sort({ createdAt: -1 })
-        .limit(6)
         .exec();
     }
 
