@@ -102,7 +102,14 @@ export function useGuestbook(weddingSlug: string) {
   const [messages, setMessages] = useState<GuestMessage[]>([]);
 
   useEffect(() => {
-    if (!weddingSlug) return;
+    if (
+      !weddingSlug ||
+      weddingSlug === "preview" ||
+      weddingSlug === "demo" ||
+      weddingSlug.startsWith("temp_")
+    ) {
+      return;
+    }
     fetch(`${API_URL}/api/weddings/${weddingSlug}/guestbook`)
       .then((res) => res.json())
       .then((data) => {
@@ -119,6 +126,15 @@ export function useGuestbook(weddingSlug: string) {
   }, [weddingSlug]);
 
   const handleSendMessage = async (name: string, msg: string) => {
+    if (
+      !weddingSlug ||
+      weddingSlug === "preview" ||
+      weddingSlug === "demo" ||
+      weddingSlug.startsWith("temp_")
+    ) {
+      setMessages((prev) => [{ name: name || "Khách mời", msg, time: "Vừa xong" }, ...prev]);
+      return { success: true };
+    }
     try {
       const response = await fetch(
         `${API_URL}/api/weddings/${weddingSlug}/guestbook`,

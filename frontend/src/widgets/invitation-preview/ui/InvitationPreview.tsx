@@ -7,7 +7,7 @@ import { getTemplatePackage } from "@/entities/template/model/registry";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 export function InvitationPreview() {
-  const { basicInfo, activeTemplate, giftInfo, galleryImages, timeline, story } = useInvitationCreate();
+  const { basicInfo, events, activeTemplate, giftInfo, galleryImages, timeline, story } = useInvitationCreate();
 
   const templatePackage = getTemplatePackage(
     activeTemplate?.code || "minimal-green",
@@ -51,10 +51,10 @@ export function InvitationPreview() {
     weddingTime: basicInfo.weddingTime || "18:00",
     musicUrl: basicInfo.musicUrl,
     story: story,
-    events: [
+    events: events && events.length > 0 ? events : [
       {
-        title: "TIỆC CƯỚI",
-        time: basicInfo.weddingTime || "18:00",
+        title: "LỄ TIỆC CƯỚI",
+        time: basicInfo.weddingTime || "11:00 AM",
         date: basicInfo.weddingDate || new Date().toISOString(),
         locationName: basicInfo.locationName || "Nhà hàng Tiệc cưới",
         address: basicInfo.address || "Địa chỉ nhà hàng",

@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Template } from "@/entities/template/api/template.api";
 import { TEMPLATES } from "@/entities/template/model/templates";
+import { WeddingEvent } from "@/entities/invitation/model/types";
 
 export function toSlug(str: string) {
   if (!str) return "";
@@ -101,6 +102,12 @@ interface InvitationCreateState {
   basicInfo: BasicInfo;
   setBasicInfo: (info: BasicInfo) => void;
 
+  events: WeddingEvent[];
+  setEvents: React.Dispatch<React.SetStateAction<WeddingEvent[]>>;
+  handleAddEvent: (title?: string) => void;
+  handleRemoveEvent: (id: string) => void;
+  handleUpdateEvent: (id: string, field: keyof WeddingEvent, value: string) => void;
+
   giftInfo: GiftInfo;
   setGiftInfo: (info: GiftInfo) => void;
 
@@ -162,14 +169,90 @@ export function InvitationCreateProvider({
     brideMotherName: initialData?.wedding?.brideMotherName || "",
     brideRank: initialData?.wedding?.brideRank || "",
     brideAddress: initialData?.wedding?.brideAddress || "",
-    weddingDate: initialData?.wedding?.weddingDate ? new Date(initialData.wedding.weddingDate).toISOString().split('T')[0] : "2025-06-25",
-    weddingTime: initialData?.wedding?.weddingTime || "17:00",
-    locationName: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.locationName || "Gem Center",
-    address: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.address || "08 Nguyễn Bỉnh Khiêm, P. Đa Kao, Q.1, TP.HCM",
-    mapLink: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.mapUrl || "https://maps.google.com/?q=Gem+Center",
+    weddingDate: initialData?.wedding?.weddingDate ? new Date(initialData.wedding.weddingDate).toISOString().split('T')[0] : "2026-12-31",
+    weddingTime: initialData?.wedding?.weddingTime || "11:00 AM",
+    locationName: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.locationName || "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+    address: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.address || "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
+    mapLink: initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.mapUrl || "",
     musicUrl: initialData?.themeSettings?.musicUrl || "",
     coverImage: initialData?.wedding?.coverImage || initialData?.wedding?.templateConfig?.coverImage || "",
   });
+
+  // Multi-event state (Default: 1 event LỄ TIỆC CƯỚI)
+  const initialEventsFromDb: WeddingEvent[] = initialData?.wedding?.events && initialData.wedding.events.length > 0
+    ? initialData.wedding.events.map((e: any, idx: number) => ({
+        id: e.id || `evt_${idx}_${Date.now()}`,
+        title: e.title || (idx === 0 ? "LỄ TIỆC CƯỚI" : "LỄ THÀNH HÔN"),
+        time: e.time || "11:00 AM",
+        date: e.date || initialData?.wedding?.weddingDate || "2026-12-31",
+        locationName: e.locationName || "",
+        address: e.address || "",
+        mapUrl: e.mapUrl || "",
+      }))
+    : [
+        {
+          id: "evt_1",
+          title: "LỄ TIỆC CƯỚI",
+          time: "11:00 AM",
+          date: initialData?.wedding?.weddingDate ? new Date(initialData.wedding.weddingDate).toISOString().split('T')[0] : "2026-12-31",
+          locationName: "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+          address: "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
+          mapUrl: "",
+        },
+      ];
+
+  const [events, setEvents] = useState<WeddingEvent[]>(initialEventsFromDb);
+
+  // Auto-sync primary event (events[0]) back to basicInfo for backward compatibility
+  useEffect(() => {
+    if (events && events.length > 0) {
+      const primary = events[0];
+      setBasicInfo((prev) => {
+        if (
+          prev.locationName === primary.locationName &&
+          prev.address === primary.address &&
+          prev.mapLink === (primary.mapUrl || "") &&
+          prev.weddingDate === primary.date &&
+          prev.weddingTime === primary.time
+        ) {
+          return prev;
+        }
+        return {
+          ...prev,
+          locationName: primary.locationName || prev.locationName,
+          address: primary.address || prev.address,
+          mapLink: primary.mapUrl ?? prev.mapLink,
+          weddingDate: primary.date || prev.weddingDate,
+          weddingTime: primary.time || prev.weddingTime,
+        };
+      });
+    }
+  }, [events]);
+
+  const handleAddEvent = (title = "LỄ TIỆC CƯỚI") => {
+    setEvents((prev) => [
+      ...prev,
+      {
+        id: `evt_${Date.now()}`,
+        title,
+        time: "11:00 AM",
+        date: basicInfo.weddingDate || "2026-12-31",
+        locationName: "",
+        address: "",
+        mapUrl: "",
+      },
+    ]);
+  };
+
+  const handleRemoveEvent = (id: string) => {
+    setEvents((prev) => prev.filter((e) => (e.id || "") !== id));
+  };
+
+  const handleUpdateEvent = (id: string, field: keyof WeddingEvent, value: string) => {
+    setEvents((prev) =>
+      prev.map((e) => (e.id === id ? { ...e, [field]: value } : e))
+    );
+  };
   
   const [giftInfo, setGiftInfo] = useState<GiftInfo>(initialData?.wedding?.giftInfo || {});
   
@@ -235,6 +318,11 @@ export function InvitationCreateProvider({
         setEditorActiveTab,
         basicInfo,
         setBasicInfo,
+        events,
+        setEvents,
+        handleAddEvent,
+        handleRemoveEvent,
+        handleUpdateEvent,
         giftInfo,
         setGiftInfo,
         galleryImages,

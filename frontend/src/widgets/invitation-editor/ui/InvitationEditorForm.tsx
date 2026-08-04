@@ -41,6 +41,10 @@ export function InvitationEditorForm() {
     setEditorActiveTab,
     basicInfo,
     setBasicInfo,
+    events: weddingEvents,
+    handleAddEvent: handleAddWeddingEvent,
+    handleRemoveEvent: handleRemoveWeddingEvent,
+    handleUpdateEvent: handleUpdateWeddingEvent,
     publishSettings,
     story,
     setStory,
@@ -432,11 +436,12 @@ export function InvitationEditorForm() {
     (item) => item.alwaysShow || item.isEnabled,
   );
 
+  // Auto reset active tab if current tab is hidden
   useEffect(() => {
     if (!visibleTabs.find((tab) => tab.id === editorActiveTab)) {
       setEditorActiveTab("Thông tin cơ bản");
     }
-  }, [activeTemplate, editorActiveTab, setEditorActiveTab]);
+  }, [activeTemplate, editorActiveTab, setEditorActiveTab, visibleTabs]);
 
   return (
     <div className="flex w-full h-full">
@@ -667,43 +672,144 @@ export function InvitationEditorForm() {
               )}
             </div>
 
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold text-slate-700">
-                Thời gian tổ chức
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
-                    Ngày cưới
-                  </label>
-                  <input
-                    type="date"
-                    value={basicInfo.weddingDate}
-                    onChange={(e) =>
-                      setBasicInfo({
-                        ...basicInfo,
-                        weddingDate: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                  />
+            {/* Thông tin Lễ & Tiệc Cưới (Multi-event Card Editor) */}
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <CalendarClock size={16} className="text-rose-500" />
+                  Thông tin Lễ & Tiệc Cưới (Nhiều sự kiện)
+                </h4>
+                <div className="flex gap-1.5 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => handleAddWeddingEvent("LỄ TIỆC CƯỚI")}
+                    className="px-2 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-colors"
+                  >
+                    + Lễ Tiệc Cưới
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleAddWeddingEvent("LỄ THÀNH HÔN")}
+                    className="px-2 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-colors"
+                  >
+                    + Lễ Thành Hôn
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleAddWeddingEvent("LỄ VU QUY")}
+                    className="px-2 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg text-xs font-semibold hover:bg-amber-100 transition-colors"
+                  >
+                    + Lễ Vu Quy
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
-                    Giờ cưới
-                  </label>
-                  <input
-                    type="time"
-                    value={basicInfo.weddingTime}
-                    onChange={(e) =>
-                      setBasicInfo({
-                        ...basicInfo,
-                        weddingTime: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                  />
-                </div>
+              </div>
+
+              <div className="space-y-4">
+                {weddingEvents.map((event, index) => {
+                  const eventId = event.id || String(index);
+                  return (
+                    <div
+                      key={eventId}
+                      className="p-4 border border-slate-200 rounded-2xl bg-slate-50/80 space-y-3 relative shadow-sm"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span className="font-bold text-xs text-slate-800 flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-rose-600 text-white text-[11px] flex items-center justify-center font-bold">
+                            {index + 1}
+                          </span>
+                          {event.title || `Sự kiện ${index + 1}`}
+                        </span>
+                        {weddingEvents.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveWeddingEvent(eventId)}
+                            className="text-red-500 hover:text-red-700 text-xs font-medium flex items-center gap-1 cursor-pointer border-0 bg-transparent"
+                          >
+                            <Trash2 size={13} /> Xóa sự kiện
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                            Tiêu đề lễ
+                          </label>
+                          <input
+                            type="text"
+                            value={event.title}
+                            onChange={(e) => handleUpdateWeddingEvent(eventId, "title", e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                            placeholder="LỄ TIỆC CƯỚI / LỄ THÀNH HÔN..."
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                            Giờ tổ chức
+                          </label>
+                          <input
+                            type="text"
+                            value={event.time}
+                            onChange={(e) => handleUpdateWeddingEvent(eventId, "time", e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                            placeholder="11:00 AM"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          Ngày tổ chức
+                        </label>
+                        <input
+                          type="date"
+                          value={event.date}
+                          onChange={(e) => handleUpdateWeddingEvent(eventId, "date", e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          Tên địa điểm / Nhà hàng
+                        </label>
+                        <input
+                          type="text"
+                          value={event.locationName}
+                          onChange={(e) => handleUpdateWeddingEvent(eventId, "locationName", e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          placeholder="Trung tâm hội nghị tiệc cưới Ninh Bình Legend..."
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          Địa chỉ chi tiết
+                        </label>
+                        <input
+                          type="text"
+                          value={event.address}
+                          onChange={(e) => handleUpdateWeddingEvent(eventId, "address", e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          placeholder="177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư..."
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          Link Google Maps chỉ đường (Tuỳ chọn)
+                        </label>
+                        <input
+                          type="text"
+                          value={event.mapUrl || ""}
+                          onChange={(e) => handleUpdateWeddingEvent(eventId, "mapUrl", e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          placeholder="https://maps.google.com/..."
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -773,79 +879,6 @@ export function InvitationEditorForm() {
                       className="absolute inset-0 opacity-0 cursor-pointer"
                       title="Tải file nhạc lên"
                     />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold text-slate-700">
-                Địa điểm tổ chức
-              </h4>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
-                    Tên địa điểm (Nhà hàng, tư gia...)
-                  </label>
-                  <input
-                    type="text"
-                    value={basicInfo.locationName}
-                    onChange={(e) =>
-                      setBasicInfo({
-                        ...basicInfo,
-                        locationName: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
-                    Địa chỉ cụ thể
-                  </label>
-                  <input
-                    type="text"
-                    value={basicInfo.address}
-                    onChange={(e) =>
-                      setBasicInfo({ ...basicInfo, address: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
-                    Link Google Maps
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={basicInfo.mapLink}
-                      onChange={(e) =>
-                        setBasicInfo({ ...basicInfo, mapLink: e.target.value })
-                      }
-                      className="w-full pl-3 pr-10 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
-                    />
-                    <a
-                      href={basicInfo.mapLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500"
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                    </a>
                   </div>
                 </div>
               </div>

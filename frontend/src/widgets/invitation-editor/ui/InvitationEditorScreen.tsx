@@ -15,6 +15,7 @@ export function InvitationEditorScreen() {
     activeTemplate,
     setIsPublishSuccessModalOpen,
     basicInfo,
+    events,
     publishSettings,
     setPublishSettings,
     giftInfo,
@@ -76,9 +77,9 @@ export function InvitationEditorScreen() {
         deletedGalleryImages: deletedGalleryImages,
         timeline: timeline,
         customerEmail: customerEmail || undefined,
-        events: [
+        events: events && events.length > 0 ? events : [
           {
-            title: "TIỆC CƯỚI",
+            title: "LỄ TIỆC CƯỚI",
             time: basicInfo.weddingTime,
             date: basicInfo.weddingDate,
             locationName: basicInfo.locationName,
