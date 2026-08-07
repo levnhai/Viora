@@ -2,15 +2,14 @@ import React from "react";
 import { formatDate } from "@/shared/lib/utils/date";
 import { cormorantGaramond } from "@/shared/lib/fonts";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { getLastTwoNames } from "@/shared/lib/utils/string";
 
 interface InvitationCoverProps {
   weddingData: WeddingData;
   isOpened?: boolean;
 }
 
-export function InvitationCover({
-  weddingData,
-}: InvitationCoverProps) {
+export function InvitationCover({ weddingData }: InvitationCoverProps) {
   const heroImage =
     weddingData.coverImage ||
     weddingData.galleryImages?.[0] ||
@@ -35,7 +34,7 @@ export function InvitationCover({
           {/* Groom Name */}
           <div className="self-start text-left pl-2 sm:pl-6">
             <h1 className="font-wedding-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)] leading-relaxed tracking-wide">
-              {weddingData.groomName}
+              {getLastTwoNames(weddingData.groomName)}
             </h1>
           </div>
 
@@ -49,7 +48,7 @@ export function InvitationCover({
           {/* Bride Name */}
           <div className="self-end text-right pr-2 sm:pr-6">
             <h1 className="font-wedding-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)] leading-relaxed tracking-wide">
-              {weddingData.brideName}
+              {getLastTwoNames(weddingData.brideName)}
             </h1>
           </div>
 
