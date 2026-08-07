@@ -10,25 +10,25 @@ import {
 import { Type } from 'class-transformer';
 
 class WeddingEventDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  title: string;
+  title?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  time: string;
+  time?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  date: string;
+  date?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  locationName: string;
+  locationName?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 
   @IsOptional()
   @IsString()

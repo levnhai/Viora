@@ -56,6 +56,25 @@ export function InvitationEditorScreen() {
         : slugInput.trim();
       setPublishSettings({ ...publishSettings, urlSlug: finalSlug });
 
+      const formattedEvents = (events && events.length > 0 ? events : [
+        {
+          title: "LỄ TIỆC CƯỚI",
+          time: basicInfo.weddingTime,
+          date: basicInfo.weddingDate,
+          locationName: basicInfo.locationName,
+          address: basicInfo.address,
+          mapUrl: basicInfo.mapLink,
+        },
+      ]).map((ev) => ({
+        ...ev,
+        title: ev.title || "LỄ TIỆC CƯỚI",
+        time: ev.time || basicInfo.weddingTime || "11:00 AM",
+        date: ev.date || basicInfo.weddingDate || "2026-12-31",
+        locationName: ev.locationName || basicInfo.locationName || "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+        address: ev.address || basicInfo.address || "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
+        mapUrl: ev.mapUrl || basicInfo.mapLink || "",
+      }));
+
       const payload = {
         slug: finalSlug,
         templateId:
@@ -77,16 +96,7 @@ export function InvitationEditorScreen() {
         deletedGalleryImages: deletedGalleryImages,
         timeline: timeline,
         customerEmail: customerEmail || undefined,
-        events: events && events.length > 0 ? events : [
-          {
-            title: "LỄ TIỆC CƯỚI",
-            time: basicInfo.weddingTime,
-            date: basicInfo.weddingDate,
-            locationName: basicInfo.locationName,
-            address: basicInfo.address,
-            mapUrl: basicInfo.mapLink,
-          },
-        ],
+        events: formattedEvents,
         musicUrl: basicInfo.musicUrl,
         source: source || "fb",
         templateConfig: {
@@ -94,8 +104,13 @@ export function InvitationEditorScreen() {
         },
       };
 
-      const res = await fetch(`${API_URL}/api/weddings`, {
-        method: "POST",
+      const targetUrl = isEditMode
+        ? `${API_URL}/api/weddings/${finalSlug}`
+        : `${API_URL}/api/weddings`;
+      const httpMethod = isEditMode ? "PUT" : "POST";
+
+      const res = await fetch(targetUrl, {
+        method: httpMethod,
         headers: {
           "Content-Type": "application/json",
         },
@@ -103,7 +118,14 @@ export function InvitationEditorScreen() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const textText = await res.text().catch(() => "");
+        throw new Error(textText || `Lỗi máy chủ (${res.status} ${res.statusText})`);
+      }
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Không thể xuất bản thiệp cưới");

@@ -40,18 +40,35 @@ export function GsapReveal({
     if (direction === "left") x = distance;
     if (direction === "right") x = -distance;
 
-    const isPreview = typeof window !== "undefined" && (
-      window.location.pathname.includes('/admin/invitations') ||
-      window.location.pathname.includes('/create') ||
-      window.location.pathname.includes('/edit') ||
-      window.location.pathname === '/' ||
-      window.location.pathname.includes('/templates') ||
-      window.location.pathname.includes('/wedding-demo')
+    const scrollParent = containerRef.current.closest(
+      ".overflow-y-auto, .overflow-auto"
     );
+    const isPreviewEnv =
+      typeof window !== "undefined" &&
+      (window.location.pathname.includes("/admin") ||
+        window.location.pathname.includes("/create") ||
+        window.location.pathname.includes("/edit") ||
+        window.location.pathname.includes("/templates"));
 
     const ctx = gsap.context(() => {
-      const target = stagger > 0 ? containerRef.current!.children : containerRef.current;
-      
+      const target =
+        stagger > 0 ? containerRef.current!.children : containerRef.current;
+
+      const scrollTriggerConfig = scrollParent
+        ? {
+            trigger: containerRef.current,
+            scroller: scrollParent,
+            start: "top 95%",
+            once: triggerOnce,
+          }
+        : isPreviewEnv
+        ? undefined
+        : {
+            trigger: containerRef.current,
+            start: "top 88%",
+            once: triggerOnce,
+          };
+
       gsap.fromTo(
         target,
         {
@@ -67,11 +84,7 @@ export function GsapReveal({
           delay,
           stagger: stagger > 0 ? stagger : 0,
           ease: "power3.out",
-          scrollTrigger: isPreview ? undefined : {
-            trigger: containerRef.current,
-            start: "top 85%", // Khi top của element chạm mốc 85% chiều cao màn hình thì bắt đầu
-            once: triggerOnce, // Chỉ chạy 1 lần
-          },
+          scrollTrigger: scrollTriggerConfig,
         }
       );
     }, containerRef);

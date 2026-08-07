@@ -17,15 +17,43 @@ import img_11 from "@/shared/assets/image/giffbox/img_11.svg";
 
 interface Registry_4Props {
   weddingData: WeddingData;
+  primaryColor?: string;
+  textColor?: string;
 }
 
-export function Registry_4({ weddingData }: Registry_4Props) {
+export function Registry_4({
+  weddingData,
+  textColor: textColorProp,
+}: Registry_4Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [openedBox, setOpenedBox] = useState(false);
 
+  const textColor = textColorProp || "#4e0b12";
+
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      const giffboxImages = [
+        img_1,
+        img_2,
+        img_3,
+        img_4,
+        img_5,
+        img_6,
+        img_7,
+        img_9,
+        img_10,
+        img_11,
+      ];
+      giffboxImages.forEach((img) => {
+        const src = typeof img === "string" ? img : img?.src;
+        if (src) {
+          const i = new window.Image();
+          i.src = src;
+        }
+      });
+    }
   }, []);
 
   const handleOpenGift = () => {
@@ -35,10 +63,10 @@ export function Registry_4({ weddingData }: Registry_4Props) {
       particleCount: 150,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#7c6a60', '#e8d5c4', '#fdfbf6', '#C41E26'],
+      colors: [textColor, "#e8d5c4", "#fdfbf6", "#C41E26"],
       zIndex: 10000,
     });
-    
+
     // Mở modal sau 1 chút delay để thấy hiệu ứng
     setTimeout(() => {
       setModalOpen(true);
@@ -121,7 +149,7 @@ export function Registry_4({ weddingData }: Registry_4Props) {
           <div className="mb-12">
             <h2 
               className="text-2xl uppercase tracking-widest font-serif font-bold"
-              style={{ color: "#7c6a60" }}
+              style={{ color: textColor }}
             >
               HỘP QUÀ MỪNG
             </h2>
@@ -188,17 +216,43 @@ export function Registry_4({ weddingData }: Registry_4Props) {
               alt="gift box 3" 
             />
 
+            {/* Pre-rendered hidden images for instant zero-latency swap */}
+            <img
+              src={img_1.src || (img_1 as unknown as string)}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              // @ts-ignore
+              fetchPriority="high"
+              decoding="async"
+              className="hidden"
+            />
+            <img
+              src={img_2.src || (img_2 as unknown as string)}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              // @ts-ignore
+              fetchPriority="high"
+              decoding="async"
+              className="hidden"
+            />
+
             {/* Gift Box Image */}
             <div className="relative z-10 w-full h-full animate-bounce-slow">
               <img 
                 src={(openedBox || modalOpen) ? (img_2.src || (img_2 as unknown as string)) : (img_1.src || (img_1 as unknown as string))} 
                 alt="Gift Box" 
+                loading="eager"
+                // @ts-ignore
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-full object-contain mix-blend-multiply drop-shadow-2xl" 
               />
             </div>
           </div>
 
-          <p className="mt-4 text-sm font-serif" style={{ color: "rgba(124, 106, 96, 0.7)" }}>
+          <p className="mt-4 text-sm font-serif" style={{ color: `${textColor}b3` }}>
             Nhấn để mở
           </p>
         </GsapReveal>
@@ -216,11 +270,20 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                 }}
               />
 
-              <div className="bg-[#f4efe6] rounded-3xl w-full max-w-xl relative flex flex-col max-h-[90vh] overflow-hidden shadow-[0_0_40px_rgba(124,106,96,0.1)] animate-in fade-in zoom-in duration-300 border border-[#7c6a60]/20">
+              <div
+                className="bg-[#fdfbf6] rounded-3xl w-full max-w-xl relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 border"
+                style={{ borderColor: `${textColor}33` }}
+              >
                 {/* Header */}
-                <div className="p-4 sm:p-6 flex justify-between items-center shrink-0 border-b border-[#7c6a60]/10 relative">
-                  <div className="w-8" /> {/* spacer for centering */}
-                  <h3 className="text-xl sm:text-2xl text-[#7c6a60] font-serif tracking-widest font-semibold uppercase text-center flex-1 drop-shadow-sm">
+                <div
+                  className="p-4 sm:p-6 flex justify-between items-center shrink-0 border-b relative"
+                  style={{ borderColor: `${textColor}1a` }}
+                >
+                  <div className="w-8" />
+                  <h3
+                    className="text-xl sm:text-2xl font-serif tracking-widest font-semibold uppercase text-center flex-1 drop-shadow-sm"
+                    style={{ color: textColor }}
+                  >
                     Hộp Quà Mừng
                   </h3>
                   <button
@@ -228,7 +291,8 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                       setModalOpen(false);
                       setOpenedBox(false);
                     }}
-                    className="w-8 h-8 flex items-center justify-center text-[#7c6a60]/50 hover:text-[#7c6a60] hover:bg-[#7c6a60]/10 rounded-full transition-all"
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-all"
+                    style={{ color: `${textColor}80` }}
                   >
                     <X size={24} />
                   </button>
@@ -237,7 +301,10 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                 {/* Content / Scrollable */}
                 <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 text-center bg-[#fdfbf6]">
                   {registries.length === 0 ? (
-                    <div className="text-[#7c6a60] font-serif italic py-10 opacity-70 w-full">
+                    <div
+                      className="font-serif italic py-10 opacity-70 w-full"
+                      style={{ color: textColor }}
+                    >
                       Gia đình chưa cập nhật thông tin tài khoản
                     </div>
                   ) : (
@@ -253,16 +320,28 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                       return (
                         <div
                           key={idx}
-                          className="flex flex-col items-center flex-1 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-[#7c6a60]/10 relative overflow-hidden group hover:shadow-[0_0_20px_rgba(124,106,96,0.1)] transition-shadow"
+                          className="flex flex-col items-center flex-1 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border relative overflow-hidden group transition-shadow"
+                          style={{ borderColor: `${textColor}20` }}
                         >
-                          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#7c6a60]/10 via-[#7c6a60]/40 to-[#7c6a60]/10" />
+                          <div
+                            className="absolute top-0 left-0 w-full h-1"
+                            style={{
+                              background: `linear-gradient(90deg, ${textColor}1a, ${textColor}66, ${textColor}1a)`,
+                            }}
+                          />
 
-                          <h4 className="font-serif text-[#7c6a60] mb-3 text-[15px] sm:text-base tracking-[0.2em] uppercase font-medium">
+                          <h4
+                            className="font-serif mb-3 text-[15px] sm:text-base tracking-[0.2em] uppercase font-medium"
+                            style={{ color: textColor }}
+                          >
                             {roleName}
                           </h4>
 
                           {reg.qrCode ? (
-                            <div className="bg-white p-2 rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 border border-[#7c6a60]/20 shadow-sm mx-auto relative group">
+                            <div
+                              className="bg-white p-2 rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 border shadow-sm mx-auto relative group"
+                              style={{ borderColor: `${textColor}33` }}
+                            >
                               <img
                                 src={reg.qrCode}
                                 alt="QR Code"
@@ -270,18 +349,35 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                               />
                             </div>
                           ) : (
-                            <div className="bg-[#7c6a60]/5 border-2 border-dashed border-[#7c6a60]/20 rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center mx-auto">
-                              <span className="text-[#7c6a60]/50 text-sm font-serif italic">
+                            <div
+                              className="border-2 border-dashed rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center mx-auto"
+                              style={{
+                                backgroundColor: `${textColor}0d`,
+                                borderColor: `${textColor}33`,
+                              }}
+                            >
+                              <span
+                                className="text-sm font-serif italic"
+                                style={{ color: `${textColor}80` }}
+                              >
                                 Chưa có mã QR
                               </span>
                             </div>
                           )}
 
-                          <div className="text-[#7c6a60] font-serif space-y-1 mb-4">
+                          <div
+                            className="font-serif space-y-1 mb-4"
+                            style={{ color: textColor }}
+                          >
                             <p className="text-[10px] opacity-70 uppercase tracking-widest font-sans">
                               {reg.bankName || "Tên ngân hàng"}
                             </p>
-                            <p className="font-bold tracking-widest text-base sm:text-lg drop-shadow-sm">
+                            <p
+                              className="font-bold tracking-widest text-base sm:text-lg drop-shadow-sm"
+                              style={{
+                                fontVariantNumeric: "lining-nums tabular-nums",
+                              }}
+                            >
                               {reg.accountNumber || "Số tài khoản"}
                             </p>
                             <p className="text-[13px] opacity-90 capitalize font-medium">
@@ -292,7 +388,11 @@ export function Registry_4({ weddingData }: Registry_4Props) {
                           {reg.qrCode && (
                             <button
                               onClick={() => handleSaveQR(reg.qrCode, fullName)}
-                              className="px-4 py-2 bg-transparent border border-[#7c6a60]/30 rounded-full text-[10px] uppercase tracking-widest text-[#7c6a60] hover:bg-[#7c6a60] hover:text-white transition-all flex items-center justify-center gap-2 mx-auto w-full max-w-[120px] font-medium"
+                              className="px-4 py-2 bg-transparent border rounded-full text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 mx-auto w-full max-w-[120px] font-medium hover:opacity-90"
+                              style={{
+                                borderColor: `${textColor}4d`,
+                                color: textColor,
+                              }}
                             >
                               <Download size={14} />
                               LƯU QR

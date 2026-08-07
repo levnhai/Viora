@@ -198,13 +198,47 @@ export const TEMPLATES: TemplateConfig[] = [
       gift: { enabled: true },
     },
   },
+  {
+    id: 6,
+    code: "temp_6",
+    name: "Minimal - đỏ",
+    style: "Sang trọng",
+    tags: ["Sang trọng", "Lãng mạn"],
+    isHot: true,
+    preview:
+      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    themeClass: "Minimal",
+    tier: "standard",
+    price: 149000,
+    originalPrice: 250000,
+    features: [
+      "Độc quyền Animation 3D",
+      "Không giới hạn ảnh",
+      "QR Mừng cưới + Confetti",
+      "Countdown & RSVP VIP",
+    ],
+    accentColor: "#7a5c4f",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
+    schema: {
+      basicInfo: {
+        hasParentsInfo: true,
+        hasRankInfo: true,
+        hasAddressInfo: true,
+      },
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
+    },
+  },
 ];
 
-
-export function getDemoSlugForTemplate(
-  tpl: any,
-  demos: any[]
-): string {
+export function getDemoSlugForTemplate(tpl: any, demos: any[]): string {
   if (!tpl || !Array.isArray(demos) || demos.length === 0) {
     return "vanan-thibinh";
   }
@@ -217,12 +251,24 @@ export function getDemoSlugForTemplate(
     if (d.source && d.source !== "demo") return false;
 
     const raw = d.templateId;
-    const dTplId = typeof raw === "object" ? String(raw?._id || raw?.id || "") : String(raw || "");
-    const dTplCode = typeof raw === "object" ? String(raw?.code || "") : String(d.templateCode || d.code || "");
+    const dTplId =
+      typeof raw === "object"
+        ? String(raw?._id || raw?.id || "")
+        : String(raw || "");
+    const dTplCode =
+      typeof raw === "object"
+        ? String(raw?.code || "")
+        : String(d.templateCode || d.code || "");
 
     if (tplDbId && dTplId === tplDbId) return true;
     if (tplId && dTplId === tplId) return true;
-    if (tplCode && (dTplCode === tplCode || dTplId === tplCode || (d.slug && d.slug.includes(tplCode)))) return true;
+    if (
+      tplCode &&
+      (dTplCode === tplCode ||
+        dTplId === tplCode ||
+        (d.slug && d.slug.includes(tplCode)))
+    )
+      return true;
 
     return false;
   });
@@ -233,4 +279,3 @@ export function getDemoSlugForTemplate(
 
   return demos[0]?.slug || "vanan-thibinh";
 }
-

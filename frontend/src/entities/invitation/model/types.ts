@@ -9,10 +9,13 @@ export interface WeddingEvent {
 }
 
 export interface LoveStoryTimelineItem {
-  year: string;
+  id?: string;
+  year?: string;
+  time?: string;
   title: string;
   description: string;
   imageUrl?: string;
+  icon?: string;
 }
 
 export interface GiftRegistryInfo {

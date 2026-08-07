@@ -208,25 +208,34 @@ export class WeddingsService {
     } = createDto;
 
     let targetTemplate: TemplateDocument | null = null;
-    if (typeof templateId === 'number') {
+    const numericTemplateId = Number(templateId);
+    if (!isNaN(numericTemplateId) && String(templateId).trim() !== '') {
       targetTemplate = await this.templateModel
-        .findOne({ id: templateId, deletedAt: null })
+        .findOne({ id: numericTemplateId, deletedAt: null })
         .exec();
-    } else {
-      if (Types.ObjectId.isValid(templateId)) {
+    }
+    if (!targetTemplate && templateId) {
+      const strId = String(templateId);
+      if (Types.ObjectId.isValid(strId)) {
         targetTemplate = await this.templateModel
-          .findOne({ _id: templateId, deletedAt: null })
+          .findOne({ _id: strId, deletedAt: null })
           .exec();
-      } else {
+      }
+      if (!targetTemplate) {
         targetTemplate = await this.templateModel
-          .findOne({ code: templateId, deletedAt: null })
+          .findOne({ code: strId, deletedAt: null })
           .exec();
       }
     }
     if (!targetTemplate) throw new NotFoundException(`Template không hợp lệ`);
 
-    const session = await this.connection.startSession();
-    session.startTransaction();
+    let session: any = null;
+    try {
+      session = await this.connection.startSession();
+      session.startTransaction();
+    } catch {
+      session = null;
+    }
 
     try {
       let ownerObjectId = userId
@@ -384,15 +393,15 @@ export class WeddingsService {
           .exec();
       }
 
-      await session.commitTransaction();
+      if (session) await session.commitTransaction();
 
       const result = await this.findBySlug(saved.slug);
       return { ...result, credentials };
     } catch (err) {
-      await session.abortTransaction();
+      if (session) await session.abortTransaction();
       throw err;
     } finally {
-      session.endSession();
+      if (session) session.endSession();
     }
   }
 
@@ -470,26 +479,35 @@ export class WeddingsService {
     } = updateDto;
 
     let targetTemplate: TemplateDocument | null = null;
-    if (templateId !== undefined) {
-      if (typeof templateId === 'number') {
+    if (templateId !== undefined && templateId !== null) {
+      const numericTemplateId = Number(templateId);
+      if (!isNaN(numericTemplateId) && String(templateId).trim() !== '') {
         targetTemplate = await this.templateModel
-          .findOne({ id: templateId, deletedAt: null })
+          .findOne({ id: numericTemplateId, deletedAt: null })
           .exec();
-      } else {
-        if (Types.ObjectId.isValid(templateId)) {
+      }
+      if (!targetTemplate) {
+        const strId = String(templateId);
+        if (Types.ObjectId.isValid(strId)) {
           targetTemplate = await this.templateModel
-            .findOne({ _id: templateId, deletedAt: null })
+            .findOne({ _id: strId, deletedAt: null })
             .exec();
-        } else {
+        }
+        if (!targetTemplate) {
           targetTemplate = await this.templateModel
-            .findOne({ code: templateId, deletedAt: null })
+            .findOne({ code: strId, deletedAt: null })
             .exec();
         }
       }
     }
 
-    const session = await this.connection.startSession();
-    session.startTransaction();
+    let session: any = null;
+    try {
+      session = await this.connection.startSession();
+      session.startTransaction();
+    } catch {
+      session = null;
+    }
 
     try {
       let credentials: any = null;
@@ -732,15 +750,15 @@ export class WeddingsService {
         }
       }
 
-      await session.commitTransaction();
+      if (session) await session.commitTransaction();
 
       const result = await this.findBySlug(slug);
       return { ...result, credentials };
     } catch (err) {
-      await session.abortTransaction();
+      if (session) await session.abortTransaction();
       throw err;
     } finally {
-      session.endSession();
+      if (session) session.endSession();
     }
   }
 

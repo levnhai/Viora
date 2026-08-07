@@ -109,7 +109,7 @@ interface InvitationCreateState {
   handleUpdateEvent: (id: string, field: keyof WeddingEvent, value: string) => void;
 
   giftInfo: GiftInfo;
-  setGiftInfo: (info: GiftInfo) => void;
+  setGiftInfo: React.Dispatch<React.SetStateAction<GiftInfo>>;
 
   galleryImages: string[];
   setGalleryImages: React.Dispatch<React.SetStateAction<string[]>>;
@@ -183,10 +183,10 @@ export function InvitationCreateProvider({
     ? initialData.wedding.events.map((e: any, idx: number) => ({
         id: e.id || `evt_${idx}_${Date.now()}`,
         title: e.title || (idx === 0 ? "LỄ TIỆC CƯỚI" : "LỄ THÀNH HÔN"),
-        time: e.time || "11:00 AM",
-        date: e.date || initialData?.wedding?.weddingDate || "2026-12-31",
-        locationName: e.locationName || "",
-        address: e.address || "",
+        time: e.time || initialData?.wedding?.weddingTime || "11:00 AM",
+        date: e.date || (initialData?.wedding?.weddingDate ? new Date(initialData.wedding.weddingDate).toISOString().split('T')[0] : "2026-12-31"),
+        locationName: e.locationName || initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.locationName || "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+        address: e.address || initialData?.sections?.find((s:any) => s.type === 'rsvp')?.settings?.events?.[0]?.address || "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
         mapUrl: e.mapUrl || "",
       }))
     : [
@@ -235,11 +235,11 @@ export function InvitationCreateProvider({
       {
         id: `evt_${Date.now()}`,
         title,
-        time: "11:00 AM",
+        time: basicInfo.weddingTime || "11:00 AM",
         date: basicInfo.weddingDate || "2026-12-31",
-        locationName: "",
-        address: "",
-        mapUrl: "",
+        locationName: basicInfo.locationName || "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+        address: basicInfo.address || "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
+        mapUrl: basicInfo.mapLink || "",
       },
     ]);
   };

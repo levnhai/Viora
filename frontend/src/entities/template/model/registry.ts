@@ -5,6 +5,7 @@ import { LiveView as MinimalLiveView } from "@/views/invitations/minimal/LiveVie
 import { LiveView as temp_3 } from "@/views/invitations/luxury/LiveView";
 import { LiveView as Temp_4 } from "@/views/invitations/temp_4/LiveView";
 import { LiveView as temp_5 } from "@/views/invitations/floral/LiveView";
+import { LiveView as temp_6 } from "@/views/invitations/temp_6/LiveView";
 
 const LegacyMockEditView = () => null;
 
@@ -36,6 +37,12 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
       return {
         config,
         LiveView: temp_5,
+        EditView: LegacyMockEditView,
+      };
+    case "temp_6":
+      return {
+        config,
+        LiveView: temp_6,
         EditView: LegacyMockEditView,
       };
     default:

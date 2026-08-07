@@ -119,4 +119,16 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 6,
+    code: 'temp_6',
+    name: 'Minimal - đỏ',
+    thumbnail:
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];

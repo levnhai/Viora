@@ -8,6 +8,8 @@ export type RegistryId = "minimal" | "register_4";
 export interface RegistryProps {
   variantId: RegistryId;
   weddingData: WeddingData;
+  primaryColor?: string;
+  textColor?: string;
 }
 
 const registryComponents: Record<RegistryId, ComponentType<any>> = {
