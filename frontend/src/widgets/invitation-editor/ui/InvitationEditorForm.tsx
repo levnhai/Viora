@@ -162,6 +162,18 @@ export function InvitationEditorForm() {
   const [banks, setBanks] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [customMusicList, setCustomMusicList] = useState<Array<{ name: string; url: string }>>([]);
+  const [systemAudioList, setSystemAudioList] = useState<Array<{ name: string; url: string }>>([]);
+
+  useEffect(() => {
+    fetch("/api/media/audio")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setSystemAudioList(res.data);
+        }
+      })
+      .catch((err) => console.error("Lỗi khi tải danh sách nhạc hệ thống:", err));
+  }, []);
 
   useEffect(() => {
     fetch("https://api.vietqr.io/v2/banks")
@@ -413,9 +425,16 @@ export function InvitationEditorForm() {
   );
   const schema = templatePackage.config.schema;
 
+  const defaultPresetMusic = [
+    { name: "Chỉ Cần Có Nhau", url: "/audio/Chỉ Cần Có Nhau.mp3" },
+    { name: "Lễ Đường", url: "/audio/Lễ Đường.mp3" },
+    { name: "Một Đời", url: "/audio/một đời.mp3" },
+    { name: "River Flows In You - Yiruma", url: "/audio/RiverFlowsInYou.mp3" },
+  ];
+
   const PRESET_MUSIC = [
     { name: "-- Chọn bài hát từ thư viện --", url: "" },
-    { name: "River Flows In You - Yiruma", url: "/audio/RiverFlowsInYou.mp3" },
+    ...(systemAudioList.length > 0 ? systemAudioList : defaultPresetMusic),
   ];
 
   const MENU_ITEMS = [
