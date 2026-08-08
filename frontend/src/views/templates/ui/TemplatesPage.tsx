@@ -451,19 +451,18 @@ export function TemplatesPage() {
                 </h2>
               </div>
 
-              {/* Flex container canh giữa 100% tất cả các mẫu thiệp */}
+              {/* Grid container tất cả các mẫu thiệp (2 cột trên Mobile, 4 cột trên Desktop) */}
               {sortedTemplates.length > 0 ? (
                 <div>
-                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 mx-auto w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 mx-auto w-full">
                     {visibleTemplates.map((tpl, idx) => (
-                      <div key={tpl.id} className="w-[240px] sm:w-[260px] md:w-[270px] flex-shrink-0">
-                        <TemplateCard
-                          tpl={tpl}
-                          demoData={demos.find((d) => d.templateId === tpl.code) || demos[idx % (demos.length || 1)]}
-                          onPreviewDemo={() => setPreviewTpl(tpl)}
-                          onUseTemplate={handleStartCreating}
-                        />
-                      </div>
+                      <TemplateCard
+                        key={tpl.id}
+                        tpl={tpl}
+                        demoData={demos.find((d) => d.templateId === tpl.code) || demos[idx % (demos.length || 1)]}
+                        onPreviewDemo={() => setPreviewTpl(tpl)}
+                        onUseTemplate={handleStartCreating}
+                      />
                     ))}
                   </div>
 

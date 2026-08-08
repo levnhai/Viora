@@ -10,7 +10,6 @@ interface CoverflowGalleryProps {
 export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
   const { galleryImages, coverImageUrl } = weddingData;
 
-  // Default demo fallback photos if gallery is empty
   const fallbackPhotos = [
     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
@@ -24,13 +23,12 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
     galleryImages && galleryImages.length > 0
       ? galleryImages
       : coverImageUrl
-      ? [coverImageUrl, ...fallbackPhotos]
-      : fallbackPhotos;
+        ? [coverImageUrl, ...fallbackPhotos]
+        : fallbackPhotos;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Touch / Drag handling
   const touchStartX = useRef<number | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
@@ -59,7 +57,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
 
   const handlePrev = () => {
     setActiveIndex(
-      (prev) => (prev - 1 + imagesList.length) % imagesList.length
+      (prev) => (prev - 1 + imagesList.length) % imagesList.length,
     );
   };
 
@@ -70,7 +68,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
         if (e.key === "Escape") setLightboxIndex(null);
         if (e.key === "ArrowLeft")
           setLightboxIndex(
-            (prev) => (prev! - 1 + imagesList.length) % imagesList.length
+            (prev) => (prev! - 1 + imagesList.length) % imagesList.length,
           );
         if (e.key === "ArrowRight")
           setLightboxIndex((prev) => (prev! + 1) % imagesList.length);
@@ -227,7 +225,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
           <button
             onClick={() =>
               setLightboxIndex(
-                (prev) => (prev! - 1 + imagesList.length) % imagesList.length
+                (prev) => (prev! - 1 + imagesList.length) % imagesList.length,
               )
             }
             className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
