@@ -161,6 +161,7 @@ export function InvitationEditorForm() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [banks, setBanks] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [customMusicList, setCustomMusicList] = useState<Array<{ name: string; url: string }>>([]);
 
   useEffect(() => {
     fetch("https://api.vietqr.io/v2/banks")
@@ -355,6 +356,11 @@ export function InvitationEditorForm() {
           const result = await res.json();
           const uploadedUrl = result.data?.url || result.url;
           if (uploadedUrl) {
+            const songName = file.name ? `🎵 ${file.name}` : "🎵 Nhạc cá nhân vừa tải";
+            setCustomMusicList((prev) => {
+              if (prev.some((item) => item.url === uploadedUrl)) return prev;
+              return [{ name: songName, url: uploadedUrl }, ...prev];
+            });
             setBasicInfo({ ...basicInfo, musicUrl: uploadedUrl });
           }
         }
@@ -820,30 +826,41 @@ export function InvitationEditorForm() {
                   Link nhạc nền (tuỳ chọn)
                 </label>
 
-                <div className="mb-3">
-                  <select
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 bg-white"
-                    onChange={(e) => {
-                      if (e.target.value !== undefined) {
-                        setBasicInfo({
-                          ...basicInfo,
-                          musicUrl: e.target.value,
-                        });
-                      }
-                    }}
-                    value={
-                      PRESET_MUSIC.find((m) => m.url === basicInfo.musicUrl)
-                        ? basicInfo.musicUrl
-                        : ""
-                    }
-                  >
-                    {PRESET_MUSIC.map((song, idx) => (
-                      <option key={idx} value={song.url}>
-                        {song.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {(() => {
+                  const allMusicOptions = [...PRESET_MUSIC, ...customMusicList];
+                  if (
+                    basicInfo.musicUrl &&
+                    !allMusicOptions.some((m) => m.url === basicInfo.musicUrl)
+                  ) {
+                    const rawFileName = basicInfo.musicUrl.split("/").pop()?.split("?")[0] || "File nhạc";
+                    const cleanName = decodeURIComponent(rawFileName);
+                    allMusicOptions.push({
+                      name: `🎵 Nhạc đã tải lên (${cleanName})`,
+                      url: basicInfo.musicUrl,
+                    });
+                  }
+
+                  return (
+                    <div className="mb-3">
+                      <select
+                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 bg-white cursor-pointer"
+                        onChange={(e) => {
+                          setBasicInfo({
+                            ...basicInfo,
+                            musicUrl: e.target.value,
+                          });
+                        }}
+                        value={basicInfo.musicUrl || ""}
+                      >
+                        {allMusicOptions.map((song, idx) => (
+                          <option key={idx} value={song.url}>
+                            {song.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  );
+                })()}
 
                 <div className="flex gap-2 items-center">
                   <input
