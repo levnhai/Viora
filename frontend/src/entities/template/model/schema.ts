@@ -56,7 +56,7 @@ export interface TemplateConfig {
   bgColor?: string;
   textColor?: string;
   schema: TemplateSchema;
-  envelopeKey?: "royal" | "minimal" | "lavender";
+  envelopeKey?: "royal" | "minimal" | "lavender" | "floral" | "envelope_4" | "envelope_6" | "envelope_7" | "envelope_8" | string;
   timelineKey?: "vertical" | "slider" | "simple";
   galleryKey?: "masonry" | "grid";
   tags?: string[];
