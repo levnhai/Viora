@@ -91,10 +91,10 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
       {/* Header */}
       <GsapReveal direction="up" distance={30}>
         <div className="flex flex-col items-center mb-6">
-          <h2 className="font-serif-title tracking-[0.25em] text-lg sm:text-xl md:text-2xl font-bold uppercase text-[#7C2D3E] text-center">
+          <h2 className="font-serif-title tracking-[0.25em] text-lg sm:text-xl md:text-2xl font-bold uppercase text-[#5b2d18] text-center">
             ALBUM ẢNH
           </h2>
-          <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#F9DFDF] to-transparent opacity-60 mt-2" />
+          <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#e7bf78] to-transparent opacity-60 mt-2" />
         </div>
       </GsapReveal>
 
@@ -168,7 +168,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
                     setActiveIndex(index);
                   }
                 }}
-                className="absolute w-[62%] sm:w-[54%] aspect-[3/4] rounded-[22px] overflow-hidden cursor-pointer transition-all duration-500 ease-out shadow-[0_20px_45px_rgba(124,45,62,0.3)] bg-white p-1.5 sm:p-2 group"
+                className="absolute w-[62%] sm:w-[54%] aspect-[3/4] rounded-[22px] overflow-hidden cursor-pointer transition-all duration-500 ease-out shadow-[0_20px_45px_rgba(91,45,24,0.3)] bg-white p-1.5 sm:p-2 group"
                 style={{
                   transform: `translateX(${translateX}) scale(${scale}) perspective(1000px) rotateY(${rotateY})`,
                   opacity,
@@ -184,7 +184,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
                   />
                   {isActive && (
                     <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-[#7C2D3E] shadow-md">
+                      <div className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-[#5b2d18] shadow-md">
                         <Maximize2 size={18} />
                       </div>
                     </div>
@@ -203,8 +203,8 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
               onClick={() => setActiveIndex(dotIndex)}
               className={`transition-all duration-300 rounded-full ${
                 dotIndex === activeIndex
-                  ? "w-7 h-2.5 bg-[#7C2D3E]"
-                  : "w-2.5 h-2.5 bg-[#F9DFDF]/50 hover:bg-[#7C2D3E]/60"
+                  ? "w-7 h-2.5 bg-[#5b2d18]"
+                  : "w-2.5 h-2.5 bg-[#e7bf78]/50 hover:bg-[#5b2d18]/60"
               }`}
               aria-label={`Go to slide ${dotIndex + 1}`}
             />
@@ -258,3 +258,4 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
     </section>
   );
 }
+

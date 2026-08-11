@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import { WeddingData } from "@/entities/invitation/model/types";
-import {
-  formatDateToDDMMYYYY,
-} from "@/shared/lib/utils/date";
-
-// img
-import img_16 from "@/shared/assets/image/flower/img_16.webp";
-import img_9 from "@/shared/assets/image/envelope/img_9.webp";
-import img_10 from "@/shared/assets/image/envelope/img_10.webp";
+import img_12 from "@/shared/assets/image/wood/img_12.webp";
+import img_13 from "@/shared/assets/image/wood/img_13.svg";
+import img_14 from "@/shared/assets/image/wood/img_14.png";
+import img_16 from "@/shared/assets/image/wood/img_16.png";
+import img_18 from "@/shared/assets/image/wood/img_18.png";
+import img_4 from "@/shared/assets/image/wood/img_4.svg";
 
 interface InvitationCoverProps {
   weddingData: WeddingData;
@@ -18,160 +17,303 @@ export function InvitationCover({
   weddingData,
   guestName,
 }: InvitationCoverProps) {
-  const {
-    groomName,
-    brideName,
-    galleryImages,
-    coverImageUrl,
-    weddingDate,
-  } = weddingData;
+  const { groomName, brideName, galleryImages, coverImageUrl } =
+    weddingData || {};
+
+  const guestDisplayName = guestName || "Quý Khách";
 
   const couplePhoto =
     (galleryImages && galleryImages[0]) ||
     coverImageUrl ||
     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800";
 
-  const getImgSrc = (img: any): string => {
-    if (!img) return "";
-    return typeof img === "string" ? img : img.src || "";
-  };
+  const woodBgSrc =
+    typeof img_12 === "string" ? img_12 : (img_12 as any)?.src || img_12;
+  const img13Src =
+    typeof img_13 === "string" ? img_13 : (img_13 as any)?.src || img_13;
+  const img14Src =
+    typeof img_14 === "string" ? img_14 : (img_14 as any)?.src || img_14;
+  const img16Src =
+    typeof img_16 === "string" ? img_16 : (img_16 as any)?.src || img_16;
+  const img18Src =
+    typeof img_18 === "string" ? img_18 : (img_18 as any)?.src || img_18;
+  const img4Src =
+    typeof img_4 === "string" ? img_4 : (img_4 as any)?.src || img_4;
+
+  const branchLeftRef = useRef<HTMLDivElement>(null);
+  const branchRightRef = useRef<HTMLDivElement>(null);
+  const board1Ref = useRef<HTMLDivElement>(null);
+  const board2Ref = useRef<HTMLDivElement>(null);
+  const textSaveTheDateRef = useRef<HTMLDivElement>(null);
+  const textNamesRef = useRef<HTMLDivElement>(null);
+  const board3Ref = useRef<HTMLDivElement>(null);
+  const board4Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Preload envelope assets into browser memory immediately
-    [img_9, img_10, img_16, couplePhoto].forEach((img) => {
-      const src = getImgSrc(img);
-      if (src && typeof window !== "undefined") {
-        const i = new window.Image();
-        i.src = src;
-      }
+    if (typeof window !== "undefined") {
+      [
+        woodBgSrc,
+        img13Src,
+        img14Src,
+        img16Src,
+        img18Src,
+        img4Src,
+        couplePhoto,
+      ].forEach((src) => {
+        if (src) {
+          const img = new window.Image();
+          img.src = src;
+        }
+      });
+    }
+  }, [woodBgSrc, img13Src, img14Src, img16Src, img18Src, img4Src, couplePhoto]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+      });
+
+      // Ban đầu ẩn tất cả các phần tử
+      gsap.set(
+        [
+          branchLeftRef.current,
+          branchRightRef.current,
+          board1Ref.current,
+          board2Ref.current,
+          textSaveTheDateRef.current,
+          textNamesRef.current,
+          board3Ref.current,
+          board4Ref.current,
+        ],
+        { opacity: 0 }
+      );
+
+      // 0. Ảnh hoa lá gỗ img_13 chạy từ từ từ trên đỉnh màn hình xuống
+      tl.fromTo(
+        [branchLeftRef.current, branchRightRef.current],
+        { y: -120, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.5, ease: "power2.out" },
+        0
+      )
+        // 1. Bảng 1 chạy từ trên xuống
+        .fromTo(
+          board1Ref.current,
+          { y: -140, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9 },
+          0.3
+        )
+        // 2. Bảng 2 chạy từ trên xuống
+        .fromTo(
+          board2Ref.current,
+          { y: -100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.4"
+        )
+        // 3. Chữ "SAVE THE DATE" chạy từ trái sang phải
+        .fromTo(
+          textSaveTheDateRef.current,
+          { x: -90, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.7 },
+          "-=0.3"
+        )
+        // 4. Tên cô dâu và chú rể chạy từ phải sang trái
+        .fromTo(
+          textNamesRef.current,
+          { x: 90, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.8 },
+          "-=0.3"
+        )
+        // 5. Bảng 3 (Khung ảnh) và Bảng 4 (Kính Mời) xuất hiện tiếp nối
+        .fromTo(
+          board3Ref.current,
+          { scale: 0.88, y: 30, opacity: 0 },
+          { scale: 1, y: 0, opacity: 1, duration: 0.85 },
+          "-=0.3"
+        )
+        .fromTo(
+          board4Ref.current,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.35"
+        );
     });
-  }, [couplePhoto]);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="relative flex flex-col items-center justify-start text-center overflow-hidden pt-8 px-4 bg-transparent select-none">
+    <section
+      className="relative w-full min-h-screen bg-transparent overflow-hidden select-none"
+      style={{
+        backgroundImage: woodBgSrc ? `url(${woodBgSrc})` : undefined,
+        backgroundSize: "100% auto",
+        backgroundRepeat: "repeat-y",
+      }}
+    >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=Pinyon+Script&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel+Decorative:wght@700;900&family=Great+Vibes&family=MonteCarlo&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Pinyon+Script&display=swap');
 
         .font-calligraphy {
-          font-family: "Alex Brush", "Great Vibes", "Pinyon Script", cursive;
+          font-family: "Great Vibes", "Alex Brush", "Pinyon Script", cursive;
+        }
+        .font-decorative {
+          font-family: "Cinzel Decorative", "Playfair Display", serif;
         }
         .font-serif-title {
           font-family: "Playfair Display", "Cormorant Garamond", serif;
         }
-        @keyframes sway-slow {
-          0%, 100% { transform: rotate(0deg) translateY(0px); }
-          50% { transform: rotate(2deg) translateY(-4px); }
-        }
-        .animate-sway-slow {
-          animation: sway-slow 6s ease-in-out infinite;
-        }
-        @keyframes float-photo {
-          0%, 100% { transform: translateY(0px) rotate(7deg); }
-          50% { transform: translateY(-8px) rotate(8deg); }
-        }
-        .animate-float-photo {
-          animation: float-photo 5s ease-in-out infinite;
-          will-change: transform;
-        }
       `}</style>
 
-      {/* Top Section Header */}
-      <div className="mb-6 flex flex-col items-center">
-        <span className="font-serif-title tracking-[0.3em] text-md sm:text-sm font-semibold uppercase text-[#7C2D3E] opacity-90 mb-1">
-          SAVE THE DATE
-        </span>
-        <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#F9DFDF] to-transparent opacity-60 my-1" />
+      {/* TRANG TRÍ GÓC TRÊN BÊN TRÁI (TOP LEFT) */}
+      <div
+        ref={branchLeftRef}
+        className="absolute top-[-70px] left-[-40px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md"
+      >
+        <img
+          src={img13Src}
+          alt="Wood branch top left"
+          className="w-full h-auto object-contain"
+        />
       </div>
 
-      {/* Envelope Graphic Composition */}
-      <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[440px] aspect-[1013/1168] mx-auto my-10 filter drop-shadow-[0_20px_40px_rgba(124,45,62,0.22)]">
-        {/* Layer 1: Envelope Interior & Back Flap (img_9) */}
+      {/* TRANG TRÍ GÓC TRÊN BÊN PHẢI (TOP RIGHT) */}
+      <div
+        ref={branchRightRef}
+        className="absolute top-[-40px] right-[-30px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md scale-x-[-1]"
+      >
         <img
-          src={getImgSrc(img_9)}
-          alt="Envelope Back"
-          loading="eager"
-          // @ts-ignore
-          fetchPriority="high"
-          decoding="async"
-          className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none z-0"
+          src={img13Src}
+          alt="Wood branc"
+          className="w-full h-auto object-contain"
         />
+      </div>
 
-        {/* Layer 2: Couple Polaroid Photo Card */}
-        <div className="absolute right-[3%] sm:right-[4%] top-[1%] sm:top-[2%] w-[62%] sm:w-[65%] aspect-[3/4] z-20 shadow-[0_22px_45px_rgba(0,0,0,0.48),0_6px_16px_rgba(0,0,0,0.25)] rounded-[4px] bg-white p-1.5 sm:p-2 border border-neutral-100/80 animate-float-photo">
-          <div className="relative w-full h-full overflow-hidden rounded-[2px] bg-neutral-100">
+      {/* CỤM BẢNG GỖ & KHUNG ẢNH CỦA DÂU RỂ */}
+      <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md pointer-events-none z-10 flex flex-col items-center">
+        {/* BẢNG 1: BẢNG GỖ TREO PHÍA TRÊN (SAVE THE DATE) */}
+        <div
+          ref={board1Ref}
+          className="relative w-[75%] top-[-20px] sm:w-[70%] z-10 flex items-center justify-center"
+        >
+          <img
+            src={img14Src}
+            alt="Bảng gỗ treo 1"
+            loading="eager"
+            decoding="async"
+            className="w-full h-auto object-contain filter drop-shadow-md"
+          />
+          <div
+            ref={textSaveTheDateRef}
+            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20"
+          >
+            <span
+              className="font-decorative tracking-[0.18em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-black uppercase text-[#fff3d6]"
+              style={{
+                textShadow:
+                  "1px 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7)",
+              }}
+            >
+              SAVE THE DATE
+            </span>
+          </div>
+        </div>
+
+        {/* BẢNG 2: BẢNG GỖ TREO NỐI TRỰC TIẾP NGAY BÊN DƯỚI BẢNG 1 (TÊN CÔ DÂU VÀ CHÚ RỂ) */}
+        <div
+          ref={board2Ref}
+          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] z-0 flex items-center justify-center"
+        >
+          <img
+            src={img14Src}
+            alt="Bảng gỗ treo 2"
+            loading="eager"
+            decoding="async"
+            className="w-full h-auto object-contain filter drop-shadow-md"
+          />
+          <div
+            ref={textNamesRef}
+            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20"
+          >
+            <div
+              className="font-calligraphy text-[26px] sm:text-2xl md:text-4xl font-semibold text-[#fff3d6] flex items-center justify-center flex-wrap gap-1.5 leading-tight"
+              style={{
+                textShadow:
+                  "1px 2px 5px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.8)",
+              }}
+            >
+              <span className="capitalize">{groomName || "Hoàng Long"}</span>
+              <span className="text-[#eab308] text-xl sm:text-2xl md:text-3xl font-serif-title mx-1 font-bold">
+                &amp;
+              </span>
+              <span className="capitalize">{brideName || "Bảo Ngọc"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* BẢNG 3 / KHUNG ẢNH GỖ IMG_16 NẰM DƯỚI TÊN CÔ DÂU CHÚ RỂ */}
+        <div
+          ref={board3Ref}
+          className="relative w-[95%] sm:w-[90%] max-w-[340px] sm:max-w-[400px] md:max-w-[440px] mt-20 sm:mt-50 z-10 flex items-center justify-center filter drop-shadow-2xl"
+        >
+          {/* Họa tiết trang trí img_4.svg ở góc trên bên phải khung ảnh gỗ */}
+          <div className="absolute -top-26 right-[-70px] sm:-top-5 sm:-right-5 w-50 sm:w-28 md:w-32 z-30 pointer-events-none filter drop-shadow-md">
+            <img
+              src={img4Src}
+              alt="Họa tiết trang trí góc trên phải khung ảnh"
+              className="w-full h-auto object-contain"
+            />
+          </div>
+
+          {/* Ảnh cưới dâu rể lấp đầy 100% khung gỗ với tiêu điểm khuôn mặt ở giữa/trên */}
+          <div className="absolute left-[15%] right-[15%] top-[14%] bottom-[15%] flex items-center justify-center overflow-hidden rounded-[2px] bg-neutral-900 z-0">
             <img
               src={couplePhoto}
               alt="Groom & Bride"
               loading="eager"
-              // @ts-ignore
-              fetchPriority="high"
               decoding="async"
-              className="w-full h-full object-cover contrast-[1.03]"
+              className="w-full h-full object-cover object-[center_20%] contrast-[1.03] hover:scale-105 transition-transform duration-700 z-10"
             />
-            {/* Subtle Polaroid Gloss Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/10 via-transparent to-white/20 pointer-events-none" />
+            <div className="absolute inset-0 shadow-[inset_0_3px_10px_rgba(0,0,0,0.65)] pointer-events-none z-20" />
           </div>
+
+          {/* Viền khung gỗ img_16 đè phía trên (với cửa sổ trong suốt) */}
+          <img
+            src={img16Src}
+            alt="Khung ảnh gỗ 16"
+            loading="eager"
+            decoding="async"
+            className="relative w-full h-auto object-contain pointer-events-none z-10"
+          />
         </div>
 
-        {/* Layer 3: Flower Bouquet inside Envelope (img_16) */}
-        <div className="absolute left-[1%] sm:left-[-1%] top-[-10%] sm:top-[-10%] w-[40%] sm:w-[40%] z-10 pointer-events-none drop-shadow-md animate-sway-slow">
+        {/* BẢNG 4 / BẢNG GỖ IMG_18 NẰM DƯỚI KHUNG ẢNH (KÍNH MỜI KHÁCH) */}
+        <div
+          ref={board4Ref}
+          className="relative w-[85%] sm:w-[80%] max-w-[320px] sm:max-w-[360px] mt-10 sm:mt-3 z-20 flex items-center justify-center filter drop-shadow-xl pointer-events-auto"
+        >
           <img
-            src={getImgSrc(img_16)}
-            alt="Flower Decoration"
+            src={img18Src}
+            alt="Bảng gỗ kính mời 18"
             loading="eager"
             decoding="async"
             className="w-full h-auto object-contain"
           />
-        </div>
-
-        {/* Layer 4: Envelope Front Pocket (img_10) */}
-        <img
-          src={getImgSrc(img_10)}
-          alt="Envelope Front Flap"
-          loading="eager"
-          // @ts-ignore
-          fetchPriority="high"
-          decoding="async"
-          className="absolute bottom-0 left-0 w-full h-auto pointer-events-none z-30 drop-shadow-sm"
-        />
-      </div>
-
-      {/* Bottom Section: Bride & Groom Names directly below Envelope */}
-      <div className="mt-10 mb-8 flex flex-col items-center justify-center text-center select-none">
-        <h1 className="relative flex flex-col items-center justify-center font-serif-title uppercase text-[#7C2D3E] tracking-[0.16em] leading-tight">
-          <span
-            className="text-[2.5rem] sm:text-5xl md:text-6xl font-bold py-1 transition-all duration-300 drop-shadow-sm"
-            style={{
-              textShadow:
-                "0 2px 10px rgba(124, 45, 62, 0.2), 0 0 20px rgba(255, 243, 246, 0.9)",
-            }}
-          >
-            {groomName || "HOÀNG LONG"}
-          </span>
-          <span
-            className="font-calligraphy text-4xl sm:text-6xl md:text-7xl text-[#7C2D3E]/70 my-1 select-none pointer-events-none"
-            style={{
-              textShadow: "0 2px 8px rgba(124, 45, 62, 0.12)",
-            }}
-          >
-            &amp;
-          </span>
-          <span
-            className="text-[2.5rem] sm:text-5xl md:text-6xl font-bold py-1 transition-all duration-300 drop-shadow-sm"
-            style={{
-              textShadow:
-                "0 2px 10px rgba(124, 45, 62, 0.2), 0 0 20px rgba(255, 243, 246, 0.9)",
-            }}
-          >
-            {brideName || "BẢO NGỌC"}
-          </span>
-        </h1>
-
-        {guestName && (
-          <div className="mt-6 px-6 py-2 rounded-full bg-white/90 backdrop-blur-xs border border-[#F9DFDF]/40 shadow-sm text-xs sm:text-sm text-[#7C2D3E] font-medium">
-            Trân trọng kính mời: <span className="font-bold">{guestName}</span>
+          <div className="absolute left-0 right-0 top-0 bottom-0 flex flex-col items-center justify-center text-center px-4 z-20">
+            <span className="font-decorative text-[10px] sm:text-xs tracking-[0.18em] font-bold text-[#fef08a] uppercase drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]">
+              Kính Mời
+            </span>
+            <span
+              className="font-calligraphy text-lg sm:text-2xl font-normal text-[#fff3d6] leading-tight mt-0.5"
+              style={{
+                textShadow:
+                  "1px 2px 5px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.8)",
+              }}
+            >
+              {guestDisplayName}
+            </span>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

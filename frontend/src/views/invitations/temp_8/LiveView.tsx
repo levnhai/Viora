@@ -15,22 +15,11 @@ import { WeddingData } from "@/entities/invitation/model/types";
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
 
-import img_6 from "@/shared/assets/image/flower/img_6.svg";
-import img_7 from "@/shared/assets/image/flower/img_7.svg";
-import img_8 from "@/shared/assets/image/flower/img_8.svg";
-import img_9 from "@/shared/assets/image/flower/img_9.svg";
-import bgPaper from "@/shared/assets/image/paper/paper1.webp";
-
-import arch_1 from "@/shared/assets/image/architecture/img_1.svg";
-import arch_2 from "@/shared/assets/image/architecture/img_2.svg";
-import arch_3 from "@/shared/assets/image/architecture/img_3.svg";
-
-// Envelope & Giftbox assets for instant preloading
-import env_9 from "@/shared/assets/image/envelope/img_9.webp";
-import env_10 from "@/shared/assets/image/envelope/img_10.webp";
-import flw_16 from "@/shared/assets/image/flower/img_16.webp";
-import gift_1 from "@/shared/assets/image/giffbox/img_1.svg";
-import gift_2 from "@/shared/assets/image/giffbox/img_2.svg";
+import bgWood from "@/shared/assets/image/wood/img_12.webp";
+import woodBranchLeft from "@/shared/assets/image/wood/img_7.svg";
+import woodBranchRight from "@/shared/assets/image/wood/img_8.svg";
+import woodBranchBottom from "@/shared/assets/image/wood/img_9.svg";
+import woodBranchTop from "@/shared/assets/image/wood/img_10.svg";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -45,26 +34,10 @@ export function LiveView({
 }: LiveViewProps) {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY || window.pageYOffset || 0);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const colorPalette = {
-    primaryColor: "transparent",
-    textColor: "#7C2D3E",
+    primaryColor: "#d5a94d",
+    textColor: "#4a2918",
   };
 
   const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
@@ -76,18 +49,18 @@ export function LiveView({
     if (previewMode) {
       setEnvelopeOpen(previewMode === "invitation");
     }
-
-    // Preload invitation envelope & giftbox images silently in background
-    if (typeof window !== "undefined") {
-      [env_9, env_10, flw_16, gift_1, gift_2].forEach((img) => {
-        const src = typeof img === "string" ? img : img?.src;
-        if (src) {
-          const i = new window.Image();
-          i.src = src;
-        }
-      });
-    }
   }, [previewMode]);
+
+  const woodBgSrc =
+    typeof bgWood === "string" ? bgWood : (bgWood as any)?.src || bgWood;
+
+  // Preload ảnh nền gỗ ngay khi trang vừa mount để khi mở phong bì là ảnh có sẵn ngay lập tức
+  useEffect(() => {
+    if (typeof window !== "undefined" && woodBgSrc) {
+      const img = new window.Image();
+      img.src = woodBgSrc;
+    }
+  }, [woodBgSrc]);
 
   const onSendMessage = async (name: string, msg: string) => {
     const result = await handleSendMessage(name, msg);
@@ -107,7 +80,7 @@ export function LiveView({
     {};
 
   return (
-    <div className="w-full min-h-screen relative font-sans text-[#7c6a60] overflow-hidden bg-white">
+    <div className="w-full min-h-screen relative font-sans text-[#4a2918] overflow-hidden bg-[#21120b]">
       {/* phong bì */}
       {!envelopeOpen ? (
         <Envelope
@@ -118,7 +91,7 @@ export function LiveView({
           weddingTime={weddingData.weddingTime}
           guestName={guestName}
           isFixed={!previewMode}
-          primaryColor="#fff8f8"
+          primaryColor="#d5a94d"
           textColor={colorPalette.textColor}
           onOpen={() => {
             setEnvelopeOpen(true);
@@ -126,102 +99,17 @@ export function LiveView({
           }}
         />
       ) : (
-        <div className="relative z-10 w-full bg-white flex justify-center">
+        <div className="relative z-10 w-full bg-[#21120b] flex justify-center">
           <div
-            className="w-full max-w-3xl min-h-screen relative z-10 pb-20 shadow-2xl bg-center bg-repeat overflow-hidden"
+            className="w-full max-w-3xl min-h-screen relative z-10 pb-8 shadow-2xl overflow-hidden"
             style={{
-              backgroundColor: "rgb(255, 243, 246)",
-              backgroundImage: `url(${bgPaper.src})`,
-              backgroundBlendMode: "multiply",
+              backgroundColor: "#2a170d",
+              backgroundImage: `url(${woodBgSrc})`,
+              backgroundSize: "100% auto",
+              backgroundPosition: "center top",
+              backgroundRepeat: "repeat-y",
             }}
           >
-            <style>{`
-              @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
-              @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(25px) translateZ(0); } }
-              .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; will-change: transform; }
-              .animate-float-2 { animation: float-float-2 9s ease-in-out infinite; will-change: transform; }
-              .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; will-change: transform; }
-              .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; will-change: transform; }
-            `}</style>
-
-            {/* Scrollable background accents */}
-            <div className="absolute top-[15%] left-[-15%] w-64 opacity-20 mix-blend-multiply pointer-events-none z-0 animate-float-1">
-              <img
-                src={img_6.src || (img_6 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full rotate-[15deg]"
-              />
-            </div>
-            <div className="absolute top-[45%] right-[-15%] w-80 opacity-15 mix-blend-multiply pointer-events-none z-0 animate-float-2">
-              <img
-                src={img_7.src || (img_7 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full -rotate-[20deg]"
-              />
-            </div>
-            <div className="absolute top-[75%] left-[-10%] w-72 opacity-20 mix-blend-multiply pointer-events-none z-0 animate-float-3">
-              <img
-                src={img_8.src || (img_8 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full rotate-[35deg]"
-              />
-            </div>
-            <div className="absolute bottom-[5%] right-[-5%] w-64 opacity-25 mix-blend-multiply pointer-events-none z-0 animate-float-4">
-              <img
-                src={img_9.src || (img_9 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full -rotate-[10deg]"
-              />
-            </div>
-
-            {/* Architectural sketch watermark backgrounds (Centered & Scroll-Driven Parallax) */}
-            <div
-              className="absolute top-[1%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.12}px, 0)`,
-                willChange: "transform",
-              }}
-            >
-              <img
-                src={arch_1.src || (arch_1 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            <div
-              className="absolute top-[34%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.1}px, 0)`,
-                willChange: "transform",
-              }}
-            >
-              <img
-                src={arch_2.src || (arch_2 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            <div
-              className="absolute top-[66%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.08}px, 0)`,
-                willChange: "transform",
-              }}
-            >
-              <img
-                src={arch_3.src || (arch_3 as unknown as string)}
-                alt=""
-                decoding="async"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-
             {/* hero */}
             <GsapReveal direction="up" distance={50} duration={1.2}>
               <InvitationCover
@@ -274,7 +162,6 @@ export function LiveView({
                 />
               </GsapReveal>
             </div>
-
             {/* sổ lời chúc */}
             <GsapReveal direction="up" distance={50} duration={1.2}>
               <Guestbook
@@ -286,11 +173,10 @@ export function LiveView({
                 textColor={colorPalette.textColor}
               />
             </GsapReveal>
-
             {/* mừng cưới */}
             <GsapReveal direction="up" distance={50} duration={1.2}>
               <Registry
-                variantId="register_4"
+                variantId="register_8"
                 weddingData={weddingData}
                 textColor={colorPalette.textColor}
               />
@@ -309,8 +195,8 @@ export function LiveView({
             onClick={togglePlay}
             className={`fixed bottom-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-full transition-all duration-500 shadow-xl cursor-pointer ${
               playing
-                ? "bg-[#8A3D50] text-white shadow-[0_0_25px_rgba(138,61,80,0.6)]"
-                : "bg-white/90 backdrop-blur-md text-[#7C2D3E] border border-[#F9DFDF] hover:bg-white"
+                ? "bg-[#6b351c] text-[#fff1cf] shadow-[0_0_25px_rgba(213,169,77,0.5)]"
+                : "bg-[#f8e4bd]/95 backdrop-blur-md text-[#5b2d18] border border-[#b87935] hover:bg-[#fff1d5]"
             } hover:scale-110 active:scale-95`}
             aria-label={playing ? "Tắt nhạc" : "Bật nhạc"}
           >
@@ -337,15 +223,15 @@ export function LiveView({
                 className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                 onClick={() => setRsvpModalOpen(false)}
               />
-              <div className="bg-[#fff5f7] rounded-3xl w-full max-w-md relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl border border-[#F9DFDF]/40 animate-in fade-in zoom-in duration-300">
-                <div className="p-4 flex justify-between items-center border-b border-[#F9DFDF]/20 shrink-0">
+              <div className="bg-[#f6dfb5] rounded-3xl w-full max-w-md relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl border border-[#b87935]/50 animate-in fade-in zoom-in duration-300">
+                <div className="p-4 flex justify-between items-center border-b border-[#9a5a28]/25 shrink-0">
                   <div className="w-8" />
-                  <h3 className="text-lg text-[#7C2D3E] font-serif tracking-widest uppercase">
+                  <h3 className="text-lg text-[#5b2d18] font-serif tracking-widest uppercase">
                     Xác Nhận Tham Dự
                   </h3>
                   <button
                     onClick={() => setRsvpModalOpen(false)}
-                    className="w-8 h-8 flex items-center justify-center text-[#7C2D3E]/70 hover:text-[#7C2D3E] transition-colors"
+                    className="w-8 h-8 flex items-center justify-center text-[#5b2d18]/70 hover:text-[#5b2d18] transition-colors"
                   >
                     <X size={20} />
                   </button>
@@ -354,9 +240,9 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     prefilledName={guestName}
-                    theme="temp4"
+                    theme="temp8"
                     textColor={colorPalette.textColor}
-                    primaryColor="#fff8f8"
+                    primaryColor="#d5a94d"
                     hideMessage
                   />
                 </div>

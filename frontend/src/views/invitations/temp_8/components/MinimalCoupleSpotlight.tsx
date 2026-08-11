@@ -1,7 +1,7 @@
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { getVietnameseLunarDate } from "@/shared/lib/utils/date";
-import img_16 from "@/shared/assets/image/flower/img_16.webp";
+import img_16 from "@/shared/assets/image/wood/img_8.svg";
 
 interface MinimalCoupleSpotlightProps {
   weddingData: WeddingData;
@@ -136,12 +136,12 @@ export function MinimalCoupleSpotlight({
       `}</style>
 
       {/* Main Dark Rose Card */}
-      <div className="relative max-w-xl mx-auto rounded-[24px] bg-[linear-gradient(155deg,#7c2d3e_0%,#581c28_55%,#3a101a_100%)] text-[#fff8f8] shadow-[0_25px_60px_rgba(124,45,62,0.4)] px-6 py-10 sm:px-10 sm:py-14 border border-[#F9DFDF]/40">
-        {/* Overflowing Right Floral Bouquet (img_16) */}
+      <div className="relative max-w-xl mx-auto rounded-[24px] bg-[linear-gradient(155deg,#5b2d18_0%,#3c1f10_55%,#21120b_100%)] text-[#fff1cf] shadow-[0_25px_60px_rgba(91,45,24,0.4)] px-6 py-10 sm:px-10 sm:py-14 border border-[#e7bf78]/40">
+        {/* Overflowing Right Woodland Ornament (img_16) */}
         <div className="absolute -right-16 sm:-right-14 md:-right-16 top-[8%] w-28 sm:w-44 md:w-56 z-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] animate-sway-slow">
           <img
             src={getImgSrc(img_16)}
-            alt="Floral Bouquet"
+            alt="Woodland Ornament"
             loading="eager"
             decoding="async"
             className="w-full h-auto object-contain opacity-90 sm:opacity-100"
@@ -152,7 +152,7 @@ export function MinimalCoupleSpotlight({
         <div className="relative z-10 flex flex-col items-center text-center">
           {/* Header Title */}
           <GsapReveal direction="up" distance={30}>
-            <h2 className="font-serif-title tracking-[0.25em] text-xs sm:text-sm font-bold uppercase text-[#ffd1d1] text-center mb-8 sm:mb-10 drop-shadow-xs">
+            <h2 className="font-serif-title tracking-[0.25em] text-xs sm:text-sm font-bold uppercase text-[#f4d79d] text-center mb-8 sm:mb-10 drop-shadow-xs">
               THÔNG TIN LỄ CƯỚI
             </h2>
           </GsapReveal>
@@ -167,7 +167,7 @@ export function MinimalCoupleSpotlight({
             <div className="flex flex-row items-stretch justify-between w-full max-w-md mx-auto text-center">
               {/* Groom Side */}
               <div className="flex-1 pr-3 sm:pr-4 flex flex-col justify-start">
-                <p className="text-xs text-[#F9DFDF] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
                   Ông Bà
                 </p>
                 <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
@@ -176,17 +176,17 @@ export function MinimalCoupleSpotlight({
                 <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
                   {groomMotherName || "Bùi Thị Mai"}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#ffe8e8] leading-tight font-medium opacity-90">
+                <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
                   {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
                 </p>
               </div>
 
               {/* Vertical Divider */}
-              <div className="w-[1px] bg-[#F9DFDF]/40 self-stretch my-1" />
+              <div className="w-[1px] bg-[#e7bf78]/40 self-stretch my-1" />
 
               {/* Bride Side */}
               <div className="flex-1 pl-3 sm:pl-4 flex flex-col justify-start">
-                <p className="text-xs text-[#F9DFDF] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
                   Ông Bà
                 </p>
                 <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
@@ -195,7 +195,7 @@ export function MinimalCoupleSpotlight({
                 <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
                   {brideMotherName || "Ngô Thị Hạnh"}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#ffe8e8] leading-tight font-medium opacity-90">
+                <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
                   {brideAddress || "Quận 3, TP. Hồ Chí Minh"}
                 </p>
               </div>
@@ -205,7 +205,7 @@ export function MinimalCoupleSpotlight({
           {/* Announcement Intro */}
           <GsapReveal delay={0.2} direction="up" distance={30}>
             <div className="my-6 text-center">
-              <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#ffd1d1] leading-relaxed drop-shadow-xs">
+              <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] leading-relaxed drop-shadow-xs">
                 TRÂN TRỌNG BÁO TIN
                 <br />
                 {displayCeremonyTitle} CỦA CON CHÚNG TÔI
@@ -225,13 +225,13 @@ export function MinimalCoupleSpotlight({
               <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold text-white tracking-wide mb-1 leading-tight drop-shadow-xs">
                 {groomName || "Đặng Hoàng Long"}
               </h3>
-              <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#F9DFDF] font-semibold">
+              <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">
                 {groomRank || "TRƯỞNG NAM"}
               </p>
             </div>
 
             {/* Ampersand Icon */}
-            <div className="font-calligraphy text-3xl sm:text-4xl text-[#F9DFDF] my-2 select-none pointer-events-none drop-shadow-xs">
+            <div className="font-calligraphy text-3xl sm:text-4xl text-[#e7bf78] my-2 select-none pointer-events-none drop-shadow-xs">
               &amp;
             </div>
 
@@ -240,7 +240,7 @@ export function MinimalCoupleSpotlight({
               <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold text-white tracking-wide mb-1 leading-tight drop-shadow-xs">
                 {brideName || "Vũ Bảo Ngọc"}
               </h3>
-              <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#F9DFDF] font-semibold">
+              <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">
                 {brideRank || "ÚT NỮ"}
               </p>
             </div>
@@ -253,7 +253,7 @@ export function MinimalCoupleSpotlight({
             distance={40}
             className="mt-8 pt-4 w-full flex flex-col items-center"
           >
-            <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#ffd1d1] mb-5 leading-relaxed">
+            <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] mb-5 leading-relaxed">
               {displayCeremonyTitle} ĐƯỢC CỬ HÀNH TẠI
               <br />
               <span className="font-bold text-white text-sm sm:text-base tracking-widest">
@@ -263,7 +263,7 @@ export function MinimalCoupleSpotlight({
 
             <div className="flex items-center justify-center gap-4 tracking-[0.2em] text-xs sm:text-sm font-bold uppercase text-[#fff0f0] mb-4">
               <span>VÀO LÚC {ceremonyTime}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F9DFDF]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#e7bf78]" />
               <span>{dInfo.dayOfWeek}</span>
             </div>
 
@@ -272,19 +272,19 @@ export function MinimalCoupleSpotlight({
               <span className="font-serif-title text-4xl sm:text-5xl font-normal text-white tracking-tight drop-shadow-xs" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
                 {dInfo.date}
               </span>
-              <div className="w-[1.5px] h-10 bg-[#F9DFDF]/40" />
+              <div className="w-[1.5px] h-10 bg-[#e7bf78]/40" />
               <div className="flex flex-col text-left font-serif-title uppercase leading-tight">
                 <span className="text-sm font-bold tracking-widest text-white">
                   {dInfo.month}
                 </span>
-                <span className="text-xs sm:text-sm tracking-widest text-[#ffd1d1] font-semibold" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
+                <span className="text-xs sm:text-sm tracking-widest text-[#f4d79d] font-semibold" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
                   {dInfo.year}
                 </span>
               </div>
             </div>
 
             {/* Lunar Date */}
-            <p className="text-xs font-serif-title uppercase tracking-widest text-[#ffd1d1] font-medium mt-4 opacity-95">
+            <p className="text-xs font-serif-title uppercase tracking-widest text-[#f4d79d] font-medium mt-4 opacity-95">
               {lunarDateStr || "(TỨC NGÀY 15 THÁNG 11 NĂM ẤT TỴ)"}
             </p>
           </GsapReveal>
@@ -293,3 +293,5 @@ export function MinimalCoupleSpotlight({
     </section>
   );
 }
+
+
