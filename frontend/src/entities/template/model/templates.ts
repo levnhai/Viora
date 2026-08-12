@@ -314,6 +314,42 @@ export const TEMPLATES: TemplateConfig[] = [
   },
 ];
 
+export function hasDemoForTemplate(tpl: any, demos: any[]): boolean {
+  if (!tpl || !Array.isArray(demos) || demos.length === 0) {
+    return false;
+  }
+
+  const tplDbId = tpl._id ? String(tpl._id) : null;
+  const tplId = tpl.id !== undefined && tpl.id !== null ? String(tpl.id) : null;
+  const tplCode = tpl.code ? String(tpl.code) : null;
+
+  return demos.some((d) => {
+    if (d.source && d.source !== "demo") return false;
+
+    const raw = d.templateId;
+    const dTplId =
+      typeof raw === "object"
+        ? String(raw?._id || raw?.id || "")
+        : String(raw || "");
+    const dTplCode =
+      typeof raw === "object"
+        ? String(raw?.code || "")
+        : String(d.templateCode || d.code || "");
+
+    if (tplDbId && dTplId === tplDbId) return true;
+    if (tplId && dTplId === tplId) return true;
+    if (
+      tplCode &&
+      (dTplCode === tplCode ||
+        dTplId === tplCode ||
+        (d.slug && d.slug.includes(tplCode)))
+    )
+      return true;
+
+    return false;
+  });
+}
+
 export function getDemoSlugForTemplate(tpl: any, demos: any[]): string {
   if (!tpl || !Array.isArray(demos) || demos.length === 0) {
     return "vanan-thibinh";

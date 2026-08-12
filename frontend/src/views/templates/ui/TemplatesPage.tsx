@@ -88,7 +88,7 @@ export function TemplatesPage() {
       });
   }, []);
 
-  // Chỉ hiển thị những mẫu thiệp đã xuất bản từ Database (dbTemplates)
+  // Lấy danh sách mẫu thiệp 100% động từ Database (dbTemplates)
   const templatesToUse = dbTemplates.map((dbTpl) => {
     const match = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id);
     if (match) {
@@ -102,7 +102,7 @@ export function TemplatesPage() {
         style: dbTpl.category || match.style,
       };
     }
-    // Trường hợp mẫu trong DB chưa có config ở FE: dùng cấu hình cơ bản
+    // Trường hợp mẫu trong DB chưa có config ở FE: dùng cấu hình mặc định
     return {
       id: dbTpl.id,
       code: dbTpl.code,

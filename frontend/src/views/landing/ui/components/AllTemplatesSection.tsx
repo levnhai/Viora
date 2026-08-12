@@ -1,21 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Sparkles, RefreshCw } from "lucide-react";
-import { TEMPLATES, getDemoSlugForTemplate } from "@/entities/template/model/templates";
+import { Search, RefreshCw } from "lucide-react";
+import {
+  TEMPLATES,
+  getDemoSlugForTemplate,
+} from "@/entities/template/model/templates";
 import { TemplateConfig } from "@/entities/template/model/schema";
 import { TemplateCard } from "@/entities/template/ui/TemplateCard";
 import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 import { CreateInvitationModal } from "@/entities/template/ui/CreateInvitationModal";
 import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
-import { fetchTemplates } from "@/entities/template/api/template.api";
 import { PackageComparisonSection } from "./PackageComparisonSection";
 
 const TIER_TABS = [
   { id: "all", label: "Tất cả mẫu" },
   { id: "basic", label: "Cơ Bản" },
   { id: "standard", label: "Tiêu Chuẩn" },
-  // { id: "pro", label: "Cao Cấp" },
 ];
 
 export function AllTemplatesSection() {
@@ -25,75 +26,49 @@ export function AllTemplatesSection() {
   const [previewTpl, setPreviewTpl] = useState<TemplateConfig | null>(null);
   const [requestTpl, setRequestTpl] = useState<TemplateConfig | null>(null);
   const [demos, setDemos] = useState<any[]>([]);
-  const [dbTemplates, setDbTemplates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Call API lấy danh sách Template từ Database MongoDB
-    fetchTemplates()
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setDbTemplates(data);
-        }
-      })
-      .catch((err) => console.error("Lỗi tải danh sách template từ DB:", err))
-      .finally(() => setLoading(false));
-
-    // Call API lấy dữ liệu demo thiệp cưới từ DB
+    // CHỈ call API lấy danh sách các bản thiệp demo công khai (/api/weddings/public/demos)
     fetchDemoInvitations()
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setDemos(data);
         }
       })
-      .catch((err) => console.error("Lỗi tải thiệp demo:", err));
+      .catch((err) => console.error("Lỗi tải thiệp demo:", err))
+      .finally(() => setLoading(false));
   }, []);
 
-  // Chỉ hiển thị những mẫu thiệp đã xuất bản từ Database (dbTemplates)
-  const allTemplates: TemplateConfig[] = dbTemplates.map((dbTpl) => {
-    const matched = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id);
-    if (matched) {
-      return {
-        ...matched,
-        ...dbTpl,
-        id: dbTpl.id || matched.id,
-        code: dbTpl.code || matched.code,
-        name: dbTpl.name || matched.name,
-        style: dbTpl.style || matched.style,
-        tier: dbTpl.tier || matched.tier || "basic",
-        price: dbTpl.price || matched.price || 99000,
-        originalPrice: dbTpl.originalPrice || matched.originalPrice || 150000,
-      };
-    }
-    return {
-      id: dbTpl.id,
-      code: dbTpl.code,
-      name: dbTpl.name,
-      style: dbTpl.category || "Truyền thống",
-      tags: ["Nổi bật"],
-      isHot: false,
-      preview: dbTpl.thumbnail || "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
-      themeClass: "theme-pink",
-      tier: "basic" as const,
-      price: dbTpl.price || 99000,
-      originalPrice: 150000,
-      features: ["Nhạc nền cơ bản", "Bản đồ Google Maps", "RSVP & Lời chúc"],
-      accentColor: "#ff007a",
-      envelopeKey: "minimal",
-      timelineKey: "simple",
-      galleryKey: "grid",
-      schema: {
-        basicInfo: { hasParentsInfo: true, hasRankInfo: true, hasAddressInfo: true },
-        cover: { hasBackgroundVideo: false, hasCoverImage: false },
-        spotlight: { hasGroomBrideImages: false, showTitles: false },
-        timeline: { enabled: true },
-        gallery: { maxImages: 10 },
-        story: { enabled: true },
-        rsvp: { enabled: true },
-        gift: { enabled: true },
-      },
-    };
-  });
+  // Lấy danh sách mẫu thiệp TRỰC TIẾP từ các bản demo được xuất bản (demos)
+  const allTemplates: TemplateConfig[] = [];
+  const seenCodes = new Set<string>();
+
+  for (const demo of demos) {
+    const rawTpl = demo.templateId;
+    const tplObj = typeof rawTpl === "object" && rawTpl !== null ? rawTpl : {};
+    const code =
+      tplObj.code ||
+      demo.templateCode ||
+      (typeof rawTpl === "string" ? rawTpl : "") ||
+      "";
+
+    if (!code || seenCodes.has(code)) continue;
+    seenCodes.add(code);
+
+    const matched =
+      TEMPLATES.find((t) => t.code === code || String(t.id) === String(code)) ||
+      TEMPLATES[0];
+
+    allTemplates.push({
+      ...matched,
+      id: tplObj.id || tplObj._id || matched.id,
+      code: code || matched.code,
+      name: tplObj.name || matched.name,
+      price: tplObj.price ?? matched.price,
+      preview: tplObj.thumbnail || matched.preview,
+    });
+  }
 
   // Lọc mẫu thiệp theo tìm kiếm và Gói Dịch Vụ (Tier)
   const filteredTemplates = allTemplates.filter((tpl) => {
