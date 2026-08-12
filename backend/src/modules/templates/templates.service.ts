@@ -1,63 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Template, TemplateDocument } from './schemas/template.schema';
-
-const DEFAULT_TEMPLATES = [
-  {
-    id: 1,
-    code: "temp_1",
-    name: "Song Hỷ - Xanh",
-    category: "Truyền thống",
-    price: 99000,
-    active: true,
-  },
-  {
-    id: 2,
-    code: "temp_2",
-    name: "Song Hỷ - Đỏ",
-    category: "Truyền thống",
-    price: 99000,
-    active: true,
-  },
-  {
-    id: 3,
-    code: "temp_3",
-    name: "Hoa Mộc - Xanh",
-    category: "Hoa lá",
-    price: 460000,
-    active: true,
-  },
-  {
-    id: 4,
-    code: "temp_4",
-    name: "Elegant - Nâu",
-    category: "Thanh Lịch",
-    price: 149000,
-    active: true,
-  },
-];
+import { DEFAULT_TEMPLATES } from './template.data';
 
 @Injectable()
-export class TemplatesService {
+export class TemplatesService implements OnModuleInit {
   constructor(
     @InjectModel(Template.name)
     private readonly templateModel: Model<TemplateDocument>,
   ) {}
 
-  async findAll(): Promise<TemplateDocument[]> {
-    const list = await this.templateModel.find({ deletedAt: null }).exec();
-    if (list && list.length > 0) {
-      return list;
-    }
+  async onModuleInit() {
+    await this.syncTemplatesWithDb();
+  }
 
-    // Tự động Seed dữ liệu mẫu vào MongoDB nếu Database rỗng
+  /**
+   * Tự động đồng bộ (Upsert) danh sách mẫu thiệp xuất bản từ template.data.ts vào MongoDB
+   * Và ẩn (active: false) các mẫu không có trong danh sách xuất bản.
+   */
+  async syncTemplatesWithDb() {
     try {
-      await this.templateModel.insertMany(DEFAULT_TEMPLATES);
-    } catch (err) {
-      console.error("Lỗi khi seed templates vào DB:", err);
-    }
+      if (!DEFAULT_TEMPLATES || DEFAULT_TEMPLATES.length === 0) return;
 
-    return this.templateModel.find({ deletedAt: null }).exec();
+      const publishedCodes = DEFAULT_TEMPLATES.map((t) => t.code);
+
+      // 1. Upsert các mẫu chính thức được xuất bản
+      const bulkOps: any[] = DEFAULT_TEMPLATES.map((tpl) => ({
+        updateOne: {
+          filter: { code: tpl.code },
+          update: { $set: { ...tpl, active: true, deletedAt: null } },
+          upsert: true,
+        },
+      }));
+
+      // 2. Ẩn (deactivate) các mẫu cũ/demo không có trong template.data.ts
+      bulkOps.push({
+        updateMany: {
+          filter: { code: { $nin: publishedCodes } },
+          update: { $set: { active: false } },
+        },
+      });
+
+      await this.templateModel.bulkWrite(bulkOps);
+      console.log('✅ [TemplatesService] Đã đồng bộ mẫu thiệp xuất bản từ template.data.ts vào MongoDB.');
+    } catch (err) {
+      console.error('❌ [TemplatesService] Lỗi khi đồng bộ templates vào DB:', err);
+    }
+  }
+
+  async findAll(): Promise<TemplateDocument[]> {
+    return this.templateModel.find({ active: true, deletedAt: null }).exec();
   }
 }
+

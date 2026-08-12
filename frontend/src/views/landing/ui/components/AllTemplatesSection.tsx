@@ -49,27 +49,51 @@ export function AllTemplatesSection() {
       .catch((err) => console.error("Lỗi tải thiệp demo:", err));
   }, []);
 
-  // Merge DB templates với local registry
-  const allTemplates: TemplateConfig[] =
-    dbTemplates.length > 0
-      ? dbTemplates.map((dbTpl, idx) => {
-          const matched =
-            TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id) ||
-            TEMPLATES[idx % TEMPLATES.length];
-          return {
-            ...matched,
-            ...dbTpl,
-            id: dbTpl.id || matched.id,
-            code: dbTpl.code || matched.code,
-            name: dbTpl.name || matched.name,
-            style: dbTpl.style || matched.style,
-            tier: dbTpl.tier || matched.tier || "basic",
-            price: dbTpl.price || matched.price || 99000,
-            originalPrice:
-              dbTpl.originalPrice || matched.originalPrice || 150000,
-          };
-        })
-      : TEMPLATES;
+  // Chỉ hiển thị những mẫu thiệp đã xuất bản từ Database (dbTemplates)
+  const allTemplates: TemplateConfig[] = dbTemplates.map((dbTpl) => {
+    const matched = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id);
+    if (matched) {
+      return {
+        ...matched,
+        ...dbTpl,
+        id: dbTpl.id || matched.id,
+        code: dbTpl.code || matched.code,
+        name: dbTpl.name || matched.name,
+        style: dbTpl.style || matched.style,
+        tier: dbTpl.tier || matched.tier || "basic",
+        price: dbTpl.price || matched.price || 99000,
+        originalPrice: dbTpl.originalPrice || matched.originalPrice || 150000,
+      };
+    }
+    return {
+      id: dbTpl.id,
+      code: dbTpl.code,
+      name: dbTpl.name,
+      style: dbTpl.category || "Truyền thống",
+      tags: ["Nổi bật"],
+      isHot: false,
+      preview: dbTpl.thumbnail || "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+      themeClass: "theme-pink",
+      tier: "basic" as const,
+      price: dbTpl.price || 99000,
+      originalPrice: 150000,
+      features: ["Nhạc nền cơ bản", "Bản đồ Google Maps", "RSVP & Lời chúc"],
+      accentColor: "#ff007a",
+      envelopeKey: "minimal",
+      timelineKey: "simple",
+      galleryKey: "grid",
+      schema: {
+        basicInfo: { hasParentsInfo: true, hasRankInfo: true, hasAddressInfo: true },
+        cover: { hasBackgroundVideo: false, hasCoverImage: false },
+        spotlight: { hasGroomBrideImages: false, showTitles: false },
+        timeline: { enabled: true },
+        gallery: { maxImages: 10 },
+        story: { enabled: true },
+        rsvp: { enabled: true },
+        gift: { enabled: true },
+      },
+    };
+  });
 
   // Lọc mẫu thiệp theo tìm kiếm và Gói Dịch Vụ (Tier)
   const filteredTemplates = allTemplates.filter((tpl) => {

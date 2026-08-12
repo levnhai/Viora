@@ -1,76 +1,4 @@
 export const DEFAULT_TEMPLATES = [
-  //   {
-  //     id: 1,
-  //     code: 'rose-gold',
-  //     name: 'Rose Gold',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
-  //     price: 460000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
-  //   {
-  //     id: 2,
-  //     code: 'minimal-green',
-  //     name: 'Minimal Green',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format',
-  //     price: 460000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
-  //   {
-  //     id: 3,
-  //     code: 'classic-white',
-  //     name: 'Classic White',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format',
-  //     price: 460000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
-  //   {
-  //     id: 4,
-  //     code: 'love-story',
-  //     name: 'Love Story',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format',
-  //     price: 460000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
-  //   {
-  //     id: 5,
-  //     code: 'eternal-flower',
-  //     name: 'Eternal Flower',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1507504038482-76210378664a?w=600&h=800&fit=crop&auto=format',
-  //     price: 460000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
-  //   {
-  //     id: 6,
-  //     code: 'black-elegant',
-  //     name: 'Black Elegant',
-  //     thumbnail:
-  //       'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=800&fit=crop&auto=format',
-  //     price: 560000,
-  //     version: '1.0.0',
-  //     status: 'active',
-  //     active: true,
-  //     deletedAt: null,
-  //   },
   {
     id: 1,
     code: 'temp_1',
@@ -132,3 +60,5 @@ export const DEFAULT_TEMPLATES = [
     deletedAt: null,
   },
 ];
+
+

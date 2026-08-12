@@ -88,19 +88,50 @@ export function TemplatesPage() {
       });
   }, []);
 
-  const templatesToUse = dbTemplates.length > 0
-    ? dbTemplates.map((dbTpl, idx) => {
-        const match = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id) || TEMPLATES[idx % TEMPLATES.length];
-        return {
-          ...match,
-          id: dbTpl.id || match.id,
-          code: dbTpl.code || match.code,
-          name: dbTpl.name || match.name,
-          price: dbTpl.price ?? match.price,
-          style: dbTpl.category || match.style,
-        };
-      })
-    : TEMPLATES;
+  // Chỉ hiển thị những mẫu thiệp đã xuất bản từ Database (dbTemplates)
+  const templatesToUse = dbTemplates.map((dbTpl) => {
+    const match = TEMPLATES.find((t) => t.code === dbTpl.code || t.id === dbTpl.id);
+    if (match) {
+      return {
+        ...match,
+        ...dbTpl,
+        id: dbTpl.id || match.id,
+        code: dbTpl.code || match.code,
+        name: dbTpl.name || match.name,
+        price: dbTpl.price ?? match.price,
+        style: dbTpl.category || match.style,
+      };
+    }
+    // Trường hợp mẫu trong DB chưa có config ở FE: dùng cấu hình cơ bản
+    return {
+      id: dbTpl.id,
+      code: dbTpl.code,
+      name: dbTpl.name,
+      style: dbTpl.category || "Truyền thống",
+      tags: ["Nổi bật"],
+      isHot: false,
+      preview: dbTpl.thumbnail || "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+      themeClass: "theme-pink",
+      tier: "basic" as const,
+      price: dbTpl.price || 99000,
+      originalPrice: 150000,
+      features: ["Nhạc nền cơ bản", "Bản đồ Google Maps", "RSVP & Lời chúc"],
+      accentColor: "#db2777",
+      envelopeKey: "minimal",
+      timelineKey: "simple",
+      galleryKey: "grid",
+      schema: {
+        basicInfo: { hasParentsInfo: true, hasRankInfo: true, hasAddressInfo: true },
+        cover: { hasBackgroundVideo: false, hasCoverImage: false },
+        spotlight: { hasGroomBrideImages: false, showTitles: false },
+        timeline: { enabled: true },
+        gallery: { maxImages: 10 },
+        story: { enabled: true },
+        rsvp: { enabled: true },
+        gift: { enabled: true },
+      },
+    };
+  });
 
   const navigate = (path: string) => router.push(path);
 
