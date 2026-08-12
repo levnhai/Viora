@@ -24,10 +24,12 @@ const nextConfig = {
     return config;
   },
   async rewrites() {
+    const rawBackendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    const cleanBackendUrl = rawBackendUrl.replace(/\/api\/?$/, '').replace(/\/$/, '');
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/:path*`,
+        destination: `${cleanBackendUrl}/api/:path*`,
       },
     ];
   },

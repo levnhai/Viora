@@ -41,7 +41,7 @@ export function AllTemplatesSection() {
   }, []);
 
   // Lấy danh sách mẫu thiệp TRỰC TIẾP từ các bản demo được xuất bản (demos)
-  const allTemplates: TemplateConfig[] = [];
+  const demoTemplates: TemplateConfig[] = [];
   const seenCodes = new Set<string>();
 
   for (const demo of demos) {
@@ -60,7 +60,7 @@ export function AllTemplatesSection() {
       TEMPLATES.find((t) => t.code === code || String(t.id) === String(code)) ||
       TEMPLATES[0];
 
-    allTemplates.push({
+    demoTemplates.push({
       ...matched,
       id: tplObj.id || tplObj._id || matched.id,
       code: code || matched.code,
@@ -69,6 +69,12 @@ export function AllTemplatesSection() {
       preview: tplObj.thumbnail || matched.preview,
     });
   }
+
+  // Nếu API bị lỗi (503 Service Unavailable) hoặc chưa có dữ liệu demo trên DB,
+  // tự động dùng fallback danh sách mẫu mặc định để giao diện không bị trống.
+  const allTemplates: TemplateConfig[] = demoTemplates.length > 0
+    ? demoTemplates
+    : TEMPLATES.filter((t) => ["temp_1", "temp_2", "temp_4", "temp_5", "temp_6"].includes(t.code));
 
   // Lọc mẫu thiệp theo tìm kiếm và Gói Dịch Vụ (Tier)
   const filteredTemplates = allTemplates.filter((tpl) => {
