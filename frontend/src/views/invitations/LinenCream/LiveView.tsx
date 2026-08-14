@@ -93,7 +93,7 @@ export function LiveView({
       {/* phong bì */}
       {!envelopeOpen ? (
         <Envelope
-          variant="envelope_8"
+          variant="LinenEnvelope"
           groomName={weddingData.groomName}
           brideName={weddingData.brideName}
           weddingDate={weddingData.weddingDate}
@@ -190,9 +190,7 @@ export function LiveView({
                 textColor="#FBFBFB"
               />
             </GsapReveal>
-            <h4
-              className="text-center text-sm px-4 font-serif text-[#FBFBFB] pb-8"
-            >
+            <h4 className="text-center text-sm px-4 font-serif text-[#FBFBFB] pb-8">
               Sự hiện diện của quý khách là niềm vinh hạnh tới gia đình chúng
               tôi
             </h4>
@@ -248,7 +246,6 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     prefilledName={guestName}
-                    theme="temp8"
                     textColor={colorPalette.textColor}
                     primaryColor="#d5a94d"
                     hideMessage

@@ -16,8 +16,15 @@ export function MinimalVenueMap({
   textColor,
   fontFamily,
 }: MinimalVenueMapProps) {
-  const pColor = textColor || "rgb(225,188,124)";
-  const tColor = primaryColor || "rgb(225,188,124)";
+  const formatColor = (color?: string, fallback = "rgb(225,188,124)") => {
+    if (!color) return fallback;
+    const clean = color.trim();
+    if (/^[0-9A-Fa-f]{3,8}$/.test(clean)) return `#${clean}`;
+    return clean;
+  };
+
+  const pColor = formatColor(textColor, "rgb(225,188,124)");
+  const tColor = formatColor(primaryColor, "rgb(225,188,124)");
 
   const defaultMapUrl =
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3741.0116668749845!2d105.975432074558!3d20.341147011039864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31367a14e9f31efb%3A0x88924b4f177c424a!2sNinh%20Binh%20Legend%20Hotel!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s";

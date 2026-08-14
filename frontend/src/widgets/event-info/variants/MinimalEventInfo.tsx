@@ -25,11 +25,11 @@ export function MinimalEventInfo({
 
   const pColor = textColor || "#e1bc7c";
   const tColor = primaryColor || "#001A08";
-  const pColor30 = pColor + "4D"; // 30% opacity
-  const pColor50 = pColor + "80"; // 50% opacity
-  const pColor80 = pColor + "CC"; // 80% opacity
-  const pColor05 = pColor + "0D"; // 5% opacity
-  const pColor15 = pColor + "26"; // 15% opacity
+  const pColor30 = pColor + "4D"; 
+  const pColor50 = pColor + "80"; 
+  const pColor80 = pColor + "CC"; 
+  const pColor05 = pColor + "0D";
+  const pColor15 = pColor + "26";
 
   return (
     <section className="pt-12 sm:pt-24 sm:pb-24 px-4 relative">
@@ -141,7 +141,7 @@ export function MinimalEventInfo({
                     </h5>
 
                     <div className="grid grid-cols-7 gap-y-4 text-sm font-serif">
-                      {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
+                      {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map(( day) => (
                         <div
                           key={day}
                           className="pb-2 border-b mb-2"

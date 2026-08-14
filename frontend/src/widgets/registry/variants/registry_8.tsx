@@ -28,7 +28,16 @@ export function Registry_8({
   const [mounted, setMounted] = useState(false);
   const [openedBox, setOpenedBox] = useState(false);
 
-  const textColor = textColorProp || "#4e0b12";
+  const formatColor = (color?: string, fallback = "#4e0b12") => {
+    if (!color) return fallback;
+    const clean = color.trim();
+    if (/^[0-9A-Fa-f]{3,8}$/.test(clean)) return `#${clean}`;
+    return clean;
+  };
+
+  const textColor = formatColor(textColorProp, "#4e0b12");
+  // Chữ bên trong Modal nền sáng kem cần màu sẫm để dễ đọc, không bị trắng trên nền trắng khi textColor ngoài là #FBFBFB
+  const modalTextColor = "#4a2918";
 
   const img12Src =
     typeof img_12 === "string" ? img_12 : (img_12 as any)?.src || img_12;
@@ -247,17 +256,17 @@ export function Registry_8({
 
               <div
                 className="bg-[#fdfbf6] rounded-3xl w-full max-w-xl relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 border"
-                style={{ borderColor: `${textColor}33` }}
+                style={{ borderColor: `${modalTextColor}33` }}
               >
                 {/* Header */}
                 <div
                   className="p-4 sm:p-6 flex justify-between items-center shrink-0 border-b relative"
-                  style={{ borderColor: `${textColor}1a` }}
+                  style={{ borderColor: `${modalTextColor}1a` }}
                 >
                   <div className="w-8" />
                   <h3
                     className="text-xl sm:text-2xl font-serif tracking-widest font-semibold uppercase text-center flex-1 drop-shadow-sm"
-                    style={{ color: textColor }}
+                    style={{ color: modalTextColor }}
                   >
                     Hộp Quà Mừng
                   </h3>
@@ -267,7 +276,7 @@ export function Registry_8({
                       setOpenedBox(false);
                     }}
                     className="w-8 h-8 flex items-center justify-center rounded-full transition-all"
-                    style={{ color: `${textColor}80` }}
+                    style={{ color: `${modalTextColor}80` }}
                   >
                     <X size={24} />
                   </button>
@@ -278,7 +287,7 @@ export function Registry_8({
                   {registries.length === 0 ? (
                     <div
                       className="font-serif italic py-10 opacity-70 w-full"
-                      style={{ color: textColor }}
+                      style={{ color: modalTextColor }}
                     >
                       Gia đình chưa cập nhật thông tin tài khoản
                     </div>
@@ -296,18 +305,18 @@ export function Registry_8({
                         <div
                           key={idx}
                           className="flex flex-col items-center flex-1 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border relative overflow-hidden group transition-shadow"
-                          style={{ borderColor: `${textColor}20` }}
+                          style={{ borderColor: `${modalTextColor}20` }}
                         >
                           <div
                             className="absolute top-0 left-0 w-full h-1"
                             style={{
-                              background: `linear-gradient(90deg, ${textColor}1a, ${textColor}66, ${textColor}1a)`,
+                              background: `linear-gradient(90deg, ${modalTextColor}1a, ${modalTextColor}66, ${modalTextColor}1a)`,
                             }}
                           />
 
                           <h4
                             className="font-serif mb-3 text-[15px] sm:text-base tracking-[0.2em] uppercase font-medium"
-                            style={{ color: textColor }}
+                            style={{ color: modalTextColor }}
                           >
                             {roleName}
                           </h4>
@@ -315,7 +324,7 @@ export function Registry_8({
                           {reg.qrCode ? (
                             <div
                               className="bg-white p-2 rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 border shadow-sm mx-auto relative group"
-                              style={{ borderColor: `${textColor}33` }}
+                              style={{ borderColor: `${modalTextColor}33` }}
                             >
                               <img
                                 src={reg.qrCode}
@@ -327,13 +336,13 @@ export function Registry_8({
                             <div
                               className="border-2 border-dashed rounded-xl mb-3 w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center mx-auto"
                               style={{
-                                backgroundColor: `${textColor}0d`,
-                                borderColor: `${textColor}33`,
+                                backgroundColor: `${modalTextColor}0d`,
+                                borderColor: `${modalTextColor}33`,
                               }}
                             >
                               <span
                                 className="text-sm font-serif italic"
-                                style={{ color: `${textColor}80` }}
+                                style={{ color: `${modalTextColor}80` }}
                               >
                                 Chưa có mã QR
                               </span>
@@ -342,7 +351,7 @@ export function Registry_8({
 
                           <div
                             className="font-serif space-y-1 mb-4"
-                            style={{ color: textColor }}
+                            style={{ color: modalTextColor }}
                           >
                             <p className="text-[10px] opacity-70 uppercase tracking-widest font-sans">
                               {reg.bankName || "Tên ngân hàng"}
@@ -365,8 +374,8 @@ export function Registry_8({
                               onClick={() => handleSaveQR(reg.qrCode, fullName)}
                               className="px-4 py-2 bg-transparent border rounded-full text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 mx-auto w-full max-w-[120px] font-medium hover:opacity-90"
                               style={{
-                                borderColor: `${textColor}4d`,
-                                color: textColor,
+                                borderColor: `${modalTextColor}4d`,
+                                color: modalTextColor,
                               }}
                             >
                               <Download size={14} />

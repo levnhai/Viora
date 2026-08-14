@@ -7,6 +7,7 @@ import { Envelope_4 } from "./variants/envelope_4";
 import { Envelope_6 } from "./variants/envelope_6";
 import { Envelope_7 } from "./variants/envelope_7";
 import { Envelope_8 } from "./variants/envelope_8";
+import { LinenEnvelope } from "./variants/LinenEnvelope";
 
 export type EnvelopeKey =
   | "royal"
@@ -16,7 +17,8 @@ export type EnvelopeKey =
   | "envelope_4"
   | "envelope_6"
   | "envelope_7"
-  | "envelope_8";
+  | "envelope_8"
+  | "LinenEnvelope";
 
 export interface EnvelopeProps {
   variant: EnvelopeKey;
@@ -40,6 +42,7 @@ const envelopeRegistry: Record<EnvelopeKey, ComponentType<any>> = {
   envelope_6: Envelope_6,
   envelope_7: Envelope_7,
   envelope_8: Envelope_8,
+  LinenEnvelope: LinenEnvelope,
 };
 
 export function Envelope({ variant, ...props }: EnvelopeProps) {
