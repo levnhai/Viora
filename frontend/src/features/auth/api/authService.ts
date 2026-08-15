@@ -13,7 +13,10 @@ export const authService = {
     if (!response.ok) {
       throw new Error(resData.message || "Đăng nhập thất bại!");
     }
-    return resData.data; // Trả về: { role, weddingSlug, name, email }
+    if (resData.data?.token && typeof window !== "undefined") {
+      localStorage.setItem("token", resData.data.token);
+    }
+    return resData.data; // Trả về: { role, weddingSlug, name, email, token }
   },
 
   // 2. Đăng ký tài khoản mới (Gửi mã OTP về email)
@@ -43,7 +46,10 @@ export const authService = {
     if (!response.ok) {
       throw new Error(resData.message || "Mã xác thực không chính xác hoặc đã hết hạn!");
     }
-    return resData.data; // Trả về: { role, weddingSlug, name, email }
+    if (resData.data?.token && typeof window !== "undefined") {
+      localStorage.setItem("token", resData.data.token);
+    }
+    return resData.data; // Trả về: { role, weddingSlug, name, email, token }
   },
 
   // 4. Gửi yêu cầu quên mật khẩu (gửi OTP)
@@ -103,11 +109,19 @@ export const authService = {
     if (!response.ok) {
       throw new Error(resData.message || "Xác thực Google với hệ thống thất bại!");
     }
+    if (resData.data?.token && typeof window !== "undefined") {
+      localStorage.setItem("token", resData.data.token);
+    }
     return resData.data;
   },
 
-  // 6. Đăng xuất hệ thống (xoá cookie)
+  // 6. Đăng xuất hệ thống (xoá cookie & localStorage)
   async logout() {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("username");
+    }
     const response = await fetch(`${API_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include",

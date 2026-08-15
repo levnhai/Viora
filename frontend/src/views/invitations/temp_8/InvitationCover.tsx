@@ -40,6 +40,7 @@ export function InvitationCover({
   const img4Src =
     typeof img_4 === "string" ? img_4 : (img_4 as any)?.src || img_4;
 
+  const containerRef = useRef<HTMLElement>(null);
   const branchLeftRef = useRef<HTMLDivElement>(null);
   const branchRightRef = useRef<HTMLDivElement>(null);
   const board1Ref = useRef<HTMLDivElement>(null);
@@ -71,79 +72,75 @@ export function InvitationCover({
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
+        defaults: { ease: "power2.out", force3D: true },
       });
 
-      // Ban đầu ẩn tất cả các phần tử
-      gsap.set(
-        [
-          branchLeftRef.current,
-          branchRightRef.current,
-          board1Ref.current,
-          board2Ref.current,
-          textSaveTheDateRef.current,
-          textNamesRef.current,
-          board3Ref.current,
-          board4Ref.current,
-        ],
-        { opacity: 0 }
-      );
-
-      // 0. Ảnh hoa lá gỗ img_13 chạy từ từ từ trên đỉnh màn hình xuống
+      // 0. Cành lá hoa góc trên trượt xuống nhẹ nhàng
       tl.fromTo(
         [branchLeftRef.current, branchRightRef.current],
-        { y: -120, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.5, ease: "power2.out" },
+        { y: -45, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, ease: "power2.out" },
         0
       )
-        // 1. Bảng 1 chạy từ trên xuống
+        // 1. Bảng 1 (Save The Date) hạ xuống êm ái
         .fromTo(
           board1Ref.current,
-          { y: -140, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9 },
-          0.3
+          { y: -55, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+          0.1
         )
-        // 2. Bảng 2 chạy từ trên xuống
+        // 2. Bảng 2 (Tên Dâu Rể) hạ xuống nối liền mượt mà cùng trục chuyển động
         .fromTo(
           board2Ref.current,
-          { y: -100, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8 },
-          "-=0.4"
+          { y: -40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+          0.25
         )
-        // 3. Chữ "SAVE THE DATE" chạy từ trái sang phải
+        // 3. Chữ Save The Date và Tên dâu rể fade-in êm dịu (chỉ fade opacity, không đổi vị trí/scale để tránh rung giật chữ)
         .fromTo(
-          textSaveTheDateRef.current,
-          { x: -90, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7 },
-          "-=0.3"
+          [textSaveTheDateRef.current, textNamesRef.current],
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6, stagger: 0.12, ease: "power1.out" },
+          0.35
         )
-        // 4. Tên cô dâu và chú rể chạy từ phải sang trái
-        .fromTo(
-          textNamesRef.current,
-          { x: 90, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.8 },
-          "-=0.3"
-        )
-        // 5. Bảng 3 (Khung ảnh) và Bảng 4 (Kính Mời) xuất hiện tiếp nối
+        // 4. Bảng 3 (Khung ảnh dâu rể) trồi lên mượt mà và chuyển tiếp vào floating tự nhiên
         .fromTo(
           board3Ref.current,
-          { scale: 0.88, y: 30, opacity: 0 },
-          { scale: 1, y: 0, opacity: 1, duration: 0.85 },
-          "-=0.3"
+          { y: 35, opacity: 0, scale: 0.96 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.85,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.to(board3Ref.current, {
+                y: -6,
+                rotation: -1,
+                duration: 3.2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+              });
+            },
+          },
+          0.5
         )
+        // 5. Bảng 4 (Kính Mời) trượt nhẹ từ dưới lên
         .fromTo(
           board4Ref.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7 },
-          "-=0.35"
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75, ease: "power2.out" },
+          0.65
         );
-    });
+    }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
     <section
+      ref={containerRef}
       className="relative w-full min-h-screen bg-transparent overflow-hidden select-none"
       style={{
         backgroundImage: woodBgSrc ? `url(${woodBgSrc})` : undefined,
@@ -162,20 +159,6 @@ export function InvitationCover({
         }
         .font-serif-title {
           font-family: "Playfair Display", "Cormorant Garamond", serif;
-        }
-
-        @keyframes floatFrame {
-          0%, 100% {
-            transform: rotate(-2.5deg) translateY(0px);
-          }
-          50% {
-            transform: rotate(-1.2deg) translateY(-9px);
-          }
-        }
-
-        .animate-float-frame {
-          animation: floatFrame 4s ease-in-out infinite;
-          will-change: transform;
         }
       `}</style>
 
@@ -208,7 +191,7 @@ export function InvitationCover({
         {/* BẢNG 1: BẢNG GỖ TREO PHÍA TRÊN (SAVE THE DATE) */}
         <div
           ref={board1Ref}
-          className="relative w-[75%] top-[-20px] sm:w-[70%] z-10 flex items-center justify-center"
+          className="relative w-[75%] top-[-20px] sm:w-[70%] z-10 flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
             src={img14Src}
@@ -219,7 +202,7 @@ export function InvitationCover({
           />
           <div
             ref={textSaveTheDateRef}
-            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20"
+            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20 will-change-opacity"
           >
             <span
               className="font-decorative tracking-[0.18em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-black uppercase text-[#fff3d6]"
@@ -236,7 +219,7 @@ export function InvitationCover({
         {/* BẢNG 2: BẢNG GỖ TREO NỐI TRỰC TIẾP NGAY BÊN DƯỚI BẢNG 1 (TÊN CÔ DÂU VÀ CHÚ RỂ) */}
         <div
           ref={board2Ref}
-          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] z-0 flex items-center justify-center"
+          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] z-0 flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
             src={img14Src}
@@ -247,7 +230,7 @@ export function InvitationCover({
           />
           <div
             ref={textNamesRef}
-            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20"
+            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20 will-change-opacity"
           >
             <div
               className="font-calligraphy text-[26px] sm:text-2xl md:text-4xl font-semibold text-[#fff3d6] flex items-center justify-center flex-wrap gap-1.5 leading-tight"
@@ -266,10 +249,10 @@ export function InvitationCover({
         </div>
 
         {/* BẢNG 3 / KHUNG ẢNH GỖ IMG_16 NẰM DƯỚI TÊN CÔ DÂU CHÚ RỂ */}
-        <div className="w-full flex justify-center animate-float-frame z-10">
+        <div className="w-full flex justify-center z-10">
           <div
             ref={board3Ref}
-            className="relative w-[95%] sm:w-[90%] max-w-[340px] sm:max-w-[380px] md:max-w-[400px] mt-20 sm:mt-6 md:mt-4 z-10 flex items-center justify-center filter drop-shadow-2xl"
+            className="relative w-[95%] sm:w-[90%] max-w-[340px] sm:max-w-[380px] md:max-w-[400px] mt-20 sm:mt-6 md:mt-4 z-10 flex items-center justify-center filter drop-shadow-2xl will-change-transform"
           >
             {/* Họa tiết trang trí img_4.svg ở góc trên bên phải khung ảnh gỗ */}
             <div className="absolute -top-26 right-[-70px] sm:-top-5 sm:-right-5 w-50 sm:w-28 md:w-32 z-30 pointer-events-none filter drop-shadow-md">

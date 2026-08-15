@@ -101,7 +101,21 @@ export class AuthService {
     name?: string;
     email?: string;
   }> {
-    const user = await this.userModel.findOne({ username }).exec();
+    const trimmed = (username || '').trim();
+    const user = await this.userModel
+      .findOne({
+        $or: [
+          { username: trimmed },
+          { email: trimmed },
+          { username: { $regex: new RegExp(`^${trimmed}$`, 'i') } },
+          { email: { $regex: new RegExp(`^${trimmed}$`, 'i') } },
+          ...(trimmed.toLowerCase() === 'admin'
+            ? [{ username: 'admin@viora.vn' }, { role: 'admin' }]
+            : []),
+        ],
+      })
+      .exec();
+
     if (!user) {
       throw new UnauthorizedException('Tài khoản không tồn tại!');
     }
@@ -112,11 +126,15 @@ export class AuthService {
     }
 
     const tokenData = this.generateToken(user);
-    const displayName = username.split('@')[0];
+    const displayName = (user.fullName || user.username || '').split('@')[0];
     return {
       ...tokenData,
       name: user.fullName || displayName,
-      email: user.email || (username.includes('@') ? username : undefined),
+      email:
+        user.email ||
+        (user.username && user.username.includes('@')
+          ? user.username
+          : undefined),
     };
   }
 

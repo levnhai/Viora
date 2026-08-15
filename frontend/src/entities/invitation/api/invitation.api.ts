@@ -9,8 +9,13 @@ export const fetchInvitations = async (query: any = {}) => {
   });
 
   const url = `${API_URL}/api/weddings?${queryParams.toString()}`;
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
-  const res = await fetch(url, { credentials: "include", cache: "no-store" });
+  const res = await fetch(url, { credentials: "include", cache: "no-store", headers });
 
   if (res.status === 401) {
     throw new Error("UNAUTHORIZED");
@@ -26,8 +31,13 @@ export const fetchInvitations = async (query: any = {}) => {
 
 export const fetchInvitationDetail = async (slug: string) => {
   const url = `${API_URL}/api/weddings/${slug}/render`;
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
-  const res = await fetch(url, { credentials: "include", cache: "no-store" });
+  const res = await fetch(url, { credentials: "include", cache: "no-store", headers });
 
   if (res.status === 401) {
     throw new Error("UNAUTHORIZED");

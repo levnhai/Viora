@@ -59,6 +59,16 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 8,
+    code: 'temp_8',
+    name: 'Honey Wood',
+    thumbnail:
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];
-
-

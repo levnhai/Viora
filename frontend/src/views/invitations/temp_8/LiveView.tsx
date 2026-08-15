@@ -120,13 +120,11 @@ export function LiveView({
             }}
           >
             {/* hero */}
-            <GsapReveal direction="up" distance={50} duration={1.2}>
-              <InvitationCover
-                weddingData={weddingData}
-                guestName={guestName}
-              />
-            </GsapReveal>
-            <div className="relative pt-8">
+            <InvitationCover
+              weddingData={weddingData}
+              guestName={guestName}
+            />
+            <div className="relative pt-4">
               {/* thông tin chú rể & cô dâu */}
               <GsapReveal direction="left" distance={60} duration={1.2}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />
@@ -190,9 +188,7 @@ export function LiveView({
                 textColor="#FBFBFB"
               />
             </GsapReveal>
-            <h4
-              className="text-center text-sm px-4 font-serif text-[#FBFBFB] pb-8"
-            >
+            <h4 className="text-center text-sm px-4 font-serif text-[#FBFBFB] pb-8">
               Sự hiện diện của quý khách là niềm vinh hạnh tới gia đình chúng
               tôi
             </h4>

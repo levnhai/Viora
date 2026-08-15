@@ -31,6 +31,7 @@ export class AuthController {
       success: true,
       message: 'Đăng nhập thành công!',
       data: {
+        token: data.token,
         role: data.role,
         weddingSlug: data.weddingSlug,
         name: data.name,
@@ -67,6 +68,7 @@ export class AuthController {
       success: true,
       message: 'Kích hoạt tài khoản và đăng nhập thành công!',
       data: {
+        token: data.token,
         role: data.role,
         weddingSlug: data.weddingSlug,
         name: data.name,
@@ -114,6 +116,7 @@ export class AuthController {
       success: true,
       message: 'Đăng nhập bằng mã OTP thành công!',
       data: {
+        token: data.token,
         role: data.role,
         weddingSlug: data.weddingSlug,
         name: data.name,
@@ -133,6 +136,7 @@ export class AuthController {
       success: true,
       message: 'Đăng nhập bằng Google thành công!',
       data: {
+        token: data.token,
         role: data.role,
         weddingSlug: data.weddingSlug,
         name: data.name,

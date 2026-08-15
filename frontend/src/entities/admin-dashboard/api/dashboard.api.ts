@@ -1,11 +1,21 @@
 import { API_URL } from "@/shared/lib/config";
 
 export const fetchAdminDashboardData = async () => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const [reqRes, dashRes] = await Promise.all([
     fetch(`${API_URL}/api/invitation-requests`, {
       credentials: "include",
+      headers,
     }),
-    fetch(`${API_URL}/api/admin/dashboard`, { credentials: "include" }),
+    fetch(`${API_URL}/api/admin/dashboard`, {
+      credentials: "include",
+      headers,
+    }),
   ]);
 
   if (reqRes.status === 401 || dashRes.status === 401) {
