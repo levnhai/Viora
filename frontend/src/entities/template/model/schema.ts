@@ -46,6 +46,7 @@ export interface TemplateConfig {
   name: string;
   style: string;
   preview: string;
+  previewVideo?: string;
   themeClass: string;
   tier: TemplateTier;
   price: number;

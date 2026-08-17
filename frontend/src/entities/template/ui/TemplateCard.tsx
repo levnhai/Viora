@@ -1,12 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, createElement } from "react";
+import React, { useState, useRef, memo } from "react";
 import { Eye, Plus, ShieldCheck, Zap, Crown } from "lucide-react";
-
-// TemplateCard component for invitation templates
 import { TemplateConfig } from "../model/schema";
-import { getTemplatePackage } from "@/entities/template/model/registry";
-import { DEFAULT_DEMO_WEDDING_DATA } from "@/entities/invitation/model/mockData";
 
 interface TemplateCardProps {
   tpl: TemplateConfig;
@@ -15,74 +11,93 @@ interface TemplateCardProps {
   onUseTemplate: (tplId: string) => void;
 }
 
-export function TemplateCard({
+export const TemplateCard = memo(function TemplateCard({
   tpl,
   demoData,
   onPreviewDemo,
   onUseTemplate,
 }: TemplateCardProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState<number>(0.75);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!containerRef.current || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry && entry.contentRect) {
-        const cardWidth = entry.contentRect.width;
-        if (cardWidth > 0) {
-          setScale(cardWidth / 375);
-          setIsLoaded(true);
-        }
-      }
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
+  // Lấy ảnh thumbnail đại diện
+  const thumbnailSrc =
+    tpl?.preview ||
+    demoData?.thumbnail ||
+    demoData?.coverImage ||
+    demoData?.heroImage ||
+    demoData?.groomAvatarUrl ||
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format";
 
-  const displayTags = tpl?.tags && tpl.tags.length > 0 ? tpl.tags : [tpl?.style || "Cổ điển", "Nổi bật"];
+  // Lấy video preview nếu có
+  const videoSrc =
+    tpl?.previewVideo ||
+    demoData?.coverVideo ||
+    demoData?.previewVideo ||
+    null;
+
+  const handleMouseEnter = () => {
+    if (videoRef.current && videoSrc) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current && videoSrc) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  const displayTags =
+    tpl?.tags && tpl.tags.length > 0
+      ? tpl.tags
+      : [tpl?.style || "Cổ điển", "Nổi bật"];
 
   const templateCode = tpl?.code || "temp_1";
-  const pkg = getTemplatePackage(templateCode);
-  const LiveViewComp = pkg?.LiveView;
-  const weddingDataToRender = demoData || DEFAULT_DEMO_WEDDING_DATA;
 
   return (
     <div
-      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={() => onPreviewDemo?.(tpl)}
       className="group bg-slate-950 rounded-2xl sm:rounded-3xl overflow-hidden aspect-[9/16] relative cursor-pointer shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-pink-500/20 w-full select-none"
     >
-      {/* Skeleton loader before scale measurement */}
-      {!isLoaded && (
+      {/* Skeleton loader khi ảnh đang tải */}
+      {!imageLoaded && (
         <div className="absolute inset-0 bg-slate-900 animate-pulse flex items-center justify-center z-10">
           <div className="w-6 h-6 border-2 border-pink-500/30 border-t-pink-500 rounded-full animate-spin" />
         </div>
       )}
 
-      {/* Live Invitation Template View từ Database API (Tự động scale vừa khít 100% bề ngang card) */}
+      {/* Media Preview: Video hoặc Ảnh Thumbnail sắc nét */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-slate-950">
-        <div
-          className={`w-[375px] absolute top-0 left-0 pointer-events-none select-none transition-all duration-300 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
-          }}
-        >
-          <div className="transition-transform duration-[16000ms] ease-linear group-hover:-translate-y-[82%]">
-            {LiveViewComp ? (
-              createElement(LiveViewComp, {
-                weddingData: weddingDataToRender,
-                previewMode: "invitation",
-              })
-            ) : null}
-          </div>
-        </div>
+        {videoSrc ? (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            poster={thumbnailSrc}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setImageLoaded(true)}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <img
+            src={thumbnailSrc}
+            alt={tpl.name}
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
+            className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
       </div>
 
-      {/* Top Left Tier Badge (Cơ Bản & Tiêu Chuẩn) */}
+      {/* Top Left Tier Badge (Cơ Bản, Tiêu Chuẩn, Cao Cấp) */}
       <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-30 flex items-center gap-1 sm:gap-1.5 pointer-events-none">
         {tpl?.tier === "basic" && (
           <span className="bg-emerald-600/90 text-white text-[9px] sm:text-[10px] font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-emerald-400/40 tracking-wider flex items-center gap-1 backdrop-blur-md">
@@ -104,7 +119,7 @@ export function TemplateCard({
         )}
       </div>
 
-      {/* Top Badges (Góc trên bên phải) */}
+      {/* Top Badges (Ghim, Mới, Hot) */}
       <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-30 flex items-center gap-1 sm:gap-1.5 pointer-events-none">
         {tpl?.isPinned && (
           <span className="bg-amber-400 text-slate-950 text-[8px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full shadow-lg border border-amber-300 flex items-center gap-0.5">
@@ -147,15 +162,13 @@ export function TemplateCard({
         </div>
       </div>
 
-      {/* Bottom Dark Gradient Overlay (Hiển thị TÊN MẪU THIỆP & GIÁ TIỀN) */}
+      {/* Bottom Dark Gradient Overlay (TÊN MẪU THIỆP & GIÁ TIỀN) */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2.5 sm:p-4 text-left z-20 pointer-events-none">
         <div className="flex items-center justify-between gap-1.5">
-          {/* Tên mẫu thiệp */}
           <h3 className="text-xs sm:text-base font-bold text-white leading-tight drop-shadow-sm line-clamp-1">
             {tpl.name}
           </h3>
 
-          {/* Giá niêm yết */}
           <div className="text-right shrink-0">
             <span className="text-[11px] sm:text-sm font-black text-pink-400 font-mono">
               {tpl.price.toLocaleString("vi-VN")}đ
@@ -177,4 +190,4 @@ export function TemplateCard({
       </div>
     </div>
   );
-}
+});

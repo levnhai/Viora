@@ -15,8 +15,8 @@ import { PackageComparisonSection } from "./PackageComparisonSection";
 
 const TIER_TABS = [
   { id: "all", label: "Tất cả mẫu" },
-  { id: "basic", label: "Cơ Bản" },
   { id: "standard", label: "Tiêu Chuẩn" },
+  { id: "basic", label: "Cơ Bản" },
 ];
 
 export function AllTemplatesSection() {
@@ -29,7 +29,6 @@ export function AllTemplatesSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // CHỈ call API lấy danh sách các bản thiệp demo công khai (/api/weddings/public/demos)
     fetchDemoInvitations()
       .then((data) => {
         if (Array.isArray(data)) {
@@ -40,7 +39,6 @@ export function AllTemplatesSection() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Lấy danh sách mẫu thiệp TRỰC TIẾP từ các bản demo được xuất bản (demos)
   const demoTemplates: TemplateConfig[] = [];
   const seenCodes = new Set<string>();
 
@@ -67,16 +65,12 @@ export function AllTemplatesSection() {
       name: tplObj.name || matched.name,
       price: tplObj.price ?? matched.price,
       preview: tplObj.thumbnail || matched.preview,
+      previewVideo: tplObj.previewVideo || matched.previewVideo,
     });
   }
 
-  // Nếu API bị lỗi (503 Service Unavailable) hoặc chưa có dữ liệu demo trên DB,
-  // tự động dùng fallback danh sách mẫu mặc định để giao diện không bị trống.
-  const allTemplates: TemplateConfig[] = demoTemplates.length > 0
-    ? demoTemplates
-    : TEMPLATES.filter((t) => ["temp_1", "temp_2", "temp_4", "temp_5", "temp_6"].includes(t.code));
+  const allTemplates: TemplateConfig[] = demoTemplates;
 
-  // Lọc mẫu thiệp theo tìm kiếm và Gói Dịch Vụ (Tier)
   const filteredTemplates = allTemplates.filter((tpl) => {
     const matchesSearch =
       searchQuery.trim() === "" ||
@@ -191,20 +185,26 @@ export function AllTemplatesSection() {
         ) : displayedTemplates.length === 0 ? (
           <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10 space-y-3">
             <p className="text-base font-bold text-slate-300">
-              Không tìm thấy mẫu thiệp phù hợp
+              {demoTemplates.length === 0
+                ? "Không có mẫu nào"
+                : "Không tìm thấy mẫu thiệp phù hợp"}
             </p>
             <p className="text-xs text-slate-400">
-              Vui lòng thử tìm kiếm bằng từ khóa khác hoặc bỏ lọc.
+              {demoTemplates.length === 0
+                ? "Hiện tại chưa có mẫu thiệp cưới nào được xuất bản trên hệ thống."
+                : "Vui lòng thử tìm kiếm bằng từ khóa khác hoặc bỏ lọc."}
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedTier("all");
-              }}
-              className="px-4 py-2 bg-[#ff007a] text-white text-xs font-bold rounded-xl border-0 cursor-pointer hover:bg-pink-600"
-            >
-              Xem tất cả mẫu
-            </button>
+            {demoTemplates.length > 0 && (
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedTier("all");
+                }}
+                className="px-4 py-2 bg-[#ff007a] text-white text-xs font-bold rounded-xl border-0 cursor-pointer hover:bg-pink-600"
+              >
+                Xem tất cả mẫu
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
@@ -224,7 +224,7 @@ export function AllTemplatesSection() {
           </div>
         )}
 
-        {/* Bảng so sánh tính năng & giá các gói dịch vụ (Cơ Bản, Tiêu Chuẩn, Cao Cấp) */}
+        {/* giá */}
         <PackageComparisonSection />
       </div>
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, Eye, ShieldCheck, Zap, Crown } from "lucide-react";
+import { X, Eye, ShieldCheck, Zap, Crown, Loader2 } from "lucide-react";
 import { TemplateConfig } from "../model/schema";
 import { CreateInvitationModal } from "./CreateInvitationModal";
 
@@ -52,15 +52,34 @@ export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [groomName, setGroomName] = useState("");
   const [brideName, setBrideName] = useState("");
+  const [debouncedGroom, setDebouncedGroom] = useState("");
+  const [debouncedBride, setDebouncedBride] = useState("");
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
+
+  // Debounce input tránh reload iframe liên tục mỗi khi gõ phím
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedGroom(groomName.trim());
+      setDebouncedBride(brideName.trim());
+    }, 450);
+    return () => clearTimeout(handler);
+  }, [groomName, brideName]);
 
   const targetSlug = demoSlug || "vanan-thibinh";
 
   const getIframeUrl = () => {
     let url = `/w/${targetSlug}?embed=true`;
-    if (groomName.trim()) url += `&groom=${encodeURIComponent(groomName.trim())}`;
-    if (brideName.trim()) url += `&bride=${encodeURIComponent(brideName.trim())}`;
+    if (debouncedGroom) url += `&groom=${encodeURIComponent(debouncedGroom)}`;
+    if (debouncedBride) url += `&bride=${encodeURIComponent(debouncedBride)}`;
     return url;
   };
+
+  const iframeSrc = getIframeUrl();
+
+  // Reset loading khi targetSlug hoặc debounced names thay đổi
+  useEffect(() => {
+    setIsIframeLoading(true);
+  }, [iframeSrc]);
 
   const handlePreviewDemo = () => {
     onClose();
@@ -76,11 +95,11 @@ export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
     <>
       {/* Original PreviewModal */}
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm will-change-transform"
         onClick={onClose}
       >
         <div
-          className="relative bg-[#1c1b1b] border border-stone-800 rounded-[2rem] overflow-hidden shadow-2xl w-full max-w-[440px] h-[92vh] sm:h-[88vh] flex flex-col justify-between p-4 sm:p-6 text-white select-none text-left transition-all duration-300 scrollbar-none"
+          className="relative bg-[#1c1b1b] border border-stone-800 rounded-[2rem] overflow-hidden shadow-2xl w-full max-w-[440px] h-[92vh] sm:h-[88vh] flex flex-col justify-between p-4 sm:p-6 text-white select-none text-left transition-all duration-200 scrollbar-none transform-gpu"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Modal Header */}
@@ -158,10 +177,25 @@ export function PreviewModal({ tpl, demoSlug, onClose }: PreviewModalProps) {
 
           {/* Modal Frame Preview (Center Invitation Preview) */}
           <div className="relative w-full flex-1 min-h-[300px] aspect-[9/16] mx-auto rounded-2xl overflow-hidden shadow-2xl border border-stone-800 bg-[#121110] my-1 sm:my-2">
+            {/* Loading Indicator / Skeleton */}
+            {isIframeLoading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#181717] transition-opacity duration-300 space-y-3">
+                <Loader2 className="w-8 h-8 animate-spin text-[#ff007a]" />
+                <p className="text-xs text-stone-400 font-medium animate-pulse">
+                  Đang tải bản xem thử...
+                </p>
+              </div>
+            )}
+
             <iframe
-              src={getIframeUrl()}
-              className="w-full h-full border-0"
+              key={iframeSrc}
+              src={iframeSrc}
+              onLoad={() => setIsIframeLoading(false)}
+              className={`w-full h-full border-0 transition-opacity duration-300 ${
+                isIframeLoading ? "opacity-0" : "opacity-100"
+              }`}
               title="Wedding Invitation Demo"
+              loading="eager"
             />
           </div>
 

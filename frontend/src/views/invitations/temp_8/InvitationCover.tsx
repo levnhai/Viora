@@ -126,7 +126,6 @@ export function InvitationCover({
           },
           0.5
         )
-        // 5. Bảng 4 (Kính Mời) trượt nhẹ từ dưới lên
         .fromTo(
           board4Ref.current,
           { y: 25, opacity: 0 },

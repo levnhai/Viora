@@ -116,7 +116,11 @@ export function WeddingInvitationPage() {
 
   return (
     <div className={`min-h-screen transition-all duration-500 ${currentTheme}`}>
-      <LiveView weddingData={weddingData} guestName={guestName} />
+      <LiveView
+        weddingData={weddingData}
+        guestName={guestName}
+        previewMode={isEmbed ? "invitation" : undefined}
+      />
     </div>
   );
 }
