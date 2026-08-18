@@ -1,13 +1,15 @@
 import { createElement } from "react";
 import { TemplatePackage } from "./types";
 import { TEMPLATES } from "./templates";
-import { LiveView as MinimalLiveView } from "@/views/invitations/minimal/LiveView";
+
+//template
+import { LiveView as SonghyView } from "@/views/invitations/songhy/LiveView";
 import { LiveView as temp_3 } from "@/views/invitations/luxury/LiveView";
-import { LiveView as Temp_4 } from "@/views/invitations/temp_4/LiveView";
-import { LiveView as temp_5 } from "@/views/invitations/floral/LiveView";
-import { LiveView as temp_6 } from "@/views/invitations/temp_6/LiveView";
-import { LiveView as temp_7 } from "@/views/invitations/temp_7/LiveView";
-import { LiveView as temp_8 } from "@/views/invitations/temp_8/LiveView";
+import { LiveView as TheRoyalView } from "@/views/invitations/theRoyal/LiveView";
+import { LiveView as TheGoldenView } from "@/views/invitations/floral/LiveView";
+import { LiveView as MinimalView } from "@/views/invitations/minimal-do/LiveView";
+import { LiveView as temp_7 } from "@/views/invitations/minimal-xanh/LiveView";
+import { LiveView as honeyWoodView } from "@/views/invitations/honeyWood/LiveView";
 import { LiveView as LinenCream } from "@/views/invitations/LinenCream/LiveView";
 
 const LegacyMockEditView = () => null;
@@ -21,9 +23,10 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
       return {
         config,
         LiveView: (props) =>
-          createElement(MinimalLiveView, { ...props, config }),
+          createElement(SonghyView, { ...props, config }),
         EditView: LegacyMockEditView,
       };
+      // ch xuất bản
     case "temp_3":
       return {
         config,
@@ -33,19 +36,19 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
     case "temp_4":
       return {
         config,
-        LiveView: Temp_4,
+        LiveView: TheRoyalView,
         EditView: LegacyMockEditView,
       };
     case "temp_5":
       return {
         config,
-        LiveView: temp_5,
+        LiveView: TheGoldenView,
         EditView: LegacyMockEditView,
       };
     case "temp_6":
       return {
         config,
-        LiveView: temp_6,
+        LiveView: MinimalView,
         EditView: LegacyMockEditView,
       };
     case "temp_7":
@@ -57,7 +60,7 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
     case "temp_8":
       return {
         config,
-        LiveView: temp_8,
+        LiveView: honeyWoodView,
         EditView: LegacyMockEditView,
       };
     case "temp_9":
@@ -69,7 +72,7 @@ export const getTemplatePackage = (code: string): TemplatePackage => {
     default:
       return {
         config,
-        LiveView: MinimalLiveView,
+        LiveView: SonghyView,
         EditView: LegacyMockEditView,
       };
   }

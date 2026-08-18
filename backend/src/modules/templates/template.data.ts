@@ -26,7 +26,7 @@ export const DEFAULT_TEMPLATES = [
   {
     id: 4,
     code: 'temp_4',
-    name: 'Long Phụng',
+    name: 'The Royal',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
     price: 149000,

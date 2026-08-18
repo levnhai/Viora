@@ -4,6 +4,7 @@ import { VolumeX, X, Music } from "lucide-react";
 import { InvitationCover } from "./InvitationCover";
 import { MinimalCoupleSpotlight } from "./components/MinimalCoupleSpotlight";
 import { CoverflowGallery } from "./components/CoverflowGallery";
+
 import { EventInfo } from "@/widgets/event-info";
 import { Guestbook } from "@/widgets/guestbook";
 import { Registry } from "@/widgets/registry";
@@ -244,7 +245,6 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     prefilledName={guestName}
-                    theme="temp8"
                     textColor={colorPalette.textColor}
                     primaryColor="#d5a94d"
                     hideMessage

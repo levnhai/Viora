@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.28",
+    "@nestjs/swagger": "^11.4.7",
     "@nestjs/websockets": "^11.1.28",
     "@types/nodemailer": "^8.0.1",
     "cache-manager": "^7.2.9",
