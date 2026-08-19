@@ -16,7 +16,7 @@ export const DEFAULT_DEMO_WEDDING_DATA: WeddingData = {
   musicUrl:
     "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
   coverImage:
-    "https://i.pinimg.com/736x/9c/1d/b0/9c1db0f88cc25ef5d0b9869ca366279a.jpg",
+    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
   events: [
     {
       title: "Lễ Tiệc Cưới",
@@ -53,12 +53,12 @@ export const DEFAULT_DEMO_WEDDING_DATA: WeddingData = {
     },
   ],
   galleryImages: [
-    "https://i.pinimg.com/736x/90/f1/b2/90f1b20748f9660ffa0451bab9a1e996.jpg",
-    "https://i.pinimg.com/736x/13/aa/43/13aa43c6aacc6b7f912922574824bd99.jpg",
-    "https://i.pinimg.com/736x/a2/12/60/a21260c8e4d20ceccf1c420391b9d124.jpg",
-    "https://i.pinimg.com/736x/c8/a1/54/c8a154ccdb6ae396565d211c0d0e9824.jpg",
-    "https://i.pinimg.com/736x/32/4a/45/324a45e11b925dae2b91b32805131bd1.jpg",
-    "https://i.pinimg.com/736x/e6/62/ac/e662acdd883984180ba8cbc66bd5250b.jpg",
+    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800",
   ],
   giftInfo: {
     groomBankName: "Vietcombank",

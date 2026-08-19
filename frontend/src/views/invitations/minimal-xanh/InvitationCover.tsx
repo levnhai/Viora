@@ -6,8 +6,8 @@ import {
 
 // img
 import img_16 from "@/shared/assets/image/flower/img_16.webp";
-import img_11 from "@/shared/assets/image/envelope/img_11.svg";
-import img_12 from "@/shared/assets/image/envelope/img_12.svg";
+import img_11 from "@/shared/assets/image/envelope/img_11.webp";
+import img_12 from "@/shared/assets/image/envelope/img_12.webp";
 
 interface InvitationCoverProps {
   weddingData: WeddingData;

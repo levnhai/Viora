@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { VolumeX, X, Music } from "lucide-react";
 
 import { InvitationCover } from "./InvitationCover";
@@ -26,8 +26,8 @@ import arch_2 from "@/shared/assets/image/architecture/img_2.svg";
 import arch_3 from "@/shared/assets/image/architecture/img_3.svg";
 
 // Envelope & Giftbox assets for instant preloading
-import env_9 from "@/shared/assets/image/envelope/img_9.webp";
-import env_10 from "@/shared/assets/image/envelope/img_10.webp";
+import env_11 from "@/shared/assets/image/envelope/img_11.webp";
+import env_12 from "@/shared/assets/image/envelope/img_12.webp";
 import flw_16 from "@/shared/assets/image/flower/img_16.webp";
 import gift_1 from "@/shared/assets/image/giffbox/img_1.svg";
 import gift_2 from "@/shared/assets/image/giffbox/img_2.svg";
@@ -45,14 +45,26 @@ export function LiveView({
 }: LiveViewProps) {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
+
+  const arch1Ref = useRef<HTMLDivElement>(null);
+  const arch2Ref = useRef<HTMLDivElement>(null);
+  const arch3Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY || window.pageYOffset || 0);
+          const sy = window.scrollY || window.pageYOffset || 0;
+          if (arch1Ref.current) {
+            arch1Ref.current.style.transform = `translate3d(-50%, ${sy * 0.12}px, 0)`;
+          }
+          if (arch2Ref.current) {
+            arch2Ref.current.style.transform = `translate3d(-50%, ${sy * 0.1}px, 0)`;
+          }
+          if (arch3Ref.current) {
+            arch3Ref.current.style.transform = `translate3d(-50%, ${sy * 0.08}px, 0)`;
+          }
           ticking = false;
         });
         ticking = true;
@@ -79,7 +91,7 @@ export function LiveView({
 
     // Preload invitation envelope & giftbox images silently in background
     if (typeof window !== "undefined") {
-      [env_9, env_10, flw_16, gift_1, gift_2].forEach((img) => {
+      [env_11, env_12, flw_16, gift_1, gift_2].forEach((img) => {
         const src = typeof img === "string" ? img : img?.src;
         if (src) {
           const i = new window.Image();
@@ -103,8 +115,7 @@ export function LiveView({
         ev?.title?.toUpperCase().includes("TIỆC") ||
         ev?.title?.toUpperCase().includes("HÔN LỄ"),
     ) ||
-    events[0] ||
-    {};
+    events[0];
 
   return (
     <div className="w-full min-h-screen relative font-sans text-[#7c6a60] overflow-hidden bg-white">
@@ -139,7 +150,7 @@ export function LiveView({
               @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
               @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(25px) translateZ(0); } }
               .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; will-change: transform; }
-              .animate-float-2 { animation: float-float-2 9s ease-in-out infinite; will-change: transform; }
+              .animate-float-2 { animation: float-flower-2 9s ease-in-out infinite; will-change: transform; }
               .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; will-change: transform; }
               .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; will-change: transform; }
             `}</style>
@@ -180,11 +191,8 @@ export function LiveView({
 
             {/* Architectural sketch watermark backgrounds (Centered & Scroll-Driven Parallax) */}
             <div
-              className="absolute top-[1%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.12}px, 0)`,
-                willChange: "transform",
-              }}
+              ref={arch1Ref}
+              className="absolute top-[1%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] pointer-events-none z-0 will-change-transform -translate-x-1/2"
             >
               <img
                 src={arch_1.src || (arch_1 as unknown as string)}
@@ -194,11 +202,8 @@ export function LiveView({
               />
             </div>
             <div
-              className="absolute top-[34%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.1}px, 0)`,
-                willChange: "transform",
-              }}
+              ref={arch2Ref}
+              className="absolute top-[34%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] pointer-events-none z-0 will-change-transform -translate-x-1/2"
             >
               <img
                 src={arch_2.src || (arch_2 as unknown as string)}
@@ -208,11 +213,8 @@ export function LiveView({
               />
             </div>
             <div
-              className="absolute top-[66%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] mix-blend-multiply pointer-events-none z-0 transition-transform duration-75 ease-out"
-              style={{
-                transform: `translate3d(-50%, ${scrollY * 0.08}px, 0)`,
-                willChange: "transform",
-              }}
+              ref={arch3Ref}
+              className="absolute top-[66%] left-1/2 w-[145%] max-w-none scale-140 sm:scale-[1.65] opacity-[0.18] pointer-events-none z-0 will-change-transform -translate-x-1/2"
             >
               <img
                 src={arch_3.src || (arch_3 as unknown as string)}

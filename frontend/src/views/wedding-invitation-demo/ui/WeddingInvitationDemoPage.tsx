@@ -59,12 +59,15 @@ export function WeddingInvitationDemoPage({
     const mockWeddingData = getDemoWeddingData(tId || "temp_1");
     mockWeddingData.slug = demoSlug;
 
-    // Fetch wedding details
-    fetch(`${API_URL}/api/weddings/${demoSlug}`)
+    // Fetch wedding details with fast timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1200);
+
+    fetch(`${API_URL}/api/weddings/${demoSlug}`, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) {
           // Fallback sang vanan-thibinh nếu slug kia không có
-          return fetch(`${API_URL}/api/weddings/vanan-thibinh`).then((r) => {
+          return fetch(`${API_URL}/api/weddings/vanan-thibinh`, { signal: controller.signal }).then((r) => {
             if (!r.ok) throw new Error("Not Found");
             return r.json();
           });
@@ -84,10 +87,17 @@ export function WeddingInvitationDemoPage({
         }
       })
       .catch((err) => {
-        console.warn("Lỗi khi tải demo (có thể DB trống), dùng mock data:", err);
         setWeddingData(mockWeddingData);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        clearTimeout(timeoutId);
+        setLoading(false);
+      });
+
+    return () => {
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   if (loading || !weddingData) {
