@@ -75,9 +75,14 @@ export function Timeline1({
 
             {/* Outer Dark Card */}
             <div
-              className="rounded-[24px] sm:rounded-[32px] py-10 sm:py-12 px-6 sm:px-12 shadow-2xl relative z-10 flex flex-col items-center"
+              className="rounded-[24px] sm:rounded-[32px] py-10 sm:py-12 px-6 sm:px-12 shadow-2xl relative z-10 flex flex-col items-center border border-[#DCE7CF]/25 overflow-hidden"
               style={{
-                backgroundColor: cardBgColor,
+                backgroundColor: cardBgColor?.includes("gradient")
+                  ? undefined
+                  : cardBgColor,
+                background: cardBgColor?.includes("gradient")
+                  ? cardBgColor
+                  : undefined,
                 color: textLightColor,
               }}
             >

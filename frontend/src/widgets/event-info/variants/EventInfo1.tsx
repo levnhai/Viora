@@ -38,10 +38,12 @@ export function EventInfo1({
   const eventsToDisplay =
     partyEvents.length > 0 ? partyEvents : events.length > 1 ? [events[1]] : [events[0]];
 
+  const isGradient = Boolean(textColorProp?.includes("gradient"));
+  const solidThemeColor = isGradient ? "#2E3D25" : (textColorProp || "#4e0b12");
   const cardBgColor = textColorProp || "#4e0b12";
   const textLightColor = "#fdfbf6";
   const calendarBgColor = "#f5eee6";
-  const calendarTextColor = cardBgColor;
+  const calendarTextColor = solidThemeColor;
 
   const parseDateInfo = (dateStr: string) => {
     let year = "2026",
@@ -133,9 +135,14 @@ export function EventInfo1({
 
                 {/* Outer Dark Card */}
                 <div
-                  className="rounded-[24px] sm:rounded-[32px] py-10 sm:py-12 px-6 sm:px-12 shadow-2xl relative z-10 flex flex-col items-center text-center"
+                  className="rounded-[24px] sm:rounded-[32px] py-10 sm:py-12 px-6 sm:px-12 shadow-2xl relative z-10 flex flex-col items-center text-center border border-[#DCE7CF]/25 overflow-hidden"
                   style={{
-                    backgroundColor: cardBgColor,
+                    backgroundColor: cardBgColor?.includes("gradient")
+                      ? undefined
+                      : cardBgColor,
+                    background: cardBgColor?.includes("gradient")
+                      ? cardBgColor
+                      : undefined,
                     color: textLightColor,
                   }}
                 >
@@ -323,10 +330,10 @@ export function EventInfo1({
                   {/* RSVP Button */}
                   <button
                     onClick={onOpenRsvpModal}
-                    className="px-8 py-3 rounded-full text-xs sm:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-md"
+                    className="px-8 py-3 rounded-full text-xs sm:text-sm font-semibold tracking-[0.15em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-md cursor-pointer"
                     style={{
                       backgroundColor: textLightColor,
-                      color: cardBgColor,
+                      color: solidThemeColor,
                       fontFamily: '"Lora", "Times New Roman", serif',
                     }}
                   >

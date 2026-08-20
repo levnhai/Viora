@@ -135,8 +135,10 @@ export function MinimalCoupleSpotlight({
         }
       `}</style>
 
-      {/* Main Dark Green Card */}
-      <div className="relative max-w-xl mx-auto rounded-[24px] bg-[linear-gradient(155deg,#2e3d25_0%,#1e2b17_55%,#131c0e_100%)] text-[#fdfbf6] shadow-[0_25px_60px_rgba(20,35,15,0.5)] px-6 py-10 sm:px-10 sm:py-14 border border-[#A4B885]/20">
+      {/* Main Sage Green Envelope Gradient Card */}
+      <div className="relative max-w-xl mx-auto rounded-[28px] bg-[linear-gradient(155deg,#8DA672_0%,#69824F_32%,#435832_68%,#26351B_100%)] text-[#fdfbf6] shadow-[0_25px_60px_-12px_rgba(40,55,30,0.5),0_10px_20px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.35)] px-6 py-10 sm:px-10 sm:py-14 border border-[#DCE7CF]/30 overflow-hidden">
+        {/* Subtle Ambient Glow Highlight */}
+        <div className="absolute top-0 left-0 right-0 h-40 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),_transparent_70%)] pointer-events-none" />
         {/* Overflowing Right Floral Bouquet (img_16) */}
         <div className="absolute -right-16 sm:-right-14 md:-right-16 top-[8%] w-28 sm:w-44 md:w-56 z-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] animate-sway-slow">
           <img

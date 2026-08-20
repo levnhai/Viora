@@ -225,13 +225,11 @@ export function LiveView({
             </div>
 
             {/* hero */}
-            <GsapReveal direction="up" distance={50} duration={1.2}>
-              <InvitationCover
-                weddingData={weddingData}
-                guestName={guestName}
-              />
-            </GsapReveal>
-            <div className="relative pt-8">
+            <InvitationCover
+              weddingData={weddingData}
+              guestName={guestName}
+            />
+            <div className="relative pt-2 sm:pt-4">
               {/* thông tin chú rể & cô dâu */}
               <GsapReveal direction="left" distance={60} duration={1.2}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />
@@ -249,7 +247,7 @@ export function LiveView({
                   weddingData={weddingData}
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
                   primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
+                  textColor="linear-gradient(155deg, #8DA672 0%, #69824F 32%, #435832 68%, #26351B 100%)"
                 />
               </GsapReveal>
 
@@ -272,7 +270,7 @@ export function LiveView({
                   variant="Timeline1"
                   weddingData={weddingData}
                   primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
+                  textColor="linear-gradient(155deg, #8DA672 0%, #69824F 32%, #435832 68%, #26351B 100%)"
                 />
               </GsapReveal>
             </div>

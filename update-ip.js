@@ -6,16 +6,23 @@ const path = require('path');
 const interfaces = os.networkInterfaces();
 let ipAddress = 'localhost';
 
-// Tìm IP IPv4 nội bộ (không phải loopback)
+// Tìm IP IPv4 nội bộ thật (ưu tiên Wi-Fi, Ethernet và bỏ qua các card mạng ảo)
+const validIps = [];
 for (const name of Object.keys(interfaces)) {
+  const isVirtual = /vmnet|virtual|vEthernet|loopback|wsl/i.test(name);
   for (const net of interfaces[name]) {
-    // Bỏ qua IPv6 và loopback
     if (net.family === 'IPv4' && !net.internal) {
-      ipAddress = net.address;
-      break;
+      if (!isVirtual) {
+        validIps.unshift(net.address); // Ưu tiên card thật lên đầu
+      } else {
+        validIps.push(net.address);
+      }
     }
   }
-  if (ipAddress !== 'localhost') break;
+}
+
+if (validIps.length > 0) {
+  ipAddress = validIps[0];
 }
 
 console.log(`[Viora-IP] Phát hiện IP nội bộ của máy tính: ${ipAddress}`);

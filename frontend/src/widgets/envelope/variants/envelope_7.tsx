@@ -181,7 +181,7 @@ export function Envelope_7({
       });
     } catch (e) {}
 
-    // GSAP Cinematic Exit Timeline
+    // GSAP Cinematic Exit Timeline - Tối ưu êm ái, chuyển tiếp nhanh không đơ
     const exitTl = gsap.timeline({
       onComplete: () => {
         onOpen();
@@ -189,20 +189,20 @@ export function Envelope_7({
     });
 
     if (sealRef.current) {
-      exitTl.to(sealRef.current, { scale: 1.2, opacity: 0, duration: 0.3, ease: "power2.out" }, 0);
+      exitTl.to(sealRef.current, { scale: 1.2, opacity: 0, duration: 0.2, ease: "power2.out" }, 0);
     }
     if (buttonRef.current) {
-      exitTl.to(buttonRef.current, { scale: 0.92, opacity: 0, duration: 0.2 }, 0);
+      exitTl.to(buttonRef.current, { scale: 0.9, opacity: 0, duration: 0.15 }, 0);
     }
     if (envelopeBodyRef.current) {
       exitTl.to(
         envelopeBodyRef.current,
-        { scale: 1.06, y: -20, opacity: 0, duration: 0.6, ease: "power2.inOut" },
+        { scale: 1.03, y: -12, opacity: 0, duration: 0.4, ease: "power2.out" },
         0.05
       );
     }
     if (containerRef.current) {
-      exitTl.to(containerRef.current, { opacity: 0, duration: 0.65, ease: "power2.inOut" }, 0.1);
+      exitTl.to(containerRef.current, { opacity: 0, duration: 0.45, ease: "power2.out" }, 0.05);
     }
   };
 
