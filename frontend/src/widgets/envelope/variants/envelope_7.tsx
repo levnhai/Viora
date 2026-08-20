@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
 import img_15 from "@/shared/assets/image/flower/img_15.webp";
+import img_24 from "@/shared/assets/image/flower/img_24.svg";
 import confetti from "canvas-confetti";
 import gsap from "gsap";
 
@@ -327,10 +328,10 @@ export function Envelope_7({
                 </div>
               </div>
 
-              {/* Bottom Left Flowers */}
+              {/* Bottom Left Flowers (img_24) */}
               <div
                 ref={flowerBottomRef}
-                className="absolute pointer-events-none w-[125px] sm:w-[140px] md:w-[150px] -bottom-[45px] -left-[22px] sm:-bottom-[35px] sm:-left-[20px] z-0 will-change-transform"
+                className="absolute pointer-events-none w-[190px] sm:w-[220px] md:w-[250px] -bottom-[55px] -left-[28px] sm:-bottom-[45px] sm:-left-[24px] z-0 will-change-transform"
                 style={{
                   transformOrigin: "center",
                   transform: "rotate(24deg)",
@@ -338,7 +339,7 @@ export function Envelope_7({
               >
                 <div className="w-full h-full">
                   <img
-                    src={img_15.src || (img_15 as unknown as string)}
+                    src={img_24.src || (img_24 as unknown as string)}
                     alt=""
                     className="w-full h-auto object-contain opacity-95"
                   />
