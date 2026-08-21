@@ -26,6 +26,9 @@ export class Template {
   @Prop()
   previewUrl?: string;
 
+  @Prop()
+  previewVideo?: string;
+
   @Prop({ required: true, default: 0 })
   price: number;
 

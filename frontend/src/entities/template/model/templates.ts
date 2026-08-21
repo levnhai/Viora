@@ -10,6 +10,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isHot: false,
     preview:
       "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/songhy_xanh.mp4",
     themeClass: "theme-pink",
     tier: "basic",
     price: 99000,
@@ -50,6 +51,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isHot: false,
     preview:
       "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/songhy_do.mp4",
     themeClass: "theme-pink",
     tier: "basic",
     price: 99000,

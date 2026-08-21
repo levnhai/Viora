@@ -13,7 +13,7 @@ interface TemplateCardProps {
 
 export const TemplateCard = memo(function TemplateCard({
   tpl,
-  demoData,
+  demoData, 
   onPreviewDemo,
   onUseTemplate,
 }: TemplateCardProps) {
@@ -75,12 +75,11 @@ export const TemplateCard = memo(function TemplateCard({
         {videoSrc ? (
           <video
             ref={videoRef}
-            src={videoSrc}
-            poster={thumbnailSrc}
+            src={`${videoSrc}#t=0.001`}
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             onLoadedData={() => setImageLoaded(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
@@ -163,7 +162,7 @@ export const TemplateCard = memo(function TemplateCard({
       </div>
 
       {/* Bottom Dark Gradient Overlay (TÊN MẪU THIỆP & GIÁ TIỀN) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2.5 sm:p-4 text-left z-20 pointer-events-none">
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-10 p-2.5 sm:p-4 text-left z-20 pointer-events-none">
         <div className="flex items-center justify-between gap-1.5">
           <h3 className="text-xs sm:text-base font-bold text-white leading-tight drop-shadow-sm line-clamp-1">
             {tpl.name}
