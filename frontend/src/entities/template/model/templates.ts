@@ -171,6 +171,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isHot: true,
     preview:
       "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/the_golden.mp4",
     themeClass: "theme-modern",
     tier: "standard",
     price: 149000,
@@ -279,12 +280,13 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 8,
     code: "temp_8",
-    name: "Minimal - hồng",
+    name: "Honey Wood",
     style: "Sang trọng",
     tags: ["Sang trọng", "Lãng mạn"],
     isHot: true,
     preview:
       "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/honey_wood.mp4",
     themeClass: "Minimal",
     tier: "standard",
     price: 149000,

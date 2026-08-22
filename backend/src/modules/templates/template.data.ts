@@ -43,6 +43,7 @@ export const DEFAULT_TEMPLATES = [
     name: 'The Golden',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
+    previewVideo: '/video/the_golden.mp4',
     price: 149000,
     version: '1.0.0',
     status: 'active',
@@ -61,7 +62,7 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
-   {
+  {
     id: 7,
     code: 'temp_7',
     name: 'Minimal - xanh',
@@ -79,6 +80,7 @@ export const DEFAULT_TEMPLATES = [
     name: 'Honey Wood',
     thumbnail:
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
+    previewVideo: '/video/honey_wood.mp4',
     price: 149000,
     version: '1.0.0',
     status: 'active',
