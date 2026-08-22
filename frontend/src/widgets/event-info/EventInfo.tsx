@@ -11,6 +11,8 @@ export interface EventInfoProps {
   onOpenRsvpModal: () => void;
   primaryColor?: string;
   textColor?: string;
+  flowerImage?: string;
+  paperBg?: boolean;
 }
 
 const eventInfoRegistry: Record<EventInfoKey, ComponentType<any>> = {

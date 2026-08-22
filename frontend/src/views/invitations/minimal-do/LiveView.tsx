@@ -65,6 +65,8 @@ export function LiveView({
   const colorPalette = {
     primaryColor: "transparent",
     textColor: "#4e0b12",
+    cardGradient:
+      "linear-gradient(155deg, #4e0b12 0%, #3b060b 55%, #260306 100%)",
   };
 
   const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
@@ -231,48 +233,38 @@ export function LiveView({
             </GsapReveal>
             <div className="relative pt-8">
               {/* thông tin chú rể & cô dâu */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <MinimalCoupleSpotlight weddingData={weddingData} />
-              </GsapReveal>
+              <MinimalCoupleSpotlight weddingData={weddingData} />
 
               {/* bộ sưu tập ảnh 3D Coverflow */}
-              <GsapReveal direction="right" distance={60} duration={1.2}>
-                <CoverflowGallery weddingData={weddingData} />
-              </GsapReveal>
+              <CoverflowGallery weddingData={weddingData} />
 
               {/* thông tin tiệc cưới */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <EventInfo
-                  variantId="EventInfo1"
-                  weddingData={weddingData}
-                  onOpenRsvpModal={() => setRsvpModalOpen(true)}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
-                />
-              </GsapReveal>
+              <EventInfo
+                variantId="EventInfo1"
+                weddingData={weddingData}
+                onOpenRsvpModal={() => setRsvpModalOpen(true)}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.cardGradient}
+              />
 
               {/* địa điểm */}
               {primaryEvent && (
-                <GsapReveal direction="right" distance={60} duration={1.2}>
-                  <VenueMap
-                    variantId="minimal"
-                    event={primaryEvent}
-                    primaryColor={colorPalette.primaryColor}
-                    textColor={colorPalette.textColor}
-                    fontFamily='"Times New Roman", serif'
-                  />
-                </GsapReveal>
+                <VenueMap
+                  variantId="minimal"
+                  event={primaryEvent}
+                  primaryColor={colorPalette.primaryColor}
+                  textColor={colorPalette.textColor}
+                  fontFamily='"Times New Roman", serif'
+                />
               )}
 
               {/* time line */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <Timeline
-                  variant="Timeline1"
-                  weddingData={weddingData}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
-                />
-              </GsapReveal>
+              <Timeline
+                variant="Timeline1"
+                weddingData={weddingData}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.cardGradient}
+              />
             </div>
 
             {/* sổ lời chúc */}

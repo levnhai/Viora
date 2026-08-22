@@ -19,6 +19,12 @@ import img_6 from "@/shared/assets/image/flower/img_6.svg";
 import img_7 from "@/shared/assets/image/flower/img_7.svg";
 import img_8 from "@/shared/assets/image/flower/img_8.svg";
 import img_9 from "@/shared/assets/image/flower/img_9.svg";
+import img_19 from "@/shared/assets/image/flower/img_19.webp";
+import img_20 from "@/shared/assets/image/flower/img_20.webp";
+import img_22 from "@/shared/assets/image/flower/img_22.webp";
+import img_23 from "@/shared/assets/image/flower/img_23.webp";
+import img_27 from "@/shared/assets/image/flower/img_27.webp";
+import img_31 from "@/shared/assets/image/flower/img_31.webp";
 import bgPaper from "@/shared/assets/image/paper/paper1.webp";
 
 import arch_1 from "@/shared/assets/image/architecture/img_1.svg";
@@ -28,7 +34,7 @@ import arch_3 from "@/shared/assets/image/architecture/img_3.svg";
 // Envelope & Giftbox assets for instant preloading
 import env_11 from "@/shared/assets/image/envelope/img_11.webp";
 import env_12 from "@/shared/assets/image/envelope/img_12.webp";
-import flw_16 from "@/shared/assets/image/flower/img_16.webp";
+import flw_26 from "@/shared/assets/image/flower/img_26.webp";
 import gift_1 from "@/shared/assets/image/giffbox/img_1.svg";
 import gift_2 from "@/shared/assets/image/giffbox/img_2.svg";
 
@@ -77,6 +83,8 @@ export function LiveView({
   const colorPalette = {
     primaryColor: "transparent",
     textColor: "#2E3D25",
+    cardGradient:
+      "linear-gradient(155deg, #8DA672 0%, #69824F 32%, #435832 68%, #26351B 100%)",
   };
 
   const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
@@ -91,7 +99,7 @@ export function LiveView({
 
     // Preload invitation envelope & giftbox images silently in background
     if (typeof window !== "undefined") {
-      [env_11, env_12, flw_16, gift_1, gift_2].forEach((img) => {
+      [env_11, env_12, flw_26, img_27, gift_1, gift_2].forEach((img) => {
         const src = typeof img === "string" ? img : img?.src;
         if (src) {
           const i = new window.Image();
@@ -149,10 +157,44 @@ export function LiveView({
             <style>{`
               @keyframes float-flower-1 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
               @keyframes float-flower-2 { 0%, 100% { transform: translateY(0px) translateZ(0); } 50% { transform: translateY(25px) translateZ(0); } }
+              @keyframes fly-across-full-1 {
+                0% {
+                  transform: translate3d(-140%, 0, 0) rotate(-12deg);
+                  opacity: 0;
+                }
+                6% {
+                  opacity: 0.95;
+                }
+                92% {
+                  opacity: 0.95;
+                }
+                100% {
+                  transform: translate3d(820px, -35px, 0) rotate(16deg);
+                  opacity: 0;
+                }
+              }
+              @keyframes fly-across-full-2 {
+                0% {
+                  transform: translate3d(-140%, 0, 0) rotate(10deg);
+                  opacity: 0;
+                }
+                6% {
+                  opacity: 0.95;
+                }
+                92% {
+                  opacity: 0.95;
+                }
+                100% {
+                  transform: translate3d(820px, 35px, 0) rotate(-14deg);
+                  opacity: 0;
+                }
+              }
               .animate-float-1 { animation: float-flower-1 7s ease-in-out infinite; will-change: transform; }
               .animate-float-2 { animation: float-flower-2 9s ease-in-out infinite; will-change: transform; }
               .animate-float-3 { animation: float-flower-1 8s ease-in-out infinite; will-change: transform; }
               .animate-float-4 { animation: float-flower-2 10s ease-in-out infinite; will-change: transform; }
+              .animate-fly-across-1 { animation: fly-across-full-1 22s linear infinite; will-change: transform, opacity; }
+              .animate-fly-across-2 { animation: fly-across-full-2 26s linear infinite 11s; will-change: transform, opacity; }
             `}</style>
 
             {/* Scrollable background accents */}
@@ -186,6 +228,58 @@ export function LiveView({
                 alt=""
                 decoding="async"
                 className="w-full -rotate-[10deg]"
+              />
+            </div>
+
+            {/* img_31 Foreground Floating Botanical Elements (Size 1x) */}
+            <div className="absolute top-[28%] left-0 w-36 sm:w-48 opacity-0 pointer-events-none z-30 drop-shadow-[0_12px_24px_rgba(0,0,0,0.18)] animate-fly-across-1">
+              <img
+                src={img_31.src || (img_31 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+            <div className="absolute top-[66%] left-0 w-40 sm:w-52 opacity-0 pointer-events-none z-30 drop-shadow-[0_12px_24px_rgba(0,0,0,0.18)] animate-fly-across-2">
+              <img
+                src={img_31.src || (img_31 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+
+            {/* Botanical Floral Corner & Side Accents (Exclusive for temp_7) */}
+            <div className="absolute top-[24%] -right-[25px] sm:-right-[15px] w-48 sm:w-60 opacity-45 mix-blend-multiply pointer-events-none z-0">
+              <img
+                src={img_19.src || (img_19 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain -rotate-[12deg]"
+              />
+            </div>
+            <div className="absolute top-[48%] -left-[30px] sm:-left-[20px] w-52 sm:w-64 opacity-40 mix-blend-multiply pointer-events-none z-0">
+              <img
+                src={img_20.src || (img_20 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain rotate-[18deg]"
+              />
+            </div>
+            <div className="absolute top-[70%] -right-[30px] sm:-right-[20px] w-48 sm:w-60 opacity-45 mix-blend-multiply pointer-events-none z-0">
+              <img
+                src={img_22.src || (img_22 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain -rotate-[8deg]"
+              />
+            </div>
+            <div className="absolute bottom-[8%] -left-[25px] sm:-left-[15px] w-52 sm:w-64 opacity-45 mix-blend-multiply pointer-events-none z-0">
+              <img
+                src={img_23.src || (img_23 as unknown as string)}
+                alt=""
+                decoding="async"
+                className="w-full h-auto object-contain rotate-[14deg]"
               />
             </div>
 
@@ -231,48 +325,40 @@ export function LiveView({
             />
             <div className="relative pt-2 sm:pt-4">
               {/* thông tin chú rể & cô dâu */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <MinimalCoupleSpotlight weddingData={weddingData} />
-              </GsapReveal>
+              <MinimalCoupleSpotlight weddingData={weddingData} />
 
               {/* bộ sưu tập ảnh 3D Coverflow */}
-              <GsapReveal direction="right" distance={60} duration={1.2}>
-                <CoverflowGallery weddingData={weddingData} />
-              </GsapReveal>
+              <CoverflowGallery weddingData={weddingData} />
 
               {/* thông tin tiệc cưới */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <EventInfo
-                  variantId="EventInfo1"
-                  weddingData={weddingData}
-                  onOpenRsvpModal={() => setRsvpModalOpen(true)}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor="linear-gradient(155deg, #8DA672 0%, #69824F 32%, #435832 68%, #26351B 100%)"
-                />
-              </GsapReveal>
+              <EventInfo
+                variantId="EventInfo1"
+                weddingData={weddingData}
+                onOpenRsvpModal={() => setRsvpModalOpen(true)}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.cardGradient}
+                flowerImage={img_27.src || (img_27 as unknown as string)}
+              />
 
               {/* địa điểm */}
               {primaryEvent && (
-                <GsapReveal direction="right" distance={60} duration={1.2}>
-                  <VenueMap
-                    variantId="minimal"
-                    event={primaryEvent}
-                    primaryColor={colorPalette.primaryColor}
-                    textColor={colorPalette.textColor}
-                    fontFamily='"Times New Roman", serif'
-                  />
-                </GsapReveal>
+                <VenueMap
+                  variantId="minimal"
+                  event={primaryEvent}
+                  primaryColor={colorPalette.primaryColor}
+                  textColor={colorPalette.textColor}
+                  fontFamily='"Times New Roman", serif'
+                />
               )}
 
               {/* time line */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
-                <Timeline
-                  variant="Timeline1"
-                  weddingData={weddingData}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor="linear-gradient(155deg, #8DA672 0%, #69824F 32%, #435832 68%, #26351B 100%)"
-                />
-              </GsapReveal>
+              <Timeline
+                variant="Timeline1"
+                weddingData={weddingData}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.cardGradient}
+                flowerImage={img_27.src || (img_27 as unknown as string)}
+              />
             </div>
 
             {/* sổ lời chúc */}

@@ -3,9 +3,11 @@ import { WeddingData } from "@/entities/invitation/model/types";
 import {
   formatDateToDDMMYYYY,
 } from "@/shared/lib/utils/date";
+import { getLastTwoNames } from "@/shared/lib/utils/string";
 
 // img
-import img_16 from "@/shared/assets/image/flower/img_16.webp";
+import img_26 from "@/shared/assets/image/flower/img_26.webp";
+import img_31 from "@/shared/assets/image/flower/img_31.webp";
 import img_11 from "@/shared/assets/image/envelope/img_11.webp";
 import img_12 from "@/shared/assets/image/envelope/img_12.webp";
 
@@ -45,7 +47,7 @@ export function InvitationCover({
 
   useEffect(() => {
     // Preload ảnh
-    [img_11, img_12, img_16, couplePhoto].forEach((img) => {
+    [img_11, img_12, img_26, img_31, couplePhoto].forEach((img) => {
       const src = getImgSrc(img);
       if (src && typeof window !== "undefined") {
         const i = new window.Image();
@@ -222,6 +224,27 @@ export function InvitationCover({
             transform: translate3d(0, 0, 0) scale(1);
           }
         }
+        @keyframes cover-fly-across-full {
+          0% {
+            transform: translate3d(-140%, 0, 0) rotate(-12deg);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.95;
+          }
+          92% {
+            opacity: 0.95;
+          }
+          100% {
+            transform: translate3d(620px, -20px, 0) rotate(14deg);
+            opacity: 0;
+          }
+        }
+        .animate-cover-fly-across {
+          animation: cover-fly-across-full 18s linear infinite;
+          will-change: transform, opacity;
+        }
+
         .animate-guest-in {
           animation: guest-pill-in 1.0s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
           will-change: transform, opacity;
@@ -238,6 +261,16 @@ export function InvitationCover({
 
       {/* Envelope Graphic Composition - Responsive Scale for Mobile & Desktop */}
       <div className={`relative w-full max-w-[390px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[580px] aspect-[1063/1891] mx-auto -mt-4 sm:-mt-6 -mb-24 sm:-mb-32 md:-mb-40 filter drop-shadow-[0_20px_45px_rgba(20,35,15,0.25)] ${animReady ? 'animate-envelope-appear' : 'opacity-0'}`}>
+        {/* Floating Botanical Branch img_31 - Nổi lên trên bề mặt, chuyển động từ mép trái qua hết mép phải (Size 1x) */}
+        <div className="absolute top-[4%] left-0 w-[38%] sm:w-[42%] z-40 opacity-0 pointer-events-none drop-shadow-[0_14px_28px_rgba(0,0,0,0.18)] animate-cover-fly-across">
+          <img
+            src={getImgSrc(img_31)}
+            alt="Botanical Flower Decoration"
+            loading="eager"
+            decoding="async"
+            className="w-full h-auto object-contain"
+          />
+        </div>
         {/* Layer 1: Envelope Interior & Back Flap (img_11) - Hiển thị cùng lúc với img_12 */}
         <img
           src={getImgSrc(img_11)}
@@ -249,11 +282,11 @@ export function InvitationCover({
           className="absolute inset-0 w-full h-full object-contain pointer-events-none z-10"
         />
 
-        {/* Layer 2: Flower Bouquet inside Envelope (img_16) - Hiện sau khi phong bì hiển thị hoàn tất */}
-        <div className={`absolute left-[7%] sm:left-[5%] top-[15%] sm:top-[14%] w-[40%] sm:w-[42%] z-10 pointer-events-none drop-shadow-md ${animReady ? 'animate-flower-slide-up' : 'opacity-0'}`}>
+        {/* Layer 2: Flower Bouquet inside Envelope (img_26) - Hiện sau khi phong bì hiển thị hoàn tất */}
+        <div className={`absolute left-[5%] sm:left-[3%] top-[12%] sm:top-[10%] w-[44%] sm:w-[46%] z-10 pointer-events-none drop-shadow-md ${animReady ? 'animate-flower-slide-up' : 'opacity-0'}`}>
           <div className="w-full h-full animate-sway-slow">
             <img
-              src={getImgSrc(img_16)}
+              src={getImgSrc(img_26)}
               alt="Flower Decoration"
               loading="eager"
               decoding="async"
@@ -308,7 +341,7 @@ export function InvitationCover({
                 "0 2px 12px rgba(46, 61, 37, 0.18), 0 0 20px rgba(247, 249, 244, 0.9)",
             }}
           >
-            {groomName || "Văn An"}
+            {getLastTwoNames(groomName) || "Văn An"}
           </span>
 
           {/* Ký tự & */}
@@ -330,7 +363,7 @@ export function InvitationCover({
                 "0 2px 12px rgba(46, 61, 37, 0.18), 0 0 20px rgba(247, 249, 244, 0.9)",
             }}
           >
-            {brideName || "Thị Bình"}
+            {getLastTwoNames(brideName) || "Thị Bình"}
           </span>
         </h1>
 

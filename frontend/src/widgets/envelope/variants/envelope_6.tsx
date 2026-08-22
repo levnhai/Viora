@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
+import { getLastTwoNames } from "@/shared/lib/utils/string";
 import img_15 from "@/shared/assets/image/flower/img_15.webp";
 import confetti from "canvas-confetti";
 
@@ -289,33 +290,32 @@ export function Envelope_6({
               {/* Bay Bổng Calligraphy Names */}
               <h1 className="mb-2 flex flex-col items-center leading-tight">
                 <span
-                  className="block w-full text-center text-[2.65rem] sm:text-5xl md:text-6xl font-calligraphy font-semibold capitalize tracking-normal animate-fade-in-up delay-100 py-1"
+                  className="block w-full text-center text-[2.65rem] sm:text-5xl md:text-6xl font-calligraphy font-semibold capitalize tracking-normal py-1 animate-title-fade"
                   style={{
                     color: textColor,
                     WebkitTextStroke: "0.2px currentColor",
-                    textShadow: "0 1px 3px rgba(84, 12, 20, 0.12)",
+                    textShadow: "0 1px 3px rgba(78, 11, 18, 0.2)",
                   }}
                 >
-                  {groomName || "Hoàng Long"}
+                  {getLastTwoNames(groomName) || "Hoàng Long"}
                 </span>
                 <span
-                  className="block w-full text-center text-2xl sm:text-3xl leading-none my-1 animate-fade-in-up delay-200 font-serif italic font-medium"
+                  className="block w-full text-center text-2xl sm:text-3xl leading-none my-1 font-serif italic font-medium"
                   style={{
                     color: textColor,
-                    opacity: 0.85,
                   }}
                 >
                   &amp;
                 </span>
                 <span
-                  className="block w-full text-center text-[2.65rem] sm:text-5xl md:text-6xl font-calligraphy font-semibold capitalize tracking-normal animate-fade-in-up delay-300 py-1"
+                  className="block w-full text-center text-[2.65rem] sm:text-5xl md:text-6xl font-calligraphy font-semibold capitalize tracking-normal py-1 animate-title-fade"
                   style={{
                     color: textColor,
                     WebkitTextStroke: "0.2px currentColor",
-                    textShadow: "0 1px 3px rgba(84, 12, 20, 0.12)",
+                    textShadow: "0 1px 3px rgba(78, 11, 18, 0.2)",
                   }}
                 >
-                  {brideName || "Bảo Ngọc"}
+                  {getLastTwoNames(brideName) || "Bảo Ngọc"}
                 </span>
               </h1>
 

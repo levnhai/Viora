@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { formatVietnameseDate } from "@/shared/lib/utils/date";
-import img_15 from "@/shared/assets/image/flower/img_15.webp";
-import img_24 from "@/shared/assets/image/flower/img_24.svg";
+import { getLastTwoNames } from "@/shared/lib/utils/string";
+import img_26 from "@/shared/assets/image/flower/img_26.webp";
+import img_25 from "@/shared/assets/image/flower/img_25.svg";
 import confetti from "canvas-confetti";
 import gsap from "gsap";
 
@@ -313,7 +314,7 @@ export function Envelope_7({
               {/* Top Right Flowers */}
               <div
                 ref={flowerTopRef}
-                className="absolute pointer-events-none w-[125px] sm:w-[140px] md:w-[150px] -top-[45px] -right-[25px] sm:-top-[35px] sm:-right-[20px] z-0 will-change-transform"
+                className="absolute pointer-events-none w-[120px] sm:w-[120px] md:w-[150px] -top-[80px] -right-[25px] sm:-top-[35px] sm:-right-[20px] z-0 will-change-transform"
                 style={{
                   transformOrigin: "center",
                   transform: "rotate(198deg)",
@@ -321,17 +322,17 @@ export function Envelope_7({
               >
                 <div className="w-full h-full">
                   <img
-                    src={img_15.src || (img_15 as unknown as string)}
+                    src={img_26.src || (img_26 as unknown as string)}
                     alt=""
                     className="w-full h-auto object-contain opacity-95"
                   />
                 </div>
               </div>
 
-              {/* Bottom Left Flowers (img_24) */}
+              {/* Bottom Left Flowers (img_25) */}
               <div
                 ref={flowerBottomRef}
-                className="absolute pointer-events-none w-[190px] sm:w-[220px] md:w-[250px] -bottom-[55px] -left-[28px] sm:-bottom-[45px] sm:-left-[24px] z-0 will-change-transform"
+                className="absolute pointer-events-none w-[130px] sm:w-[130px] md:w-[130px] -bottom-[50px] -left-[36px] sm:-bottom-[50px] sm:-left-[36px] z-0 will-change-transform"
                 style={{
                   transformOrigin: "center",
                   transform: "rotate(24deg)",
@@ -339,7 +340,7 @@ export function Envelope_7({
               >
                 <div className="w-full h-full">
                   <img
-                    src={img_24.src || (img_24 as unknown as string)}
+                    src={img_25.src || (img_25 as unknown as string)}
                     alt=""
                     className="w-full h-auto object-contain opacity-95"
                   />
@@ -383,7 +384,7 @@ export function Envelope_7({
                     textShadow: "0 1px 3px rgba(46, 61, 37, 0.12)",
                   }}
                 >
-                  {groomName || "Hoàng Long"}
+                  {getLastTwoNames(groomName) || "Văn An"}
                 </span>
                 <span
                   ref={ampersandRef}
@@ -405,7 +406,7 @@ export function Envelope_7({
                     textShadow: "0 1px 3px rgba(46, 61, 37, 0.12)",
                   }}
                 >
-                  {brideName || "Bảo Ngọc"}
+                  {getLastTwoNames(brideName) || "Thị Bình"}
                 </span>
               </h1>
 

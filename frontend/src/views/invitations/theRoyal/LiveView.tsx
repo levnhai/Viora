@@ -150,9 +150,7 @@ export function LiveView({
             </GsapReveal>
             <div className="relative pt-8">
               {/* thông tin tiệc cưới */}
-              <GsapReveal direction="up" distance={40}>
-                <MinimalCoupleSpotlight weddingData={weddingData} />
-              </GsapReveal>
+              <MinimalCoupleSpotlight weddingData={weddingData} />
 
               {/* bộ sưu tập ảnh */}
               <Gallery
@@ -162,15 +160,14 @@ export function LiveView({
                 textColor={colorPalette.textColor}
               />
 
-              <GsapReveal direction="up" distance={40}>
-                <EventInfo
-                  variantId="EventInfo1"
-                  weddingData={weddingData}
-                  onOpenRsvpModal={() => setRsvpModalOpen(true)}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
-                />
-              </GsapReveal>
+              <EventInfo
+                variantId="EventInfo1"
+                weddingData={weddingData}
+                onOpenRsvpModal={() => setRsvpModalOpen(true)}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
+                paperBg={true}
+              />
 
               {/* địa điểm */}
               {primaryEvent && (
@@ -184,14 +181,13 @@ export function LiveView({
               )}
 
               {/* time line */}
-              <GsapReveal direction="up" distance={40}>
-                <Timeline
-                  variant="Timeline1"
-                  weddingData={weddingData}
-                  primaryColor={colorPalette.primaryColor}
-                  textColor={colorPalette.textColor}
-                />
-              </GsapReveal>
+              <Timeline
+                variant="Timeline1"
+                weddingData={weddingData}
+                primaryColor={colorPalette.primaryColor}
+                textColor={colorPalette.textColor}
+                paperBg={true}
+              />
             </div>
 
             {/* sổ lời chúc */}

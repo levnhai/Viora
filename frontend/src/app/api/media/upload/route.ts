@@ -7,15 +7,21 @@ export async function POST(request: NextRequest) {
 
     const contentType = request.headers.get("content-type") || "";
     const cookie = request.headers.get("cookie") || "";
+    const authHeader = request.headers.get("authorization") || "";
+
+    const headers: Record<string, string> = {
+      "content-type": contentType,
+      "cookie": cookie,
+    };
+    if (authHeader) {
+      headers["authorization"] = authHeader;
+    }
 
     // Gửi request upload trực tiếp từ NextJS Server sang NestJS Backend
     // Tránh được giới hạn hoặc lỗi ngắt kết nối của dev server proxy mặc định
     const response = await fetch(uploadUrl, {
       method: "POST",
-      headers: {
-        "content-type": contentType,
-        "cookie": cookie,
-      },
+      headers,
       body: request.body,
       duplex: "half",
     } as any);

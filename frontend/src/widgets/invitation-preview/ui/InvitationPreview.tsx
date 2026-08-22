@@ -7,35 +7,40 @@ import { getTemplatePackage } from "@/entities/template/model/registry";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 export function InvitationPreview() {
-  const { basicInfo, events, activeTemplate, giftInfo, galleryImages, timeline, story } = useInvitationCreate();
+  const { basicInfo, events, activeTemplate, templateId, giftInfo, galleryImages, timeline, story } = useInvitationCreate();
 
-  const templatePackage = getTemplatePackage(
-    activeTemplate?.code || "minimal-green",
-  );
+  const resolvedTemplateCode =
+    activeTemplate?.code ||
+    (typeof (activeTemplate as any)?.id === "number" ? `temp_${(activeTemplate as any).id}` : "") ||
+    (templateId ? (templateId.startsWith("temp_") ? templateId : `temp_${templateId}`) : "") ||
+    "temp_7";
+
+  const templatePackage = getTemplatePackage(resolvedTemplateCode);
   const SelectedLiveView = templatePackage.LiveView;
 
   // Mock data for empty state
   const mockGalleryImages = [
+    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format"
   ];
-  const mockCoverImage = "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format";
+  const mockCoverImage = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format";
 
   // Transform basicInfo to WeddingData format for the LiveView
   const dummyWeddingData: WeddingData = {
     slug: "preview",
-    templateId: activeTemplate?.code || "minimal-green",
-    groomName: basicInfo.groomName || "Chú Rể",
-    brideName: basicInfo.brideName || "Cô Dâu",
-    groomFatherName: basicInfo.groomFatherName || "",
-    groomMotherName: basicInfo.groomMotherName || "",
-    brideFatherName: basicInfo.brideFatherName || "",
-    brideMotherName: basicInfo.brideMotherName || "",
-    groomRank: basicInfo.groomRank || "",
-    brideRank: basicInfo.brideRank || "",
-    groomAddress: basicInfo.groomAddress || "",
-    brideAddress: basicInfo.brideAddress || "",
+    templateId: resolvedTemplateCode,
+    groomName: basicInfo.groomName || "Minh Quân",
+    brideName: basicInfo.brideName || "Thu Hà",
+    groomFatherName: basicInfo.groomFatherName || "Nguyễn Văn A",
+    groomMotherName: basicInfo.groomMotherName || "Trần Thị B",
+    brideFatherName: basicInfo.brideFatherName || "Lê Văn C",
+    brideMotherName: basicInfo.brideMotherName || "Phạm Thị D",
+    groomRank: basicInfo.groomRank || "Trưởng nam",
+    brideRank: basicInfo.brideRank || "Út nữ",
+    groomAddress: basicInfo.groomAddress || "Hà Nội",
+    brideAddress: basicInfo.brideAddress || "Ninh Bình",
     giftInfo: {
       groomBankName: giftInfo.groomBankName || "",
       groomAccountNumber: giftInfo.groomAccountNumber || "",
@@ -47,27 +52,31 @@ export function InvitationPreview() {
       brideQrUrl: giftInfo.brideQrUrl || "",
     },
     galleryImages: galleryImages.length > 0 ? galleryImages : mockGalleryImages,
-    weddingDate: basicInfo.weddingDate || new Date().toISOString(),
-    weddingTime: basicInfo.weddingTime || "18:00",
+    weddingDate: basicInfo.weddingDate || "2026-12-31",
+    weddingTime: basicInfo.weddingTime || "11:00 AM",
     musicUrl: basicInfo.musicUrl,
     story: story,
     events: events && events.length > 0 ? events : [
       {
+        id: "evt_preview_1",
         title: "LỄ TIỆC CƯỚI",
         time: basicInfo.weddingTime || "11:00 AM",
-        date: basicInfo.weddingDate || new Date().toISOString(),
-        locationName: basicInfo.locationName || "Nhà hàng Tiệc cưới",
-        address: basicInfo.address || "Địa chỉ nhà hàng",
+        date: basicInfo.weddingDate || "2026-12-31",
+        locationName: basicInfo.locationName || "TRUNG TÂM HỘI NGHỊ TIỆC CƯỚI NINH BÌNH LEGEND",
+        address: basicInfo.address || "177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư, Ninh Bình",
         mapUrl: basicInfo.mapLink || "",
       },
     ],
-    timeline: timeline.map((t, index) => ({
+    timeline: timeline.length > 0 ? timeline.map((t, index) => ({
       year: t.time,
       title: t.title,
       description: t.description,
       imageUrl: mockGalleryImages[index % mockGalleryImages.length],
-    })),
-    coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : undefined),
+    })) : [
+      { year: "09:00", title: "Lễ Đón Dâu", description: "Tại tư gia nhà gái" },
+      { year: "11:00", title: "Tiệc Cưới", description: "Khai tiệc mừng hạnh phúc" },
+    ],
+    coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : mockCoverImage),
     templateConfig: {
       coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : mockCoverImage),
     },

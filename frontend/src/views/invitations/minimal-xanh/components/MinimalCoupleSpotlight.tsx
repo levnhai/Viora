@@ -1,7 +1,7 @@
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { getVietnameseLunarDate } from "@/shared/lib/utils/date";
-import img_16 from "@/shared/assets/image/flower/img_16.webp";
+import img_27 from "@/shared/assets/image/flower/img_27.webp";
 
 interface MinimalCoupleSpotlightProps {
   weddingData: WeddingData;
@@ -39,17 +39,7 @@ export function MinimalCoupleSpotlight({
         t.includes("GIA TIÊN") ||
         loc.includes("TƯ GIA")
       );
-    }) || events[0];
-
-  const rawTitle = (ceremonyEvent?.title || "LỄ THÀNH HÔN").toUpperCase();
-  const displayCeremonyTitle = rawTitle.startsWith("LỄ")
-    ? rawTitle
-    : `LỄ ${rawTitle}`;
-  const ceremonyLocation = (
-    ceremonyEvent?.locationName || "TƯ GIA"
-  ).toUpperCase();
-  const ceremonyDate = ceremonyEvent?.date || weddingDate || "2026-12-31";
-  const ceremonyTime = ceremonyEvent?.time || weddingTime || "11:00 AM";
+    }) || events[0] || {};
 
   const getImgSrc = (img: any): string => {
     if (!img) return "";
@@ -87,14 +77,6 @@ export function MinimalCoupleSpotlight({
     }
 
     const d = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    if (isNaN(d.getTime()))
-      return {
-        dayOfWeek: "THỨ BẢY",
-        date: "03",
-        month: "THÁNG 01",
-        year: "2026",
-      };
-
     const days = [
       "CHỦ NHẬT",
       "THỨ HAI",
@@ -105,18 +87,28 @@ export function MinimalCoupleSpotlight({
       "THỨ BẢY",
     ];
     return {
-      dayOfWeek: days[d.getDay()],
+      dayOfWeek: days[isNaN(d.getDay()) ? 6 : d.getDay()],
       date: day.padStart(2, "0"),
       month: `THÁNG ${month.padStart(2, "0")}`,
       year: year,
     };
   };
 
+  const ceremonyDate = ceremonyEvent?.date || weddingDate || "2026-12-31";
+  const ceremonyTime = ceremonyEvent?.time || weddingTime || "11:00 AM";
   const dInfo = parseDateInfo(ceremonyDate);
   const lunarDateStr = getVietnameseLunarDate(ceremonyDate);
 
+  const rawTitle = (ceremonyEvent?.title || "LỄ THÀNH HÔN").toUpperCase();
+  const displayCeremonyTitle = rawTitle.startsWith("LỄ")
+    ? rawTitle
+    : `LỄ ${rawTitle}`;
+  const ceremonyLocation = (
+    ceremonyEvent?.locationName || "TƯ GIA"
+  ).toUpperCase();
+
   return (
-    <section className="relative py-12 px-4 sm:px-6 z-20 select-none overflow-visible">
+    <section className="relative pt-6 sm:pt-8 pb-12 sm:pb-16 px-4 sm:px-8 z-20">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap');
 
@@ -139,14 +131,14 @@ export function MinimalCoupleSpotlight({
       <div className="relative max-w-xl mx-auto rounded-[28px] bg-[linear-gradient(155deg,#8DA672_0%,#69824F_32%,#435832_68%,#26351B_100%)] text-[#fdfbf6] shadow-[0_25px_60px_-12px_rgba(40,55,30,0.5),0_10px_20px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.35)] px-6 py-10 sm:px-10 sm:py-14 border border-[#DCE7CF]/30 overflow-hidden">
         {/* Subtle Ambient Glow Highlight */}
         <div className="absolute top-0 left-0 right-0 h-40 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),_transparent_70%)] pointer-events-none" />
-        {/* Overflowing Right Floral Bouquet (img_16) */}
-        <div className="absolute -right-16 sm:-right-14 md:-right-16 top-[8%] w-28 sm:w-44 md:w-56 z-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] animate-sway-slow">
+        {/* Overflowing Right Floral Bouquet (img_27) */}
+        <div className="absolute -right-12 sm:-right-10 md:-right-12 top-[20%]  w-32 sm:w-48 md:w-56 z-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] animate-sway-slow">
           <img
-            src={getImgSrc(img_16)}
+            src={getImgSrc(img_27)}
             alt="Floral Bouquet"
             loading="eager"
             decoding="async"
-            className="w-full h-auto object-contain opacity-90 sm:opacity-100"
+            className="w-full h-auto object-contain opacity-95"
           />
         </div>
 

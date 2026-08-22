@@ -158,6 +158,39 @@ export function InvitationCreateProvider({
   const [isPublishSuccessModalOpen, setIsPublishSuccessModalOpen] = useState(false);
   const [editorActiveTab, setEditorActiveTab] = useState("Thông tin cơ bản");
 
+  // Read URL query parameter if available (e.g. ?templateId=temp_7 or ?template=temp_7)
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isEditMode) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryTemp = urlParams.get("templateId") || urlParams.get("template");
+      if (queryTemp) {
+        const found = TEMPLATES.find(
+          (t) =>
+            t.code.toLowerCase() === queryTemp.toLowerCase() ||
+            t.id.toString() === queryTemp ||
+            `temp_${t.id}` === queryTemp.toLowerCase(),
+        );
+        if (found) {
+          setActiveTemplate({
+            _id: found.code,
+            name: found.name,
+            code: found.code,
+            thumbnail: found.preview,
+            previewUrl: found.preview,
+            price: found.price,
+            features: found.features || [],
+            tags: found.tags || [],
+            status: "active",
+            createdAt: new Date().toISOString(),
+            schema: found.schema,
+          });
+          setTemplateId(found.code);
+          setStep("editor");
+        }
+      }
+    }
+  }, [isEditMode]);
+
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
     groomName: initialData?.wedding?.groomName || "Minh Quân",
     groomFatherName: initialData?.wedding?.groomFatherName || "",

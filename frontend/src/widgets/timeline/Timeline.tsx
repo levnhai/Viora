@@ -15,12 +15,14 @@ export type TimelineKey =
   | "minimal"
   | "Timeline1";
 
-interface TimelineProps {
+export interface TimelineProps {
   variant: TimelineKey;
   data?: LoveStoryTimelineItem[];
   weddingData?: WeddingData;
   primaryColor?: string;
   textColor?: string;
+  flowerImage?: string;
+  paperBg?: boolean;
 }
 
 const timelineRegistry: Record<TimelineKey, ComponentType<any>> = {
