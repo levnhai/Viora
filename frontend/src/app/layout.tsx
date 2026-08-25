@@ -1,49 +1,53 @@
-import './styles/index.css';
-import { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
-import GoogleOAuthProviderWrapper from './GoogleOAuthProviderWrapper';
-import { BottomNav } from '@/widgets/bottom-nav/ui/BottomNav';
-import { FloatingZaloContact } from '@/widgets/zalo-contact/ui/FloatingZaloContact';
-import { AnalyticsTracker } from '@/shared/lib/analytics/AnalyticsTracker';
+import "./styles/index.css";
+import { Metadata, Viewport } from "next";
+import { Suspense } from "react";
+import GoogleOAuthProviderWrapper from "./GoogleOAuthProviderWrapper";
+import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
+import { FloatingZaloContact } from "@/widgets/zalo-contact/ui/FloatingZaloContact";
+import { AnalyticsTracker } from "@/shared/lib/analytics/AnalyticsTracker";
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://thiepcuoionline-nine.vercel.app';
+const siteUrl =
+  process.env.NEXT_PUBLIC_APP_URL || "https://thiepcuoionline-nine.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
-  description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
+  title: "2H - Tạo Thiệp Cưới Online Đẹp & Hiện Đại",
+  description:
+    "Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
-    description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
-    siteName: 'Viora Studio',
+    title: "2H - Tạo Thiệp Cưới Online Đẹp & Hiện Đại",
+    description:
+      "Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.",
+    siteName: "Viora Studio",
     url: siteUrl,
     images: [
       {
-        url: '/og-banner.png',
+        url: "/og-banner.jpg",
         width: 1200,
         height: 630,
-        alt: 'Viora Studio - Thiệp Cưới Trực Tuyến',
+        alt: "Viora Studio - Thiệp Cưới Trực Tuyến",
       },
     ],
-    type: 'website',
-    locale: 'vi_VN',
+    type: "website",
+    locale: "vi_VN",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Viora Studio - Thiệp Cưới Trực Tuyến Sang Trọng',
-    description: 'Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.',
-    images: ['/og-banner.png'],
+    card: "summary_large_image",
+    title: "2H - Tạo Thiệp Cưới Online Đẹp & Hiện Đại",
+    description:
+      "Tự tay thiết kế thiệp cưới trực tuyến sang trọng và cao cấp. Dễ dàng tùy biến, quản lý khách mời RSVP và lời chúc.",
+    images: ["/og-banner.jpg"],
   },
 };
 
@@ -54,8 +58,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <body style={{ height: '100%', margin: 0 }} suppressHydrationWarning>
-        <div id="root" style={{ height: '100%' }}>
+      <body style={{ height: "100%", margin: 0 }} suppressHydrationWarning>
+        <div id="root" style={{ height: "100%" }}>
           <GoogleOAuthProviderWrapper>
             <Suspense fallback={null}>
               <AnalyticsTracker />

@@ -210,6 +210,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isHot: true,
     preview:
       "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/minimal_do.mp4",
     themeClass: "Minimal",
     tier: "standard",
     price: 149000,
