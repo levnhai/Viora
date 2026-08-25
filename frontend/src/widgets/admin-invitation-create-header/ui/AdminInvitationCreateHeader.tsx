@@ -8,7 +8,7 @@ export function AdminInvitationCreateHeader() {
   const handleLogout = async () => {
     try {
       await authService.logout();
-      router.push("/admin/login");
+      router.push("/admin/login-2h");
     } catch (error) {
       console.error("Lỗi đăng xuất:", error);
     }

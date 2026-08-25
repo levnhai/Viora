@@ -38,6 +38,9 @@ export class User {
   @Prop({ default: 'active' })
   status: string; // 'active' | 'blocked'
 
+  @Prop({ default: 0 })
+  failedLoginAttempts: number;
+
   @Prop()
   lastLoginAt?: Date;
 

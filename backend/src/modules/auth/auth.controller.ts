@@ -1,4 +1,6 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from './auth.guard';
+import { AdminGuard } from './admin.guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import * as express from 'express';
@@ -10,7 +12,7 @@ export class AuthController {
   private setTokenCookie(res: express.Response, token: string) {
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false, // Set to true in production (HTTPS)
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -40,6 +42,13 @@ export class AuthController {
     };
   }
 
+  @Post('admin/change-credentials')
+  @UseGuards(AuthGuard, AdminGuard)
+  async changeAdminCredentials(@Req() req: any, @Body() body: { currentPassword: string; newEmail: string; newPassword: string }, @Res({ passthrough: true }) res: express.Response) {
+    const data = await this.authService.changeAdminCredentials(req.user.id, body.currentPassword, body.newEmail, body.newPassword);
+    this.setTokenCookie(res, data.token);
+    return { success: true, message: 'Đã cập nhật thông tin đăng nhập' };
+  }
   @Post('register')
   async register(
     @Body() loginDto: LoginDto,
@@ -150,7 +159,7 @@ export class AuthController {
   async logout(@Res({ passthrough: true }) res: express.Response) {
     res.clearCookie('token', {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
     });

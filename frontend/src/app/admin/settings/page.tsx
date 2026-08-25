@@ -1,0 +1,9 @@
+"use client";
+import { FormEvent, useState } from "react";
+import { API_URL } from "@/shared/lib/config";
+import { useRouter } from "next/navigation";
+export default function AdminSettingsPage() {
+ const router=useRouter(); const [currentPassword,setCurrentPassword]=useState(""); const [newEmail,setNewEmail]=useState(""); const [newPassword,setNewPassword]=useState(""); const [message,setMessage]=useState("");
+ async function submit(e:FormEvent){e.preventDefault(); const res=await fetch(`${API_URL}/api/auth/admin/change-credentials`,{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({currentPassword,newEmail,newPassword})}); const body=await res.json(); if(!res.ok){setMessage(body.message||"Cập nhật thất bại");return;} setMessage("Đã cập nhật. Vui lòng dùng email và mật khẩu mới ở lần đăng nhập sau."); setCurrentPassword("");setNewPassword("");}
+ return <main className="max-w-md mx-auto p-8"><h1 className="text-2xl font-bold mb-6">Đổi thông tin đăng nhập</h1><form onSubmit={submit} className="space-y-4"><input required type="password" placeholder="Mật khẩu hiện tại" value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} className="w-full border p-3 rounded"/><input required type="email" placeholder="Email mới" value={newEmail} onChange={e=>setNewEmail(e.target.value)} className="w-full border p-3 rounded"/><input required minLength={8} type="password" placeholder="Mật khẩu mới (ít nhất 8 ký tự)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} className="w-full border p-3 rounded"/><button className="bg-indigo-600 text-white px-4 py-3 rounded">Cập nhật</button></form>{message&&<p className="mt-4">{message}</p>}</main>;
+}

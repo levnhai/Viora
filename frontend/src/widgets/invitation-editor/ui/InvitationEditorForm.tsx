@@ -285,31 +285,6 @@ export function InvitationEditorForm() {
             ?.split("=")[1]
         : null;
 
-    if (!token) {
-      try {
-        const authRes = await fetch(`${API_URL}/api/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            username: "admin@viora.vn",
-            password: "admin",
-          }),
-        });
-        if (authRes.ok) {
-          const authData = await authRes.json();
-          if (authData.data?.token) {
-            token = authData.data.token;
-            localStorage.setItem("token", token as string);
-            if (authData.data) {
-              localStorage.setItem("user", JSON.stringify(authData.data));
-            }
-          }
-        }
-      } catch (authErr) {
-        console.warn("Auto-auth login failed:", authErr);
-      }
-    }
 
     const headers: Record<string, string> = {};
     if (token) {
@@ -323,36 +298,6 @@ export function InvitationEditorForm() {
       credentials: "include",
     });
 
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      try {
-        const authRes = await fetch(`${API_URL}/api/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            username: "admin@viora.vn",
-            password: "admin",
-          }),
-        });
-        if (authRes.ok) {
-          const authData = await authRes.json();
-          if (authData.data?.token) {
-            token = authData.data.token;
-            localStorage.setItem("token", token as string);
-            headers["Authorization"] = `Bearer ${token}`;
-            res = await fetch(`${API_URL}/api/media/upload`, {
-              method: "POST",
-              headers,
-              body: formData,
-              credentials: "include",
-            });
-          }
-        }
-      } catch (e) {
-        console.warn("Retry upload auth failed:", e);
-      }
-    }
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ message: "Lỗi upload" }));

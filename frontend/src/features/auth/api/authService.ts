@@ -13,9 +13,6 @@ export const authService = {
     if (!response.ok) {
       throw new Error(resData.message || "Đăng nhập thất bại!");
     }
-    if (resData.data?.token && typeof window !== "undefined") {
-      localStorage.setItem("token", resData.data.token);
-    }
     return resData.data; // Trả về: { role, weddingSlug, name, email, token }
   },
 
@@ -45,9 +42,6 @@ export const authService = {
     const resData = await response.json();
     if (!response.ok) {
       throw new Error(resData.message || "Mã xác thực không chính xác hoặc đã hết hạn!");
-    }
-    if (resData.data?.token && typeof window !== "undefined") {
-      localStorage.setItem("token", resData.data.token);
     }
     return resData.data; // Trả về: { role, weddingSlug, name, email, token }
   },
@@ -108,9 +102,6 @@ export const authService = {
     const resData = await response.json();
     if (!response.ok) {
       throw new Error(resData.message || "Xác thực Google với hệ thống thất bại!");
-    }
-    if (resData.data?.token && typeof window !== "undefined") {
-      localStorage.setItem("token", resData.data.token);
     }
     return resData.data;
   },

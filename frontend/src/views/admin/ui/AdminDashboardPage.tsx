@@ -10,6 +10,7 @@ import { AdminDashboardKpi } from "@/widgets/admin-dashboard-kpi/ui/AdminDashboa
 import { AdminDashboardCharts } from "@/widgets/admin-dashboard-charts/ui/AdminDashboardCharts";
 import { AdminDashboardTables } from "@/widgets/admin-dashboard-tables/ui/AdminDashboardTables";
 import { AdminDashboardSystem } from "@/widgets/admin-dashboard-system/ui/AdminDashboardSystem";
+import { AdminAnalyticsSection } from "@/widgets/admin-analytics/ui/AdminAnalyticsSection";
 
 export function AdminDashboardPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export function AdminDashboardPage() {
 
   useEffect(() => {
     if (error === "UNAUTHORIZED") {
-      router.push("/admin/login");
+      router.push("/admin/login-2h");
     }
   }, [error, router]);
 
@@ -70,7 +71,7 @@ export function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div>
           <h2 className="text-xl font-bold text-slate-800 tracking-tight">
-            Dashboard
+            Dashboard Tổng Quan
           </h2>
           <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
             <span className="hover:text-indigo-600 cursor-pointer">
@@ -80,19 +81,17 @@ export function AdminDashboardPage() {
             <span className="text-slate-700">Dashboard</span>
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <select className="text-sm border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 text-slate-600 outline-none focus:ring-2 focus:ring-indigo-500/20">
-            <option>Hôm nay</option>
-            <option>7 ngày qua</option>
-            <option>30 ngày qua</option>
-            <option>Năm nay</option>
-          </select>
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shadow-sm shadow-indigo-600/20">
-            Xuất báo cáo
-          </button>
-        </div>
       </div>
 
+      {/* Phần Thống kê Chi tiết Lưu lượng Web, Realtime Online & Thiết bị, Trình duyệt */}
+      <AdminAnalyticsSection initialRange="7days" />
+
+      {/* KPI Thiệp Cưới & RSVP */}
+      <div className="mt-8 mb-2">
+        <h3 className="text-base font-bold text-slate-800 tracking-tight">
+          Số liệu Vận hành & Sự kiện Cưới
+        </h3>
+      </div>
       <AdminDashboardKpi kpi={kpi} />
       <AdminDashboardCharts
         charts={charts}

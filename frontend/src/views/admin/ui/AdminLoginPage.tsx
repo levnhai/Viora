@@ -67,7 +67,7 @@ export function AdminLoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} autoComplete="off" className="space-y-6">
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-[#2c1810]">Tài khoản / Email quản trị</label>
               <div className="relative">
@@ -79,7 +79,7 @@ export function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-[#faf8f5] border border-[#e6d5d8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8b3a52]/30 focus:border-[#8b3a52] transition-all text-[#2c1810]"
-                  placeholder="admin hoặc admin@viora.vn"
+                  placeholder="Nhập tài khoản hoặc email"
                   required
                 />
               </div>

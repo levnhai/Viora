@@ -17,7 +17,7 @@ export function AdminInvitationDetailPage({ slug }: { slug: string }) {
 
   useEffect(() => {
     if (error === "UNAUTHORIZED") {
-      router.push("/admin/login");
+      router.push("/admin/login-2h");
     }
   }, [error, router]);
 

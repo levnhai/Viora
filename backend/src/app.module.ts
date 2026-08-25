@@ -16,12 +16,13 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { NewsModule } from './modules/news/news.module';
 import { SocketModule } from './modules/socket/socket.module';
 import { TemplateRequestsModule } from './modules/template-requests/template-requests.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`, '.env'],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,6 +46,7 @@ import { TemplateRequestsModule } from './modules/template-requests/template-req
     NewsModule,
     SocketModule,
     TemplateRequestsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

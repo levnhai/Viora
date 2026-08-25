@@ -26,6 +26,10 @@ export class AuthService {
     return crypto.createHash('sha256').update(password).digest('hex');
   }
 
+  verifyPassword(password: string, storedHash: string): boolean {
+    const expected = crypto.createHash('sha256').update(password).digest('hex');
+    return crypto.timingSafeEqual(Buffer.from(storedHash), Buffer.from(expected));
+  }
   async createUser(
     username: string,
     passwordPlain: string,
@@ -64,26 +68,13 @@ export class AuthService {
     weddingSlug?: string;
   } {
     const secret =
-      this.configService.get<string>('JWT_SECRET') ||
-      'viora_wedding_secret_key';
+      this.configService.get<string>('JWT_SECRET');
+    if (!secret) throw new Error('JWT_SECRET must be configured');
 
-    // Create token payload
-    const payload = {
-      id: user._id,
-      username: user.username,
-      role: user.role,
-      weddingSlug: user.weddingSlug,
-    };
-
-    // Encrypt token
-    const data = Buffer.from(JSON.stringify(payload)).toString('base64');
-    const signature = crypto
-      .createHmac('sha256', secret)
-      .update(data)
-      .digest('base64');
-
-    const token = `${data}.${signature}`;
-
+    const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(JSON.stringify({ id: user._id, username: user.username, role: user.role, weddingSlug: user.weddingSlug, exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60 })).toString('base64url');
+    const signature = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
+    const token = `${header}.${payload}.${signature}`;
     return {
       token,
       role: user.role,
@@ -119,12 +110,20 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Tài khoản không tồn tại!');
     }
-
-    const hash = this.hashPassword(passwordPlain);
-    if (user.passwordHash !== hash) {
-      throw new UnauthorizedException('Mật khẩu không chính xác!');
+    if (user.status !== 'active') {
+      throw new UnauthorizedException('Tài khoản chưa được kích hoạt hoặc đã bị khóa');
     }
 
+    if (!this.verifyPassword(passwordPlain, user.passwordHash)) {
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      if (user.failedLoginAttempts >= 5) user.status = 'blocked';
+      await user.save();
+      throw new UnauthorizedException(user.status === 'blocked' ? 'Tài khoản đã bị khóa do đăng nhập sai 5 lần' : 'Mật khẩu không chính xác!');
+    }
+
+    user.failedLoginAttempts = 0;
+    user.lastLoginAt = new Date();
+    await user.save();
     const tokenData = this.generateToken(user);
     const displayName = (user.fullName || user.username || '').split('@')[0];
     return {
@@ -539,5 +538,15 @@ export class AuthService {
       picture,
       email,
     };
+  }
+  async changeAdminCredentials(userId: string, currentPassword: string, newEmail: string, newPassword: string) {
+    const user = await this.userModel.findById(userId).exec();
+    if (!user || !['admin', 'staff'].includes(user.role)) throw new UnauthorizedException('Tài khoản không hợp lệ');
+    if (!this.verifyPassword(currentPassword, user.passwordHash)) throw new UnauthorizedException('Mật khẩu hiện tại không đúng');
+    const email = newEmail.trim().toLowerCase();
+    const existing = await this.userModel.findOne({ email, _id: { $ne: user._id } }).exec();
+    if (existing) throw new UnauthorizedException('Email này đã được sử dụng');
+    user.email = email; user.username = email; user.passwordHash = this.hashPassword(newPassword);
+    await user.save(); return this.generateToken(user);
   }
 }

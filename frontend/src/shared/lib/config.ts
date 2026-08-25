@@ -1,27 +1,9 @@
 function getApiUrl(): string {
-  const rawUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const cleanUrl = rawUrl.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  // Browser requests use Next.js /api proxy so the httpOnly session cookie stays same-origin.
+  if (typeof window !== 'undefined') return '';
 
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    // Nếu truy cập từ mạng LAN/IP (ví dụ 10.20.13.65) và cleanUrl đang là localhost hoặc khác IP
-    if (
-      hostname &&
-      hostname !== 'localhost' &&
-      hostname !== '127.0.0.1' &&
-      (!cleanUrl || cleanUrl.includes('localhost') || cleanUrl.includes('127.0.0.1'))
-    ) {
-      return `http://${hostname}:8080`;
-    }
-    return cleanUrl || '';
-  }
-
-  return cleanUrl || 'http://localhost:8080';
+  const rawUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  return rawUrl.replace(/\/api\/?$/, '').replace(/\/$/, '');
 }
 
 export const API_URL = getApiUrl();
-
-
-
-
-

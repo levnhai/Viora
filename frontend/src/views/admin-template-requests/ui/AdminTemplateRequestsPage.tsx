@@ -29,7 +29,7 @@ export function AdminTemplateRequestsPage() {
     try {
       const res = await fetch("/api/template-requests");
       if (res.status === 401) {
-        router.push("/admin/login");
+        router.push("/admin/login-2h");
         return;
       }
       const data = await res.json();
