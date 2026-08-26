@@ -1,0 +1,56 @@
+
+/* Buyer dashboard: unified application shell and accessible responsive controls. */
+.buyer-dashboard {
+  --dashboard-ink: #172554;
+  --dashboard-muted: #64748b;
+  --dashboard-line: #e2e8f0;
+  --dashboard-surface: #ffffff;
+  --dashboard-accent: #be185d;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(251, 207, 232, 0.34), transparent 27rem),
+    radial-gradient(circle at 100% 0%, rgba(219, 234, 254, 0.55), transparent 30rem),
+    #f8fafc;
+  color: var(--dashboard-ink);
+}
+
+.buyer-dashboard__header > div { min-height: 4.5rem; }
+.buyer-dashboard__content > * { animation: buyer-dashboard-enter 220ms ease-out both; }
+.buyer-dashboard__content :is(button, a, input, select, textarea) { -webkit-tap-highlight-color: transparent; }
+.buyer-dashboard__content :is(button, a, input, select, textarea):focus-visible,
+.buyer-dashboard__sidebar button:focus-visible,
+.buyer-dashboard__header button:focus-visible {
+  outline: 3px solid rgba(190, 24, 93, 0.28);
+  outline-offset: 2px;
+}
+.buyer-dashboard__content :is(input, select, textarea) {
+  font-size: 0.875rem;
+  color: #1e293b;
+}
+.buyer-dashboard__content :is(input, select, textarea)::placeholder { color: #94a3b8; }
+.buyer-dashboard__content .bg-white {
+  border-color: var(--dashboard-line);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.045);
+}
+.buyer-dashboard__content h1,
+.buyer-dashboard__content h2,
+.buyer-dashboard__content h3 { letter-spacing: -0.025em; }
+.buyer-dashboard__content table th {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+}
+.buyer-dashboard__content table td { font-size: 0.875rem; }
+.buyer-dashboard__sidebar button { min-height: 3rem; }
+
+@keyframes buyer-dashboard-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+@media (max-width: 767px) {
+  .buyer-dashboard__header > div { min-height: 3.75rem; }
+  .buyer-dashboard__content { padding-bottom: 0.5rem; }
+  .buyer-dashboard__content .space-y-6 { row-gap: 1rem; }
+  .buyer-dashboard__content .rounded-2xl { border-radius: 1rem; }
+}

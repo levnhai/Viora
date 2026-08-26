@@ -18,8 +18,8 @@ export const DashboardSidebar = ({
   navigate,
 }: DashboardSidebarProps) => {
   return (
-    <aside className="w-full md:w-64 shrink-0 hidden md:block font-sans">
-      <div className="bg-white rounded-2xl border border-slate-100 p-4 space-y-2 shadow-sm">
+    <aside className="buyer-dashboard__sidebar w-full md:w-64 shrink-0 hidden md:block font-sans">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-3 space-y-1.5 shadow-[0_12px_32px_rgba(15,23,42,0.06)] md:sticky md:top-24">
         <button
           onClick={() => setActiveTab("overview")}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-0 cursor-pointer ${

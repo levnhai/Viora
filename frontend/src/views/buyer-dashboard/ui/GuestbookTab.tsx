@@ -1,51 +1,53 @@
 import React from "react";
-import { BookOpen, Heart } from "lucide-react";
+import { BookOpen, Trash2 } from "lucide-react";
 
 interface GuestbookTabProps {
   guestbookList: any[];
   getAvatarColor: (name: string) => any;
   getInitials: (name: string) => string;
+  onDeleteGuestbook?: (id: string) => void;
 }
 
 export function GuestbookTab({
   guestbookList,
   getAvatarColor,
   getInitials,
+  onDeleteGuestbook,
 }: GuestbookTabProps) {
   return (
     <>
       {/* PHIÊN BẢN MOBILE (block md:hidden) */}
-      <div className="block md:hidden space-y-4 font-sans">
+      <div className="block md:hidden space-y-3 font-sans">
         {guestbookList.length === 0 ? (
           <div className="text-center py-12 text-[#475569]/60 text-xs italic bg-white rounded-2xl border border-[#e2e8f0]/15">
             Chưa có lời chúc nào được gửi qua thiệp cưới.
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {guestbookList.map((msg: any) => {
               const avatarColor = getAvatarColor(msg.name);
               const initials = getInitials(msg.name);
               return (
                 <div
                   key={msg._id}
-                  className="p-4 bg-white rounded-2xl border border-stone-100 shadow-2xs flex gap-3 relative animate-fade-in font-sans"
+                  className="p-3.5 bg-white rounded-2xl border border-stone-100 shadow-3xs flex items-center gap-3 relative animate-fade-in font-sans"
                 >
                   {/* Avatar tròn */}
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 ${avatarColor.bg}`}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 shadow-xs border border-white ${avatarColor.bg}`}
                   >
                     {initials}
                   </div>
 
                   {/* Nội dung */}
-                  <div className="flex-1 min-w-0 pr-6">
-                    <h4 className="font-bold text-sm text-[#1e293b] leading-none mb-1">
+                  <div className="flex-1 min-w-0 pr-1">
+                    <h4 className="font-bold text-[13px] text-stone-800 leading-tight mb-1 truncate">
                       {msg.name}
                     </h4>
-                    <p className="text-xs leading-relaxed text-stone-600 mb-2">
+                    <p className="text-xs leading-relaxed text-stone-600 mb-1">
                       {msg.message}
                     </p>
-                    <span className="text-[10px] text-stone-400 font-mono block">
+                    <span className="text-[9.5px] text-stone-400 font-mono block">
                       {new Date(msg.createdAt).toLocaleTimeString(
                         "vi-VN",
                         { hour: "2-digit", minute: "2-digit" },
@@ -56,18 +58,17 @@ export function GuestbookTab({
                     </span>
                   </div>
 
-                  {/* Icon Trái tim màu hồng/đỏ ở góc phải ngoài cùng */}
-                  <div className="absolute right-4 top-4 text-red-500">
-                    <Heart size={14} />
-                  </div>
+                  {/* Nút Xóa căn giữa theo chiều dọc của thẻ */}
+                  <button
+                    onClick={() => onDeleteGuestbook && onDeleteGuestbook(msg._id)}
+                    className="w-8 h-8 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full border-0 bg-transparent cursor-pointer transition-colors shrink-0"
+                    title="Xóa lời chúc"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               );
             })}
-
-            {/* Nút Xem tất cả lời chúc ở cuối */}
-            <button className="w-full py-3.5 bg-[#1b365d] hover:bg-[#be185d] text-white rounded-2xl text-xs font-bold transition-all border-0 shadow-xs cursor-pointer flex items-center justify-center gap-1.5 font-sans mt-6">
-              Xem tất cả {guestbookList.length} lời chúc
-            </button>
           </div>
         )}
       </div>

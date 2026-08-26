@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogOut, User, Key, ChevronDown } from "lucide-react";
+import { LogOut, User, Key, ChevronDown, Eye } from "lucide-react";
 
 interface DashboardHeaderProps {
   activeTab: string;
@@ -39,7 +39,7 @@ export const DashboardHeader = ({
   return (
     <>
       {/* Header Desktop (hidden md:block) */}
-      <header className="bg-white border-b border-slate-100 sticky top-0 z-30 hidden md:block">
+      <header className="buyer-dashboard__header bg-white/95 backdrop-blur-xl border-b border-slate-200/80 sticky top-0 z-30 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div 
             className="flex items-center gap-3 cursor-pointer select-none"
@@ -136,7 +136,7 @@ export const DashboardHeader = ({
       </header>
  
       {/* Header Mobile (block md:hidden) */}
-      <header className="sticky top-0 w-full border-b border-stone-100 z-30 block md:hidden bg-white">
+      <header className="buyer-dashboard__header sticky top-0 w-full border-b border-slate-200/80 z-30 block md:hidden bg-white/95 backdrop-blur-xl">
         <div className="flex items-center justify-between h-14 px-4 w-full">
           {activeTab === "overview" && (
             <>
@@ -152,23 +152,25 @@ export const DashboardHeader = ({
                   VIORA
                 </h3>
               </div>
-              <div className="relative flex items-center">
-                <button className="flex items-center justify-center p-1.5 text-stone-600 hover:bg-stone-100 rounded-full border-0 bg-transparent cursor-pointer relative transition-colors">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
+              <div className="flex items-center">
+                {weddingSlug ? (
+                  <a
+                    href={`/w/${weddingSlug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1b365d] text-white text-xs font-semibold shadow-xs active:scale-95 transition-transform no-underline"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-                </button>
+                    <Eye size={13} />
+                    <span>Xem thiệp</span>
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => navigate("/templates")}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1b365d] text-white text-xs font-semibold shadow-xs active:scale-95 transition-transform border-0 cursor-pointer"
+                  >
+                    <span>Tạo thiệp</span>
+                  </button>
+                )}
               </div>
             </>
           )}

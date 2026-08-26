@@ -85,7 +85,7 @@ export function LoginPage() {
 
       confetti({ particleCount: 100, spread: 60 });
       toast.success("Đăng nhập thành công!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Đăng nhập thất bại!");
     } finally {
@@ -214,7 +214,7 @@ export function LoginPage() {
 
       confetti({ particleCount: 100, spread: 60 });
       toast.success("Đăng nhập bằng Google thành công!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Đăng nhập Google thất bại!");
     } finally {
@@ -286,7 +286,7 @@ export function LoginPage() {
       });
 
       toast.success("Đăng nhập bằng Facebook thành công!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Lỗi liên kết tài khoản Facebook!");
     } finally {
@@ -385,7 +385,7 @@ export function LoginPage() {
                 </p>
               </div>
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/dashboard")}
                 className="w-full py-2.5 bg-[#db2777] hover:bg-[#c2185b] text-white font-medium rounded-xl text-sm transition-colors shadow-md shadow-pink-600/10 focus:outline-none"
               >
                 Bắt đầu ngay

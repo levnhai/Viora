@@ -7,6 +7,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 import {
   Calendar,
@@ -57,12 +60,6 @@ export function OverviewTab({
   setSubTab,
 }: OverviewTabProps) {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [timeRange, setTimeRange] = useState("7 ngày qua");
-  const [isDropdownOpenMobile, setIsDropdownOpenMobile] = useState(false);
-  const [isDropdownOpenDesktop, setIsDropdownOpenDesktop] = useState(false);
-
-  const timeOptions = ["Hôm qua", "Hôm nay", "7 ngày qua", "1 tháng"];
-
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -133,6 +130,25 @@ export function OverviewTab({
     });
   }, [totalViews]);
 
+  const mobilePieData = useMemo(() => {
+    const views = weddingData?.views || 0;
+    const guests = totalGuests || 0;
+    const wishes = guestbookList?.length || 0;
+
+    return [
+      { name: "Lượt xem", value: views, color: "#1b365d" },
+      { name: "Khách mời", value: guests, color: "#0ea5e9" },
+      { name: "Lời chúc", value: wishes, color: "#f43f5e" },
+    ];
+  }, [weddingData?.views, totalGuests, guestbookList?.length]);
+
+  const mobilePieTotal = useMemo(() => {
+    const views = weddingData?.views || 0;
+    const guests = totalGuests || 0;
+    const wishes = guestbookList?.length || 0;
+    return views + guests + wishes;
+  }, [weddingData?.views, totalGuests, guestbookList?.length]);
+
   return (
     <div className="space-y-6">
       {/* PHIÊN BẢN MOBILE (block md:hidden) */}
@@ -147,159 +163,67 @@ export function OverviewTab({
           </p>
         </div>
 
-        {/* Banner Rose Gold hồng nhạt */}
-        <div className="bg-white rounded-2xl p-5 relative overflow-hidden flex justify-between items-center shadow-3xs border border-[#1b365d]/5 min-h-[200px]">
-          <div className="flex-1 flex flex-col justify-between min-h-[150px] z-10 min-w-3 pr-[25%]">
-            <div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-green-50 text-green-700 border border-green-200">
-                Đã xuất bản
-              </span>
-              <h2 className="text-lg font-black text-stone-900 mt-2 leading-tight">
-                Rose Gold
-              </h2>
-            </div>
-
-            <a
-              href={`/w/${weddingSlug}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[12px] font-bold text-[#1b365d] flex items-center gap-0.5 hover:underline no-underline truncate"
-            >
-              viora.vn/{weddingSlug}
-              <svg
-                className="w-2.5 h-2.5 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                />
-              </svg>
-            </a>
-
-            <div className="flex gap-2 pt-1 w-full">
-              <a
-                href={`/w/${weddingSlug}`}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 justify-center whitespace-nowrap px-3 py-2 bg-white text-stone-800 rounded-xl text-[11px] font-bold border border-stone-200/60 shadow-3xs flex items-center gap-1.5 no-underline active:scale-95 transition-transform"
-              >
-                <Eye size={13} className="text-stone-500 shrink-0" />
-                Xem thiệp
-              </a>
-              <button
-                onClick={() => setIsShareModalOpen(true)}
-                className="flex-1 justify-center whitespace-nowrap px-3 py-2 bg-white text-stone-800 rounded-xl text-[11px] font-bold border border-stone-200/60 shadow-3xs flex items-center gap-1.5 active:scale-95 transition-transform cursor-pointer"
-              >
-                <Share2 size={13} className="text-stone-500 shrink-0" />
-                Chia sẻ
-              </button>
-            </div>
-          </div>
-
-          {/* Banner cô dâu chú rể góc phải tràn viền bao phủ toàn bộ chiều cao */}
-          <div className="absolute right-0 top-0 bottom-0 w-[100%] overflow-hidden pointer-events-none">
-            <img
-              src={
-                weddingData.coverUrl ||
-                "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop"
-              }
-              alt="Rose Gold Theme"
-              className="w-full h-full object-cover"
-              style={{
-                maskImage:
-                  "linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Hàng 2: Thống kê tổng quan to */}
-        <div className="bg-white rounded-2xl border border-pink-50/60 p-5 shadow-3xs flex flex-col relative">
+        {/* Hàng 2: Biểu đồ tròn thống kê tổng quan (Mobile) */}
+        <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-3xs flex flex-col relative">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6 z-10">
-            <h2 className="text-base font-black text-stone-900 tracking-tight">
-              Lượt xem
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-black text-stone-900 tracking-tight">
+              Thống kê tổng quan
             </h2>
+            <span className="text-[10px] font-bold text-stone-400">
+              Tổng hợp
+            </span>
           </div>
 
-          {/* Chart Area */}
-          <div className="h-[200px] w-full relative z-10 -ml-4 mt-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={chartData}
-                margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-              >
-                <defs>
-                  <linearGradient id="colorViewsMobile" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1b365d" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#1b365d" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  vertical={false}
-                  stroke="#f5f5f4"
-                />
-                <XAxis
-                  dataKey="date"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{
-                    fontSize: 9,
-                    fill: "#a8a29e",
-                    fontFamily: "monospace",
-                    fontWeight: 500,
-                  }}
-                  dy={8}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{
-                    fontSize: 9,
-                    fill: "#a8a29e",
-                    fontFamily: "monospace",
-                    fontWeight: 500,
-                  }}
-                  dx={-8}
-                />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "none",
-                    boxShadow:
-                      "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-                    fontSize: "11px",
-                    fontWeight: "bold",
-                    color: "#1e293b",
-                  }}
-                  itemStyle={{ color: "#1b365d" }}
-                  labelStyle={{ color: "#475569", marginBottom: "2px" }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="views"
-                  name="Lượt xem"
-                  stroke="#1b365d"
-                  strokeWidth={2.5}
-                  fillOpacity={1}
-                  fill="url(#colorViewsMobile)"
-                  activeDot={{
-                    r: 5,
-                    fill: "#1b365d",
-                    stroke: "#fff",
-                    strokeWidth: 2,
-                  }}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="flex items-center justify-between gap-3">
+            {/* Donut Chart */}
+            <div className="w-[130px] h-[130px] relative shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: "10px",
+                      border: "none",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                    }}
+                  />
+                  <Pie
+                    data={mobilePieTotal > 0 ? mobilePieData : [{ name: "Chưa có", value: 1, color: "#f1f5f9" }]}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={36}
+                    outerRadius={56}
+                    paddingAngle={mobilePieTotal > 0 ? 4 : 0}
+                    cornerRadius={4}
+                  >
+                    {(mobilePieTotal > 0 ? mobilePieData : [{ name: "Chưa có", value: 1, color: "#f1f5f9" }]).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-[8px] font-bold text-stone-400 uppercase tracking-wider leading-none">Tổng</span>
+                <span className="text-sm font-black text-stone-900 font-mono leading-tight mt-0.5">{mobilePieTotal}</span>
+              </div>
+            </div>
+
+            {/* Chú thích 3 mục */}
+            <div className="flex-1 space-y-2.5 pl-1">
+              {mobilePieData.map((item) => (
+                <div key={item.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                    <span className="text-stone-600 font-medium text-xs truncate">{item.name}</span>
+                  </div>
+                  <span className="font-black text-stone-900 font-mono text-xs ml-2 shrink-0">{item.value}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -463,223 +387,87 @@ export function OverviewTab({
       {/* PHIÊN BẢN DESKTOP (hidden md:block) - GIAO DIỆN MỚI */}
       <div className="hidden md:block space-y-6">
         {/* Hàng 1: 4 khối thống kê nhỏ */}
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-4">
           {/* Tổng lượt xem */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-5 shadow-3xs flex flex-col justify-between relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#1b365d]/5 rounded-full blur-3xl opacity-50 -z-10 group-hover:scale-110 transition-transform"></div>
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center mb-4 shadow-sm border border-slate-100/50">
-                <Eye size={20} strokeWidth={2.5} />
-              </div>
-              <p className="text-xs text-stone-500 font-medium mb-1 tracking-wide">
+          <div className="bg-white rounded-2xl border border-slate-100 px-4 py-3 shadow-3xs relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 w-16 h-16 bg-[#1b365d]/5 rounded-full blur-lg opacity-60 pointer-events-none"></div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs text-stone-500 font-medium tracking-wide">
                 Tổng lượt xem
-              </p>
-              <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
-                {weddingData?.views || 0}
-              </h3>
-
+              </span>
+              <div className="w-7 h-7 rounded-lg bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center border border-slate-100/60 shrink-0">
+                <Eye size={15} strokeWidth={2.5} />
+              </div>
             </div>
-            {/* SVG line chart mini */}
-            <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
-              <svg
-                viewBox="0 0 100 30"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
-                <path
-                  d="M0,25 Q15,10 30,20 T60,5 T80,15 T100,5"
-                  fill="none"
-                  stroke="#1b365d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M0,25 Q15,10 30,20 T60,5 T80,15 T100,5 L100,30 L0,30 Z"
-                  fill="url(#grad1)"
-                  opacity="0.3"
-                />
-                <defs>
-                  <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#1b365d" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#1b365d" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
+            <p className="text-2xl font-black text-stone-900 font-mono tracking-tight leading-none m-0">
+              {weddingData?.views || 0}
+            </p>
           </div>
 
           {/* Khách xác nhận */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-5 shadow-3xs flex flex-col justify-between relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#1b365d]/5 rounded-full blur-3xl opacity-50 -z-10 group-hover:scale-110 transition-transform"></div>
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center mb-4 shadow-sm border border-slate-100/50">
-                <Heart size={20} fill="currentColor" strokeWidth={0} />
-              </div>
-              <p className="text-xs text-stone-500 font-medium mb-1 tracking-wide">
+          <div className="bg-white rounded-2xl border border-slate-100 px-4 py-3 shadow-3xs relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 w-16 h-16 bg-[#1b365d]/5 rounded-full blur-lg opacity-60 pointer-events-none"></div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs text-stone-500 font-medium tracking-wide">
                 Khách xác nhận
-              </p>
-              <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
-                {confirmedGuests || 0}
-              </h3>
-
+              </span>
+              <div className="w-7 h-7 rounded-lg bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center border border-slate-100/60 shrink-0">
+                <Heart size={15} fill="currentColor" strokeWidth={0} />
+              </div>
             </div>
-            <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
-              <svg
-                viewBox="0 0 100 30"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
-                <path
-                  d="M0,15 Q20,25 40,10 T70,20 T100,10"
-                  fill="none"
-                  stroke="#1b365d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M0,15 Q20,25 40,10 T70,20 T100,10 L100,30 L0,30 Z"
-                  fill="url(#grad1)"
-                  opacity="0.3"
-                />
-              </svg>
-            </div>
+            <p className="text-2xl font-black text-stone-900 font-mono tracking-tight leading-none m-0">
+              {confirmedGuests || 0}
+            </p>
           </div>
 
           {/* Lời chúc */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-5 shadow-3xs flex flex-col justify-between relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#1b365d]/5 rounded-full blur-3xl opacity-50 -z-10 group-hover:scale-110 transition-transform"></div>
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center mb-4 relative shadow-sm border border-slate-100/50">
-                <MessageSquare size={20} strokeWidth={2.5} />
-                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-slate-100"></span>
-              </div>
-              <p className="text-xs text-stone-500 font-medium mb-1 tracking-wide">
+          <div className="bg-white rounded-2xl border border-slate-100 px-4 py-3 shadow-3xs relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 w-16 h-16 bg-[#1b365d]/5 rounded-full blur-lg opacity-60 pointer-events-none"></div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs text-stone-500 font-medium tracking-wide">
                 Lời chúc
-              </p>
-              <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
-                {guestbookList?.length || 0}
-              </h3>
-
+              </span>
+              <div className="w-7 h-7 rounded-lg bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center relative border border-slate-100/60 shrink-0">
+                <MessageSquare size={15} strokeWidth={2.5} />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+              </div>
             </div>
-            <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
-              <svg
-                viewBox="0 0 100 30"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
-                <path
-                  d="M0,20 Q15,5 35,15 T65,10 T100,25"
-                  fill="none"
-                  stroke="#1b365d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M0,20 Q15,5 35,15 T65,10 T100,25 L100,30 L0,30 Z"
-                  fill="url(#grad1)"
-                  opacity="0.3"
-                />
-              </svg>
-            </div>
+            <p className="text-2xl font-black text-stone-900 font-mono tracking-tight leading-none m-0">
+              {guestbookList?.length || 0}
+            </p>
           </div>
 
           {/* Lời mời */}
-          <div className="bg-white rounded-3xl border border-pink-50/60 p-5 shadow-3xs flex flex-col justify-between relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#1b365d]/5 rounded-full blur-3xl opacity-50 -z-10 group-hover:scale-110 transition-transform"></div>
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center mb-4 relative shadow-sm border border-slate-100/50">
-                <Mail size={20} strokeWidth={2.5} />
-              </div>
-              <p className="text-xs text-stone-500 font-medium mb-1 tracking-wide">
+          <div className="bg-white rounded-2xl border border-slate-100 px-4 py-3 shadow-3xs relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 w-16 h-16 bg-[#1b365d]/5 rounded-full blur-lg opacity-60 pointer-events-none"></div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs text-stone-500 font-medium tracking-wide">
                 Lời mời
-              </p>
-              <h3 className="text-[26px] font-black text-stone-900 font-mono tracking-tight leading-none mb-1.5">
-                {totalGuests || 0}
-              </h3>
-
+              </span>
+              <div className="w-7 h-7 rounded-lg bg-[#1b365d]/5 text-[#1b365d] flex items-center justify-center relative border border-slate-100/60 shrink-0">
+                <Mail size={15} strokeWidth={2.5} />
+              </div>
             </div>
-            <div className="h-10 mt-4 w-[110%] -ml-[5%] -mb-2">
-              <svg
-                viewBox="0 0 100 30"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
-                <path
-                  d="M0,10 Q25,20 50,5 T80,25 T100,15"
-                  fill="none"
-                  stroke="#1b365d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M0,10 Q25,20 50,5 T80,25 T100,15 L100,30 L0,30 Z"
-                  fill="url(#grad1)"
-                  opacity="0.3"
-                />
-              </svg>
-            </div>
+            <p className="text-2xl font-black text-stone-900 font-mono tracking-tight leading-none m-0">
+              {totalGuests || 0}
+            </p>
           </div>
         </div>
 
         {/* Hàng 2: Thống kê tổng quan to */}
         <div className="bg-white rounded-2xl border border-pink-50/60 p-7 shadow-3xs flex flex-col relative">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6 z-10">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="text-base font-black text-stone-900 tracking-tight">
               Lượt xem
             </h2>
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpenDesktop(!isDropdownOpenDesktop)}
-                onBlur={() =>
-                  setTimeout(() => setIsDropdownOpenDesktop(false), 200)
-                }
-                className="flex items-center gap-2 bg-white hover:bg-[#1b365d]/5 transition-colors px-3 py-1.5 rounded-lg border border-slate-100 cursor-pointer text-xs font-semibold text-stone-600 outline-none"
-              >
-                {timeRange}
-                <svg
-                  className={`w-3.5 h-3.5 text-stone-400 transition-transform ${isDropdownOpenDesktop ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2.5"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-
-              {isDropdownOpenDesktop && (
-                <div className="absolute right-0 top-full mt-1.5 w-32 bg-white rounded-xl shadow-lg shadow-pink-500/5 border border-slate-100 py-1.5 z-50 overflow-hidden">
-                  {timeOptions.map((option) => (
-                    <div
-                      key={option}
-                      onClick={() => {
-                        setTimeRange(option);
-                        setIsDropdownOpenDesktop(false);
-                      }}
-                      className={`px-3 py-2 text-xs cursor-pointer hover:bg-[#1b365d]/5 transition-colors flex items-center justify-between ${
-                        timeRange === option
-                          ? "text-[#1b365d] font-bold bg-[#1b365d]/5/50"
-                          : "text-stone-600 font-semibold"
-                      }`}
-                    >
-                      {option}
-                      {timeRange === option && (
-                        <Check size={12} strokeWidth={3} />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <span className="text-xs font-semibold text-stone-400">
+              7 ngày gần nhất
+            </span>
           </div>
 
           {/* Chart Area */}
-          <div className="h-[250px] w-full relative z-10 -ml-4 mt-4">
+          <div className="h-[250px] w-full relative z-0 -ml-4 mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={chartData}

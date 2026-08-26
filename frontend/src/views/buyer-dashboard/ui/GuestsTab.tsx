@@ -73,9 +73,9 @@ export function GuestsTab({
     <div className="space-y-6">
       {/* Nội dung danh sách khách mời */}
       <div className="space-y-6 animate-fade-in">
-        {/* Mobile Search Bar */}
-        <div className="block md:hidden mb-2">
-          <div className="relative w-full shadow-3xs rounded-[1.25rem] bg-white border border-stone-100 transition-all focus-within:border-pink-200 focus-within:shadow-pink-100">
+        {/* Mobile Search Bar & Add Button */}
+        <div className="flex md:hidden items-center gap-2 mb-2">
+          <div className="relative flex-1 shadow-3xs rounded-[1.25rem] bg-white border border-stone-100 transition-all focus-within:border-pink-200 focus-within:shadow-pink-100">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
             <input
               type="text"
@@ -85,6 +85,13 @@ export function GuestsTab({
               className="w-full pl-11 pr-4 py-3.5 bg-transparent border-0 rounded-[1.25rem] text-xs font-medium outline-none placeholder:text-stone-400 text-stone-800"
             />
           </div>
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="w-12 h-12 bg-[#1b365d] text-white rounded-[1.25rem] flex items-center justify-center shrink-0 shadow-3xs border-0 active:scale-95 transition-transform cursor-pointer"
+            title="Thêm khách mới"
+          >
+            <Plus size={18} />
+          </button>
         </div>
 
         {/* Mobile Segmented Tabs */}
@@ -153,8 +160,8 @@ export function GuestsTab({
           </div>
         </div>
 
-        {/* Statistics Boxes (3 columns) */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-4 mb-6">
+        {/* Statistics Boxes (3 columns) - Desktop only */}
+        <div className="hidden md:grid grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-3 sm:p-4 rounded-[1.25rem] border border-stone-100 flex flex-col justify-between shadow-3xs relative overflow-hidden">
             <div className="absolute top-0 right-0 w-12 h-12 bg-blue-50/80 rounded-full blur-xl -z-10"></div>
             <span className="text-[9px] sm:text-[11px] font-extrabold text-stone-400 tracking-wide uppercase">
@@ -194,31 +201,67 @@ export function GuestsTab({
         </div>
 
         {/* Mobile List View */}
-        <div className="block md:hidden space-y-3">
+        <div className="block md:hidden space-y-2.5">
           {filteredGuestList.map((g) => {
             const avatarColor = getAvatarColor(g.name);
             const initials = getInitials(g.name);
             return (
               <div
                 key={g._id}
-                className="bg-white rounded-[1.25rem] border border-stone-100/80 p-4 shadow-3xs hover:shadow-md transition-shadow relative flex flex-col gap-3 font-sans animate-fade-in"
+                className="bg-white rounded-2xl border border-stone-100 p-3 shadow-3xs hover:shadow-sm transition-shadow relative flex flex-col gap-2 font-sans animate-fade-in"
               >
                 <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
-                      className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-black font-mono shrink-0 shadow-sm border border-white ${avatarColor.bg}`}
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 shadow-xs border border-white ${avatarColor.bg}`}
                     >
                       {initials}
                     </div>
-                    <div>
-                      <h4 className="font-extrabold text-[15px] text-stone-900 leading-tight">
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-[13px] text-stone-800 leading-tight truncate">
                         {g.name}
                       </h4>
-                      <div className="inline-block bg-stone-50 px-2 py-0.5 rounded border border-stone-100 mt-1.5">
-                        <p className="text-[9px] text-stone-500 font-bold uppercase tracking-wider">
-                          {g.relationship}
+                      <div className="inline-block bg-stone-50 px-1.5 py-0.5 rounded border border-stone-100 mt-1">
+                        <p className="text-[8.5px] text-stone-500 font-semibold uppercase tracking-wider">
+                          {g.relationship || "Khách mời"}
                         </p>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Sticker trạng thái ở Top Right */}
+                  <span
+                    className={`text-[9px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
+                      g.rsvpStatus === "confirmed"
+                        ? "bg-green-50 text-green-700 border border-green-200"
+                        : g.rsvpStatus === "declined"
+                          ? "bg-red-50 text-red-600 border border-red-200"
+                          : "bg-orange-50 text-orange-600 border border-orange-200"
+                    }`}
+                  >
+                    {g.rsvpStatus === "confirmed"
+                      ? "Đã xác nhận"
+                      : g.rsvpStatus === "declined"
+                        ? "Từ chối"
+                        : "Chưa phản hồi"}
+                  </span>
+                </div>
+
+                {/* Phần chân dòng: SĐT, Số khách đi cùng và Nút 3 chấm */}
+                <div className="flex justify-between items-center pt-1.5 border-t border-stone-50">
+                  <div className="flex flex-col gap-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <Phone size={10} className="text-stone-400" />
+                      <span className="text-[9.5px] text-stone-500 font-mono font-medium">
+                        {g.phone || "Không có SĐT"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Users size={10} className="text-stone-400" />
+                      <span className="text-[9.5px] text-stone-500 font-medium">
+                        Đi cùng:{" "}
+                        <span className="font-bold text-stone-700">{g.guests || 1}</span>
+                      </span>
                     </div>
                   </div>
 
@@ -230,9 +273,9 @@ export function GuestsTab({
                           activeActionMenuId === g._id ? null : g._id,
                         )
                       }
-                      className="p-1 hover:bg-stone-50 rounded-full border-0 bg-transparent text-stone-400 cursor-pointer"
+                      className="w-7 h-7 flex items-center justify-center hover:bg-stone-100 rounded-full border-0 bg-stone-50 text-stone-400 cursor-pointer transition-colors"
                     >
-                      <MoreHorizontal size={20} />
+                      <MoreHorizontal size={16} />
                     </button>
 
                     {activeActionMenuId === g._id && (
@@ -241,15 +284,15 @@ export function GuestsTab({
                           className="fixed inset-0 z-40"
                           onClick={() => setActiveActionMenuId(null)}
                         />
-                        <div className="absolute right-0 mt-1 w-44 bg-white border border-stone-100 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium text-stone-700 animate-fade-in overflow-hidden">
+                        <div className="absolute right-0 bottom-full mb-1.5 w-38 bg-white border border-stone-100 rounded-xl shadow-lg py-1 z-50 text-[11px] text-stone-700 animate-fade-in overflow-hidden">
                           <button
                             onClick={() => {
                               handleCopyLink(g.name, g._id);
                               setActiveActionMenuId(null);
                             }}
-                            className="w-full text-left px-4 py-2.5 hover:bg-stone-50 border-0 bg-transparent text-stone-700 cursor-pointer flex items-center gap-2"
+                            className="w-full text-left px-3 py-2 hover:bg-stone-50 border-0 bg-transparent text-stone-700 cursor-pointer flex items-center gap-2 text-[11px] font-medium"
                           >
-                            <Copy size={14} className="text-stone-400" /> Copy
+                            <Copy size={13} className="text-stone-400" /> Copy
                             link mời
                           </button>
 
@@ -259,9 +302,9 @@ export function GuestsTab({
                                 handleUpdateGuestStatus(g._id, "confirmed");
                                 setActiveActionMenuId(null);
                               }}
-                              className="w-full text-left px-4 py-2.5 hover:bg-green-50 border-0 bg-transparent text-green-600 cursor-pointer flex items-center gap-2 font-semibold"
+                              className="w-full text-left px-3 py-2 hover:bg-green-50 border-0 bg-transparent text-green-600 cursor-pointer flex items-center gap-2 text-[11px] font-medium"
                             >
-                              <Check size={14} /> Xác nhận đi
+                              <Check size={13} /> Xác nhận đi
                             </button>
                           )}
 
@@ -271,60 +314,26 @@ export function GuestsTab({
                                 handleUpdateGuestStatus(g._id, "declined");
                                 setActiveActionMenuId(null);
                               }}
-                              className="w-full text-left px-4 py-2.5 hover:bg-red-50 border-0 bg-transparent text-red-500 cursor-pointer flex items-center gap-2 font-semibold"
+                              className="w-full text-left px-3 py-2 hover:bg-red-50 border-0 bg-transparent text-red-500 cursor-pointer flex items-center gap-2 text-[11px] font-medium"
                             >
-                              <X size={14} /> Bận / Từ chối
+                              <X size={13} /> Bận / Từ chối
                             </button>
                           )}
 
-                          <div className="h-px bg-stone-100 my-1 mx-2" />
+                          <div className="h-px bg-stone-100 my-0.5 mx-2" />
                           <button
                             onClick={() => {
                               handleDeleteGuest(g._id);
                               setActiveActionMenuId(null);
                             }}
-                            className="w-full text-left px-4 py-2.5 hover:bg-red-50 border-0 bg-transparent text-red-600 cursor-pointer flex items-center gap-2 font-bold"
+                            className="w-full text-left px-3 py-2 hover:bg-red-50 border-0 bg-transparent text-red-600 cursor-pointer flex items-center gap-2 text-[11px] font-medium"
                           >
-                            <Trash2 size={14} /> Xóa khách
+                            <Trash2 size={13} /> Xóa khách
                           </button>
                         </div>
                       </>
                     )}
                   </div>
-                </div>
-
-                {/* Phần chân dòng */}
-                <div className="flex justify-between items-center mt-1 border-t border-stone-50/80">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-1.5">
-                      <Phone size={11} className="text-stone-400" />
-                      <span className="text-[10px] text-stone-600 font-mono font-medium">
-                        {g.phone || "Không có SĐT"}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Users size={11} className="text-stone-400" />
-                      <span className="text-[10px] text-stone-600 font-medium">
-                        Đi cùng:{" "}
-                        <span className="font-bold">{g.guests || 1}</span>
-                      </span>
-                    </div>
-                  </div>
-                  <span
-                    className={`text-[10px] font-bold px-3 py-1.5 rounded-lg ${
-                      g.rsvpStatus === "confirmed"
-                        ? "bg-green-50/80 text-green-700 border border-green-100 shadow-3xs"
-                        : g.rsvpStatus === "declined"
-                          ? "bg-red-50/80 text-red-600 border border-red-100 shadow-3xs"
-                          : "bg-orange-50/80 text-orange-600 border border-orange-100 shadow-3xs"
-                    }`}
-                  >
-                    {g.rsvpStatus === "confirmed"
-                      ? "Đã xác nhận"
-                      : g.rsvpStatus === "declined"
-                        ? "Từ chối"
-                        : "Chưa phản hồi"}
-                  </span>
                 </div>
               </div>
             );
@@ -336,18 +345,8 @@ export function GuestsTab({
             </div>
           )}
 
-          {/* Spacer to push content above fixed bottom button */}
-          <div className="h-16" />
-
-          {/* Nút bấm nổi Red/Pink dưới đáy trên mobile */}
-          <div className="fixed bottom-20 left-4 right-4 z-40">
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="w-full py-4 bg-[#1b365d] text-white hover:bg-[#be185d] border-0 rounded-2xl text-xs font-bold transition-all shadow-md shadow-[#1b365d]/20 active:scale-98 cursor-pointer flex items-center justify-center gap-1.5 font-sans"
-            >
-              <Plus size={16} /> Thêm khách mới
-            </button>
-          </div>
+          {/* Bottom spacing so the last card is not hidden behind the bottom navigation bar */}
+          <div className="h-6" />
         </div>
 
         {/* Desktop Table View */}

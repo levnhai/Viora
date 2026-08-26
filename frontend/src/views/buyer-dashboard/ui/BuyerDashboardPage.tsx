@@ -273,7 +273,7 @@ export function BuyerDashboardPage() {
 
   return (
     <div
-      className="min-h-screen bg-slate-50 flex flex-col"
+      className="buyer-dashboard min-h-screen bg-slate-50 flex flex-col"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <DashboardHeader
@@ -287,7 +287,7 @@ export function BuyerDashboardPage() {
         onExportGuestbook={handleExportGuestbook}
       />
 
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8 pb-24 md:pb-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 flex flex-col md:flex-row gap-5 lg:gap-8 pb-24 md:pb-8">
         <DashboardSidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -297,7 +297,7 @@ export function BuyerDashboardPage() {
           navigate={router.push}
         />
 
-        <main className="flex-1">
+        <main className="buyer-dashboard__content flex-1 min-w-0">
           {error && (
             <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-xl text-xs border border-red-200">
               {error}
