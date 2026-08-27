@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { BookOpen, Trash2 } from "lucide-react";
+import { ConfirmModal } from "@/shared/ui/ConfirmModal";
 
 interface GuestbookTabProps {
   guestbookList: any[];
@@ -14,6 +15,19 @@ export function GuestbookTab({
   getInitials,
   onDeleteGuestbook,
 }: GuestbookTabProps) {
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    if (!deleteId || !onDeleteGuestbook) return;
+    setDeleting(true);
+    try {
+      await onDeleteGuestbook(deleteId);
+    } finally {
+      setDeleting(false);
+      setDeleteId(null);
+    }
+  };
   return (
     <>
       {/* PHIÊN BẢN MOBILE (block md:hidden) */}
@@ -60,7 +74,7 @@ export function GuestbookTab({
 
                   {/* Nút Xóa căn giữa theo chiều dọc của thẻ */}
                   <button
-                    onClick={() => onDeleteGuestbook && onDeleteGuestbook(msg._id)}
+                    onClick={() => setDeleteId(msg._id)}
                     className="w-8 h-8 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full border-0 bg-transparent cursor-pointer transition-colors shrink-0"
                     title="Xóa lời chúc"
                   >
@@ -89,30 +103,65 @@ export function GuestbookTab({
           </div>
         ) : (
           <div className="space-y-4">
-            {guestbookList.map((msg: any) => (
-              <div
-                key={msg._id}
-                className="p-5 rounded-2xl bg-[#f8fafc]/40 border border-[#e2e8f0]/10 relative hover:border-[#1b365d]/30 transition-all animate-fade-in"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-semibold text-sm text-[#1e293b]">
-                    {msg.name}
-                  </h4>
-                  <span className="text-2xs text-[#475569]/50 font-mono">
-                    {new Date(msg.createdAt).toLocaleString("vi-VN", {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    })}
-                  </span>
+            {guestbookList.map((msg: any) => {
+              const avatarColor = getAvatarColor(msg.name);
+              const initials = getInitials(msg.name);
+              return (
+                <div
+                  key={msg._id}
+                  className="p-5 rounded-2xl bg-[#f8fafc]/40 border border-[#e2e8f0]/10 relative hover:border-[#1b365d]/30 transition-all animate-fade-in group"
+                >
+                  <div className="flex justify-between items-start mb-2.5">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 shadow-xs border border-white ${avatarColor.bg}`}
+                      >
+                        {initials}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm text-[#1e293b]">
+                          {msg.name}
+                        </h4>
+                        <span className="text-[11px] text-[#475569]/50 font-mono">
+                          {new Date(msg.createdAt).toLocaleString("vi-VN", {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                    {onDeleteGuestbook && (
+                      <button
+                        onClick={() => setDeleteId(msg._id)}
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors border-0 bg-transparent cursor-pointer"
+                        title="Xóa lời chúc"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-sm leading-relaxed text-[#475569] whitespace-pre-wrap pl-12">
+                    {msg.message}
+                  </p>
                 </div>
-                <p className="text-sm leading-relaxed text-[#475569] whitespace-pre-wrap">
-                  {msg.message}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Modal xác nhận xóa lời chúc */}
+      <ConfirmModal
+        isOpen={Boolean(deleteId)}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Xác nhận xóa lời chúc"
+        message="Bạn có chắc chắn muốn xóa lời chúc này khỏi sổ lưu bút không? Hành động này không thể hoàn tác."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy"
+        type="danger"
+        loading={deleting}
+      />
     </>
   );
 }

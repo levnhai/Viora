@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Heart, Loader2, Plus, Key, ChevronDown, LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 import { OverviewTab } from "./OverviewTab";
 import { GuestsTab } from "./GuestsTab";
@@ -11,6 +12,7 @@ import { SettingTab } from "./SettingTab";
 
 import { useBuyerDashboard } from "@/features/buyer-dashboard/model/useBuyerDashboard";
 import { useGuestActions } from "@/features/guest-management/model/useGuestActions";
+import { useGuestbookActions } from "@/features/guestbook-management/model/useGuestbookActions";
 import {
   exportGuestsToExcel,
   exportGuestbookToExcel,
@@ -55,12 +57,12 @@ export function BuyerDashboardPage() {
 
   const {
     guestSubmitting,
-    error,
-    successMsg,
     handleAddGuest,
     handleDeleteGuest,
     handleUpdateGuestStatus,
   } = useGuestActions(weddingSlug, refetch);
+
+  const { handleDeleteGuestbook } = useGuestbookActions(weddingSlug, refetch);
 
   // Form State for Adding Guest
   const [newGuest, setNewGuest] = useState({
@@ -107,6 +109,7 @@ export function BuyerDashboardPage() {
     const personalizedUrl = `${baseUrl}/w/${weddingSlug}?to=${encodeURIComponent(name)}`;
     navigator.clipboard.writeText(personalizedUrl);
     setCopiedId(id);
+    toast.success(`Đã sao chép link mời cho "${name}" thành công!`);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -163,7 +166,7 @@ export function BuyerDashboardPage() {
                   className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-50 border-0 bg-transparent cursor-pointer transition-all focus:outline-none"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#1b365d] text-white flex items-center justify-center text-xs font-bold font-mono tracking-wider shadow-2xs">
-                    {getInitials(username)}
+                    {getInitials(username || "")}
                   </div>
                   <ChevronDown size={14} className="text-slate-450" />
                 </button>
@@ -298,17 +301,6 @@ export function BuyerDashboardPage() {
         />
 
         <main className="buyer-dashboard__content flex-1 min-w-0">
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-xl text-xs border border-red-200">
-              {error}
-            </div>
-          )}
-          {successMsg && (
-            <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-xl text-xs border border-green-200">
-              {successMsg}
-            </div>
-          )}
-
           {activeTab === "overview" && (
             <OverviewTab
               weddingData={weddingData}
@@ -359,6 +351,7 @@ export function BuyerDashboardPage() {
               guestbookList={guestbookList}
               getAvatarColor={getAvatarColor}
               getInitials={getInitials}
+              onDeleteGuestbook={handleDeleteGuestbook}
             />
           )}
 

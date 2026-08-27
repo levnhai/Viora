@@ -48,4 +48,26 @@ export class GuestbooksService {
       .sort({ createdAt: -1 })
       .exec();
   }
+
+  async deleteGuestbook(slug: string, id: string): Promise<any> {
+    const weddingId = await this.getWeddingIdBySlug(slug);
+    const result = await this.guestbookModel
+      .findOneAndUpdate(
+        { _id: id, weddingId, deletedAt: null },
+        { deletedAt: new Date() },
+        { returnDocument: 'after' },
+      )
+      .exec();
+
+    if (!result) {
+      throw new NotFoundException(
+        `Lời chúc với ID "${id}" không tồn tại hoặc đã bị xóa`,
+      );
+    }
+
+    // Notify clients in realtime
+    this.socketGateway.notifyWeddingUpdate(slug, 'guestbook-updated');
+
+    return result;
+  }
 }

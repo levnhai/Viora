@@ -1,5 +1,16 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+  ForbiddenException,
+} from '@nestjs/common';
 import { GuestbooksService } from './guestbooks.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('weddings/:slug/guestbook')
 export class GuestbooksController {
@@ -27,6 +38,30 @@ export class GuestbooksController {
     return {
       success: true,
       data,
+    };
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async deleteGuestbook(
+    @Param('slug') slug: string,
+    @Param('id') id: string,
+    @Req() req: any,
+  ) {
+    const user = req.user;
+    if (
+      user.role !== 'admin' &&
+      user.role !== 'staff' &&
+      user.weddingSlug !== slug
+    ) {
+      throw new ForbiddenException(
+        'Bạn không có quyền xóa lời chúc của thiệp cưới này!',
+      );
+    }
+    await this.guestbooksService.deleteGuestbook(slug, id);
+    return {
+      success: true,
+      message: 'Xóa lời chúc thành công!',
     };
   }
 }

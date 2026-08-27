@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { ConfirmModal } from "@/shared/ui/ConfirmModal";
 import {
   Search,
   Plus,
@@ -69,6 +71,24 @@ export function GuestsTab({
   getInitials,
   weddingSlug,
 }: GuestsTabProps) {
+  const [mounted, setMounted] = useState(false);
+  const [deleteGuestId, setDeleteGuestId] = useState<string | null>(null);
+  const [deletingGuest, setDeletingGuest] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleConfirmDeleteGuest = async () => {
+    if (!deleteGuestId) return;
+    setDeletingGuest(true);
+    try {
+      await handleDeleteGuest(deleteGuestId);
+    } finally {
+      setDeletingGuest(false);
+      setDeleteGuestId(null);
+    }
+  };
   return (
     <div className="space-y-6">
       {/* Nội dung danh sách khách mời */}
@@ -114,7 +134,7 @@ export function GuestsTab({
                 : "text-stone-500 hover:text-stone-700 bg-transparent"
             }`}
           >
-            Xác nhận ({confirmedGuests})
+            Tham gia ({confirmedGuests})
           </button>
           <button
             onClick={() => setFilterRsvp("pending")}
@@ -124,7 +144,7 @@ export function GuestsTab({
                 : "text-stone-500 hover:text-stone-700 bg-transparent"
             }`}
           >
-            Chờ KQ ({pendingGuests + declinedGuests})
+            Từ chối ({pendingGuests + declinedGuests})
           </button>
         </div>
 
@@ -323,7 +343,7 @@ export function GuestsTab({
                           <div className="h-px bg-stone-100 my-0.5 mx-2" />
                           <button
                             onClick={() => {
-                              handleDeleteGuest(g._id);
+                              setDeleteGuestId(g._id);
                               setActiveActionMenuId(null);
                             }}
                             className="w-full text-left px-3 py-2 hover:bg-red-50 border-0 bg-transparent text-red-600 cursor-pointer flex items-center gap-2 text-[11px] font-medium"
@@ -453,7 +473,7 @@ export function GuestsTab({
                         </td>
                         <td className="px-6 py-4 text-center">
                           <button
-                            onClick={() => handleDeleteGuest(g._id)}
+                            onClick={() => setDeleteGuestId(g._id)}
                             className="p-1.5 text-slate-400 hover:text-red-600 bg-transparent border-0 cursor-pointer rounded-lg hover:bg-red-50 transition-colors"
                             title="Xóa khách mời"
                           >
@@ -471,8 +491,8 @@ export function GuestsTab({
       </div>
 
       {/* Modal Popup Thêm Khách Mới (Dùng chung cho cả Desktop và Mobile) */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 bg-stone-900/60 backdrop-blur-2xs z-50 flex items-center justify-center p-4">
+      {isAddModalOpen && mounted && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 bg-stone-900/60 backdrop-blur-2xs z-[999] flex items-center justify-center p-4">
           <div
             className="fixed inset-0"
             onClick={() => setIsAddModalOpen(false)}
@@ -552,8 +572,22 @@ export function GuestsTab({
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
+
+      {/* Modal xác nhận xóa khách mời */}
+      <ConfirmModal
+        isOpen={Boolean(deleteGuestId)}
+        onClose={() => setDeleteGuestId(null)}
+        onConfirm={handleConfirmDeleteGuest}
+        title="Xác nhận xóa khách mời"
+        message="Bạn có chắc chắn muốn xóa khách mời này khỏi danh sách không? Hành động này không thể hoàn tác."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy"
+        type="danger"
+        loading={deletingGuest}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Toaster } from 'sonner';
 
 export default function GoogleOAuthProviderWrapper({ children }: { children: React.ReactNode }) {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
@@ -9,6 +10,7 @@ export default function GoogleOAuthProviderWrapper({ children }: { children: Rea
   return (
     <GoogleOAuthProvider clientId={clientId}>
       {children}
+      <Toaster richColors position="top-right" closeButton />
     </GoogleOAuthProvider>
   );
 }

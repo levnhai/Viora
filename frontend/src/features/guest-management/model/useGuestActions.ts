@@ -1,16 +1,14 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { API_URL } from "@/shared/lib/config";
 
 export const useGuestActions = (weddingSlug: string | null, onMutateSuccess: () => void) => {
   const [guestSubmitting, setGuestSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const handleAddGuest = async (newGuest: { name: string; phone: string; relationship: string }) => {
     if (!weddingSlug || !newGuest.name.trim()) return false;
 
     setGuestSubmitting(true);
-    setError(null);
     try {
       const names = newGuest.name
         .split("\n")
@@ -39,12 +37,11 @@ export const useGuestActions = (weddingSlug: string | null, onMutateSuccess: () 
         }
       }
 
-      setSuccessMsg(`Đã thêm ${names.length} khách mời thành công!`);
+      toast.success(`Đã thêm ${names.length} khách mời thành công!`);
       onMutateSuccess();
-      setTimeout(() => setSuccessMsg(null), 3000);
       return true;
     } catch (err: any) {
-      setError(err.message || "Không thể thêm khách mời!");
+      toast.error(err.message || "Không thể thêm khách mời!");
       return false;
     } finally {
       setGuestSubmitting(false);
@@ -53,9 +50,7 @@ export const useGuestActions = (weddingSlug: string | null, onMutateSuccess: () 
 
   const handleDeleteGuest = async (id: string) => {
     if (!weddingSlug) return false;
-    if (!window.confirm("Bạn có chắc chắn muốn xóa khách mời này khỏi danh sách?")) return false;
 
-    setError(null);
     try {
       const response = await fetch(
         `${API_URL}/api/weddings/${weddingSlug}/guests/${id}`,
@@ -70,12 +65,11 @@ export const useGuestActions = (weddingSlug: string | null, onMutateSuccess: () 
         throw new Error(resData.message || "Xóa thất bại!");
       }
 
-      setSuccessMsg("Đã xóa khách mời!");
+      toast.success("Đã xóa khách mời thành công!");
       onMutateSuccess();
-      setTimeout(() => setSuccessMsg(null), 3000);
       return true;
     } catch (err: any) {
-      setError(err.message || "Không thể xóa khách mời!");
+      toast.error(err.message || "Không thể xóa khách mời!");
       return false;
     }
   };
@@ -97,20 +91,21 @@ export const useGuestActions = (weddingSlug: string | null, onMutateSuccess: () 
       );
 
       if (response.ok) {
+        toast.success("Cập nhật trạng thái thành công");
         onMutateSuccess();
         return true;
       }
+      toast.error("Cập nhật trạng thái thất bại!");
       return false;
     } catch (err) {
       console.error(err);
+      toast.error("Không thể kết nối đến máy chủ!");
       return false;
     }
   };
 
   return {
     guestSubmitting,
-    error,
-    successMsg,
     handleAddGuest,
     handleDeleteGuest,
     handleUpdateGuestStatus,
