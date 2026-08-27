@@ -54,7 +54,7 @@ export const DashboardHeader = ({
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-lg font-black text-slate-800 tracking-wider font-sans uppercase">
-                Viora
+                2H
               </span>
               <span className="text-[10px] font-bold text-slate-400 font-sans tracking-wide uppercase pt-0.5">
                 / Dashboard
@@ -149,7 +149,7 @@ export const DashboardHeader = ({
                   />
                 </div>
                 <h3 className="text-[15px] font-black text-slate-800 font-sans tracking-wider uppercase pt-0.5">
-                  VIORA
+                  2H
                 </h3>
               </div>
               <div className="flex items-center">

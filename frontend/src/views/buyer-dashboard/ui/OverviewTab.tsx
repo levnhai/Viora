@@ -188,10 +188,10 @@ export function OverviewTab({
               <Heart size={16} className="text-rose-400 fill-rose-400 shrink-0" />
             </h1>
 
-            {/* Link thiệp rút gọn */}
+            {/* Slug thiệp */}
             <p className="text-[11px] text-slate-300 flex items-center gap-1.5 font-medium">
               <Sparkles size={12} className="text-amber-300" />
-              <span>viora.vn/{weddingSlug || "thiep-cuoi"}</span>
+              <span>/{weddingSlug || "thiep-cuoi"}</span>
             </p>
           </div>
 

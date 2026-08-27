@@ -154,7 +154,7 @@ export function BuyerDashboardPage() {
               </div>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-lg font-black text-slate-800 tracking-wider font-sans uppercase">
-                  Viora
+                  2H
                 </span>
               </div>
             </div>

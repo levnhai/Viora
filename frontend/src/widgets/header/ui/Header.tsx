@@ -32,7 +32,7 @@ export function Header({ onOpenRequest }: HeaderProps) {
             <span className="text-2xl text-[#db2777]">🌸</span>
             <div className="flex flex-col text-left">
               <span className="text-lg font-black tracking-widest text-[#2c1810] dark:text-white leading-none">
-                VIORA
+                2H
               </span>
               <span className="text-[7px] text-[#7a5c4f]/70 dark:text-slate-400 tracking-widest font-bold uppercase mt-0.5">
                 WEDDING INVITATIONS
