@@ -6,10 +6,6 @@ import { Loader2, ChevronRight } from "lucide-react";
 import { useDashboardData } from "@/entities/admin-dashboard/model/useDashboardData";
 
 import { AdminLayout } from "@/widgets/admin-layout/ui/AdminLayout";
-import { AdminDashboardKpi } from "@/widgets/admin-dashboard-kpi/ui/AdminDashboardKpi";
-import { AdminDashboardCharts } from "@/widgets/admin-dashboard-charts/ui/AdminDashboardCharts";
-import { AdminDashboardTables } from "@/widgets/admin-dashboard-tables/ui/AdminDashboardTables";
-import { AdminDashboardSystem } from "@/widgets/admin-dashboard-system/ui/AdminDashboardSystem";
 import { AdminAnalyticsSection } from "@/widgets/admin-analytics/ui/AdminAnalyticsSection";
 
 export function AdminDashboardPage() {
@@ -58,13 +54,6 @@ export function AdminDashboardPage() {
     rsvpPending: 0,
     totalViews: 0,
   };
-  const charts = dashboardData.charts || { rsvpData: [], rsvpPieData: [] };
-  const tables = dashboardData.tables || {
-    topWeddings: [],
-    recentActivities: [],
-  };
-  const system = dashboardData.system || { totalUsers: 0, activeUsers: 0 };
-  const totalRsvp = kpi.rsvpConfirmed + kpi.rsvpDeclined + kpi.rsvpPending || 1;
 
   return (
     <AdminLayout>
@@ -83,23 +72,12 @@ export function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Phần Thống kê Chi tiết Lưu lượng Web, Realtime Online & Thiết bị, Trình duyệt */}
-      <AdminAnalyticsSection initialRange="7days" />
-
-      {/* KPI Thiệp Cưới & RSVP */}
-      <div className="mt-8 mb-2">
-        <h3 className="text-base font-bold text-slate-800 tracking-tight">
-          Số liệu Vận hành & Sự kiện Cưới
-        </h3>
-      </div>
-      <AdminDashboardKpi kpi={kpi} />
-      <AdminDashboardCharts
-        charts={charts}
-        tables={tables}
-        totalRsvp={totalRsvp}
+      {/* Phần Thống kê Chi tiết Lưu lượng Web, Realtime Online, Thiết bị, Trình duyệt, Top Mẫu & Yêu cầu */}
+      <AdminAnalyticsSection
+        initialRange="7days"
+        dashboardKpi={kpi}
+        requestsList={requestsList}
       />
-      <AdminDashboardTables tables={tables} requestsList={requestsList} />
-      <AdminDashboardSystem kpi={kpi} system={system} />
     </AdminLayout>
   );
 }

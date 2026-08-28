@@ -19,7 +19,7 @@ export function useTemplates() {
         setLoading(false);
       }
     };
-
+    
     loadData();
   }, []);
 

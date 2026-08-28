@@ -28,7 +28,10 @@ export function Envelope_7({
   isFixed = true,
   textColor = "#2E3D25",
 }: Envelope_7Props) {
-  const [isOpening, setIsOpening] = useState(false);
+  const isBlushTheme = textColor.toLowerCase() === "#5e2d3a";
+  const palette = isBlushTheme
+    ? { backdrop: "linear-gradient(135deg, #FCE7EC 0%, #E9A5B5 48%, #8F3E58 100%)", paper: "linear-gradient(to bottom, #FFF9FA, #FCEDEF)", border: "rgba(215, 173, 115, 0.58)", accent: "#D88A9B", seal: "radial-gradient(circle at 35% 35%, #C96E87, #762C43)", button: "linear-gradient(135deg, #C96E87, #762C43)", shadow: "rgba(118, 44, 67, 0.38)", confetti: ["#F2B8C5", "#C96E87", "#FFF8F8", "#D7AD73", "#762C43"] }
+    : { backdrop: "linear-gradient(to bottom right, #2E3D25, #1E2B17, #131C0E)", paper: "linear-gradient(to bottom, #FAF5EE, #F4F7F0)", border: "rgba(164, 184, 133, 0.4)", accent: isBlushTheme ? "#F2B8C5" : "#A4B885", seal: "radial-gradient(circle at 35% 35%, #4A5D36, #1E2B17)", button: "linear-gradient(135deg, #2E3D25, #1E2B17)", shadow: "rgba(30, 43, 23, 0.5)", confetti: [isBlushTheme ? "#F2B8C5" : "#A4B885", "#2E3D25", "#FAF5EE", "#e8d5c4", "#4A5D36"] };  const [isOpening, setIsOpening] = useState(false);
 
   // GSAP Refs
   const containerRef = useRef<HTMLDivElement>(null);
@@ -178,7 +181,7 @@ export function Envelope_7({
         particleCount: 110,
         spread: 85,
         origin: { y: 0.55 },
-        colors: ["#A4B885", "#2E3D25", "#FAF5EE", "#e8d5c4", "#4A5D36"],
+        colors: palette.confetti,
         zIndex: 10000,
       });
     } catch (e) {}
@@ -216,13 +219,13 @@ export function Envelope_7({
   // 12 hạt trái tim rơi được cấu hình tối ưu GPU
   const hearts = [
     { left: "6%", delay: "0s", duration: "8s", size: "18px", color: "rgba(255,255,255,0.65)" },
-    { left: "15%", delay: "1.8s", duration: "9s", size: "15px", color: "#A4B885" },
+    { left: "15%", delay: "1.8s", duration: "9s", size: "15px", color: isBlushTheme ? "#F2B8C5" : "#A4B885" },
     { left: "28%", delay: "3.5s", duration: "8.5s", size: "22px", color: "rgba(255,255,255,0.7)" },
-    { left: "38%", delay: "0.8s", duration: "10s", size: "16px", color: "#dbe8c7" },
+    { left: "38%", delay: "0.8s", duration: "10s", size: "16px", color: isBlushTheme ? "#FFE8ED" : "#dbe8c7" },
     { left: "50%", delay: "2.5s", duration: "7.5s", size: "14px", color: "rgba(255,255,255,0.55)" },
-    { left: "62%", delay: "4.2s", duration: "9.5s", size: "19px", color: "#A4B885" },
+    { left: "62%", delay: "4.2s", duration: "9.5s", size: "19px", color: isBlushTheme ? "#F2B8C5" : "#A4B885" },
     { left: "75%", delay: "1.2s", duration: "8.8s", size: "20px", color: "rgba(255,255,255,0.65)" },
-    { left: "88%", delay: "3.0s", duration: "8.2s", size: "17px", color: "#f3d078" },
+    { left: "88%", delay: "3.0s", duration: "8.2s", size: "17px", color: isBlushTheme ? "#D7AD73" : "#f3d078" },
   ];
 
   return (
@@ -230,7 +233,7 @@ export function Envelope_7({
       ref={containerRef}
       className={`${isFixed ? "fixed" : "absolute"} inset-0 z-50 flex items-center justify-center overflow-hidden select-none`}
       style={{
-        background: "linear-gradient(to bottom right, #2E3D25, #1E2B17, #131C0E)",
+        background: palette.backdrop,
       }}
     >
       {/* Styles & Calligraphy Fonts */}
@@ -306,8 +309,8 @@ export function Envelope_7({
             <div
               className="absolute inset-0 rounded-2xl overflow-hidden"
               style={{
-                background: "linear-gradient(to bottom, #FAF5EE, #F4F7F0)",
-                border: "1px solid rgba(164, 184, 133, 0.4)",
+                background: palette.paper,
+                border: `1px solid ${palette.border}`,
                 clipPath: "inset(0 round 16px)",
               }}
             >
@@ -359,9 +362,9 @@ export function Envelope_7({
                   width: "58px",
                   height: "58px",
                   background:
-                    "radial-gradient(circle at 35% 35%, #4A5D36, #1E2B17)",
+                    palette.seal,
                   boxShadow:
-                    "0 6px 18px rgba(30, 43, 23, 0.5), inset 0 0 0 2px rgba(164, 184, 133, 0.4)",
+                    `0 6px 18px ${palette.shadow}, inset 0 0 0 2px ${palette.border}`,
                 }}
               >
                 <svg
@@ -420,15 +423,15 @@ export function Envelope_7({
                   className="flex-1 h-[1.5px]"
                   style={{
                     background:
-                      "linear-gradient(to right, transparent, #A4B885, #2E3D25)",
+                      `linear-gradient(to right, transparent, ${palette.accent}, ${textColor})`,
                   }}
                 ></div>
-                <span className="text-sm text-[#4A5D36]">✦ ❦ ✦</span>
+                <span className="text-sm" style={{ color: palette.accent }}>✦ ❦ ✦</span>
                 <div
                   className="flex-1 h-[1.5px]"
                   style={{
                     background:
-                      "linear-gradient(to left, transparent, #A4B885, #2E3D25)",
+                      `linear-gradient(to left, transparent, ${palette.accent}, ${textColor})`,
                   }}
                 ></div>
               </div>
@@ -441,6 +444,7 @@ export function Envelope_7({
                   opacity: 0,
                   color: textColor,
                   fontFamily: '"Playfair Display", "Lora", serif',
+                  borderColor: palette.border,
                 }}
               >
                 <span>{weddingDateLabel || "3 tháng 1, 2026"}</span>
@@ -457,6 +461,7 @@ export function Envelope_7({
                   style={{
                     color: textColor,
                     fontFamily: '"Playfair Display", "Lora", serif',
+                  borderColor: palette.border,
                   }}
                 >
                   {guestName ? `Thân Mời: ${guestName}` : "Thân Mời"}
@@ -467,14 +472,15 @@ export function Envelope_7({
               <button
                 ref={buttonRef}
                 onClick={handleOpen}
-                className="relative px-9 py-2.5 text-base sm:text-lg font-bold rounded-full flex items-center justify-center overflow-hidden transition-transform hover:scale-105 active:scale-95 cursor-pointer border border-[#A4B885]/50 will-change-transform"
+                className="relative px-9 py-2.5 text-base sm:text-lg font-bold rounded-full flex items-center justify-center overflow-hidden transition-transform hover:scale-105 active:scale-95 cursor-pointer border will-change-transform"
                 style={{
                   opacity: 0,
-                  background: "linear-gradient(135deg, #2E3D25, #1E2B17)",
+                  background: palette.button,
                   color: "#ffffff",
                   boxShadow:
-                    "0 6px 20px rgba(30, 43, 23, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2)",
+                    `0 6px 20px ${palette.shadow}, inset 0 1px 1px rgba(255, 255, 255, 0.2)`,
                   fontFamily: '"Playfair Display", "Lora", serif',
+                  borderColor: palette.border,
                 }}
               >
                 <span>Mở thiệp</span>

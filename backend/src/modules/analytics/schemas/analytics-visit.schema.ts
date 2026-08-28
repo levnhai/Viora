@@ -32,6 +32,9 @@ export class AnalyticsVisit {
   @Prop()
   ipAddress?: string;
 
+  @Prop({ default: 'TP. Hồ Chí Minh' })
+  city?: string;
+
   @Prop({ type: Date, default: Date.now, expires: '90d' }) // Tự động xóa sau 90 ngày để tối ưu dung lượng DB
   createdAt: Date;
 }

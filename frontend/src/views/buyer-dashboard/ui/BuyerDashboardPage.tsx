@@ -206,7 +206,7 @@ export function BuyerDashboardPage() {
                         onClick={() => {
                           setIsUserMenuOpen(false);
                           handleLogout();
-                        }}
+                        }}  
                         className="w-full px-4 py-2 text-xs text-left hover:bg-red-50 hover:text-red-600 border-0 bg-transparent cursor-pointer text-slate-700 font-medium flex items-center gap-2.5 transition-colors"
                       >
                         <LogOut size={14} className="text-slate-400" />
@@ -233,7 +233,7 @@ export function BuyerDashboardPage() {
               className="text-3xl font-semibold text-slate-800"
               style={{ fontFamily: "'EB Garamond', serif" }}
             >
-              Chào mừng bạn đến với Viora Wedding
+              Chào mừng bạn đến với 2H Wedding
             </h2>
             <p className="text-sm text-slate-500 leading-relaxed max-w-sm mx-auto">
               Bạn chưa tạo thiệp cưới trực tuyến nào. Hãy bắt đầu tạo một mẫu
@@ -261,7 +261,7 @@ export function BuyerDashboardPage() {
   ).length;
   const pendingGuests = guestList.filter(
     (g) => g.rsvpStatus === "pending",
-  ).length;
+  ).length; 
 
   const filteredGuestList = guestList.filter((g) => {
     if (filterRsvp === "confirmed" && g.rsvpStatus !== "confirmed")

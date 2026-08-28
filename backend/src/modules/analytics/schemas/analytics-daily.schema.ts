@@ -28,6 +28,9 @@ export class AnalyticsDaily {
 
   @Prop({ type: Map, of: Number, default: {} })
   templateViews: Map<string, number>; // { 'temp_1': 15, 'temp_2': 30 }
+
+  @Prop({ type: Map, of: Number, default: {} })
+  locations: Map<string, number>; // { 'TP. Hồ Chí Minh': 120, 'Hà Nội': 85 }
 }
 
 export const AnalyticsDailySchema = SchemaFactory.createForClass(AnalyticsDaily);

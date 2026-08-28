@@ -19,9 +19,10 @@ export class AnalyticsController {
 
   @Post('track')
   async trackEvent(@Body() dto: TrackEventDto, @Req() req: any) {
-    const forwarded = req.headers ? req.headers['x-forwarded-for'] : undefined;
+    const forwarded = req.headers ? (req.headers['x-forwarded-for'] || req.headers['x-real-ip']) : undefined;
     const ip = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : req.ip;
-    return this.analyticsService.trackVisit(dto, ip);
+    const cfCity = req.headers ? (req.headers['cf-ipcity'] || req.headers['x-vercel-ip-city']) : undefined;
+    return this.analyticsService.trackVisit(dto, ip, cfCity);
   }
 
   @Get('overview')

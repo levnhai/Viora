@@ -318,6 +318,45 @@ export const TEMPLATES: TemplateConfig[] = [
       gift: { enabled: true },
     },
   },
+  {
+    id: 10,
+    code: "temp_10",
+    name: "Minimal - hồng",
+    style: "Sang trọng",
+    tags: ["Sang trọng", "Lãng mạn"],
+    isHot: true,
+    preview:
+      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format",
+    // previewVideo: "/video/honey_wood.mp4",
+    themeClass: "Minimal",
+    tier: "standard",
+    price: 149000,
+    originalPrice: 250000,
+    features: [
+      "Độc quyền Animation 3D",
+      "Không giới hạn ảnh",
+      "QR Mừng cưới + Confetti",
+      "Countdown & RSVP VIP",
+    ],
+    accentColor: "#F9DFDF",
+    envelopeKey: "envelope_8",
+    timelineKey: "simple",
+    galleryKey: "grid",
+    schema: {
+      basicInfo: {
+        hasParentsInfo: true,
+        hasRankInfo: true,
+        hasAddressInfo: true,
+      },
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
+    },
+  },
 ];
 
 export function hasDemoForTemplate(tpl: any, demos: any[]): boolean {

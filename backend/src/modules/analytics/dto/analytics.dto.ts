@@ -32,6 +32,10 @@ export class TrackEventDto {
   @IsOptional()
   @IsString()
   referrer?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
 }
 
 export class AnalyticsOverviewQueryDto {

@@ -28,6 +28,12 @@ export interface AnalyticsBrowserItem {
   count: number;
 }
 
+export interface AnalyticsLocationItem {
+  name: string;
+  count: number;
+  percent: number;
+}
+
 export interface AnalyticsTopTemplate {
   code: string;
   name: string;
@@ -43,6 +49,7 @@ export interface AnalyticsOverviewData {
   timeline: AnalyticsTimelineItem[];
   devices: AnalyticsDeviceItem[];
   browsers: AnalyticsBrowserItem[];
+  locations?: AnalyticsLocationItem[];
   topTemplates: AnalyticsTopTemplate[];
 }
 
@@ -55,4 +62,5 @@ export interface TrackEventPayload {
   browser?: string;
   os?: string;
   referrer?: string;
+  city?: string;
 }

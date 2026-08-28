@@ -12,6 +12,7 @@ import {
   Sparkles,
   ExternalLink,
   User,
+  Inbox,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AdminLayout } from "@/widgets/admin-layout/ui/AdminLayout";
@@ -261,18 +262,35 @@ export function AdminTemplateRequestsPage() {
                   <tr>
                     <td
                       colSpan={7}
-                      className="p-8 text-center text-slate-400 font-medium"
+                      className="p-12 text-center text-slate-400 font-medium"
                     >
-                      Đang tải dữ liệu yêu cầu...
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <RefreshCw size={24} className="animate-spin text-pink-500" />
+                        <p>Đang tải dữ liệu yêu cầu...</p>
+                      </div>
                     </td>
                   </tr>
                 ) : filteredRequests.length === 0 ? (
                   <tr>
                     <td
                       colSpan={7}
-                      className="p-8 text-center text-slate-400 font-medium"
+                      className="p-12 text-center"
                     >
-                      Chưa có yêu cầu tạo thiệp nào phù hợp.
+                      <div className="flex flex-col items-center justify-center gap-2 max-w-sm mx-auto">
+                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                          <Inbox size={24} />
+                        </div>
+                        <p className="text-sm font-bold text-slate-700">
+                          {requests.length === 0
+                            ? "Không có dữ liệu yêu cầu tạo thiệp"
+                            : "Không tìm thấy yêu cầu phù hợp"}
+                        </p>
+                        <p className="text-xs text-slate-400">
+                          {requests.length === 0
+                            ? "Hiện tại chưa có yêu cầu tư vấn hoặc tạo thiệp nào từ khách hàng."
+                            : "Thử thay đổi từ khóa tìm kiếm hoặc trạng thái bộ lọc."}
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 ) : (

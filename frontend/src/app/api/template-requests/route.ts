@@ -13,39 +13,8 @@ export interface TemplateRequest {
   createdAt: string;
 }
 
-// Dữ liệu mẫu dự phòng khi chưa khởi động NestJS backend
-let fallbackRequests: TemplateRequest[] = [
-  {
-    id: "req_1",
-    name: "Nguyễn Văn Nam",
-    phone: "0912345678",
-    notes: "Cần làm gấp trước ngày 15/10, hỗ trợ thay đổi sơ đồ nhà hàng",
-    templateCode: "temp_1",
-    templateName: "Song Hỷ - Xanh",
-    status: "new",
-    createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-  },
-  {
-    id: "req_2",
-    name: "Trần Thị Mai",
-    phone: "0987654321",
-    notes: "Tư vấn gói thiết kế riêng theo màu chủ đạo hồng nhạt",
-    templateCode: "minimal-green",
-    templateName: "Minimalism - Nâu",
-    status: "contacted",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-  },
-  {
-    id: "req_3",
-    name: "Lê Hoàng Anh",
-    phone: "0909123456",
-    notes: "Gửi báo giá thiệp VIP có nhạc nền tự chọn",
-    templateCode: "classic-white",
-    templateName: "Hoa Mộc - Xanh",
-    status: "completed",
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-  },
-];
+// Dữ liệu dự phòng khi chưa khởi động NestJS backend
+let fallbackRequests: TemplateRequest[] = [];
 
 export async function GET() {
   try {
