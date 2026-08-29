@@ -192,7 +192,7 @@ export class AnalyticsService {
       .exec();
 
     const dailyMap = new Map<string, any>();
-    dail    let totalPageviews = 0;
+    let totalPageviews = 0;
     let newVisitors = 0;
     let returningVisitors = 0;
     const deviceMap = new Map<string, number>();
