@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { WeddingInvitationPage } from "@/views/wedding-invitation/ui/WeddingInvitationPage";
+import { WeddingInvitationPage } from "@/views/live-preview";
 
 type PageProps = {
   params: Promise<{ weddingSlug: string }> | { weddingSlug: string };

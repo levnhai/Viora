@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Volume2, VolumeX, Phone, Mail } from "lucide-react";
 
-import { Envelope } from "@/widgets/envelope";
+import { Envelope } from "@/widgets/invitation-blocks";
 import { InvitationCover } from "./InvitationCover";
 
 import { WeddingData } from "@/entities/invitation/model/types";

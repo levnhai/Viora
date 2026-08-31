@@ -10,7 +10,7 @@ import { WeddingCountdown } from "./WeddingCountdown";
 import { WeddingGallery } from "./WeddingGallery";
 import { WeddingRSVP } from "./WeddingRSVP";
 import { ThankYouFooter } from "./ThankYouFooter";
-import { Envelope } from "@/widgets/envelope";
+import { Envelope } from "@/widgets/invitation-blocks";
 import { useWeddingMusic } from "@/shared/lib/hooks";
 import "./styles.css";
 

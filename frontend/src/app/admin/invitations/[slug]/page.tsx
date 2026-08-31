@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { AdminInvitationDetailPage } from "@/views/admin-invitation-detail/ui/AdminInvitationDetailPage";
+import { AdminInvitationDetailPage } from "@/views/admin";
 
 export default function InvitationDetailRoute() {
   const [mounted, setMounted] = useState(false);

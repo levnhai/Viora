@@ -15,6 +15,8 @@ import { LiveView as MinimalDoView } from "@/views/invitations/minimal-do/LiveVi
 import { LiveView as MinimalXanhView } from "@/views/invitations/minimal-xanh/LiveView";
 import { LiveView as MinimalHongView } from "@/views/invitations/minimal-hong/LiveView";
 
+import { LiveView as SageOliveView } from "@/views/invitations/sageOlive/LiveView";
+import { LiveView as WarmTerracottaView } from "@/views/invitations/warmTerracotta/LiveView";
 
 const LegacyMockEditView = () => null;
 
@@ -29,6 +31,8 @@ const TEMPLATE_COMPONENT_MAP: Record<string, ComponentType<TemplateProps>> = {
   temp_8: HoneyWoodView,
   temp_9: LinenCreamView,
   temp_10: MinimalHongView,
+  temp_11: SageOliveView,
+  temp_12: WarmTerracottaView,
 };
 
 export const getTemplatePackage = (codeOrId: string | number): TemplatePackage => {

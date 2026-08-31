@@ -5,12 +5,12 @@ import { InvitationCover } from "./InvitationCover";
 import { MinimalCoupleSpotlight } from "./components/MinimalCoupleSpotlight";
 import { CoverflowGallery } from "./components/CoverflowGallery";
 
-import { EventInfo } from "@/widgets/event-info";
-import { Guestbook } from "@/widgets/guestbook";
-import { Registry } from "@/widgets/registry";
-import { VenueMap } from "@/widgets/venue-map";
-import { Timeline } from "@/widgets/timeline";
-import { Envelope } from "@/widgets/envelope";
+import { EventInfo } from "@/widgets/invitation-blocks";
+import { Guestbook } from "@/widgets/invitation-blocks";
+import { Registry } from "@/widgets/invitation-blocks";
+import { VenueMap } from "@/widgets/invitation-blocks";
+import { Timeline } from "@/widgets/invitation-blocks";
+import { Envelope } from "@/widgets/invitation-blocks";
 import { RsvpForm } from "@/features/submit-rsvp/ui/RsvpForm";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { GsapReveal } from "@/shared/ui/GsapReveal";

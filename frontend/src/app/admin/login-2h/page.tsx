@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AdminLoginPage } from "@/views/admin/ui/AdminLoginPage";
+import { AdminLoginPage } from "@/views/admin";
 
 export default function AdminLoginRoute() {
   const [mounted, setMounted] = useState(false);

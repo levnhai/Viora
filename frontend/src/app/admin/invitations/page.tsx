@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AdminInvitationsPage } from "@/views/admin-invitations/ui/AdminInvitationsPage";
+import { AdminInvitationsPage } from "@/views/admin";
 
 export default function InvitationsRoute() {
   const [mounted, setMounted] = useState(false);

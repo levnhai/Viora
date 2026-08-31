@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BuyerDashboardPage } from "@/views/buyer-dashboard/ui/BuyerDashboardPage";
+import { BuyerDashboardPage } from "@/views/public-pages";
 
 export default function DashboardRoute() {
   const [mounted, setMounted] = useState(false);

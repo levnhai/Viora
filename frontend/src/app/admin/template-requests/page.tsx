@@ -1,4 +1,4 @@
-import { AdminTemplateRequestsPage } from "@/views/admin-template-requests/ui/AdminTemplateRequestsPage";
+import { AdminTemplateRequestsPage } from "@/views/admin";
 
 export const metadata = {
   title: "Quản Lý Yêu Cầu Tạo Thiệp | Admin Dashboard",

@@ -1,4 +1,4 @@
-import { AdminInvitationCreatePage } from "@/views/admin-invitation-create/ui/AdminInvitationCreatePage";
+import { AdminInvitationCreatePage } from "@/views/admin";
 
 export default function CreateInvitationRoute() {
   return <AdminInvitationCreatePage />;

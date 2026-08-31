@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AdminDashboardPage } from "@/views/admin/ui/AdminDashboardPage";
+import { AdminDashboardPage } from "@/views/admin";
 
 export default function AdminRoute() {
   const [mounted, setMounted] = useState(false);

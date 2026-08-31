@@ -2,8 +2,8 @@ import "./styles/index.css";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import GoogleOAuthProviderWrapper from "./GoogleOAuthProviderWrapper";
-import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
-import { FloatingZaloContact } from "@/widgets/zalo-contact/ui/FloatingZaloContact";
+import { BottomNav } from "@/widgets/common";
+import { FloatingZaloContact } from "@/widgets/common";
 import { AnalyticsTracker } from "@/shared/lib/analytics/AnalyticsTracker";
 import { DisableDevtool } from "@/shared/lib/security/DisableDevtool";
 

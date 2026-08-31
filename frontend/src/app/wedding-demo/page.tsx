@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { WeddingInvitationDemoPage } from "@/views/wedding-invitation-demo/ui/WeddingInvitationDemoPage";
+import { WeddingInvitationDemoPage } from "@/views/live-preview";
 import { useRouter } from "next/navigation";
 
 export default function WeddingDemo() {

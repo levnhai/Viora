@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LoginPage } from "@/views/login/ui/LoginPage";
+import { LoginPage } from "@/views/public-pages";
 
 export default function LoginRoute() {
   const [mounted, setMounted] = useState(false);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { API_URL } from "@/shared/lib/config";
-import { defaultWeddingData } from "@/views/buyer-dashboard/model/defaultData";
+import { defaultWeddingData } from "@/views/public-pages";
 import { authService } from "@/features/auth/api/authService";
 import { io } from "socket.io-client";
 
