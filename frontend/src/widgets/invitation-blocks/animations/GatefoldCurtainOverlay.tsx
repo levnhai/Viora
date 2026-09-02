@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface GatefoldCurtainOverlayProps {
   onComplete?: () => void;
@@ -19,20 +19,27 @@ export function GatefoldCurtainOverlay({
 }: GatefoldCurtainOverlayProps) {
   const [opened, setOpened] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    // Tự động mở 2 cánh thiệp khi component được mount
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    // Tự động mở 2 cánh thiệp khi component được mount (chạy 1 lần duy nhất)
     const openTimer = setTimeout(() => {
       setOpened(true);
       const hideTimer = setTimeout(() => {
         setHidden(true);
-        if (onComplete) onComplete();
+        if (onCompleteRef.current) {
+          onCompleteRef.current();
+        }
       }, 1000);
       return () => clearTimeout(hideTimer);
     }, autoOpenDelay);
 
     return () => clearTimeout(openTimer);
-  }, [autoOpenDelay, onComplete]);
+  }, [autoOpenDelay]);
 
   if (hidden) return null;
 

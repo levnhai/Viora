@@ -31,7 +31,7 @@ export function LiveView({
 }: LiveViewProps) {
   const [giftModalOpen, setGiftModalOpen] = useState(false);
 
-  const { playing, togglePlay, setPlaying, audioRef } = useWeddingMusic(
+  const { playing, togglePlay, autoPlayOnce, audioRef } = useWeddingMusic(
     weddingData.musicUrl
   );
   const { messages, handleSendMessage } = useGuestbook(weddingData.slug);
@@ -111,7 +111,7 @@ export function LiveView({
       {previewMode !== "invitation" && (
         <GatefoldCurtainOverlay
           onComplete={() => {
-            if (weddingData.musicUrl) setPlaying(true);
+            if (weddingData.musicUrl) autoPlayOnce();
           }}
         />
       )}

@@ -62,11 +62,19 @@ export function EventScheduleCard({ weddingData }: EventScheduleCardProps) {
         {displayEvents.map((ev, index) => {
           const dateInfo = parseEventDate(ev.date || weddingDate);
           const timeDisplay = ev.time || weddingTime || "17:30";
+          let rawMapUrl = (ev.mapUrl || "").trim();
+          if (rawMapUrl.includes("<iframe") && rawMapUrl.includes('src="')) {
+            const match = rawMapUrl.match(/src="([^"]+)"/);
+            if (match && match[1]) rawMapUrl = match[1];
+          }
+
+          const mapQuery = `${ev.locationName || (ev as any).location || ""} ${ev.address || ""}`.trim();
+          const fallbackMapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery || "Hà Nội")}`;
+
           const mapLink =
-            ev.mapUrl ||
-            `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              `${ev.locationName || (ev as any).location || ""} ${ev.address || ""}`.trim() || "Hà Nội"
-            )}`;
+            !rawMapUrl || rawMapUrl.includes("/maps/embed") || rawMapUrl.includes("google.com/maps/embed")
+              ? fallbackMapLink
+              : rawMapUrl;
 
           return (
             <div key={ev.id || index} className="relative flex flex-col items-center text-center">

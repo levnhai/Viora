@@ -78,6 +78,7 @@ export interface GuestMessage {
 // quản lý nhạc nền đám cưới
 export function useWeddingMusic(musicUrl?: string) {
   const [playing, setPlaying] = useState(false);
+  const userInteractedRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -92,9 +93,18 @@ export function useWeddingMusic(musicUrl?: string) {
     }
   }, [playing]);
 
-  const togglePlay = () => setPlaying((prev) => !prev);
+  const togglePlay = () => {
+    userInteractedRef.current = true;
+    setPlaying((prev) => !prev);
+  };
 
-  return { playing, setPlaying, togglePlay, audioRef };
+  const autoPlayOnce = () => {
+    if (!userInteractedRef.current) {
+      setPlaying(true);
+    }
+  };
+
+  return { playing, setPlaying, togglePlay, autoPlayOnce, audioRef };
 }
 
 // quản lý sổ lưu bút đám cưới
