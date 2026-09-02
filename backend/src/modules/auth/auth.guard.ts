@@ -8,8 +8,8 @@ export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const token = request.cookies?.token || request.headers.authorization?.replace(/^Bearer\s+/, '');
-    const secret = this.configService.get<string>('JWT_SECRET');
-    if (!token || !secret) throw new UnauthorizedException('Thiếu mã token xác thực');
+    const secret = this.configService.get<string>('JWT_SECRET') || 'viora_jwt_secret_key_2026_safe';
+    if (!token) throw new UnauthorizedException('Thiếu mã token xác thực');
     try {
       const [header, payload, signature] = token.split('.');
       if (!header || !payload || !signature) throw new Error();

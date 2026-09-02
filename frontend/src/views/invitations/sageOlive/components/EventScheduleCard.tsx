@@ -41,7 +41,7 @@ export function EventScheduleCard({ weddingData }: EventScheduleCardProps) {
       title: "bữa tiệc chung vui",
       time: weddingTime || "17:30",
       date: weddingDate || "2026-12-25",
-      location: "tư gia nhà trai",
+      locationName: "tư gia nhà trai",
       address: weddingData.groomAddress || "Số 88 Vũ Trọng Phụng - Thanh Xuân - Hà Nội",
       mapUrl: "https://maps.app.goo.gl/zhLHF81Pjzu71Eru7",
     },
@@ -50,7 +50,7 @@ export function EventScheduleCard({ weddingData }: EventScheduleCardProps) {
       title: "lễ thành hôn",
       time: "09:30",
       date: weddingDate ? new Date(new Date(weddingDate).getTime() + 86400000).toISOString().split("T")[0] : "2026-12-26",
-      location: "tư gia nhà trai",
+      locationName: "tư gia nhà trai",
       address: weddingData.groomAddress || "Số 88 Vũ Trọng Phụng - Thanh Xuân - Hà Nội",
       mapUrl: "https://maps.app.goo.gl/zhLHF81Pjzu71Eru7",
     },
@@ -67,7 +67,7 @@ export function EventScheduleCard({ weddingData }: EventScheduleCardProps) {
           const mapLink =
             ev.mapUrl ||
             `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              `${ev.location || ""} ${ev.address || ""}`.trim() || "Hà Nội"
+              `${ev.locationName || (ev as any).location || ""} ${ev.address || ""}`.trim() || "Hà Nội"
             )}`;
 
           return (
@@ -130,7 +130,7 @@ export function EventScheduleCard({ weddingData }: EventScheduleCardProps) {
               {/* 5. Nơi tổ chức (y=1962 / y=2379, font Lora 18px 600 uppercase) */}
               <AnimateView animation="fadeInUp" delay={0.3} duration={1}>
                 <p className="font-lora text-[16px] sm:text-[18px] font-semibold uppercase text-[#5D733F]">
-                  tại {ev.location || "tư gia nhà trai"}
+                  tại {ev.locationName || (ev as any).location || "tư gia nhà trai"}
                 </p>
               </AnimateView>
 

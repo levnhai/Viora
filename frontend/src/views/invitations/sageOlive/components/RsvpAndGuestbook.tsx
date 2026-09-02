@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { GsapReveal } from "@/shared/ui/GsapReveal";
+import { AnimateView } from "@/widgets/invitation-blocks";
 import { Heart, Send, CheckCircle2, MessageSquare } from "lucide-react";
 
 interface RsvpAndGuestbookProps {

@@ -41,21 +41,21 @@ export function InvitationCover({
           className="w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Gradient Overlay từ y=400 (h=245px) */}
+        {/* Darker Gradient Overlay từ bottom (h=60%) giúp chữ trắng luôn nổi bật trên mọi ảnh nền */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[40%] pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[60%] pointer-events-none"
           style={{
             background:
-              "linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 100%)",
+              "linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0) 100%)",
           }}
         />
 
         {/* Content Over the Hero Image */}
-        <div className="absolute inset-x-0 bottom-0 pb-6 pt-12 flex flex-col items-center justify-end text-center z-10 select-none">
-          {/* Chữ "Wedding" nghệ thuật to mờ đè phía trên (font Arcittya Begatri 106px) */}
+        <div className="absolute inset-x-0 bottom-0 pb-6 pt-12 flex flex-col items-center justify-end text-center z-10 select-none px-4">
+          {/* Chữ "Wedding" nghệ thuật to mờ đè phía trên (font Arcittya Begatri) */}
           <AnimateView animation="fadeInUp" duration={1.2}>
             <p
-              className="font-arcittya leading-none pointer-events-none select-none text-[84px] sm:text-[106px] text-white/60 drop-shadow-sm -mb-6 sm:-mb-8 tracking-wider"
+              className="font-arcittya leading-none pointer-events-none select-none text-[88px] sm:text-[110px] text-white/70 [text-shadow:_0_2px_12px_rgba(0,0,0,0.5)] -mb-7 sm:-mb-9 tracking-wider"
               style={{
                 fontFamily: "'Arcittya Begatri', 'Playfair Display', serif",
               }}
@@ -64,21 +64,30 @@ export function InvitationCover({
             </p>
           </AnimateView>
 
-          {/* Tên dâu rể (font Hastegi 36px uppercase) chạy từ dưới lên */}
-          <AnimateView animation="fadeInUp" delay={0.15} duration={1.2}>
+          {/* Tên dâu rể (font Hastegi uppercase) đè lên ký tự & nghệ thuật ở lớp nền */}
+          <AnimateView animation="fadeInUp" delay={0.15} duration={1.2} className="relative flex flex-col items-center justify-center my-1">
+            {/* Ký tự & nghệ thuật nằm chìm ở dưới tên dâu rể */}
+            <span
+              className="absolute inset-0 flex items-center justify-center text-[110px] sm:text-[140px] text-white/35 pointer-events-none select-none font-pinyon z-0 [text-shadow:_0_2px_10px_rgba(0,0,0,0.6)]"
+              style={{ fontFamily: "'Pinyon', cursive" }}
+              aria-hidden="true"
+            >
+              &
+            </span>
+
             <h1
-              className="text-2xl sm:text-[34px] leading-tight uppercase text-white font-normal tracking-wide drop-shadow-md my-1"
+              className="text-[32px] sm:text-[42px] leading-[1.25] uppercase text-white font-bold tracking-[0.12em] [text-shadow:_0_2px_12px_rgba(0,0,0,0.9)] relative z-10"
               style={{ fontFamily: "'Hastegi', sans-serif" }}
             >
-              <div className="block">{groomName || "tuấn anh"}</div>
-              <div className="block">{brideName || "bích ngọc"}</div>
+              <div className="block drop-shadow-md">{groomName || "tuấn anh"}</div>
+              <div className="block drop-shadow-md">{brideName || "bích ngọc"}</div>
             </h1>
           </AnimateView>
 
-          {/* Ngày cưới (font Hastegi 20px) */}
+          {/* Ngày cưới (font Hastegi) */}
           <AnimateView animation="fadeInUp" delay={0.25} duration={1}>
             <p
-              className="text-base sm:text-[20px] uppercase text-white tracking-widest font-normal drop-shadow-md mt-1"
+              className="text-lg sm:text-[22px] uppercase text-white tracking-[0.2em] font-semibold [text-shadow:_0_2px_8px_rgba(0,0,0,0.85)] mt-1"
               style={{ fontFamily: "'Hastegi', sans-serif" }}
             >
               {formattedDate}

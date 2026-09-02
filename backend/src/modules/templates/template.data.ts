@@ -88,4 +88,17 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 11,
+    code: 'temp_11',
+    name: 'Sage Olive',
+    thumbnail:
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format',
+    previewVideo: '/video/honey_wood.mp4',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];

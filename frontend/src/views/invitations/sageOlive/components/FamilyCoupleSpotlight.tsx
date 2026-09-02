@@ -96,17 +96,27 @@ export function FamilyCoupleSpotlight({
         </div>
 
         {/* 3. Tên Chú Rể & Cô Dâu (y=962 -> y=1024) */}
-        <div className="grid grid-cols-2 gap-2 text-center mb-4">
+        <div className="grid grid-cols-2 gap-2 text-center mb-5 relative">
+          {/* Ký tự & nghệ thuật nằm chìm ở giữa nền đè bên dưới 2 tên */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+            <span
+              className="text-[70px] sm:text-[85px] text-[#5D733F]/20 font-pinyon leading-none"
+              style={{ fontFamily: "'Pinyon', cursive" }}
+              aria-hidden="true"
+            >
+              &
+            </span>
+          </div>
           {/* Chú rể */}
           <div className="flex flex-col items-center">
             <AnimateView animation="fadeInLeft" delay={0.2} duration={1}>
-              <span className="font-lora text-[15px] font-semibold text-[#30451c] uppercase">
-                Chú rể
+              <span className="font-lora text-[13px] sm:text-[14px] font-bold text-[#5D733F] uppercase tracking-[0.2em] mb-1">
+                CHÚ RỂ
               </span>
             </AnimateView>
             <AnimateView animation="fadeInUp" delay={0.25} duration={1.2}>
               <h2
-                className="text-[28px] sm:text-[32px] text-[#30451c] font-normal leading-tight mt-0.5"
+                className="text-[36px] sm:text-[44px] text-[#233814] font-semibold leading-tight mt-0.5 tracking-wide drop-shadow-sm"
                 style={{ fontFamily: "'Uvn Hoa Tay 1', cursive" }}
               >
                 {groomName || "Tuấn Anh"}
@@ -117,13 +127,13 @@ export function FamilyCoupleSpotlight({
           {/* Cô dâu */}
           <div className="flex flex-col items-center">
             <AnimateView animation="fadeInRight" delay={0.2} duration={1}>
-              <span className="font-lora text-[15px] font-semibold text-[#30451c] uppercase">
-                cô dâu
+              <span className="font-lora text-[13px] sm:text-[14px] font-bold text-[#5D733F] uppercase tracking-[0.2em] mb-1">
+                CÔ DÂU
               </span>
             </AnimateView>
             <AnimateView animation="fadeInUp" delay={0.25} duration={1.2}>
               <h2
-                className="text-[28px] sm:text-[32px] text-[#30451c] font-normal leading-tight mt-0.5"
+                className="text-[36px] sm:text-[44px] text-[#233814] font-semibold leading-tight mt-0.5 tracking-wide drop-shadow-sm"
                 style={{ fontFamily: "'Uvn Hoa Tay 1', cursive" }}
               >
                 {brideName || "Bích Ngọc"}

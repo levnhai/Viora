@@ -6,6 +6,75 @@ interface WeddingCountdownProps {
   weddingTime?: string;
 }
 
+function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
+  const defaultTs = new Date("2026-12-31T09:30:00").getTime();
+  if (!dateStr || !dateStr.trim()) return defaultTs;
+
+  let cleanDate = dateStr.trim();
+  if (cleanDate.includes("T")) {
+    cleanDate = cleanDate.split("T")[0];
+  }
+
+  let hours = 9;
+  let minutes = 30;
+
+  if (timeStr && timeStr.trim()) {
+    const tStr = timeStr.trim();
+    const isPM = /pm/i.test(tStr);
+    const isAM = /am/i.test(tStr);
+    const match = tStr.match(/(\d{1,2}):(\d{2})/);
+    if (match) {
+      let h = parseInt(match[1], 10);
+      minutes = parseInt(match[2], 10);
+      if (isPM && h < 12) h += 12;
+      if (isAM && h === 12) h = 0;
+      hours = h;
+    }
+  }
+
+  let year = 2026;
+  let month = 12;
+  let day = 31;
+
+  if (cleanDate.includes("-")) {
+    const parts = cleanDate.split("-").map((p) => parseInt(p, 10));
+    if (parts.length === 3 && !parts.some(isNaN)) {
+      if (parts[0] > 1000) {
+        year = parts[0];
+        month = parts[1];
+        day = parts[2];
+      } else {
+        month = parts[0];
+        day = parts[1];
+        year = parts[2];
+      }
+    }
+  } else if (cleanDate.includes("/")) {
+    const parts = cleanDate.split("/").map((p) => parseInt(p, 10));
+    if (parts.length === 3 && !parts.some(isNaN)) {
+      if (parts[2] > 1000) {
+        if (parts[0] > 12) {
+          day = parts[0];
+          month = parts[1];
+          year = parts[2];
+        } else {
+          month = parts[0];
+          day = parts[1];
+          year = parts[2];
+        }
+      } else if (parts[0] > 1000) {
+        year = parts[0];
+        month = parts[1];
+        day = parts[2];
+      }
+    }
+  }
+
+  const d = new Date(year, month - 1, day, hours, minutes, 0);
+  const ts = d.getTime();
+  return isNaN(ts) ? defaultTs : ts;
+}
+
 export function WeddingCountdown({
   weddingDate,
   weddingTime,
@@ -18,15 +87,13 @@ export function WeddingCountdown({
   });
 
   useEffect(() => {
-    const targetDateStr = weddingDate || "2026-12-26";
-    const targetTimeStr = weddingTime || "09:30";
-    const target = new Date(`${targetDateStr}T${targetTimeStr}:00`).getTime();
+    const target = parseTargetTimestamp(weddingDate, weddingTime);
 
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = target - now;
 
-      if (difference <= 0) {
+      if (isNaN(difference) || difference <= 0) {
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
         return;
       }
@@ -39,10 +106,10 @@ export function WeddingCountdown({
       const s = Math.floor((difference % (1000 * 60)) / 1000);
 
       setTimeLeft({
-        days: d.toString().padStart(2, "0"),
-        hours: h.toString().padStart(2, "0"),
-        minutes: m.toString().padStart(2, "0"),
-        seconds: s.toString().padStart(2, "0"),
+        days: isNaN(d) ? "00" : d.toString().padStart(2, "0"),
+        hours: isNaN(h) ? "00" : h.toString().padStart(2, "0"),
+        minutes: isNaN(m) ? "00" : m.toString().padStart(2, "0"),
+        seconds: isNaN(s) ? "00" : s.toString().padStart(2, "0"),
       });
     };
 

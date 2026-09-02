@@ -165,8 +165,8 @@ export function LiveView({
 
         {/* 7. Đếm Ngược Countdown */}
         <WeddingCountdown
-          weddingDate={weddingData.weddingDate}
-          weddingTime={weddingData.weddingTime}
+          weddingDate={weddingData.weddingDate || weddingData.events?.[0]?.date}
+          weddingTime={weddingData.weddingTime || weddingData.events?.[0]?.time}
         />
 
         {/* 8. Lời Cảm Ơn & Chân Trang */}
