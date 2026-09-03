@@ -10,7 +10,7 @@ declare module "*.jpg" {
 
 declare module "*.jpeg" {
   const content: any;
-  export default content;
+  export default content; 
 }
 
 declare module "*.svg" {

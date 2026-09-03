@@ -406,6 +406,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isNew: true,
     isHot: true,
     preview: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format",
+    previewVideo: "/video/SageOlive_Xanh.mp4",
     themeClass: "theme-sage-olive",
     tier: "standard",
     price: 149000,
