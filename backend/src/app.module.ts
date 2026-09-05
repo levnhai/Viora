@@ -9,10 +9,8 @@ import { GuestsModule } from './modules/guests/guests.module';
 import { GuestbooksModule } from './modules/guestbooks/guestbooks.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-import { AffiliatesModule } from './modules/affiliates/affiliates.module';
 import { TemplatesModule } from './modules/templates/templates.module';
 import { MediaModule } from './modules/media/media.module';
-import { PaymentsModule } from './modules/payments/payments.module';
 import { NewsModule } from './modules/news/news.module';
 import { SocketModule } from './modules/socket/socket.module';
 import { TemplateRequestsModule } from './modules/template-requests/template-requests.module';
@@ -39,10 +37,8 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     GuestbooksModule,
     AuthModule,
     UsersModule,
-    AffiliatesModule,
     TemplatesModule,
     MediaModule,
-    PaymentsModule,
     NewsModule,
     SocketModule,
     TemplateRequestsModule,

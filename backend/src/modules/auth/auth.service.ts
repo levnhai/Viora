@@ -1,6 +1,7 @@
 import {
   Injectable,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -248,12 +249,26 @@ export class AuthService {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(`[SMTP] Đã gửi mã OTP quên mật khẩu (${otpCode}) thành công tới: ${email}`);
+        console.log(`[SMTP] Đã gửi mã OTP quên mật khẩu thành công tới: ${email}`);
       } catch (error) {
         console.error('[SMTP Error] Gửi mail khôi phục mật khẩu thất bại:', error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(`[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+        } else {
+          throw new InternalServerErrorException(
+            'Không thể gửi mã khôi phục mật khẩu qua email. Vui lòng thử lại sau.',
+          );
+        }
       }
     } else {
-      console.log(`[SMTP Config Missing] Chưa cấu hình SMTP. Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+      console.warn('[SMTP Config Missing] Chưa cấu hình SMTP.');
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+      } else {
+        throw new InternalServerErrorException(
+          'Hệ thống gửi email chưa được cấu hình. Vui lòng liên hệ quản trị viên.',
+        );
+      }
     }
   }
 
@@ -387,7 +402,7 @@ export class AuthService {
 
         await transporter.sendMail(mailOptions);
         console.log(
-          `[SMTP] Đã gửi mã OTP (${otpCode}) thành công tới: ${email}`,
+          `[SMTP] Đã gửi mã OTP thành công tới: ${email}`,
         );
         return {
           success: true,
@@ -395,20 +410,29 @@ export class AuthService {
         };
       } catch (error) {
         console.error('[SMTP Error] Gửi mail thất bại:', error);
-        console.log(`[FALLBACK] Mã OTP của email ${email} là: ${otpCode}`);
-        return {
-          success: true,
-          message: `Gửi mail lỗi nhưng hệ thống dự phòng đã kích hoạt. Mã OTP: ${otpCode}`,
-        };
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(`[DEV ONLY] Mã OTP của email ${email} là: ${otpCode}`);
+          return {
+            success: true,
+            message: 'Gửi mail thất bại (xem mã OTP tại console server trong môi trường dev).',
+          };
+        }
+        throw new InternalServerErrorException(
+          'Không thể gửi mã xác thực qua email. Vui lòng thử lại sau hoặc liên hệ hỗ trợ.',
+        );
       }
     } else {
-      console.log(
-        `[SMTP Config Missing] Chưa cấu hình SMTP. Mã OTP của email ${email} là: ${otpCode}`,
+      console.warn('[SMTP Config Missing] Chưa cấu hình SMTP.');
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`[DEV ONLY] Mã OTP của email ${email} là: ${otpCode}`);
+        return {
+          success: true,
+          message: 'Hệ thống dev chưa cấu hình SMTP (xem mã OTP tại console server).',
+        };
+      }
+      throw new InternalServerErrorException(
+        'Hệ thống gửi email chưa được cấu hình. Vui lòng liên hệ quản trị viên.',
       );
-      return {
-        success: true,
-        message: `Chưa cấu hình SMTP. OTP (in ra console backend): ${otpCode}`,
-      };
     }
   }
 

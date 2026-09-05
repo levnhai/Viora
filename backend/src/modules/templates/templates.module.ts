@@ -5,11 +5,6 @@ import {
   TemplateSection,
   TemplateSectionSchema,
 } from './schemas/template_sections.schema';
-import {
-  TemplatePurchase,
-  TemplatePurchaseSchema,
-} from './schemas/template-purchase.schema';
-
 import { TemplatesController } from './templates.controller';
 import { TemplatesService } from './templates.service';
 
@@ -18,7 +13,6 @@ import { TemplatesService } from './templates.service';
     MongooseModule.forFeature([
       { name: Template.name, schema: TemplateSchema },
       { name: TemplateSection.name, schema: TemplateSectionSchema },
-      { name: TemplatePurchase.name, schema: TemplatePurchaseSchema },
     ]),
   ],
   controllers: [TemplatesController],
