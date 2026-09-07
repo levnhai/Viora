@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ChevronRight } from "lucide-react";
-import { useDashboardData } from "@/entities/admin-dashboard/model/useDashboardData";
+import { useDashboardData } from "../model/useDashboardData";
 
 import { AdminLayout } from "@/widgets/admin";
 import { AdminAnalyticsSection } from "@/widgets/admin";

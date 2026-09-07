@@ -33,7 +33,7 @@ import {
   Maximize2,
   Move,
 } from "lucide-react";
-import { getTemplatePackage } from "@/entities/template/model/registry";
+import { getTemplatePackage } from "@/widgets/invitation-renderer";
 
 export function InvitationEditorForm() {
   const {

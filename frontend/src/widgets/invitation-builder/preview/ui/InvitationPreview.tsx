@@ -3,7 +3,7 @@
 import { useInvitationCreate } from "@/views/admin";
 import { Monitor, Smartphone, ChevronDown } from "lucide-react";
 
-import { getTemplatePackage } from "@/entities/template/model/registry";
+import { getTemplatePackage } from "@/widgets/invitation-renderer";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 export function InvitationPreview() {

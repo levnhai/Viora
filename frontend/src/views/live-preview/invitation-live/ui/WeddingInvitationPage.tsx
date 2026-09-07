@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 
 import { WeddingData } from "@/entities/invitation/model/types";
 import { TEMPLATES } from "@/entities/template/model/templates";
-import { getTemplatePackage } from "@/entities/template/model/registry";
+import { getTemplatePackage } from "@/widgets/invitation-renderer";
 import { API_URL } from "@/shared/lib/config";
 import { getDemoWeddingData } from "@/entities/invitation/model/mockData";
 
