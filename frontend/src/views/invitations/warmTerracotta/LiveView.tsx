@@ -50,7 +50,7 @@ export function LiveView({
   const marqueeText = `${weddingData.groomName || "Tuấn Anh"} & ${weddingData.brideName || "Bích Ngọc"} • SAVE OUR DATE • ${formattedDate} • THE WEDDING`;
 
   return (
-    <div className="w-full min-h-screen relative font-serif text-[#2C2018] bg-[#EDE9E1] flex justify-center selection:bg-[#844C3A] selection:text-white">
+    <div className="w-full min-h-screen relative font-serif text-[#2C2018] bg-[#EDE9E1] flex justify-center selection:bg-[#2C6E91] selection:text-white">
       {/* Import Animate.css cho toàn bộ hiệu ứng chữ chạy và hoạt ảnh */}
       <link
         rel="stylesheet"
@@ -128,7 +128,7 @@ export function LiveView({
         <RunningMarquee
           text={marqueeText}
           speed={22}
-          className="bg-[#844C3A] text-white py-2 text-[11px] sm:text-xs uppercase tracking-[0.25em] font-lora shadow-inner"
+          className="bg-[#2C6E91] text-white py-2 text-[11px] sm:text-xs uppercase tracking-[0.25em] font-lora shadow-inner"
         />
 
         {/* 2. Câu Chuyện Tình Yêu & Chân Dung So Le Độc Đáo */}
@@ -147,7 +147,7 @@ export function LiveView({
         <RunningMarquee
           text="FOREVER TOGETHER • HAPPY WEDDING • BEST WISHES"
           speed={28}
-          className="bg-[#FAF8F5] text-[#844C3A] border-y border-[#844C3A]/20 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-lora"
+          className="bg-[#FAF8F5] text-[#2C6E91] border-y border-[#2C6E91]/20 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-lora"
         />
 
         {/* 6. Album Golden Hour of Love Mosaic */}

@@ -30,12 +30,12 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
     "Mỗi câu chuyện tình yêu đều có một khởi đầu riêng, và câu chuyện của chúng mình được viết nên từ những điều giản dị nhất. Qua từng ngày, tình yêu lớn dần theo sự thấu hiểu, sẻ chia và những lời hẹn ước cho tương lai.";
 
   return (
-    <section className="relative w-full bg-white text-[#844C3A] pt-10 pb-8 px-3 overflow-hidden">
+    <section className="relative w-full bg-white text-[#2C6E91] pt-10 pb-8 px-3 overflow-hidden">
       <div className="max-w-[430px] mx-auto">
-        {/* 1. Tiêu đề câu chuyện tình yêu (y=745, font Luxurious 48px #844C3A) */}
+        {/* 1. Tiêu đề câu chuyện tình yêu (y=745, font Luxurious 48px #2C6E91) */}
         <AnimateView animation="fadeInUp" duration={1.2}>
           <h2
-            className="text-[36px] sm:text-[44px] text-[#844C3A] font-normal leading-tight text-center mb-3 select-none"
+            className="text-[36px] sm:text-[44px] text-[#2C6E91] font-normal leading-tight text-center mb-3 select-none"
             style={{ fontFamily: "'Luxurious', 'Playfair Display', serif" }}
           >
             Hai Trái Tim, Một Hành Trình
@@ -44,7 +44,7 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
 
         {/* 2. Đoạn văn giới thiệu (y=800, font Lora 14px text-justify line-height 1.8) */}
         <AnimateView animation="fadeInUp" delay={0.15} duration={1}>
-          <p className="font-lora text-[13px] sm:text-[14px] text-[#844C3A]/90 leading-[1.8] text-justify px-2 mb-8">
+          <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/90 leading-[1.8] text-justify px-2 mb-8">
             {defaultStory}
           </p>
         </AnimateView>
@@ -67,11 +67,11 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
             {/* Chữ Cô Dâu & Tên (Phải) */}
             <AnimateView animation="fadeInRight" delay={0.25} duration={1.2}>
               <div className="flex flex-col items-center justify-center text-center p-2">
-                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#844C3A] tracking-wider mb-1">
+                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
                   Cô dâu
                 </span>
                 <h3
-                  className="text-[32px] sm:text-[40px] text-[#844C3A] font-normal leading-tight capitalize"
+                  className="text-[32px] sm:text-[40px] text-[#2C6E91] font-normal leading-tight capitalize"
                   style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
                 >
                   {brideName || "Bích Ngọc"}
@@ -85,11 +85,11 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
             {/* Chữ Chú Rể & Tên (Trái) */}
             <AnimateView animation="fadeInLeft" delay={0.3} duration={1.2}>
               <div className="flex flex-col items-center justify-center text-center p-2">
-                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#844C3A] tracking-wider mb-1">
+                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
                   Chú rể
                 </span>
                 <h3
-                  className="text-[32px] sm:text-[40px] text-[#844C3A] font-normal leading-tight capitalize"
+                  className="text-[32px] sm:text-[40px] text-[#2C6E91] font-normal leading-tight capitalize"
                   style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
                 >
                   {groomName || "Tuấn Anh"}

@@ -3,10 +3,12 @@ import { WeddingData } from "@/entities/invitation/model/types";
 import { AnimateView } from "@/widgets/invitation-blocks";
 import { Heart, CheckCircle2 } from "lucide-react";
 
+import { GuestMessage } from "@/shared/lib/hooks";
+
 interface RsvpAndGuestbookProps {
   weddingData: WeddingData;
   guestName?: string;
-  messages: Array<{ name: string; message: string; createdAt?: string }>;
+  messages: GuestMessage[];
   onSendMessage: (name: string, msg: string) => Promise<void>;
   onOpenGiftModal: () => void;
 }
@@ -45,11 +47,11 @@ export function RsvpAndGuestbook({
   };
 
   return (
-    <section className="relative w-full bg-white text-[#844C3A] pt-8 pb-4 px-3 overflow-hidden">
+    <section className="relative w-full bg-white text-[#2C6E91] pt-8 pb-4 px-3 overflow-hidden">
       <div className="max-w-[430px] mx-auto">
-        {/* 1. Lời dẫn xác nhận tham dự (y=4246, font Lora 16px #844C3A) */}
+        {/* 1. Lời dẫn xác nhận tham dự (y=4246, font Lora 16px #2C6E91) */}
         <AnimateView animation="fadeInUp" duration={1}>
-          <div className="text-center font-lora text-[15px] sm:text-[16px] text-[#844C3A] leading-relaxed mb-4">
+          <div className="text-center font-lora text-[15px] sm:text-[16px] text-[#2C6E91] leading-relaxed mb-4">
             <p>Hãy xác nhận sự có mặt của Quý Khách để gia đình</p>
             <p>chúng tôi chuẩn bị đón tiếp một cách chu đáo nhất.</p>
             <p className="font-medium mt-0.5">Trân trọng!</p>
@@ -67,7 +69,7 @@ export function RsvpAndGuestbook({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full h-10 px-4 rounded-full border border-[#844C3A] bg-transparent text-[#844C3A] placeholder:text-[#844C3A] text-[15px] sm:text-[16px] font-lora focus:outline-none focus:ring-1 focus:ring-[#844C3A] transition-all"
+                className="w-full h-10 px-4 rounded-full border border-[#2C6E91] bg-transparent text-[#2C6E91] placeholder:text-[#2C6E91] text-[15px] sm:text-[16px] font-lora focus:outline-none focus:ring-1 focus:ring-[#2C6E91] transition-all"
               />
             </div>
 
@@ -79,7 +81,7 @@ export function RsvpAndGuestbook({
                 onChange={(e) => setWishes(e.target.value)}
                 rows={3}
                 required
-                className="w-full h-24 p-3 rounded-[18px] border border-[#844C3A] bg-transparent text-[#844C3A] placeholder:text-[#844C3A] text-[15px] sm:text-[16px] font-lora resize-none focus:outline-none focus:ring-1 focus:ring-[#844C3A] transition-all"
+                className="w-full h-24 p-3 rounded-[18px] border border-[#2C6E91] bg-transparent text-[#2C6E91] placeholder:text-[#2C6E91] text-[15px] sm:text-[16px] font-lora resize-none focus:outline-none focus:ring-1 focus:ring-[#2C6E91] transition-all"
               />
             </div>
 
@@ -88,9 +90,9 @@ export function RsvpAndGuestbook({
               <select
                 value={attendance}
                 onChange={(e) => setAttendance(e.target.value)}
-                className="w-full h-10 px-4 pr-8 rounded-full border border-[#844C3A] bg-transparent text-[#844C3A] text-[15px] sm:text-[16px] font-lora focus:outline-none focus:ring-1 focus:ring-[#844C3A] appearance-none cursor-pointer"
+                className="w-full h-10 px-4 pr-8 rounded-full border border-[#2C6E91] bg-transparent text-[#2C6E91] text-[15px] sm:text-[16px] font-lora focus:outline-none focus:ring-1 focus:ring-[#2C6E91] appearance-none cursor-pointer"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 24'%3E%3Cpolygon points='0,0 32,0 16,24' style='fill:rgb(132,76,58)'/%3E%3C/svg%3E")`,
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 24'%3E%3Cpolygon points='0,0 32,0 16,24' style='fill:rgb(44,110,145)'/%3E%3C/svg%3E")`,
                   backgroundSize: "9px 6px",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "right 0.8rem center",
@@ -116,7 +118,7 @@ export function RsvpAndGuestbook({
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 min-h-[40px] rounded-full bg-[#844C3A] text-white font-lora text-[14px] uppercase tracking-normal font-normal shadow-sm hover:bg-[#6d3b2b] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="flex-1 min-h-[40px] rounded-full bg-[#2C6E91] text-white font-lora text-[14px] uppercase tracking-normal font-normal shadow-sm hover:bg-[#1f5470] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <span>{submitting ? "ĐANG GỬI..." : "GỬI LỜI CHÚC & XÁC NHẬN"}</span>
               </button>
@@ -124,7 +126,7 @@ export function RsvpAndGuestbook({
               <button
                 type="button"
                 onClick={() => setShowWishesModal(true)}
-                className="w-10 h-10 min-h-[40px] rounded-full bg-[#844C3A] text-white flex items-center justify-center shadow-sm hover:bg-[#6d3b2b] active:scale-95 transition-all shrink-0 cursor-pointer"
+                className="w-10 h-10 min-h-[40px] rounded-full bg-[#2C6E91] text-white flex items-center justify-center shadow-sm hover:bg-[#1f5470] active:scale-95 transition-all shrink-0 cursor-pointer"
                 title="Xem danh sách phản hồi"
                 aria-label="Xem danh sách phản hồi"
               >
@@ -138,7 +140,7 @@ export function RsvpAndGuestbook({
         <AnimateView animation="fadeInUp" delay={0.15} duration={1} className="mt-3">
           <button
             onClick={onOpenGiftModal}
-            className="w-full h-10 rounded-full bg-[#844C3A] text-white font-lora text-[14px] uppercase tracking-normal font-normal shadow-sm hover:bg-[#6d3b2b] active:scale-[0.98] transition-all flex items-center justify-center cursor-pointer"
+            className="w-full h-10 rounded-full bg-[#2C6E91] text-white font-lora text-[14px] uppercase tracking-normal font-normal shadow-sm hover:bg-[#1f5470] active:scale-[0.98] transition-all flex items-center justify-center cursor-pointer"
           >
             GỬI QUÀ MỪNG CƯỚI
           </button>
@@ -152,10 +154,10 @@ export function RsvpAndGuestbook({
           onClick={() => setShowWishesModal(false)}
         >
           <div
-            className="bg-white rounded-2xl w-full max-w-[400px] max-h-[80vh] flex flex-col overflow-hidden shadow-2xl border border-[#844C3A]/20 text-[#2C2018]"
+            className="bg-white rounded-2xl w-full max-w-[400px] max-h-[80vh] flex flex-col overflow-hidden shadow-2xl border border-[#2C6E91]/20 text-[#2C2018]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 bg-[#844C3A] text-white flex justify-between items-center shrink-0">
+            <div className="p-4 bg-[#2C6E91] text-white flex justify-between items-center shrink-0">
               <h3 className="font-lora text-[15px] font-semibold uppercase tracking-wider">
                 DANH SÁCH PHẢN HỒI ({messages ? messages.length : 0})
               </h3>
@@ -172,11 +174,11 @@ export function RsvpAndGuestbook({
                 messages.map((m, idx) => (
                   <div
                     key={idx}
-                    className="p-3 bg-[#FAF8F5] rounded-xl border-l-2 border-[#844C3A] font-lora text-xs shadow-sm"
+                    className="p-3 bg-[#FAF8F5] rounded-xl border-l-2 border-[#2C6E91] font-lora text-xs shadow-sm"
                   >
                     <p className="font-bold text-[#2C2018] mb-1">{m.name}</p>
-                    <p className="text-[#844C3A] italic leading-relaxed">
-                      &ldquo;{m.message}&rdquo;
+                    <p className="text-[#2C6E91] italic leading-relaxed">
+                      &ldquo;{m.msg || (m as any).message}&rdquo;
                     </p>
                   </div>
                 ))

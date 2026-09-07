@@ -119,12 +119,12 @@ export function WeddingCountdown({
   }, [weddingDate, weddingTime]);
 
   return (
-    <section className="relative w-full bg-white text-[#844C3A] pt-8 pb-10 px-3 text-center overflow-hidden">
+    <section className="relative w-full bg-white text-[#2C6E91] pt-8 pb-10 px-3 text-center overflow-hidden">
       <div className="max-w-[430px] mx-auto">
-        {/* 1. Tiêu đề Hẹn Gặp (y=4705, font Luxurious 48px #844C3A) */}
+        {/* 1. Tiêu đề Hẹn Gặp (y=4705, font Luxurious 48px #2C6E91) */}
         <AnimateView animation="zoomIn" duration={1}>
           <h2
-            className="text-[34px] sm:text-[44px] text-[#844C3A] font-normal leading-tight mb-3 select-none"
+            className="text-[34px] sm:text-[44px] text-[#2C6E91] font-normal leading-tight mb-3 select-none"
             style={{ fontFamily: "'Luxurious', 'Playfair Display', serif" }}
           >
             Đừng quên mình có hẹn nhé!
@@ -137,12 +137,12 @@ export function WeddingCountdown({
             {/* Ngày */}
             <div className="flex flex-col items-center w-14">
               <span
-                className="text-[36px] sm:text-[42px] text-[#844C3A] leading-none font-normal"
+                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
                 style={{ fontFamily: "'Alisheia', sans-serif" }}
               >
                 {timeLeft.days}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#844C3A] mt-1 font-normal">
+              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
                 Ngày
               </span>
             </div>
@@ -150,12 +150,12 @@ export function WeddingCountdown({
             {/* Giờ */}
             <div className="flex flex-col items-center w-14">
               <span
-                className="text-[36px] sm:text-[42px] text-[#844C3A] leading-none font-normal"
+                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
                 style={{ fontFamily: "'Alisheia', sans-serif" }}
               >
                 {timeLeft.hours}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#844C3A] mt-1 font-normal">
+              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
                 Giờ
               </span>
             </div>
@@ -163,12 +163,12 @@ export function WeddingCountdown({
             {/* Phút */}
             <div className="flex flex-col items-center w-14">
               <span
-                className="text-[36px] sm:text-[42px] text-[#844C3A] leading-none font-normal"
+                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
                 style={{ fontFamily: "'Alisheia', sans-serif" }}
               >
                 {timeLeft.minutes}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#844C3A] mt-1 font-normal">
+              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
                 Phút
               </span>
             </div>
@@ -176,12 +176,12 @@ export function WeddingCountdown({
             {/* Giây */}
             <div className="flex flex-col items-center w-14">
               <span
-                className="text-[36px] sm:text-[42px] text-[#844C3A] leading-none font-normal"
+                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
                 style={{ fontFamily: "'Alisheia', sans-serif" }}
               >
                 {timeLeft.seconds}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#844C3A] mt-1 font-normal">
+              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
                 Giây
               </span>
             </div>

@@ -57,11 +57,6 @@ export function ThankYouSection({ weddingData }: ThankYouSectionProps) {
           </AnimateView>
         </div>
       </div>
-
-      {/* 2. Chân Trang Footer Bar */}
-      <div className="bg-black py-3 px-4 text-center border-t border-white/10 text-[12px] font-sans text-white/70">
-        <p>© 2026 {groomName || "Tuấn Anh"} &amp; {brideName || "Bích Ngọc"}. All rights reserved.</p>
-      </div>
     </footer>
   );
 }

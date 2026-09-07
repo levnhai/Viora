@@ -28,7 +28,7 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
   const daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
   // Generate calendar grid items
-  const calendarCells = [];
+  const calendarCells: (number | null)[] = [];
   for (let i = 0; i < firstDayIndex; i++) {
     calendarCells.push(null);
   }
@@ -37,7 +37,7 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
   }
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#844C3A] text-white">
+    <section className="relative w-full overflow-hidden bg-[#2C6E91] text-white">
       {/* Background Image Container with Overlay (y=2445, 430x305) */}
       <div className="relative w-full aspect-[430/320] overflow-hidden">
         <img
@@ -91,7 +91,7 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
                       className="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 mx-auto relative"
                     >
                       {isWeddingDay ? (
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#844C3A] text-white font-bold flex flex-col items-center justify-center shadow-lg border-2 border-white animate-pulse">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2C6E91] text-white font-bold flex flex-col items-center justify-center shadow-lg border-2 border-white animate-pulse">
                           <span className="text-[11px] leading-none">{day}</span>
                           <Heart size={8} className="fill-white text-white mt-0.5" />
                         </div>

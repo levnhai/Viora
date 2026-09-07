@@ -84,8 +84,8 @@ export function InvitationCover({
       {/* Guest Name banner nếu có */}
       {guestName && (
         <AnimateView animation="fadeInUp" delay={0.3} duration={1} className="w-full max-w-[390px] mx-auto px-4 mt-4">
-          <div className="bg-[#844C3A]/10 border border-[#844C3A]/30 rounded-full py-1.5 px-4 text-center">
-            <p className="text-xs text-[#844C3A] font-lora uppercase tracking-wider">
+          <div className="bg-[#2C6E91]/10 border border-[#2C6E91]/30 rounded-full py-1.5 px-4 text-center">
+            <p className="text-xs text-[#2C6E91] font-lora uppercase tracking-wider">
               Kính mời: <strong className="font-bold text-[#2C2018]">{guestName}</strong>
             </p>
           </div>

@@ -50,7 +50,7 @@ export function EditorialGallery({ weddingData }: EditorialGalleryProps) {
   };
 
   return (
-    <section className="relative w-full bg-[#844C3A] text-white pt-10 pb-12 px-3 overflow-hidden">
+    <section className="relative w-full bg-[#2C6E91] text-white pt-10 pb-12 px-3 overflow-hidden">
       <div className="max-w-[430px] mx-auto relative z-10">
         {/* 1. Tiêu đề: GOLDEN HOUR of LOVE (y=2785 -> y=2801) */}
         <AnimateView animation="fadeInUp" duration={1}>
