@@ -43,9 +43,14 @@ export class TemplatesService implements OnModuleInit {
       });
 
       await this.templateModel.bulkWrite(bulkOps);
-      console.log('✅ [TemplatesService] Đã đồng bộ mẫu thiệp xuất bản từ template.data.ts vào MongoDB.');
+      console.log(
+        '✅ [TemplatesService] Đã đồng bộ mẫu thiệp xuất bản từ template.data.ts vào MongoDB.',
+      );
     } catch (err) {
-      console.error('❌ [TemplatesService] Lỗi khi đồng bộ templates vào DB:', err);
+      console.error(
+        '❌ [TemplatesService] Lỗi khi đồng bộ templates vào DB:',
+        err,
+      );
     }
   }
 
@@ -53,4 +58,3 @@ export class TemplatesService implements OnModuleInit {
     return this.templateModel.find({ active: true, deletedAt: null }).exec();
   }
 }
-

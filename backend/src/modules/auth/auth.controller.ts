@@ -1,8 +1,10 @@
 import { Controller, Post, Body, Res, Req, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from './auth.guard';
 import { AdminGuard } from './admin.guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { ChangeAdminCredentialsDto } from './dto/change-credentials.dto';
 import * as express from 'express';
 
 @Controller('auth')
@@ -19,6 +21,7 @@ export class AuthController {
     });
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('login')
   async login(
     @Body() loginDto: LoginDto,
@@ -44,15 +47,23 @@ export class AuthController {
 
   @Post('admin/change-credentials')
   @UseGuards(AuthGuard, AdminGuard)
-  async changeAdminCredentials(@Req() req: any, @Body() body: { currentPassword: string; newEmail: string; newPassword: string }, @Res({ passthrough: true }) res: express.Response) {
-    const data = await this.authService.changeAdminCredentials(req.user.id, body.currentPassword, body.newEmail, body.newPassword);
+  async changeAdminCredentials(
+    @Req() req: any,
+    @Body() body: ChangeAdminCredentialsDto,
+    @Res({ passthrough: true }) res: express.Response,
+  ) {
+    const data = await this.authService.changeAdminCredentials(
+      req.user.id,
+      body.currentPassword,
+      body.newEmail,
+      body.newPassword,
+    );
     this.setTokenCookie(res, data.token);
     return { success: true, message: 'Đã cập nhật thông tin đăng nhập' };
   }
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('register')
-  async register(
-    @Body() loginDto: LoginDto,
-  ) {
+  async register(@Body() loginDto: LoginDto) {
     const data = await this.authService.register(
       loginDto.username,
       loginDto.password,
@@ -65,6 +76,7 @@ export class AuthController {
     };
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('register-verify-otp')
   async registerVerifyOtp(
     @Body('email') email: string,
@@ -86,11 +98,13 @@ export class AuthController {
     };
   }
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
     return this.authService.forgotPassword(email);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('verify-forgot-password-otp')
   async verifyForgotPasswordOtp(
     @Body('email') email: string,
@@ -99,6 +113,7 @@ export class AuthController {
     return this.authService.verifyForgotPasswordOtp(email, code);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('reset-password')
   async resetPassword(
     @Body('email') email: string,

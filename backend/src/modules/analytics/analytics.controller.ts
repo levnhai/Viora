@@ -1,4 +1,13 @@
-import { Body, Controller, ForbiddenException, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { TrackEventDto, AnalyticsOverviewQueryDto } from './dto/analytics.dto';
 import { SocketGateway } from '../socket/socket.gateway';
@@ -19,15 +28,23 @@ export class AnalyticsController {
 
   @Post('track')
   async trackEvent(@Body() dto: TrackEventDto, @Req() req: any) {
-    const forwarded = req.headers ? (req.headers['x-forwarded-for'] || req.headers['x-real-ip']) : undefined;
-    const ip = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : req.ip;
-    const cfCity = req.headers ? (req.headers['cf-ipcity'] || req.headers['x-vercel-ip-city']) : undefined;
+    const forwarded = req.headers
+      ? req.headers['x-forwarded-for'] || req.headers['x-real-ip']
+      : undefined;
+    const ip =
+      typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : req.ip;
+    const cfCity = req.headers
+      ? req.headers['cf-ipcity'] || req.headers['x-vercel-ip-city']
+      : undefined;
     return this.analyticsService.trackVisit(dto, ip, cfCity);
   }
 
   @Get('overview')
   @UseGuards(AuthGuard)
-  async getOverview(@Query() query: AnalyticsOverviewQueryDto, @Req() req: any) {
+  async getOverview(
+    @Query() query: AnalyticsOverviewQueryDto,
+    @Req() req: any,
+  ) {
     this.ensureAnalyticsAccess(req);
     return this.analyticsService.getOverview(query.range || '7days');
   }
@@ -36,6 +53,9 @@ export class AnalyticsController {
   @UseGuards(AuthGuard)
   async getRealtime(@Req() req: any) {
     this.ensureAnalyticsAccess(req);
-    return { onlineUsers: this.socketGateway.getOnlineCount(), timestamp: new Date().toISOString() };
+    return {
+      onlineUsers: this.socketGateway.getOnlineCount(),
+      timestamp: new Date().toISOString(),
+    };
   }
 }

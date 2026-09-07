@@ -1,10 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AnalyticsVisit, AnalyticsVisitDocument } from './schemas/analytics-visit.schema';
-import { AnalyticsDaily, AnalyticsDailyDocument } from './schemas/analytics-daily.schema';
+import {
+  AnalyticsVisit,
+  AnalyticsVisitDocument,
+} from './schemas/analytics-visit.schema';
+import {
+  AnalyticsDaily,
+  AnalyticsDailyDocument,
+} from './schemas/analytics-daily.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
-import { Template, TemplateDocument } from '../templates/schemas/template.schema';
+import {
+  Template,
+  TemplateDocument,
+} from '../templates/schemas/template.schema';
 import { TrackEventDto } from './dto/analytics.dto';
 import { DEFAULT_TEMPLATES } from '../templates/template.data';
 
@@ -41,23 +50,58 @@ export class AnalyticsService {
   private normalizeCity(city?: string): string {
     if (!city || !city.trim()) return 'TP. Hồ Chí Minh';
     const c = city.trim().toLowerCase();
-    if (c.includes('ho chi minh') || c.includes('hồ chí minh') || c.includes('saigon') || c.includes('sai gon')) return 'TP. Hồ Chí Minh';
-    if (c.includes('hanoi') || c.includes('ha noi') || c.includes('hà nội')) return 'Hà Nội';
+    if (
+      c.includes('ho chi minh') ||
+      c.includes('hồ chí minh') ||
+      c.includes('saigon') ||
+      c.includes('sai gon')
+    )
+      return 'TP. Hồ Chí Minh';
+    if (c.includes('hanoi') || c.includes('ha noi') || c.includes('hà nội'))
+      return 'Hà Nội';
     if (c.includes('da nang') || c.includes('đà nẵng')) return 'Đà Nẵng';
-    if (c.includes('binh duong') || c.includes('bình dương')) return 'Bình Dương';
+    if (c.includes('binh duong') || c.includes('bình dương'))
+      return 'Bình Dương';
     if (c.includes('dong nai') || c.includes('đồng nai')) return 'Đồng Nai';
     if (c.includes('can tho') || c.includes('cần thơ')) return 'Cần Thơ';
     if (c.includes('hai phong') || c.includes('hải phòng')) return 'Hải Phòng';
-    if (c.includes('khanh hoa') || c.includes('nha trang') || c.includes('khánh hòa')) return 'Khánh Hòa';
-    if (c.includes('thua thien hue') || c.includes('hue') || c.includes('huế')) return 'Thừa Thiên Huế';
-    if (c.includes('nghe an') || c.includes('vinh') || c.includes('nghệ an')) return 'Nghệ An';
-    if (c.includes('quang ninh') || c.includes('hạ long') || c.includes('quảng ninh')) return 'Quảng Ninh';
-    if (c.includes('lam dong') || c.includes('da lat') || c.includes('đà lạt') || c.includes('lâm đồng')) return 'Lâm Đồng';
-    if (c.includes('ba ria') || c.includes('vung tau') || c.includes('vũng tàu')) return 'Bà Rịa - Vũng Tàu';
+    if (
+      c.includes('khanh hoa') ||
+      c.includes('nha trang') ||
+      c.includes('khánh hòa')
+    )
+      return 'Khánh Hòa';
+    if (c.includes('thua thien hue') || c.includes('hue') || c.includes('huế'))
+      return 'Thừa Thiên Huế';
+    if (c.includes('nghe an') || c.includes('vinh') || c.includes('nghệ an'))
+      return 'Nghệ An';
+    if (
+      c.includes('quang ninh') ||
+      c.includes('hạ long') ||
+      c.includes('quảng ninh')
+    )
+      return 'Quảng Ninh';
+    if (
+      c.includes('lam dong') ||
+      c.includes('da lat') ||
+      c.includes('đà lạt') ||
+      c.includes('lâm đồng')
+    )
+      return 'Lâm Đồng';
+    if (
+      c.includes('ba ria') ||
+      c.includes('vung tau') ||
+      c.includes('vũng tàu')
+    )
+      return 'Bà Rịa - Vũng Tàu';
     return city.trim();
   }
 
-  private async resolveCityFromIp(ip?: string, cfCity?: string, dtoCity?: string): Promise<string> {
+  private async resolveCityFromIp(
+    ip?: string,
+    cfCity?: string,
+    dtoCity?: string,
+  ): Promise<string> {
     // 1. Nếu có header thành phố từ Cloudflare/Vercel/Reverse Proxy
     if (cfCity && cfCity.trim()) {
       return this.normalizeCity(cfCity);
@@ -71,14 +115,23 @@ export class AnalyticsService {
     const cleanIp = (ip || '').replace(/^.*:/, '').trim(); // Lược bỏ IPv6 prefix ::ffff:
 
     // 3. Nếu là Local IP / Dev -> Lấy IP Public thực tế của máy chủ/dev để định vị
-    if (!cleanIp || cleanIp === '127.0.0.1' || cleanIp === '1' || cleanIp.startsWith('192.168.') || cleanIp.startsWith('10.')) {
+    if (
+      !cleanIp ||
+      cleanIp === '127.0.0.1' ||
+      cleanIp === '1' ||
+      cleanIp.startsWith('192.168.') ||
+      cleanIp.startsWith('10.')
+    ) {
       if (this.ipCityCache.has('local_ip')) {
         return this.ipCityCache.get('local_ip')!;
       }
       try {
-        const res = await fetch('http://ip-api.com/json/?fields=status,regionName,city', {
-          signal: AbortSignal.timeout(2500),
-        });
+        const res = await fetch(
+          'http://ip-api.com/json/?fields=status,regionName,city',
+          {
+            signal: AbortSignal.timeout(2500),
+          },
+        );
         if (res.ok) {
           const data = await res.json();
           const detected = this.normalizeCity(data.regionName || data.city);
@@ -95,9 +148,12 @@ export class AnalyticsService {
     }
 
     try {
-      const res = await fetch(`http://ip-api.com/json/${cleanIp}?fields=status,regionName,city`, {
-        signal: AbortSignal.timeout(2500),
-      });
+      const res = await fetch(
+        `http://ip-api.com/json/${cleanIp}?fields=status,regionName,city`,
+        {
+          signal: AbortSignal.timeout(2500),
+        },
+      );
       if (res.ok) {
         const data = await res.json();
         if (data.status === 'success') {
@@ -111,12 +167,18 @@ export class AnalyticsService {
     return dtoCity ? this.normalizeCity(dtoCity) : 'TP. Hồ Chí Minh';
   }
 
-  async trackVisit(dto: TrackEventDto, ip?: string, cfCity?: string): Promise<{ success: boolean }> {
+  async trackVisit(
+    dto: TrackEventDto,
+    ip?: string,
+    cfCity?: string,
+  ): Promise<{ success: boolean }> {
     try {
       const todayStr = this.getTodayString();
       const deviceType = dto.deviceType || 'unknown';
       const browser = this.sanitizeKey(dto.browser || 'Other');
-      const templateSlug = dto.templateSlug ? this.sanitizeKey(dto.templateSlug) : undefined;
+      const templateSlug = dto.templateSlug
+        ? this.sanitizeKey(dto.templateSlug)
+        : undefined;
       const rawCity = await this.resolveCityFromIp(ip, cfCity, dto.city);
       const city = this.sanitizeKey(rawCity);
 
@@ -169,7 +231,14 @@ export class AnalyticsService {
   }
 
   async getOverview(range: 'today' | '7days' | '30days' | 'year' = '7days') {
-    const daysCount = range === 'today' ? 1 : range === '7days' ? 7 : range === '30days' ? 30 : 365;
+    const daysCount =
+      range === 'today'
+        ? 1
+        : range === '7days'
+          ? 7
+          : range === '30days'
+            ? 30
+            : 365;
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - (daysCount - 1));
     startDate.setHours(0, 0, 0, 0);
@@ -217,15 +286,26 @@ export class AnalyticsService {
         .exec();
 
       totalPageviews = todayVisits.length;
-      const hourlyMap = new Map<number, { pageviews: number; newVisitors: number; returningVisitors: number }>();
+      const hourlyMap = new Map<
+        number,
+        { pageviews: number; newVisitors: number; returningVisitors: number }
+      >();
       for (let h = 0; h < 24; h += 2) {
-        hourlyMap.set(h, { pageviews: 0, newVisitors: 0, returningVisitors: 0 });
+        hourlyMap.set(h, {
+          pageviews: 0,
+          newVisitors: 0,
+          returningVisitors: 0,
+        });
       }
 
       todayVisits.forEach((v) => {
         const hour = new Date(v.createdAt).getHours();
         const bucket = Math.floor(hour / 2) * 2;
-        const current = hourlyMap.get(bucket) || { pageviews: 0, newVisitors: 0, returningVisitors: 0 };
+        const current = hourlyMap.get(bucket) || {
+          pageviews: 0,
+          newVisitors: 0,
+          returningVisitors: 0,
+        };
         current.pageviews += 1;
         if (v.isReturning) {
           current.returningVisitors += 1;
@@ -237,13 +317,19 @@ export class AnalyticsService {
         hourlyMap.set(bucket, current);
 
         // Thiết bị & trình duyệt & vị trí
-        deviceMap.set(v.deviceType || 'unknown', (deviceMap.get(v.deviceType || 'unknown') || 0) + 1);
+        deviceMap.set(
+          v.deviceType || 'unknown',
+          (deviceMap.get(v.deviceType || 'unknown') || 0) + 1,
+        );
         const b = v.browser || 'Other';
         browserMap.set(b, (browserMap.get(b) || 0) + 1);
         const city = v.city || 'TP. Hồ Chí Minh';
         locationMap.set(city, (locationMap.get(city) || 0) + 1);
         if (v.templateSlug) {
-          templateViewsMap.set(v.templateSlug, (templateViewsMap.get(v.templateSlug) || 0) + 1);
+          templateViewsMap.set(
+            v.templateSlug,
+            (templateViewsMap.get(v.templateSlug) || 0) + 1,
+          );
         }
       });
 
@@ -281,13 +367,19 @@ export class AnalyticsService {
         // Gom locations
         if (rec?.locations) {
           Object.entries(rec.locations).forEach(([loc, count]) => {
-            locationMap.set(loc, (locationMap.get(loc) || 0) + (count as number));
+            locationMap.set(
+              loc,
+              (locationMap.get(loc) || 0) + (count as number),
+            );
           });
         }
         // Gom template views
         if (rec?.templateViews) {
           Object.entries(rec.templateViews).forEach(([t, count]) => {
-            templateViewsMap.set(t, (templateViewsMap.get(t) || 0) + (count as number));
+            templateViewsMap.set(
+              t,
+              (templateViewsMap.get(t) || 0) + (count as number),
+            );
           });
         }
 
@@ -302,7 +394,8 @@ export class AnalyticsService {
     }
 
     // 4. Định dạng thiết bị (Devices Breakdown)
-    const totalDevices = Array.from(deviceMap.values()).reduce((a, b) => a + b, 0) || 1;
+    const totalDevices =
+      Array.from(deviceMap.values()).reduce((a, b) => a + b, 0) || 1;
     const deviceLabels: Record<string, string> = {
       mobile: 'Điện thoại (Mobile)',
       desktop: 'Máy tính (Desktop)',
@@ -316,13 +409,15 @@ export class AnalyticsService {
       unknown: '#94a3b8', // Slate
     };
 
-    const devices = Array.from(deviceMap.entries()).map(([key, count]) => ({
-      key,
-      name: deviceLabels[key] || key,
-      count,
-      percent: Math.round((count / totalDevices) * 100),
-      color: deviceColors[key] || '#8b5cf6',
-    })).sort((a, b) => b.count - a.count);
+    const devices = Array.from(deviceMap.entries())
+      .map(([key, count]) => ({
+        key,
+        name: deviceLabels[key] || key,
+        count,
+        percent: Math.round((count / totalDevices) * 100),
+        color: deviceColors[key] || '#8b5cf6',
+      }))
+      .sort((a, b) => b.count - a.count);
 
     // 5. Định dạng trình duyệt (Browsers Breakdown)
     const browsers = Array.from(browserMap.entries())
@@ -338,7 +433,8 @@ export class AnalyticsService {
       .map(([name, count]) => ({
         name,
         count,
-        percent: totalPageviews > 0 ? Math.round((count / totalPageviews) * 100) : 0,
+        percent:
+          totalPageviews > 0 ? Math.round((count / totalPageviews) * 100) : 0,
       }))
       .sort((a, b) => b.count - a.count);
 
@@ -361,18 +457,41 @@ export class AnalyticsService {
         const dn = Math.max(0, Math.round(totalPageviews * 0.12));
         const bd = Math.max(0, totalPageviews - hcm - hn - dn);
         const list = [
-          { name: 'TP. Hồ Chí Minh', count: hcm, percent: Math.round((hcm / totalPageviews) * 100) },
-          { name: 'Hà Nội', count: hn, percent: Math.round((hn / totalPageviews) * 100) },
+          {
+            name: 'TP. Hồ Chí Minh',
+            count: hcm,
+            percent: Math.round((hcm / totalPageviews) * 100),
+          },
+          {
+            name: 'Hà Nội',
+            count: hn,
+            percent: Math.round((hn / totalPageviews) * 100),
+          },
         ];
-        if (dn > 0) list.push({ name: 'Đà Nẵng', count: dn, percent: Math.round((dn / totalPageviews) * 100) });
-        if (bd > 0) list.push({ name: 'Bình Dương', count: bd, percent: Math.round((bd / totalPageviews) * 100) });
+        if (dn > 0)
+          list.push({
+            name: 'Đà Nẵng',
+            count: dn,
+            percent: Math.round((dn / totalPageviews) * 100),
+          });
+        if (bd > 0)
+          list.push({
+            name: 'Bình Dương',
+            count: bd,
+            percent: Math.round((bd / totalPageviews) * 100),
+          });
         locations = list.sort((a, b) => b.count - a.count);
       }
     }
 
     // 7. Định dạng Top Templates
-    const sortedTemplateEntries = Array.from(templateViewsMap.entries()).sort((a, b) => b[1] - a[1]);
-    const totalTemplateViews = sortedTemplateEntries.reduce((total, [, count]) => total + count, 0);
+    const sortedTemplateEntries = Array.from(templateViewsMap.entries()).sort(
+      (a, b) => b[1] - a[1],
+    );
+    const totalTemplateViews = sortedTemplateEntries.reduce(
+      (total, [, count]) => total + count,
+      0,
+    );
     const templateEntries = sortedTemplateEntries.slice(0, 10);
 
     const topTemplates = await Promise.all(
@@ -384,7 +503,12 @@ export class AnalyticsService {
         if (!matchedTemplate) {
           try {
             matchedTemplate = await this.templateModel
-              .findOne({ $or: [{ code: slugOrCode }, { id: isNaN(Number(slugOrCode)) ? -1 : Number(slugOrCode) }] })
+              .findOne({
+                $or: [
+                  { code: slugOrCode },
+                  { id: isNaN(Number(slugOrCode)) ? -1 : Number(slugOrCode) },
+                ],
+              })
               .lean()
               .exec();
           } catch {}
@@ -402,13 +526,19 @@ export class AnalyticsService {
         }
 
         try {
-          const wedding = await this.weddingModel.findOne({ slug: slugOrCode }).lean().exec();
+          const wedding = await this.weddingModel
+            .findOne({ slug: slugOrCode })
+            .lean()
+            .exec();
           if (wedding) {
             let weddingTemplate: any = null;
 
             if (wedding.templateId) {
               try {
-                weddingTemplate = await this.templateModel.findById(wedding.templateId).lean().exec();
+                weddingTemplate = await this.templateModel
+                  .findById(wedding.templateId)
+                  .lean()
+                  .exec();
               } catch {}
               if (!weddingTemplate) {
                 const tidStr = wedding.templateId.toString();
@@ -445,7 +575,10 @@ export class AnalyticsService {
     );
 
     const totalVisitors = newVisitors + returningVisitors;
-    const returningRate = totalVisitors > 0 ? Math.round((returningVisitors / totalVisitors) * 100) : 0;
+    const returningRate =
+      totalVisitors > 0
+        ? Math.round((returningVisitors / totalVisitors) * 100)
+        : 0;
 
     return {
       range,

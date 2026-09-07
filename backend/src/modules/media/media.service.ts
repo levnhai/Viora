@@ -10,7 +10,8 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export class MediaService {
   constructor(
     @InjectModel(Media.name) private readonly mediaModel: Model<MediaDocument>,
-    @InjectModel(Wedding.name) private readonly weddingModel: Model<WeddingDocument>,
+    @InjectModel(Wedding.name)
+    private readonly weddingModel: Model<WeddingDocument>,
     private readonly cloudinaryService: CloudinaryService,
     private readonly configService: ConfigService,
   ) {}
@@ -23,7 +24,8 @@ export class MediaService {
     slug?: string,
   ): Promise<Media> {
     try {
-      const basePath = this.configService.get<string>('CLOUDINARY_FOLDER') || 'viora';
+      const basePath =
+        this.configService.get<string>('CLOUDINARY_FOLDER') || 'viora';
       let weddingSlug = slug;
 
       if (!weddingSlug && weddingId && Types.ObjectId.isValid(weddingId)) {
@@ -34,12 +36,20 @@ export class MediaService {
       }
 
       // Lưu trực tiếp vào thiepmoionline/[slug] (hoặc thiepmoionline/temp nếu chưa có slug)
-      const folderName = weddingSlug ? `${basePath}/${weddingSlug}` : `${basePath}/temp`;
-      const uploadResult = await this.cloudinaryService.uploadFile(file, folderName);
+      const folderName = weddingSlug
+        ? `${basePath}/${weddingSlug}`
+        : `${basePath}/temp`;
+      const uploadResult = await this.cloudinaryService.uploadFile(
+        file,
+        folderName,
+      );
 
       const newMedia = new this.mediaModel({
         ownerId: new Types.ObjectId(ownerId),
-        weddingId: weddingId && Types.ObjectId.isValid(weddingId) ? new Types.ObjectId(weddingId) : undefined,
+        weddingId:
+          weddingId && Types.ObjectId.isValid(weddingId)
+            ? new Types.ObjectId(weddingId)
+            : undefined,
         type: type,
         url: uploadResult.secure_url,
         size: uploadResult.bytes,
@@ -56,7 +66,10 @@ export class MediaService {
   }
 
   async getMediaByUser(ownerId: string, type?: string): Promise<Media[]> {
-    const query: any = { ownerId: new Types.ObjectId(ownerId), deletedAt: null };
+    const query: any = {
+      ownerId: new Types.ObjectId(ownerId),
+      deletedAt: null,
+    };
     if (type) {
       query.type = type;
     }
@@ -64,7 +77,10 @@ export class MediaService {
   }
 
   async getMediaByWedding(weddingId: string, type?: string): Promise<Media[]> {
-    const query: any = { weddingId: new Types.ObjectId(weddingId), deletedAt: null };
+    const query: any = {
+      weddingId: new Types.ObjectId(weddingId),
+      deletedAt: null,
+    };
     if (type) {
       query.type = type;
     }
@@ -72,7 +88,10 @@ export class MediaService {
   }
 
   async deleteMedia(id: string, ownerId: string): Promise<any> {
-    const media = await this.mediaModel.findOne({ _id: new Types.ObjectId(id), ownerId: new Types.ObjectId(ownerId) });
+    const media = await this.mediaModel.findOne({
+      _id: new Types.ObjectId(id),
+      ownerId: new Types.ObjectId(ownerId),
+    });
     if (!media) {
       throw new InternalServerErrorException('Không tìm thấy ảnh');
     }
@@ -80,7 +99,7 @@ export class MediaService {
     if (media.filename) {
       await this.cloudinaryService.deleteFile(media.filename);
     }
-    
+
     // Xóa cứng (hard delete) hoặc mềm (soft delete)
     // Ở đây ta xóa cứng hoặc xóa mềm tuỳ yêu cầu. Schema có deletedAt.
     media.deletedAt = new Date();

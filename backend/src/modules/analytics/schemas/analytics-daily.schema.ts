@@ -33,4 +33,5 @@ export class AnalyticsDaily {
   locations: Map<string, number>; // { 'TP. Hồ Chí Minh': 120, 'Hà Nội': 85 }
 }
 
-export const AnalyticsDailySchema = SchemaFactory.createForClass(AnalyticsDaily);
+export const AnalyticsDailySchema =
+  SchemaFactory.createForClass(AnalyticsDaily);

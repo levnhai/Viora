@@ -84,7 +84,11 @@ export class SystemService {
 
   async setSetting(key: string, value: any): Promise<SystemSetting> {
     return this.settingModel
-      .findOneAndUpdate({ key }, { value }, { upsert: true, returnDocument: 'after' })
+      .findOneAndUpdate(
+        { key },
+        { value },
+        { upsert: true, returnDocument: 'after' },
+      )
       .exec();
   }
 }

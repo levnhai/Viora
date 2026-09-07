@@ -10,7 +10,7 @@ import {
   Query,
   Param,
   Delete,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from './media.service';
@@ -33,12 +33,18 @@ export class MediaController {
     if (!file) {
       throw new BadRequestException('Vui lòng chọn file để upload');
     }
-    
+
     // type có thể là 'gallery', 'cover', 'avatar',...
     const mediaType = type || 'gallery';
     const ownerId = req.user._id || req.user.id;
 
-    return this.mediaService.uploadMedia(file, ownerId, mediaType, weddingId, slug);
+    return this.mediaService.uploadMedia(
+      file,
+      ownerId,
+      mediaType,
+      weddingId,
+      slug,
+    );
   }
 
   @Get('my-media')

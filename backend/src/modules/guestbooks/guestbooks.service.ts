@@ -34,7 +34,7 @@ export class GuestbooksService {
       weddingId,
     });
     const savedGb = await gb.save();
-    
+
     // Notify clients in realtime
     this.socketGateway.notifyWeddingUpdate(slug, 'guestbook-updated');
 

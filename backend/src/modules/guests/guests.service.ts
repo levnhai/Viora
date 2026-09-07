@@ -5,6 +5,10 @@ import { Guest, GuestDocument } from './schemas/guest.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
 import { SocketGateway } from '../socket/socket.gateway';
 
+function escapeRegex(text: string): string {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 @Injectable()
 export class GuestsService {
   constructor(
@@ -31,12 +35,13 @@ export class GuestsService {
   async createRsvp(slug: string, rsvpData: any): Promise<Guest> {
     const weddingId = await this.getWeddingIdBySlug(slug);
     const normalizedName = rsvpData.name.trim().toLowerCase();
+    const escapedName = escapeRegex(normalizedName);
 
     let savedGuest: Guest;
     const guest = await this.guestModel
       .findOne({
         weddingId,
-        name: new RegExp(`^${normalizedName}$`, 'i'),
+        name: new RegExp(`^${escapedName}$`, 'i'),
         deletedAt: null,
       })
       .exec();

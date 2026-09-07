@@ -9,21 +9,24 @@ import {
   Req,
   ForbiddenException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { GuestbooksService } from './guestbooks.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { CreateGuestbookDto } from './dto/create-guestbook.dto';
 
 @Controller('weddings/:slug/guestbook')
 export class GuestbooksController {
   constructor(private readonly guestbooksService: GuestbooksService) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post()
   async createGuestbook(
     @Param('slug') slug: string,
-    @Body() guestbookData: any,
+    @Body() guestbookDto: CreateGuestbookDto,
   ) {
     const data = await this.guestbooksService.createGuestbook(
       slug,
-      guestbookData,
+      guestbookDto,
     );
     return {
       success: true,

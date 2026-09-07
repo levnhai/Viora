@@ -7,16 +7,19 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { SystemService } from './system.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { CreateInvitationRequestDto } from './dto/create-invitation-request.dto';
 
 @Controller('invitation-requests')
 export class SystemController {
   constructor(private readonly systemService: SystemService) {}
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
-  async createRequest(@Body() body: any) {
-    const data = await this.systemService.createRequest(body);
+  async createRequest(@Body() createDto: CreateInvitationRequestDto) {
+    const data = await this.systemService.createRequest(createDto);
     return {
       success: true,
       message: 'Gửi yêu cầu thành công! Chúng tôi sẽ liên hệ sớm nhất.',

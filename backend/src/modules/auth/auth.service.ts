@@ -6,10 +6,12 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { Otp, OtpDocument } from './schemas/otp.schema';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
+import * as bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
@@ -20,17 +22,41 @@ export class AuthService {
     @InjectModel(Otp.name)
     private readonly otpModel: Model<OtpDocument>,
     private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
-
-  hashPassword(password: string): string {
-    return crypto.createHash('sha256').update(password).digest('hex');
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
   }
 
-  verifyPassword(password: string, storedHash: string): boolean {
-    const expected = crypto.createHash('sha256').update(password).digest('hex');
-    return crypto.timingSafeEqual(Buffer.from(storedHash), Buffer.from(expected));
+  async verifyPassword(password: string, storedHash: string): Promise<boolean> {
+    if (!storedHash) return false;
+
+    // Nếu là chuỗi hash bcrypt ($2a$, $2b$, $2y$)
+    if (
+      storedHash.startsWith('$2a$') ||
+      storedHash.startsWith('$2b$') ||
+      storedHash.startsWith('$2y$')
+    ) {
+      return bcrypt.compare(password, storedHash);
+    }
+
+    // Tương thích ngược: kiểm tra hash SHA-256 cũ
+    try {
+      const expected = crypto.createHash('sha256').update(password).digest('hex');
+      if (Buffer.byteLength(storedHash) !== Buffer.byteLength(expected)) {
+        return false;
+      }
+      return crypto.timingSafeEqual(
+        Buffer.from(storedHash),
+        Buffer.from(expected),
+      );
+    } catch {
+      return false;
+    }
   }
+
   async createUser(
     username: string,
     passwordPlain: string,
@@ -40,7 +66,7 @@ export class AuthService {
     phone?: string,
     status = 'active',
   ): Promise<User> {
-    const passwordHash = this.hashPassword(passwordPlain);
+    const passwordHash = await this.hashPassword(passwordPlain);
     const displayName = fullName || username.split('@')[0];
     const emailValue = username.includes('@') ? username : '';
 
@@ -68,13 +94,14 @@ export class AuthService {
     role: string;
     weddingSlug?: string;
   } {
-    const secret =
-      this.configService.get<string>('JWT_SECRET') || 'viora_jwt_secret_key_2026_safe';
+    const payload = {
+      id: user._id?.toString() || user.id,
+      username: user.username,
+      role: user.role,
+      weddingSlug: user.weddingSlug,
+    };
 
-    const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-    const payload = Buffer.from(JSON.stringify({ id: user._id, username: user.username, role: user.role, weddingSlug: user.weddingSlug, exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60 })).toString('base64url');
-    const signature = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
-    const token = `${header}.${payload}.${signature}`;
+    const token = this.jwtService.sign(payload);
     return {
       token,
       role: user.role,
@@ -111,14 +138,28 @@ export class AuthService {
       throw new UnauthorizedException('Tài khoản không tồn tại!');
     }
     if (user.status !== 'active') {
-      throw new UnauthorizedException('Tài khoản chưa được kích hoạt hoặc đã bị khóa');
+      throw new UnauthorizedException(
+        'Tài khoản chưa được kích hoạt hoặc đã bị khóa',
+      );
     }
 
-    if (!this.verifyPassword(passwordPlain, user.passwordHash)) {
+    if (!(await this.verifyPassword(passwordPlain, user.passwordHash))) {
       user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
       if (user.failedLoginAttempts >= 5) user.status = 'blocked';
       await user.save();
-      throw new UnauthorizedException(user.status === 'blocked' ? 'Tài khoản đã bị khóa do đăng nhập sai 5 lần' : 'Mật khẩu không chính xác!');
+      throw new UnauthorizedException(
+        user.status === 'blocked'
+          ? 'Tài khoản đã bị khóa do đăng nhập sai 5 lần'
+          : 'Mật khẩu không chính xác!',
+      );
+    }
+
+    // Tự động nâng cấp mật khẩu từ SHA-256 cũ sang bcrypt
+    if (
+      !user.passwordHash.startsWith('$2a$') &&
+      !user.passwordHash.startsWith('$2b$')
+    ) {
+      user.passwordHash = await this.hashPassword(passwordPlain);
     }
 
     user.failedLoginAttempts = 0;
@@ -149,7 +190,7 @@ export class AuthService {
         throw new UnauthorizedException('Tên đăng nhập đã tồn tại!');
       }
       // Nếu chưa kích hoạt, cho phép cập nhật thông tin mới
-      existingUser.passwordHash = this.hashPassword(passwordPlain);
+      existingUser.passwordHash = await this.hashPassword(passwordPlain);
       existingUser.fullName = fullName || existingUser.fullName;
       existingUser.phone = phone || existingUser.phone;
       await existingUser.save();
@@ -179,7 +220,9 @@ export class AuthService {
   }> {
     const otpRecord = await this.otpModel.findOne({ email }).exec();
     if (!otpRecord) {
-      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
+      throw new UnauthorizedException(
+        'Mã xác thực đã hết hạn hoặc không tồn tại!',
+      );
     }
 
     if (otpRecord.code !== code) {
@@ -249,11 +292,18 @@ export class AuthService {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(`[SMTP] Đã gửi mã OTP quên mật khẩu thành công tới: ${email}`);
+        console.log(
+          `[SMTP] Đã gửi mã OTP quên mật khẩu thành công tới: ${email}`,
+        );
       } catch (error) {
-        console.error('[SMTP Error] Gửi mail khôi phục mật khẩu thất bại:', error);
+        console.error(
+          '[SMTP Error] Gửi mail khôi phục mật khẩu thất bại:',
+          error,
+        );
         if (process.env.NODE_ENV !== 'production') {
-          console.warn(`[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+          console.warn(
+            `[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`,
+          );
         } else {
           throw new InternalServerErrorException(
             'Không thể gửi mã khôi phục mật khẩu qua email. Vui lòng thử lại sau.',
@@ -263,7 +313,9 @@ export class AuthService {
     } else {
       console.warn('[SMTP Config Missing] Chưa cấu hình SMTP.');
       if (process.env.NODE_ENV !== 'production') {
-        console.warn(`[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`);
+        console.warn(
+          `[DEV ONLY] Mã OTP quên mật khẩu của ${email} là: ${otpCode}`,
+        );
       } else {
         throw new InternalServerErrorException(
           'Hệ thống gửi email chưa được cấu hình. Vui lòng liên hệ quản trị viên.',
@@ -272,18 +324,24 @@ export class AuthService {
     }
   }
 
-  async forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
+  async forgotPassword(
+    email: string,
+  ): Promise<{ success: boolean; message: string }> {
     const user = await this.userModel.findOne({ username: email }).exec();
     if (!user) {
-      throw new UnauthorizedException('Địa chỉ Email không tồn tại trong hệ thống!');
+      throw new UnauthorizedException(
+        'Địa chỉ Email không tồn tại trong hệ thống!',
+      );
     }
 
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    await this.otpModel.findOneAndUpdate(
-      { email },
-      { code: otpCode, createdAt: new Date() },
-      { upsert: true, returnDocument: 'after' },
-    ).exec();
+    await this.otpModel
+      .findOneAndUpdate(
+        { email },
+        { code: otpCode, createdAt: new Date() },
+        { upsert: true, returnDocument: 'after' },
+      )
+      .exec();
 
     await this.sendForgotPasswordOtp(email, otpCode);
 
@@ -299,7 +357,9 @@ export class AuthService {
   ): Promise<{ success: boolean; message: string }> {
     const otpRecord = await this.otpModel.findOne({ email }).exec();
     if (!otpRecord) {
-      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
+      throw new UnauthorizedException(
+        'Mã xác thực đã hết hạn hoặc không tồn tại!',
+      );
     }
 
     if (otpRecord.code !== code) {
@@ -319,7 +379,9 @@ export class AuthService {
   ): Promise<{ success: boolean; message: string }> {
     const otpRecord = await this.otpModel.findOne({ email }).exec();
     if (!otpRecord) {
-      throw new UnauthorizedException('Mã xác thực đã hết hạn hoặc không tồn tại!');
+      throw new UnauthorizedException(
+        'Mã xác thực đã hết hạn hoặc không tồn tại!',
+      );
     }
 
     if (otpRecord.code !== code) {
@@ -332,7 +394,7 @@ export class AuthService {
     }
 
     // Cập nhật mật khẩu mới
-    user.passwordHash = this.hashPassword(passwordNew);
+    user.passwordHash = await this.hashPassword(passwordNew);
     await user.save();
 
     // Xóa mã OTP sau khi đổi mật khẩu thành công
@@ -401,9 +463,7 @@ export class AuthService {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(
-          `[SMTP] Đã gửi mã OTP thành công tới: ${email}`,
-        );
+        console.log(`[SMTP] Đã gửi mã OTP thành công tới: ${email}`);
         return {
           success: true,
           message: 'Mã xác thực đã được gửi tới email của bạn!',
@@ -414,7 +474,8 @@ export class AuthService {
           console.warn(`[DEV ONLY] Mã OTP của email ${email} là: ${otpCode}`);
           return {
             success: true,
-            message: 'Gửi mail thất bại (xem mã OTP tại console server trong môi trường dev).',
+            message:
+              'Gửi mail thất bại (xem mã OTP tại console server trong môi trường dev).',
           };
         }
         throw new InternalServerErrorException(
@@ -427,7 +488,8 @@ export class AuthService {
         console.warn(`[DEV ONLY] Mã OTP của email ${email} là: ${otpCode}`);
         return {
           success: true,
-          message: 'Hệ thống dev chưa cấu hình SMTP (xem mã OTP tại console server).',
+          message:
+            'Hệ thống dev chưa cấu hình SMTP (xem mã OTP tại console server).',
         };
       }
       throw new InternalServerErrorException(
@@ -562,14 +624,26 @@ export class AuthService {
       email,
     };
   }
-  async changeAdminCredentials(userId: string, currentPassword: string, newEmail: string, newPassword: string) {
+  async changeAdminCredentials(
+    userId: string,
+    currentPassword: string,
+    newEmail: string,
+    newPassword: string,
+  ) {
     const user = await this.userModel.findById(userId).exec();
-    if (!user || !['admin', 'staff'].includes(user.role)) throw new UnauthorizedException('Tài khoản không hợp lệ');
-    if (!this.verifyPassword(currentPassword, user.passwordHash)) throw new UnauthorizedException('Mật khẩu hiện tại không đúng');
+    if (!user || !['admin', 'staff'].includes(user.role))
+      throw new UnauthorizedException('Tài khoản không hợp lệ');
+    if (!(await this.verifyPassword(currentPassword, user.passwordHash)))
+      throw new UnauthorizedException('Mật khẩu hiện tại không đúng');
     const email = newEmail.trim().toLowerCase();
-    const existing = await this.userModel.findOne({ email, _id: { $ne: user._id } }).exec();
+    const existing = await this.userModel
+      .findOne({ email, _id: { $ne: user._id } })
+      .exec();
     if (existing) throw new UnauthorizedException('Email này đã được sử dụng');
-    user.email = email; user.username = email; user.passwordHash = this.hashPassword(newPassword);
-    await user.save(); return this.generateToken(user);
+    user.email = email;
+    user.username = email;
+    user.passwordHash = await this.hashPassword(newPassword);
+    await user.save();
+    return this.generateToken(user);
   }
 }

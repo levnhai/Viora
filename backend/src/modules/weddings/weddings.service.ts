@@ -322,8 +322,24 @@ export class WeddingsService {
         });
       } else {
         newSections = [
-          { weddingId: saved._id, sectionVersion: 1, type: 'timeline', enabled: true, order: 1, layout: 'default', settings: { timeline: timeline || [] } },
-          { weddingId: saved._id, sectionVersion: 1, type: 'rsvp', enabled: true, order: 2, layout: 'default', settings: { events: events || [] } }
+          {
+            weddingId: saved._id,
+            sectionVersion: 1,
+            type: 'timeline',
+            enabled: true,
+            order: 1,
+            layout: 'default',
+            settings: { timeline: timeline || [] },
+          },
+          {
+            weddingId: saved._id,
+            sectionVersion: 1,
+            type: 'rsvp',
+            enabled: true,
+            order: 2,
+            layout: 'default',
+            settings: { events: events || [] },
+          },
         ];
       }
 
@@ -439,9 +455,10 @@ export class WeddingsService {
       .find({ weddingId: wedding._id, type: 'gallery', deletedAt: null })
       .sort({ order: 1 })
       .exec();
-    const galleryImages = mediaImages.length > 0 
-      ? mediaImages.map((m) => m.url) 
-      : (wedding.galleryImages || []);
+    const galleryImages =
+      mediaImages.length > 0
+        ? mediaImages.map((m) => m.url)
+        : wedding.galleryImages || [];
 
     const themeSettings = await this.weddingThemeSettingModel
       .findOne({ weddingId: wedding._id })

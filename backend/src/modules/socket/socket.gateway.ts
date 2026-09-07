@@ -36,7 +36,10 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('identify-visitor')
-  handleIdentifyVisitor(@ConnectedSocket() client: Socket, @MessageBody() visitorId: string) {
+  handleIdentifyVisitor(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() visitorId: string,
+  ) {
     if (!visitorId || visitorId.length > 128) return;
     const previousCount = this.getOnlineCount();
     this.socketVisitors.set(client.id, visitorId);
@@ -46,15 +49,24 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('join-admin-stats')
   handleJoinAdminStats(@ConnectedSocket() client: Socket) {
     client.join('admin-stats');
-    client.emit('online-users-count', { count: this.getOnlineCount(), timestamp: new Date().toISOString() });
+    client.emit('online-users-count', {
+      count: this.getOnlineCount(),
+      timestamp: new Date().toISOString(),
+    });
   }
 
   @SubscribeMessage('join-wedding')
-  handleJoinWedding(@ConnectedSocket() client: Socket, @MessageBody() slug: string) {
+  handleJoinWedding(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() slug: string,
+  ) {
     if (slug) client.join(slug);
   }
 
-  notifyWeddingUpdate(slug: string, eventType: 'guestbook-updated' | 'guests-updated' | 'wedding-updated') {
+  notifyWeddingUpdate(
+    slug: string,
+    eventType: 'guestbook-updated' | 'guests-updated' | 'wedding-updated',
+  ) {
     this.server?.to(slug).emit(eventType, { slug });
   }
 }

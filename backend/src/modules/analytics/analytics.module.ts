@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AnalyticsVisit, AnalyticsVisitSchema } from './schemas/analytics-visit.schema';
-import { AnalyticsDaily, AnalyticsDailySchema } from './schemas/analytics-daily.schema';
+import {
+  AnalyticsVisit,
+  AnalyticsVisitSchema,
+} from './schemas/analytics-visit.schema';
+import {
+  AnalyticsDaily,
+  AnalyticsDailySchema,
+} from './schemas/analytics-daily.schema';
 import { Wedding, WeddingSchema } from '../weddings/schemas/wedding.schema';
 import { Template, TemplateSchema } from '../templates/schemas/template.schema';
 import { AnalyticsService } from './analytics.service';

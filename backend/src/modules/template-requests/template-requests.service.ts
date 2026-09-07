@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { TemplateRequest, TemplateRequestDocument } from './schemas/template-request.schema';
+import {
+  TemplateRequest,
+  TemplateRequestDocument,
+} from './schemas/template-request.schema';
 
 @Injectable()
 export class TemplateRequestsService {
@@ -10,7 +13,9 @@ export class TemplateRequestsService {
     private readonly requestModel: Model<TemplateRequestDocument>,
   ) {}
 
-  async create(data: Partial<TemplateRequest>): Promise<TemplateRequestDocument> {
+  async create(
+    data: Partial<TemplateRequest>,
+  ): Promise<TemplateRequestDocument> {
     const created = new this.requestModel(data);
     return created.save();
   }
@@ -19,8 +24,13 @@ export class TemplateRequestsService {
     return this.requestModel.find().sort({ createdAt: -1 }).exec();
   }
 
-  async updateStatus(id: string, status: string): Promise<TemplateRequestDocument | null> {
-    return this.requestModel.findByIdAndUpdate(id, { status }, { new: true }).exec();
+  async updateStatus(
+    id: string,
+    status: string,
+  ): Promise<TemplateRequestDocument | null> {
+    return this.requestModel
+      .findByIdAndUpdate(id, { status }, { new: true })
+      .exec();
   }
 
   async remove(id: string): Promise<TemplateRequestDocument | null> {

@@ -10,17 +10,25 @@ import {
   Req,
   ForbiddenException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { GuestsService } from './guests.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { CreateRsvpDto } from './dto/create-rsvp.dto';
+import { CreateGuestDto } from './dto/create-guest.dto';
+import { UpdateGuestDto } from './dto/update-guest.dto';
 
 @Controller('weddings/:slug')
 export class GuestsController {
   constructor(private readonly guestsService: GuestsService) {}
 
   // RSVP Endpoints
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('rsvp')
-  async createRsvp(@Param('slug') slug: string, @Body() rsvpData: any) {
-    const data = await this.guestsService.createRsvp(slug, rsvpData);
+  async createRsvp(
+    @Param('slug') slug: string,
+    @Body() rsvpDto: CreateRsvpDto,
+  ) {
+    const data = await this.guestsService.createRsvp(slug, rsvpDto);
     return {
       success: true,
       message: 'Gửi xác nhận tham dự thành công!',
@@ -53,7 +61,7 @@ export class GuestsController {
   @UseGuards(AuthGuard)
   async createGuest(
     @Param('slug') slug: string,
-    @Body() guestData: any,
+    @Body() guestDto: CreateGuestDto,
     @Req() req: any,
   ) {
     const user = req.user;
@@ -66,7 +74,7 @@ export class GuestsController {
         'Bạn không có quyền quản lý danh sách khách mời của thiệp cưới này!',
       );
     }
-    const data = await this.guestsService.createGuest(slug, guestData);
+    const data = await this.guestsService.createGuest(slug, guestDto);
     return {
       success: true,
       message: 'Thêm khách mời thành công!',
@@ -99,7 +107,7 @@ export class GuestsController {
   async updateGuest(
     @Param('slug') slug: string,
     @Param('id') id: string,
-    @Body() guestData: any,
+    @Body() guestDto: UpdateGuestDto,
     @Req() req: any,
   ) {
     const user = req.user;
@@ -112,7 +120,7 @@ export class GuestsController {
         'Bạn không có quyền cập nhật khách mời của thiệp cưới này!',
       );
     }
-    const data = await this.guestsService.updateGuest(slug, id, guestData);
+    const data = await this.guestsService.updateGuest(slug, id, guestDto);
     return {
       success: true,
       message: 'Cập nhật khách mời thành công!',

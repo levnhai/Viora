@@ -39,6 +39,7 @@ export class AnalyticsVisit {
   createdAt: Date;
 }
 
-export const AnalyticsVisitSchema = SchemaFactory.createForClass(AnalyticsVisit);
+export const AnalyticsVisitSchema =
+  SchemaFactory.createForClass(AnalyticsVisit);
 AnalyticsVisitSchema.index({ createdAt: -1 });
 AnalyticsVisitSchema.index({ templateSlug: 1, createdAt: -1 });

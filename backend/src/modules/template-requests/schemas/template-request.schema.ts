@@ -24,4 +24,5 @@ export class TemplateRequest {
   status: string; // 'new' | 'contacted' | 'completed' | 'cancelled'
 }
 
-export const TemplateRequestSchema = SchemaFactory.createForClass(TemplateRequest);
+export const TemplateRequestSchema =
+  SchemaFactory.createForClass(TemplateRequest);
