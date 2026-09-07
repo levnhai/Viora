@@ -1,5 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Alex+Brush&family=Dancing+Script:wght@400;600;700&display=swap');
-@import url('https://chungdoi.com/fonts/font-face.css?v=2');
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Dancing+Script:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Great+Vibes&family=Lora:ital,wght@0,400..700;1,400..700&family=Monsieur+La+Doulaise&family=Montserrat:ital,wght@0,400..800;1,400..800&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+
+/* Local Font Face Definitions (Served from /fonts/ on host domain) */
+@font-face {
+  font-family: "Hastegi";
+  src: url("/fonts/hastegi.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arcittya Begatri";
+  src: url("/fonts/arcittya-begatri.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alisheia";
+  src: url("/fonts/alisheia.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monsieur La Doulaise";
+  src: url("/fonts/monsieur-la-doulaise.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pinyon";
+  src: url("/fonts/pinyon.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "UVN";
+  src: url("/fonts/uvn.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Uvn Hoa Tay 1";
+  src: url("/fonts/uvn-hoa-tay-1.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pattaya";
+  src: url("/fonts/Pattaya-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "The Nautigal";
+  src: url("/fonts/TheNautigal-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "The Nautigal";
+  src: url("/fonts/TheNautigal-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Babylonica";
+  src: url("/fonts/Babylonica-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Uchen";
+  src: url("/fonts/Uchen-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alex Brush";
+  src: url("/fonts/AlexBrush-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* Utility classes for wedding typography */
 .font-playfair {
@@ -22,6 +126,10 @@
   font-family: 'Dancing Script', cursive !important;
 }
 
+.font-[#hastegi] {
+  font-family: 'Hastegi', 'Montserrat', 'Plus Jakarta Sans', sans-serif !important;
+}
+
 .font-be-vietnam {
   font-family: 'Be Vietnam Pro', system-ui, sans-serif !important;
 }
@@ -30,375 +138,30 @@
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
-@font-face {
-  font-family: "DFVN New Eddy";
-  src: url("https://chungdoi.com/fonts/DFVN-NewEddy-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "1FTV VIP Signora";
-  src: url("https://chungdoi.com/fonts/1FTV-VIP-Signora-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 .font-wedding-script {
-  font-family: "DFVN New Eddy", "1FTV VIP Signora", "Great Vibes", "Alex Brush", "Dancing Script", cursive !important;
+  font-family: "Great Vibes", "Alex Brush", "Dancing Script", "Pinyon Script", cursive !important;
 }
 
 .font-griffiths {
-  font-family: "DFVN New Eddy", "1FTV VIP Signora", "Dancing Script", cursive !important;
-}
-Title: Cached Content
-
-Description: Fetched from cache
-
-Source: https://chungdoi.com/fonts/font-face.css?v=2
-
----
-
-/* Wedding Invitation Font Faces */
-
-@font-face {
-  font-family: "Pattaya";
-  src: url("https://chungdoi.com/fonts/Pattaya-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+  font-family: "Dancing Script", "Great Vibes", cursive !important;
 }
 
-/* Nháº­t BÃ¬nh Äá» (Figma 7907:35) â€” SVN-HC licensed fonts */
-@font-face {
-  font-family: "SVN-HC Pacifico";
-  src: url("https://chungdoi.com/fonts/SVN-HC-Pacifico.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SVN-HC Marvin Visions";
-  src: url("https://chungdoi.com/fonts/SVN-HC-Marvin-Visions.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SVN-HC Built Titling";
-  src: url("https://chungdoi.com/fonts/SVN-HC-Built-Titling.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SVN-HC Carosello";
-  src: url("https://chungdoi.com/fonts/SVN-HC-Carosello.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SVN-HC Haydon Brush";
-  src:
-    url("https://chungdoi.com/fonts/SVN-HC-Haydon-Brush.woff2") format("woff2"),
-    url("https://chungdoi.com/fonts/SVN-HC-Haydon-Brush.woff") format("woff"),
-    url("https://chungdoi.com/fonts/SVN-HC Haydon Brush.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaNeue";
-  src: url("https://chungdoi.com/fonts/HelveticaNeueRoman.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaNeue";
-  src: url("https://chungdoi.com/fonts/HelveticaNeueBold.otf") format("opentype");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaNeue";
-  src: url("https://chungdoi.com/fonts/HelveticaNeueLight.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "HelveticaNeue";
-  src: url("https://chungdoi.com/fonts/HelveticaNeueMedium.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "UNI Chu truyen thong";
-  src: url("https://chungdoi.com/fonts/UNI_Chu_truyen_thong.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "The Nautigal";
-  src: url("https://chungdoi.com/fonts/TheNautigal-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "The Nautigal";
-  src: url("https://chungdoi.com/fonts/TheNautigal-Bold.ttf") format("truetype");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Fz Qellia";
-  src: url("https://chungdoi.com/fonts/Fz_Qellia_Fix.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* CSS Custom Properties for Wedding Themes */
-:root {
-  --font-primary: "Pattaya", cursive;
-  --font-secondary: "HelveticaNeue", "Helvetica Neue", Arial, sans-serif;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-}
-
-/* Utility classes for fonts */
 .font-pattaya {
-  font-family: var(--font-primary);
-}
-
-.font-helvetica {
-  font-family: var(--font-secondary);
-}
-
-.font-uni-chu {
-  font-family: "UNI Chu truyen thong", "Times New Roman", serif;
+  font-family: "Pattaya", cursive !important;
 }
 
 .font-nautigal {
-  font-family: "The Nautigal", cursive;
-}
-
-.font-fz-qellia {
-  font-family: "Fz Qellia", serif;
-}
-
-/* Chibi Template Fonts */
-@font-face {
-  font-family: "1FTV VIP Signora";
-  src: url("https://chungdoi.com/fonts/1FTV-VIP-Signora-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Babylonica";
-  src: url("https://chungdoi.com/fonts/Babylonica-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Uchen";
-  src: url("https://chungdoi.com/fonts/Uchen-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+  font-family: "The Nautigal", cursive !important;
 }
 
 .font-signora {
-  font-family: "1FTV VIP Signora", "Dancing Script", cursive;
+  font-family: "Dancing Script", cursive !important;
 }
 
 .font-babylonica {
-  font-family: "Babylonica", cursive;
+  font-family: "Babylonica", cursive !important;
 }
 
 .font-uchen {
-  font-family: "Uchen", serif;
+  font-family: "Uchen", serif !important;
 }
-
-.font-cormorant {
-  font-family: "Cormorant Garamond", "Times New Roman", serif;
-}
-
-.font-alex-brush {
-  font-family: "Alex Brush", "The Nautigal", cursive;
-}
-
-@font-face {
-  font-family: "Fz Aghita";
-  src: url("https://chungdoi.com/fonts/FzAghita.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-.font-fz-aghita {
-  font-family: "Fz Aghita", serif;
-}
-
-@font-face {
-  font-family: "EB Garamond";
-  src: url("https://chungdoi.com/fonts/EBGaramond-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Lora";
-  src: url("https://chungdoi.com/fonts/Lora-Regular.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Noto Serif";
-  src: url("https://chungdoi.com/fonts/NotoSerif-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Crimson Pro";
-  src: url("https://chungdoi.com/fonts/CrimsonPro-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Lexend";
-  src: url("https://chungdoi.com/fonts/Lexend-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Hoáº¡ TÃ¬nh â€” Comic Helvetic */
-@font-face {
-  font-family: "Comic Helvetic";
-  src: url("https://chungdoi.com/fonts/ComicHelvetic-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Comic Helvetic";
-  src: url("https://chungdoi.com/fonts/ComicHelvetic-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Comic Helvetic";
-  src: url("https://chungdoi.com/fonts/ComicHelvetic-Heavy.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Hoáº¡ TÃ¬nh â€” SVN-HC Elixir Sans (section headings) */
-@font-face {
-  font-family: "SVN-HC Elixir Sans";
-  src: url("https://chungdoi.com/fonts/SVN-HC Elixir Sans.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Hoáº¡ TÃ¬nh â€” Baloo Bhaijaan (announcement text) */
-@font-face {
-  font-family: "Baloo Bhaijaan";
-  src: url("https://chungdoi.com/fonts/BalooBhaijaan-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Hoáº¡ TÃ¬nh â€” Noteworthy (danh xung Co dau / Chu re) */
-@font-face {
-  font-family: "Noteworthy";
-  src: url("https://chungdoi.com/fonts/Noteworthy-Light.woff2") format("woff2");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Noteworthy";
-  src: url("https://chungdoi.com/fonts/Noteworthy-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Chateau Blue â€” DFVN New Eddy (hero couple names) */
-@font-face {
-  font-family: "DFVN New Eddy";
-  src: url("https://chungdoi.com/fonts/DFVN-NewEddy-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Chateau Blue â€” Alex Brush (script ampersand) */
-@font-face {
-  font-family: "Alex Brush";
-  src: url("https://chungdoi.com/fonts/AlexBrush-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Chateau Blue â€” Cormorant Garamond (welcome heading, variable weight 300-700) */
-@font-face {
-  font-family: "Cormorant Garamond";
-  src: url("https://chungdoi.com/fonts/CormorantGaramond-Variable.ttf") format("truetype-variations");
-  font-weight: 300 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-
-
