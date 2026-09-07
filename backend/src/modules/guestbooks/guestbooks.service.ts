@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Guestbook, GuestbookDocument } from './schemas/guestbook.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
 import { SocketGateway } from '../socket/socket.gateway';
+import { AppCacheService } from '../cache/cache.service';
 
 @Injectable()
 export class GuestbooksService {
@@ -13,6 +14,7 @@ export class GuestbooksService {
     @InjectModel(Wedding.name)
     private readonly weddingModel: Model<WeddingDocument>,
     private readonly socketGateway: SocketGateway,
+    private readonly cacheService: AppCacheService,
   ) {}
 
   private async getWeddingIdBySlug(slug: string): Promise<Types.ObjectId> {
@@ -35,6 +37,8 @@ export class GuestbooksService {
     });
     const savedGb = await gb.save();
 
+    await this.cacheService.del(`guestbook:${slug}`);
+
     // Notify clients in realtime
     this.socketGateway.notifyWeddingUpdate(slug, 'guestbook-updated');
 
@@ -42,11 +46,18 @@ export class GuestbooksService {
   }
 
   async findGuestbook(slug: string): Promise<Guestbook[]> {
+    const cacheKey = `guestbook:${slug}`;
+    const cached = await this.cacheService.get<any>(cacheKey);
+    if (cached) return cached;
+
     const weddingId = await this.getWeddingIdBySlug(slug);
-    return this.guestbookModel
+    const result = await this.guestbookModel
       .find({ weddingId, isApproved: true, deletedAt: null })
       .sort({ createdAt: -1 })
       .exec();
+
+    await this.cacheService.set(cacheKey, result, 60000);
+    return result;
   }
 
   async deleteGuestbook(slug: string, id: string): Promise<any> {
@@ -64,6 +75,8 @@ export class GuestbooksService {
         `Lời chúc với ID "${id}" không tồn tại hoặc đã bị xóa`,
       );
     }
+
+    await this.cacheService.del(`guestbook:${slug}`);
 
     // Notify clients in realtime
     this.socketGateway.notifyWeddingUpdate(slug, 'guestbook-updated');

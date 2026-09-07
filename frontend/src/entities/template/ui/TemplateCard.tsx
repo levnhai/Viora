@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, memo } from "react";
-import { Eye, Plus, ShieldCheck, Zap, Crown } from "lucide-react";
+import { ShieldCheck, Zap, Crown } from "lucide-react";
 import { TemplateConfig } from "../model/schema";
 
 interface TemplateCardProps {
@@ -75,7 +75,7 @@ export const TemplateCard = memo(function TemplateCard({
         {videoSrc ? (
           <video
             ref={videoRef}
-            src={`${videoSrc}#t=0.001`}
+            src={videoSrc}
             muted
             loop
             playsInline
@@ -137,29 +137,7 @@ export const TemplateCard = memo(function TemplateCard({
         )}
       </div>
 
-      {/* Hover Backdrop Overlay nút bấm */}
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-4 z-30 pointer-events-auto backdrop-blur-xs">
-        <div className="flex flex-col gap-2 w-full max-w-[140px] sm:max-w-[160px] transform scale-90 group-hover:scale-100 transition-transform duration-300">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onPreviewDemo?.(tpl);
-            }}
-            className="w-full py-2 rounded-full bg-white/95 text-stone-950 text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1.5 shadow-lg hover:bg-white transition-colors cursor-pointer"
-          >
-            <Eye size={13} /> Xem Demo
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onUseTemplate?.(tpl?.code || templateCode);
-            }}
-            className="w-full py-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#e0b769] text-stone-950 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg hover:brightness-110 transition-all cursor-pointer"
-          >
-            <Plus size={13} /> Tạo thiệp
-          </button>
-        </div>
-      </div>
+
 
       {/* Bottom Dark Gradient Overlay (TÊN MẪU THIỆP & GIÁ TIỀN) */}
       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/85 to-transparent pt-14 p-3 sm:p-4 text-left z-20 pointer-events-none">

@@ -413,8 +413,9 @@ export class WeddingsService {
 
       if (session) await session.commitTransaction();
 
-      // Xóa cache danh sách demo công khai khi có thiệp mới
+      // Xóa cache danh sách demo công khai và cache thiệp khi có thiệp mới
       await this.cacheService.del('weddings:public_demos');
+      await this.cacheService.del(`wedding:slug:${saved.slug}`);
 
       const result = await this.findBySlug(saved.slug);
       return { ...result, credentials };
@@ -428,6 +429,19 @@ export class WeddingsService {
 
   // Phục vụ API tương thích ngược cũ GET /weddings/:slug
   async findBySlug(slug: string): Promise<any> {
+    const cacheKey = `wedding:slug:${slug}`;
+    const cachedData = await this.cacheService.get<any>(cacheKey);
+    if (cachedData) {
+      const weddingId = cachedData._id || cachedData.id;
+      if (weddingId) {
+        this.weddingModel
+          .findByIdAndUpdate(weddingId, { $inc: { views: 1 } })
+          .exec()
+          .catch(() => {});
+      }
+      return cachedData;
+    }
+
     const wedding = await this.weddingModel
       .findOneAndUpdate(
         { slug, deletedAt: null },
@@ -472,7 +486,7 @@ export class WeddingsService {
 
     const templateCode = (wedding.templateId as any)?.code || 'temp_1';
 
-    return {
+    const result = {
       ...wedding,
       templateId: templateCode,
       themeSettings,
@@ -480,6 +494,9 @@ export class WeddingsService {
       events,
       timeline,
     };
+
+    await this.cacheService.set(cacheKey, result, 300000);
+    return result;
   }
 
   async update(slug: string, updateDto: any): Promise<any> {
@@ -776,6 +793,7 @@ export class WeddingsService {
 
       // Invalidate cache khi thông tin thiệp cưới được cập nhật
       await this.cacheService.del(`wedding:render:${slug}`);
+      await this.cacheService.del(`wedding:slug:${slug}`);
       await this.cacheService.del('weddings:public_demos');
 
       const result = await this.findBySlug(slug);

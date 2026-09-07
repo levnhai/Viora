@@ -54,3 +54,15 @@
   .buyer-dashboard__content .space-y-6 { row-gap: 1rem; }
   .buyer-dashboard__content .rounded-2xl { border-radius: 1rem; }
 }
+
+/* Hide scrollbars visually while retaining full scroll functionality */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html, body, iframe, * {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}

@@ -177,8 +177,12 @@ export const useAnalyticsTracker = () => {
   const trackedPathRef = useRef<string>("");
 
   useEffect(() => {
-    // Không track các trang admin
-    if (!pathname || pathname.startsWith("/admin")) {
+    // Không track các trang admin hoặc chế độ embed iframe xem thử demo
+    const isEmbed =
+      typeof window !== "undefined" &&
+      (window.location.search.includes("embed=true") || window.self !== window.top);
+
+    if (!pathname || pathname.startsWith("/admin") || isEmbed) {
       return;
     }
 
