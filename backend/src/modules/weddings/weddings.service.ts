@@ -37,6 +37,7 @@ import {
   FALLBACK_THEME_COLOR,
   DEFAULT_PASSWORD,
 } from './constants/theme-colors.constant';
+import { AppCacheService } from '../cache/cache.service';
 
 @Injectable()
 export class WeddingsService {
@@ -61,6 +62,7 @@ export class WeddingsService {
     private readonly guestbookModel: Model<GuestbookDocument>,
     private readonly authService: AuthService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly cacheService: AppCacheService,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
@@ -410,6 +412,9 @@ export class WeddingsService {
       }
 
       if (session) await session.commitTransaction();
+
+      // Xóa cache danh sách demo công khai khi có thiệp mới
+      await this.cacheService.del('weddings:public_demos');
 
       const result = await this.findBySlug(saved.slug);
       return { ...result, credentials };
@@ -769,6 +774,10 @@ export class WeddingsService {
 
       if (session) await session.commitTransaction();
 
+      // Invalidate cache khi thông tin thiệp cưới được cập nhật
+      await this.cacheService.del(`wedding:render:${slug}`);
+      await this.cacheService.del('weddings:public_demos');
+
       const result = await this.findBySlug(slug);
       return { ...result, credentials };
     } catch (err) {
@@ -779,8 +788,25 @@ export class WeddingsService {
     }
   }
 
-  // ================= WEDDING RENDER API (NEW) =================
+  // ================= WEDDING RENDER API (OPTIMIZED WITH CACHE) =================
   async getRenderData(slug: string): Promise<any> {
+    const cacheKey = `wedding:render:${slug}`;
+
+    // 1. Kiểm tra cache RAM trước
+    const cachedData = await this.cacheService.get<any>(cacheKey);
+    if (cachedData) {
+      // Tăng view bất đồng bộ trong background, không làm chậm response trả về cho khách
+      const weddingId = cachedData.wedding?.id || cachedData.wedding?._id;
+      if (weddingId) {
+        this.weddingModel
+          .findByIdAndUpdate(weddingId, { $inc: { views: 1 } })
+          .exec()
+          .catch(() => {});
+      }
+      return cachedData;
+    }
+
+    // 2. Cache miss: Truy vấn MongoDB
     const wedding = await this.weddingModel
       .findOne({ slug, deletedAt: null })
       .exec();
@@ -824,7 +850,7 @@ export class WeddingsService {
       })
       .exec();
 
-    return {
+    const renderData = {
       wedding: {
         ...wedding.toObject(),
         id: wedding._id,
@@ -843,25 +869,43 @@ export class WeddingsService {
         rsvpConfirmedCount,
       },
     };
+
+    // 3. Lưu vào Cache 5 phút (300.000 ms) để phục vụ hàng ngàn lượt xem tiếp theo
+    await this.cacheService.set(cacheKey, renderData, 300000);
+
+    return renderData;
   }
 
   async getPublicDemos(): Promise<any> {
-    // Lấy các bản thiệp mới nhất có source = 'demo'
+    const cacheKey = 'weddings:public_demos';
+
+    // 1. Kiểm tra cache
+    const cachedDemos = await this.cacheService.get<any>(cacheKey);
+    if (cachedDemos) {
+      return cachedDemos;
+    }
+
+    // 2. Cache miss: Truy vấn MongoDB
     const demoWeddings = await this.weddingModel
       .find({ source: 'demo', deletedAt: null })
       .populate('templateId', 'code name _id')
       .sort({ createdAt: -1 })
       .exec();
 
+    let result: any[];
     if (!demoWeddings || demoWeddings.length === 0) {
-      // Nếu chưa tìm thấy source = 'demo', trả về các bản thiệp mới nhất làm fallback
-      return await this.weddingModel
+      result = await this.weddingModel
         .find({ deletedAt: null })
         .populate('templateId', 'code name _id')
         .sort({ createdAt: -1 })
         .exec();
+    } else {
+      result = demoWeddings;
     }
 
-    return demoWeddings;
+    // 3. Lưu vào Cache 10 phút (600.000 ms)
+    await this.cacheService.set(cacheKey, result, 600000);
+
+    return result;
   }
 }

@@ -117,19 +117,23 @@ export function AllTemplatesSection() {
       className="py-12 sm:py-20 bg-[#121111] text-white min-h-screen relative overflow-hidden"
     >
       {/* Background Ambient Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#ff007a]/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-br from-[#d4af37]/10 via-[#c5a880]/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
-            Tất cả mẫu thiệp cưới
-            <span className="text-[#ff007a] italic font-serif">
-              online đẹp nhất
+        <div className="text-center max-w-3xl mx-auto space-y-3.5">
+          <p className="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#e0b769] font-medium font-sans">
+            Bộ Sưu Tập Thiệp Cưới Trực Tuyến 2026
+          </p>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-normal tracking-wide text-white leading-[1.25]">
+            Tất Cả Mẫu Thiệp Cưới{" "}
+            <span className="italic font-light text-[#e0b769]">
+              Online Đẹp Nhất
             </span>
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-stone-300/90 max-w-xl mx-auto leading-relaxed font-light font-sans">
             Khám phá trọn bộ các mẫu thiệp cưới trực tuyến sang trọng, hiện đại.
             Chọn mẫu yêu thích và gửi đăng ký để chuyên viên hỗ trợ tạo thiệp
             ngay lập tức.
@@ -144,10 +148,10 @@ export function AllTemplatesSection() {
               <button
                 key={tab.id}
                 onClick={() => setSelectedTier(tab.id)}
-                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
+                className={`px-5 py-2.5 rounded-2xl text-xs tracking-wide transition-all cursor-pointer whitespace-nowrap border ${
                   selectedTier === tab.id
-                    ? "bg-[#ff007a] text-white border-[#ff007a] shadow-lg shadow-pink-600/30"
-                    : "bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:text-white"
+                    ? "bg-gradient-to-r from-[#d4af37] to-[#e0b769] text-stone-950 font-semibold border-[#e0b769] shadow-lg shadow-amber-900/20"
+                    : "bg-white/5 text-stone-300 font-normal border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {tab.label}
@@ -161,14 +165,14 @@ export function AllTemplatesSection() {
             <div className="relative w-full sm:w-60">
               <Search
                 size={16}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm kiếm mẫu thiệp..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/10 border border-white/10 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#ff007a] focus:bg-white/15 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/10 border border-white/10 text-xs text-white placeholder-stone-400 focus:outline-none focus:border-[#e0b769] focus:bg-white/15 transition-all"
               />
             </div>
           </div>
@@ -177,7 +181,7 @@ export function AllTemplatesSection() {
         {/* Template Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 space-y-3">
-            <RefreshCw size={28} className="animate-spin text-[#ff007a]" />
+            <RefreshCw size={28} className="animate-spin text-[#e0b769]" />
             <p className="text-xs text-slate-400 font-medium">
               Đang tải danh sách mẫu thiệp cưới...
             </p>

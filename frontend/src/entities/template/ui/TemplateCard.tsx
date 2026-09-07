@@ -99,19 +99,19 @@ export const TemplateCard = memo(function TemplateCard({
       {/* Top Left Tier Badge (Cơ Bản, Tiêu Chuẩn, Cao Cấp) */}
       <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-30 flex items-center gap-1 sm:gap-1.5 pointer-events-none">
         {tpl?.tier === "basic" && (
-          <span className="bg-emerald-600/90 text-white text-[9px] sm:text-[10px] font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-emerald-400/40 tracking-wider flex items-center gap-1 backdrop-blur-md">
-            <ShieldCheck size={11} className="text-emerald-300" />
+          <span className="bg-black/50 backdrop-blur-md text-stone-300 text-[9px] sm:text-[10px] font-medium uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-white/15 tracking-wider flex items-center gap-1">
+            <ShieldCheck size={11} className="text-stone-300" />
             <span>Cơ Bản</span>
           </span>
         )}
         {tpl?.tier === "standard" && (
-          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 text-white text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-pink-400/40 tracking-wider flex items-center gap-1 backdrop-blur-md">
-            <Zap size={11} className="text-amber-300 fill-amber-300 animate-pulse" />
+          <span className="bg-black/60 backdrop-blur-md text-[#e0b769] text-[9px] sm:text-[10px] font-semibold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-[#e0b769]/40 tracking-wider flex items-center gap-1">
+            <Zap size={11} className="text-[#e0b769] fill-[#e0b769]" />
             <span>Tiêu Chuẩn</span>
           </span>
         )}
         {tpl?.tier === "pro" && (
-          <span className="bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 text-white text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-amber-300/50 tracking-wider flex items-center gap-1 backdrop-blur-md">
+          <span className="bg-black/60 backdrop-blur-md text-amber-200 text-[9px] sm:text-[10px] font-semibold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg border border-amber-300/50 tracking-wider flex items-center gap-1">
             <Crown size={11} className="text-amber-300 fill-amber-300" />
             <span>Cao Cấp</span>
           </span>
@@ -121,66 +121,66 @@ export const TemplateCard = memo(function TemplateCard({
       {/* Top Badges (Ghim, Mới, Hot) */}
       <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-30 flex items-center gap-1 sm:gap-1.5 pointer-events-none">
         {tpl?.isPinned && (
-          <span className="bg-amber-400 text-slate-950 text-[8px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full shadow-lg border border-amber-300 flex items-center gap-0.5">
+          <span className="bg-amber-400/90 text-stone-950 text-[8px] sm:text-[9px] font-bold uppercase px-2 py-0.5 rounded-full shadow-lg border border-amber-300 flex items-center gap-0.5">
             📌 Ghim
           </span>
         )}
         {tpl?.isNew && (
-          <span className="bg-[#ff0055] text-white text-[8px] sm:text-[10px] font-extrabold uppercase px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full shadow-md">
+          <span className="bg-rose-900/80 backdrop-blur-md text-rose-200 text-[8px] sm:text-[9px] font-medium uppercase px-2 py-0.5 rounded-full shadow-md border border-rose-500/30">
             Mới
           </span>
         )}
         {tpl?.isHot && (
-          <span className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[8px] sm:text-[10px] font-extrabold uppercase px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full shadow-md">
+          <span className="bg-amber-900/80 backdrop-blur-md text-amber-200 text-[8px] sm:text-[9px] font-medium uppercase px-2 py-0.5 rounded-full shadow-md border border-amber-500/30">
             Hot
           </span>
         )}
       </div>
 
       {/* Hover Backdrop Overlay nút bấm */}
-      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-4 z-30 pointer-events-auto">
+      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-4 z-30 pointer-events-auto backdrop-blur-xs">
         <div className="flex flex-col gap-2 w-full max-w-[140px] sm:max-w-[160px] transform scale-90 group-hover:scale-100 transition-transform duration-300">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onPreviewDemo?.(tpl);
             }}
-            className="w-full py-1.5 sm:py-2 rounded-full bg-white text-slate-950 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 shadow-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-full py-2 rounded-full bg-white/95 text-stone-950 text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1.5 shadow-lg hover:bg-white transition-colors cursor-pointer"
           >
-            <Eye size={12} /> Xem Demo
+            <Eye size={13} /> Xem Demo
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onUseTemplate?.(tpl?.code || templateCode);
             }}
-            className="w-full py-1.5 sm:py-2 rounded-full bg-[#ff007a] text-white text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 shadow-lg hover:bg-pink-600 transition-colors cursor-pointer"
+            className="w-full py-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#e0b769] text-stone-950 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg hover:brightness-110 transition-all cursor-pointer"
           >
-            <Plus size={12} /> Tạo thiệp
+            <Plus size={13} /> Tạo thiệp
           </button>
         </div>
       </div>
 
       {/* Bottom Dark Gradient Overlay (TÊN MẪU THIỆP & GIÁ TIỀN) */}
-      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-10 p-2.5 sm:p-4 text-left z-20 pointer-events-none">
-        <div className="flex items-center justify-between gap-1.5">
-          <h3 className="text-xs sm:text-base font-bold text-white leading-tight drop-shadow-sm line-clamp-1">
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/85 to-transparent pt-14 p-3 sm:p-4 text-left z-20 pointer-events-none">
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="text-xs sm:text-sm font-serif font-normal text-white tracking-wide leading-tight line-clamp-1">
             {tpl.name}
           </h3>
 
           <div className="text-right shrink-0">
-            <span className="text-[11px] sm:text-sm font-black text-pink-400 font-mono">
+            <span className="text-xs sm:text-sm font-semibold text-[#e0b769] font-sans">
               {tpl.price.toLocaleString("vi-VN")}đ
             </span>
           </div>
         </div>
 
         {/* Các thẻ phong cách (Pill Badges) */}
-        <div className="flex items-center gap-1 mt-1.5 sm:mt-2 flex-wrap">
+        <div className="flex items-center gap-1.5 mt-2 flex-wrap">
           {displayTags.slice(0, 2).map((tag, idx) => (
             <span
               key={idx}
-              className="bg-white/20 backdrop-blur-md text-[9px] sm:text-[10px] font-medium text-white/90 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-white/10"
+              className="bg-white/10 backdrop-blur-md text-[9px] sm:text-[10px] font-light text-stone-300 px-2.5 py-0.5 rounded-full border border-white/10"
             >
               {tag}
             </span>

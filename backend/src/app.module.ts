@@ -17,6 +17,7 @@ import { NewsModule } from './modules/news/news.module';
 import { SocketModule } from './modules/socket/socket.module';
 import { TemplateRequestsModule } from './modules/template-requests/template-requests.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { AppCacheModule } from './modules/cache/cache.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`, '.env'],
     }),
+    AppCacheModule,
     ThrottlerModule.forRoot([
       {
         name: 'default',

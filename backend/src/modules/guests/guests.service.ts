@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Guest, GuestDocument } from './schemas/guest.schema';
 import { Wedding, WeddingDocument } from '../weddings/schemas/wedding.schema';
 import { SocketGateway } from '../socket/socket.gateway';
+import { AppCacheService } from '../cache/cache.service';
 
 function escapeRegex(text: string): string {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -17,6 +18,7 @@ export class GuestsService {
     @InjectModel(Wedding.name)
     private readonly weddingModel: Model<WeddingDocument>,
     private readonly socketGateway: SocketGateway,
+    private readonly cacheService: AppCacheService,
   ) {}
 
   private async getWeddingIdBySlug(slug: string): Promise<Types.ObjectId> {
@@ -63,6 +65,9 @@ export class GuestsService {
       });
       savedGuest = await newGuest.save();
     }
+
+    // Invalidate cache render thiệp để cập nhật số lượng khách xác nhận mới
+    await this.cacheService.del(`wedding:render:${slug}`);
 
     // Notify clients in realtime
     this.socketGateway.notifyWeddingUpdate(slug, 'guests-updated');
