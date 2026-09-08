@@ -303,7 +303,7 @@ export function LoginPage() {
 
   return (
     <div
-      className="theme-pink min-h-screen bg-[#faf5f0] flex select-none antialiased"
+      className="theme-pink min-h-screen bg-[#faf5f0] flex antialiased"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       {/* ── BANNER TRÁI (ẨN TRÊN MOBILE) ────────── */}
