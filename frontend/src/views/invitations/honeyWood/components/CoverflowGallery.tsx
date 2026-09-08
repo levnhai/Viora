@@ -86,12 +86,31 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
         .font-serif-title {
           font-family: "Playfair Display", "Cormorant Garamond", serif;
         }
+        @keyframes gold-shine-sweep {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .gold-shine-text {
+          background: linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #fef0d2 25%,
+            #e7bf78 50%,
+            #fef0d2 75%,
+            #ffffff 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: gold-shine-sweep 5s linear infinite;
+        }
       `}</style>
 
       {/* Header */}
       <GsapReveal direction="up" distance={30}>
         <div className="flex flex-col items-center mb-6">
-          <h2 className="font-serif-title tracking-[0.25em] text-lg sm:text-xl md:text-2xl font-bold uppercase text-[#FBFBFB] text-center">
+          <h2 className="font-serif-title tracking-[0.25em] text-lg sm:text-xl md:text-2xl font-bold uppercase text-center gold-shine-text">
             ALBUM ẢNH
           </h2>
           <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#e7bf78] to-transparent opacity-60 mt-2" />

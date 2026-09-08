@@ -20,6 +20,7 @@ export function WeddingInvitationDemoPage({
   const [loading, setLoading] = useState(true);
   const [weddingData, setWeddingData] = useState<WeddingData | null>(null);
   const [isEmbed, setIsEmbed] = useState(false);
+  const [guestName, setGuestName] = useState<string | undefined>();
 
   useEffect(() => {
     let tId: string | null = null;
@@ -29,6 +30,8 @@ export function WeddingInvitationDemoPage({
       const params = new URLSearchParams(window.location.search);
       embedMode = params.get("embed") === "true";
       tId = params.get("templateId");
+      const toParam = params.get("to") || params.get("guest");
+      if (toParam) setGuestName(toParam);
       setIsEmbed(embedMode);
     }
 
@@ -125,6 +128,7 @@ export function WeddingInvitationDemoPage({
       {/* Render đúng template package tương ứng */}
       <LiveView
         weddingData={weddingData}
+        guestName={guestName}
         previewMode={isEmbed ? "invitation" : undefined}
       />
     </div>

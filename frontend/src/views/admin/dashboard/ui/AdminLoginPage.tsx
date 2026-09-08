@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, Loader2, ArrowRight, ShieldCheck } from "lucide-react";
+import { Lock, Mail, Loader2, ArrowRight, ShieldCheck, Heart } from "lucide-react";
 import { authService } from "@/features/auth/api/authService";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function AdminLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+      setError("Vui lòng nhập đầy đủ email/tài khoản và mật khẩu.");
       return;
     }
 
@@ -25,14 +25,14 @@ export function AdminLoginPage() {
 
     try {
       const data = await authService.login(email, password);
-      
+
       if (data.role !== "admin" && data.role !== "staff") {
         throw new Error("Tài khoản không có quyền quản trị viên.");
       }
 
       localStorage.setItem("role", data.role);
       localStorage.setItem("username", data.name || email);
-      
+
       toast.success("Đăng nhập quản trị thành công!");
       router.push("/admin");
     } catch (err: any) {
@@ -44,58 +44,65 @@ export function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f0e6e6] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-[#c9828e]/20 overflow-hidden">
-        
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
         {/* Header */}
-        <div className="bg-[#8b3a52] p-8 text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] pointer-events-none"></div>
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-            <ShieldCheck size={32} className="text-white" />
+        <div className="bg-gradient-to-tr from-indigo-600 via-indigo-600 to-violet-600 p-8 text-center relative overflow-hidden text-white">
+          <div className="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center mx-auto mb-3 backdrop-blur-md shadow-inner border border-white/20">
+            <Heart size={28} className="text-white fill-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-wide" style={{ fontFamily: "'EB Garamond', serif" }}>
-            Quản Trị Hệ Thống
-          </h1>
-          <p className="text-white/80 text-sm mt-2">Viora Wedding Admin Portal</p>
+          <div className="flex items-center justify-center gap-1.5 mb-1">
+            <span className="text-xl font-black tracking-wide">VIORA</span>
+            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-white/20 text-white">
+              ADMIN
+            </span>
+          </div>
+          <p className="text-white/80 text-xs">
+            Trung tâm quản trị hệ thống thiệp cưới
+          </p>
         </div>
 
         {/* Form */}
         <div className="p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 flex items-start gap-2">
-              <span className="font-semibold text-red-700">Lỗi:</span> {error}
+            <div className="mb-6 p-4 bg-rose-50 text-rose-700 text-xs font-semibold rounded-xl border border-rose-200/80 flex items-start gap-2">
+              <span className="font-bold">Lỗi:</span> {error}
             </div>
           )}
 
-          <form onSubmit={handleLogin} autoComplete="off" className="space-y-6">
+          <form onSubmit={handleLogin} autoComplete="off" className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-[#2c1810]">Tài khoản / Email quản trị</label>
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Tài khoản hoặc Email
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail size={18} className="text-[#c9828e]" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Mail size={17} />
                 </div>
                 <input
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#faf8f5] border border-[#e6d5d8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8b3a52]/30 focus:border-[#8b3a52] transition-all text-[#2c1810]"
-                  placeholder="Nhập tài khoản hoặc email"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-slate-800 text-sm font-medium"
+                  placeholder="admin@viora.vn hoặc username"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-[#2c1810]">Mật khẩu</label>
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Mật khẩu
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock size={18} className="text-[#c9828e]" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Lock size={17} />
                 </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#faf8f5] border border-[#e6d5d8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8b3a52]/30 focus:border-[#8b3a52] transition-all text-[#2c1810]"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-slate-800 text-sm font-medium"
                   placeholder="••••••••"
                   required
                 />
@@ -105,7 +112,7 @@ export function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#8b3a52] hover:bg-[#722f42] text-white py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-md shadow-[#8b3a52]/20"
+              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-md shadow-indigo-600/20 hover:scale-[1.01]"
             >
               {loading ? (
                 <>
@@ -119,11 +126,12 @@ export function AdminLoginPage() {
             </button>
           </form>
         </div>
-        
+
         {/* Footer */}
-        <div className="bg-[#faf5f0] p-4 text-center border-t border-[#c9828e]/10">
-          <p className="text-xs text-[#7a5c4f]">
-            Khu vực dành riêng cho nhân viên. <br/>Mọi truy cập trái phép đều được ghi nhận.
+        <div className="bg-slate-50 p-4 text-center border-t border-slate-100">
+          <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
+            <ShieldCheck size={14} className="text-emerald-500" />
+            Khu vực bảo mật dành riêng cho quản trị viên Viora
           </p>
         </div>
       </div>

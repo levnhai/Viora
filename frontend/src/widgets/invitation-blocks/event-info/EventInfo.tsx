@@ -2,8 +2,9 @@ import { ComponentType } from "react";
 import { MinimalEventInfo } from "./variants/MinimalEventInfo";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { EventInfo1 } from "./variants/EventInfo1";
+import { EventInfoWood } from "./variants/EventInfoWood";
 
-export type EventInfoKey = "minimal" | "EventInfo1";
+export type EventInfoKey = "minimal" | "EventInfo1" | "wood";
 
 export interface EventInfoProps {
   variantId: EventInfoKey;
@@ -18,6 +19,7 @@ export interface EventInfoProps {
 const eventInfoRegistry: Record<EventInfoKey, ComponentType<any>> = {
   minimal: MinimalEventInfo,
   EventInfo1: EventInfo1,
+  wood: EventInfoWood,
 };
 
 export function EventInfo({ variantId, ...props }: EventInfoProps) {

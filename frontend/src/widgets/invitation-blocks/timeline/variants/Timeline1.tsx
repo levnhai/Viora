@@ -202,25 +202,29 @@ export function Timeline1({
 
             {/* Outer Card */}
             <div
-              className={`py-10 sm:py-14 px-6 sm:px-12 relative z-10 flex flex-col items-center overflow-hidden bg-center bg-repeat ${
+              className={`py-10 sm:py-14 px-6 sm:px-12 relative z-10 flex flex-col items-center overflow-hidden ${
                 isPaper
-                  ? "rounded-2xl sm:rounded-3xl shadow-[0_12px_36px_-8px_rgba(124,106,96,0.25)] border border-[#7c6a60]/30"
-                  : "rounded-[24px] sm:rounded-[32px] shadow-2xl border border-[#DCE7CF]/25"
+                  ? "rounded-2xl sm:rounded-3xl shadow-[0_12px_36px_-8px_rgba(124,106,96,0.25)] border border-[#7c6a60]/30 bg-center bg-repeat"
+                  : "rounded-[24px] sm:rounded-[32px] shadow-2xl border border-[#DCE7CF]/25 bg-center bg-repeat"
               }`}
-              style={{
-                backgroundColor: isPaper
-                  ? "rgb(236, 218, 199)"
-                  : cardBgColor?.includes("gradient")
-                  ? undefined
-                  : cardBgColor,
-                backgroundImage: isPaper ? `url(${bgPaper.src})` : undefined,
-                backgroundBlendMode: isPaper ? "multiply" : undefined,
-                background:
-                  !isPaper && cardBgColor?.includes("gradient")
-                    ? cardBgColor
-                    : undefined,
-                color: mainTextColor,
-              }}
+              style={
+                isPaper
+                  ? {
+                      backgroundColor: "rgb(236, 218, 199)",
+                      backgroundImage: `url(${bgPaper.src})`,
+                      backgroundBlendMode: "multiply",
+                      color: mainTextColor,
+                    }
+                  : {
+                      background: cardBgColor?.includes("gradient")
+                        ? cardBgColor
+                        : undefined,
+                      backgroundColor: cardBgColor?.includes("gradient")
+                        ? undefined
+                        : cardBgColor,
+                      color: mainTextColor,
+                    }
+              }
             >
               {/* Decorative Leaves for Paper Theme */}
               {isPaper && (

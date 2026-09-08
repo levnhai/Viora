@@ -133,10 +133,42 @@ export function MinimalCoupleSpotlight({
         .animate-sway-slow {
           animation: sway-slow 6s ease-in-out infinite;
         }
+        @keyframes gold-shine-sweep {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .gold-shine-text {
+          background: linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #fef0d2 25%,
+            #e7bf78 50%,
+            #fef0d2 75%,
+            #ffffff 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: gold-shine-sweep 5s linear infinite;
+        }
+        @keyframes border-breathe {
+          0%, 100% {
+            border-color: rgba(231, 191, 120, 0.35);
+            box-shadow: 0 25px 60px rgba(91, 45, 24, 0.4);
+          }
+          50% {
+            border-color: rgba(244, 215, 157, 0.65);
+            box-shadow: 0 25px 65px rgba(213, 169, 77, 0.25);
+          }
+        }
+        .card-breathe {
+          animation: border-breathe 4s ease-in-out infinite;
+        }
       `}</style>
 
       {/* Main Dark Rose Card */}
-      <div className="relative max-w-xl mx-auto rounded-[24px] bg-[linear-gradient(155deg,#5b2d18_0%,#3c1f10_55%,#21120b_100%)] text-[#fff1cf] shadow-[0_25px_60px_rgba(91,45,24,0.4)] px-6 py-10 sm:px-10 sm:py-14 border border-[#e7bf78]/40">
+      <div className="relative max-w-xl mx-auto rounded-[24px] bg-[linear-gradient(155deg,#5b2d18_0%,#3c1f10_55%,#21120b_100%)] text-[#fff1cf] shadow-[0_25px_60px_rgba(91,45,24,0.4)] px-6 py-10 sm:px-10 sm:py-14 border border-[#e7bf78]/40 card-breathe">
         {/* Overflowing Right Woodland Ornament (img_16) */}
         <div className="absolute -right-16 sm:-right-14 md:-right-16 top-[8%] w-28 sm:w-44 md:w-56 z-0 pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] animate-sway-slow">
           <img
@@ -152,7 +184,7 @@ export function MinimalCoupleSpotlight({
         <div className="relative z-10 flex flex-col items-center text-center">
           {/* Header Title */}
           <GsapReveal direction="up" distance={30}>
-            <h2 className="font-serif-title tracking-[0.25em] text-xs sm:text-sm font-bold uppercase text-[#f4d79d] text-center mb-8 sm:mb-10 drop-shadow-xs">
+            <h2 className="font-serif-title tracking-[0.25em] text-xs sm:text-sm font-bold uppercase text-center mb-8 sm:mb-10 text-[#fcd34d] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               THÔNG TIN LỄ CƯỚI
             </h2>
           </GsapReveal>
@@ -222,7 +254,7 @@ export function MinimalCoupleSpotlight({
           >
             {/* Groom */}
             <div className="flex flex-col items-center">
-              <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold text-white tracking-wide mb-1 leading-tight drop-shadow-xs">
+              <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold tracking-wide mb-1 leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 {groomName || "Đặng Hoàng Long"}
               </h3>
               <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">
@@ -231,13 +263,13 @@ export function MinimalCoupleSpotlight({
             </div>
 
             {/* Ampersand Icon */}
-            <div className="font-calligraphy text-3xl sm:text-4xl text-[#e7bf78] my-2 select-none pointer-events-none drop-shadow-xs">
+            <div className="font-calligraphy text-3xl sm:text-4xl text-[#fcd34d] my-2 select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] animate-pulse">
               &amp;
             </div>
 
             {/* Bride */}
             <div className="flex flex-col items-center">
-              <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold text-white tracking-wide mb-1 leading-tight drop-shadow-xs">
+              <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold tracking-wide mb-1 leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 {brideName || "Vũ Bảo Ngọc"}
               </h3>
               <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">

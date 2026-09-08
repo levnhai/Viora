@@ -1,88 +1,110 @@
-import { Menu, Search, Sun, Bell, Mail, LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { authService } from "@/features/auth/api/authService";
+"use client";
 
-export function AdminHeader() {
-  const router = useRouter();
+import { useState, useEffect } from "react";
+import { Search, Menu, Radio, ExternalLink } from "lucide-react";
+import { AdminCommandPalette } from "./AdminCommandPalette";
+import { AdminNotificationMenu } from "./AdminNotificationMenu";
+import { AdminUserMenu } from "./AdminUserMenu";
+import { AdminThemeToggle } from "./AdminThemeToggle";
 
-  const handleLogout = async () => {
-    try {
-      await authService.logout();
-      router.push("/admin/login-2h");
-    } catch (error) {
-      console.error("Lỗi đăng xuất:", error);
-    }
-  };
+interface AdminHeaderProps {
+  onToggleMobileSidebar?: () => void;
+  onlineCount?: number;
+}
+
+export function AdminHeader({
+  onToggleMobileSidebar,
+  onlineCount = 1,
+}: AdminHeaderProps) {
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
+
+  // Global Ctrl+K / Cmd+K listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
-      <div className="flex items-center gap-4">
-        <button className="text-slate-400 hover:text-slate-600 md:hidden">
-          <Menu size={20} />
-        </button>
-        <div className="relative hidden sm:block">
-          <Search
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-          />
-          <input
-            type="text"
-            placeholder="Tìm kiếm nhanh..."
-            className="pl-9 pr-12 py-1.5 bg-slate-100 border-none rounded-lg text-sm w-[280px] focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-          />
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
-            <span className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 text-slate-400 font-mono bg-white">
-              Ctrl
-            </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 text-slate-400 font-mono bg-white">
-              K
-            </span>
-          </div>
-        </div>
-      </div>
+    <>
+      <header className="h-16 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 z-30 sticky top-0 transition-colors">
+        {/* Left: Mobile Toggle & Quick Search */}
+        <div className="flex items-center gap-3">
+          {onToggleMobileSidebar && (
+            <button
+              onClick={onToggleMobileSidebar}
+              className="p-2 -ml-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 md:hidden transition-colors"
+              title="Mở menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
 
-      <div className="flex items-center gap-5">
-        <button className="text-slate-400 hover:text-slate-600">
-          <Sun size={20} />
-        </button>
-        <div className="relative">
-          <button className="text-slate-400 hover:text-slate-600">
-            <Bell size={20} />
-          </button>
-          <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">
-            5
-          </span>
-        </div>
-        <div className="relative">
-          <button className="text-slate-400 hover:text-slate-600">
-            <Mail size={20} />
-          </button>
-          <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">
-            3
-          </span>
-        </div>
-        <div className="h-6 w-px bg-slate-200 mx-1" />
-        <div className="flex items-center gap-3 cursor-pointer group">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors">
-              Super Admin
-            </p>
-            <p className="text-[11px] text-slate-400">Quản trị viên</p>
-          </div>
-          <img
-            src="https://i.pravatar.cc/150?img=11"
-            alt="Avatar"
-            className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
-          />
+          {/* Quick Search trigger button */}
           <button
-            onClick={handleLogout}
-            className="text-slate-400 hover:text-red-500 ml-2"
-            title="Đăng xuất"
+            onClick={() => setIsCommandOpen(true)}
+            className="flex items-center gap-3 px-3.5 py-1.5 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 rounded-xl text-xs text-slate-500 dark:text-slate-400 w-44 sm:w-64 md:w-80 border border-slate-200/60 dark:border-slate-700/60 transition-all group"
           >
-            <LogOut size={18} />
+            <Search className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+            <span className="truncate">Tìm kiếm nhanh...</span>
+            <div className="ml-auto flex items-center gap-1">
+              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-slate-300/80 dark:border-slate-600 font-mono bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-2xs">
+                Ctrl
+              </kbd>
+              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-slate-300/80 dark:border-slate-600 font-mono bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-2xs">
+                K
+              </kbd>
+            </div>
           </button>
         </div>
-      </div>
-    </header>
+
+        {/* Right: Realtime status, View Site, Notifications & Profile */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Live Online Badge */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-xs font-semibold shadow-2xs">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="flex items-center gap-1">
+              <Radio className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{onlineCount} Online</span>
+            </span>
+          </div>
+
+          {/* Quick External Link to Public Site */}
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            title="Mở website khách hàng"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Trang chủ</span>
+          </a>
+
+          {/* Theme Toggle (Dark / Light) */}
+          <AdminThemeToggle />
+
+          {/* Notifications Popover */}
+          <AdminNotificationMenu />
+
+          {/* User Account Popover */}
+          <AdminUserMenu />
+        </div>
+      </header>
+
+      {/* Command Palette Modal */}
+      <AdminCommandPalette
+        isOpen={isCommandOpen}
+        onClose={() => setIsCommandOpen(false)}
+      />
+    </>
   );
 }

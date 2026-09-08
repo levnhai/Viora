@@ -7,13 +7,15 @@ import { VerticalTimeline } from "./variants/VerticalTimeline";
 import { SimpleList } from "./variants/SimpleList";
 import { MinimalTimeline } from "./variants/MinimalTimeline";
 import { Timeline1 } from "./variants/Timeline1";
+import { TimelineWood } from "./variants/TimelineWood";
 
 export type TimelineKey =
   | "vertical"
   | "slider"
   | "simple"
   | "minimal"
-  | "Timeline1";
+  | "Timeline1"
+  | "wood";
 
 export interface TimelineProps {
   variant: TimelineKey;
@@ -31,6 +33,7 @@ const timelineRegistry: Record<TimelineKey, ComponentType<any>> = {
   simple: SimpleList,
   minimal: MinimalTimeline,
   Timeline1: Timeline1,
+  wood: TimelineWood,
 };
 
 export function Timeline({

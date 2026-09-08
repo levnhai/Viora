@@ -173,7 +173,7 @@ export function AdminAnalyticsSection({
 
   const timeline = data?.timeline || [];
   const effectiveTimeline = timeline.length > 0 ? timeline : (() => {
-    const fallback = [];
+    const fallback: any[] = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);

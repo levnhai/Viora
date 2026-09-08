@@ -1,10 +1,9 @@
 "use client";
 
-import { AdminSidebar } from "@/widgets/admin";
+import { AdminLayout } from "@/widgets/admin";
 import { InvitationCreateProvider, useInvitationCreate } from "../model/InvitationCreateProvider";
 import { InvitationTemplateSelector } from "@/widgets/invitation-builder";
 import { TemplateDetailModal } from "@/widgets/invitation-builder";
-
 import { InvitationEditorScreen } from "@/widgets/invitation-builder";
 
 function InvitationCreateContent() {
@@ -15,22 +14,17 @@ function InvitationCreateContent() {
   }
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
-      <InvitationTemplateSelector />
-      <TemplateDetailModal />
-    </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto">
+        <InvitationTemplateSelector />
+        <TemplateDetailModal />
+      </div>
+    </AdminLayout>
   );
 }
 
 function InvitationCreateLayout() {
-  const { step } = useInvitationCreate();
-
-  return (
-    <div className="min-h-screen bg-[#f8fafc] flex text-slate-800" style={{ fontFamily: "'Inter', sans-serif" }}>
-      {step === "select_template" && <AdminSidebar />}
-      <InvitationCreateContent />
-    </div>
-  );
+  return <InvitationCreateContent />;
 }
 
 export function AdminInvitationCreatePage() {

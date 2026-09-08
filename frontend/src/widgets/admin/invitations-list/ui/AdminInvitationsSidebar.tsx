@@ -1,93 +1,143 @@
-import { ArrowUpRight, Download, Trash2, Plus } from "lucide-react";
+import { Download, Trash2, Plus } from "lucide-react";
+import Link from "next/link";
 
-export function AdminInvitationsSidebar({ topTemplatesData = [] }: { topTemplatesData?: any[] }) {
-  const topTemplates = topTemplatesData.length > 0 ? topTemplatesData : [
-    {
-      id: 1,
-      name: "Chưa có dữ liệu",
-      count: 0,
-      percentage: 0,
-      thumbnail: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=100&q=80",
-    }
-  ];
+export function AdminInvitationsSidebar({
+  topTemplatesData = [],
+}: {
+  topTemplatesData?: any[];
+}) {
+  const topTemplates =
+    topTemplatesData.length > 0
+      ? topTemplatesData
+      : [
+          {
+            id: 1,
+            name: "Chưa có dữ liệu",
+            count: 0,
+            percentage: 0,
+            thumbnail:
+              "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=100&q=80",
+          },
+        ];
 
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Top Templates Stats */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <h3 className="font-semibold text-slate-800 mb-1">Thống kê theo mẫu</h3>
-        <p className="text-xs text-slate-500 mb-4">Top mẫu thiệp được sử dụng nhiều nhất</p>
-        
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
+        <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1">
+          Thống kê theo mẫu
+        </h3>
+        <p className="text-xs text-slate-400 mb-4">
+          Top mẫu thiệp được sử dụng nhiều nhất
+        </p>
+
         <div className="space-y-4">
           {topTemplates.map((item, idx) => (
-            <div key={item._id || item.id} className="flex items-center gap-3">
-              <span className="text-sm font-medium text-slate-400 w-3">{idx + 1}</span>
-              <img src={item.thumbnail} alt={item.name} className="w-8 h-10 object-cover rounded shadow-sm border border-slate-100" />
-              <div className="flex-1">
+            <div key={item._id || item.id || idx} className="flex items-center gap-3">
+              <span className="text-xs font-bold text-slate-400 w-3">
+                {idx + 1}
+              </span>
+              <img
+                src={item.thumbnail}
+                alt={item.name}
+                className="w-8 h-10 object-cover rounded-lg shadow-2xs border border-slate-200 dark:border-slate-700"
+              />
+              <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs font-semibold text-slate-700">{item.name}</span>
-                  <span className="text-xs font-medium text-slate-500">{item.percentage}%</span>
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
+                    {item.name}
+                  </span>
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 font-mono ml-2">
+                    {item.percentage}%
+                  </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-slate-400">{item.count} thiệp</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
-                  <div 
-                    className="h-full bg-pink-500 rounded-full" 
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-rose-500 to-indigo-500 rounded-full"
                     style={{ width: `${item.percentage}%` }}
-                  ></div>
+                  />
                 </div>
               </div>
             </div>
           ))}
         </div>
-        
-        <button className="w-full mt-5 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-          Xem tất cả thống kê
-        </button>
+
+        <Link
+          href="/admin/invitations/create"
+          className="w-full mt-5 py-2 block text-center rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+        >
+          Xem tất cả mẫu thiệp
+        </Link>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <h3 className="font-semibold text-slate-800 mb-4">Thao tác nhanh</h3>
-        <div className="space-y-3">
-          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-indigo-50 border border-transparent hover:border-indigo-100 transition-colors group text-left">
-            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors shrink-0">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
+        <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-4">
+          Thao tác nhanh
+        </h3>
+        <div className="space-y-2">
+          <Link
+            href="/admin/invitations/create"
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/40 transition-all group text-left"
+          >
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
               <Plus size={16} />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">Tạo thiệp mới</p>
-              <p className="text-xs text-slate-500">Bắt đầu tạo thiệp từ template</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                Tạo thiệp mới
+              </p>
+              <p className="text-[11px] text-slate-400">
+                Bắt đầu từ mẫu thiết kế có sẵn
+              </p>
             </div>
-          </button>
+          </Link>
 
-          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 border border-transparent hover:border-green-100 transition-colors group text-left">
-            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors shrink-0">
+          <button
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-900/40 transition-all group text-left"
+          >
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
               <Download size={16} className="rotate-180" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700 group-hover:text-green-700 transition-colors">Import thiệp</p>
-              <p className="text-xs text-slate-500">Import thiệp từ file dữ liệu</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                Import thiệp
+              </p>
+              <p className="text-[11px] text-slate-400">
+                Nhập danh sách từ file dữ liệu
+              </p>
             </div>
           </button>
 
-          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-orange-50 border border-transparent hover:border-orange-100 transition-colors group text-left">
-            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors shrink-0">
+          <button
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-amber-50/70 dark:hover:bg-amber-950/40 border border-transparent hover:border-amber-100 dark:hover:border-amber-900/40 transition-all group text-left"
+          >
+            <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 group-hover:bg-amber-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
               <Download size={16} />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700 group-hover:text-orange-700 transition-colors">Xuất dữ liệu</p>
-              <p className="text-xs text-slate-500">Xuất danh sách thiệp</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                Xuất dữ liệu
+              </p>
+              <p className="text-[11px] text-slate-400">
+                Xuất file Excel / CSV danh sách
+              </p>
             </div>
           </button>
 
-          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 border border-transparent hover:border-red-100 transition-colors group text-left">
-            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors shrink-0">
+          <button
+            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-rose-50/70 dark:hover:bg-rose-950/40 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/40 transition-all group text-left"
+          >
+            <div className="w-8 h-8 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 group-hover:bg-rose-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
               <Trash2 size={16} />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700 group-hover:text-red-700 transition-colors">Thùng rác</p>
-              <p className="text-xs text-slate-500">Xem thiệp đã xóa</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                Thùng rác
+              </p>
+              <p className="text-[11px] text-slate-400">
+                Khôi phục thiệp đã xóa
+              </p>
             </div>
           </button>
         </div>

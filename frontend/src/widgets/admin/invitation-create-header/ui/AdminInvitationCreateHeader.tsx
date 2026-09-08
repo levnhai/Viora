@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu, Check, LogOut } from "lucide-react";
 import { authService } from "@/features/auth/api/authService";
 import { useRouter } from "next/navigation";

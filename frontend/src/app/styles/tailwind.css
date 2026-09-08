@@ -1,5 +1,6 @@
 @import 'tailwindcss' source(none);
 @source '../../**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import 'tw-animate-css';
 
@@ -40,5 +41,23 @@
       transform: translateY(110vh) translateX(var(--sway, 20px)) rotate(360deg);
       opacity: 0;
     }
+  }
+}
+
+@layer base {
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input[type="button"]:disabled,
+  input[type="submit"]:disabled,
+  input[type="reset"]:disabled {
+    cursor: not-allowed;
   }
 }

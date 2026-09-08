@@ -96,12 +96,30 @@ export function InvitationCover({
           { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
           0.25
         )
-        // 3. Chữ Save The Date và Tên dâu rể fade-in êm dịu (chỉ fade opacity, không đổi vị trí/scale để tránh rung giật chữ)
+        // 3. Chữ Save The Date và Tên dâu rể unblur fade-in sang trọng
         .fromTo(
-          [textSaveTheDateRef.current, textNamesRef.current],
-          { opacity: 0 },
-          { opacity: 1, duration: 0.6, stagger: 0.12, ease: "power1.out" },
-          0.35
+          textSaveTheDateRef.current,
+          { opacity: 0, scale: 0.92, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.85,
+            ease: "power2.out",
+          },
+          0.32
+        )
+        .fromTo(
+          textNamesRef.current,
+          { opacity: 0, y: 12, filter: "blur(8px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.95,
+            ease: "power2.out",
+          },
+          0.45
         )
         // 4. Bảng 3 (Khung ảnh dâu rể) trồi lên mượt mà và chuyển tiếp vào floating tự nhiên
         .fromTo(
@@ -140,7 +158,7 @@ export function InvitationCover({
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen bg-transparent overflow-hidden select-none"
+      className="relative w-full min-h-screen md:min-h-[900px] lg:min-h-[940px] bg-transparent overflow-hidden select-none"
       style={{
         backgroundImage: woodBgSrc ? `url(${woodBgSrc})` : undefined,
         backgroundSize: "100% auto",
@@ -159,12 +177,38 @@ export function InvitationCover({
         .font-serif-title {
           font-family: "Playfair Display", "Cormorant Garamond", serif;
         }
+        @keyframes gold-shine-sweep {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .gold-shine-text {
+          background: linear-gradient(
+            90deg,
+            #fff3d6 0%,
+            #ffe5a3 25%,
+            #ffffff 50%,
+            #ffe5a3 75%,
+            #fff3d6 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: gold-shine-sweep 4.5s linear infinite;
+        }
+        @keyframes subtle-sway {
+          0%, 100% { transform: rotate(0deg) translateY(0px); }
+          50% { transform: rotate(1.5deg) translateY(-3px); }
+        }
+        .animate-subtle-sway {
+          animation: subtle-sway 5s ease-in-out infinite;
+        }
       `}</style>
 
       {/* TRANG TRÍ GÓC TRÊN BÊN TRÁI (TOP LEFT) */}
       <div
         ref={branchLeftRef}
-        className="absolute top-[-70px] left-[-40px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md"
+        className="absolute top-[-70px] left-[-40px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md animate-subtle-sway"
       >
         <img
           src={img13Src}
@@ -176,7 +220,8 @@ export function InvitationCover({
       {/* TRANG TRÍ GÓC TRÊN BÊN PHẢI (TOP RIGHT) */}
       <div
         ref={branchRightRef}
-        className="absolute top-[-40px] right-[-30px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md scale-x-[-1]"
+        className="absolute top-[-40px] right-[-30px] w-32 sm:w-44 md:w-56 pointer-events-none z-20 opacity-90 filter drop-shadow-md scale-x-[-1] animate-subtle-sway"
+        style={{ animationDelay: "-2.5s" }}
       >
         <img
           src={img13Src}
@@ -186,11 +231,11 @@ export function InvitationCover({
       </div>
 
       {/* CỤM BẢNG GỖ & KHUNG ẢNH CỦA DÂU RỂ */}
-      <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md pointer-events-none z-10 flex flex-col items-center">
+      <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md md:max-w-[560px] lg:max-w-[580px] pointer-events-none z-10 flex flex-col items-center">
         {/* BẢNG 1: BẢNG GỖ TREO PHÍA TRÊN (SAVE THE DATE) */}
         <div
           ref={board1Ref}
-          className="relative w-[75%] top-[-20px] sm:w-[70%] z-10 flex items-center justify-center transform-gpu will-change-transform"
+          className="relative w-[75%] top-[-20px] sm:w-[70%] md:max-w-[360px] z-10 flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
             src={img14Src}
@@ -204,10 +249,10 @@ export function InvitationCover({
             className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20 will-change-opacity"
           >
             <span
-              className="font-decorative tracking-[0.18em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-black uppercase text-[#fff3d6]"
+              className="font-decorative tracking-[0.2em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-black uppercase text-[#fffdfa]"
               style={{
                 textShadow:
-                  "1px 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7)",
+                  "0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.8)",
               }}
             >
               SAVE THE DATE
@@ -218,7 +263,7 @@ export function InvitationCover({
         {/* BẢNG 2: BẢNG GỖ TREO NỐI TRỰC TIẾP NGAY BÊN DƯỚI BẢNG 1 (TÊN CÔ DÂU VÀ CHÚ RỂ) */}
         <div
           ref={board2Ref}
-          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] z-0 flex items-center justify-center transform-gpu will-change-transform"
+          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] md:max-w-[420px] z-0 flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
             src={img14Src}
@@ -229,20 +274,30 @@ export function InvitationCover({
           />
           <div
             ref={textNamesRef}
-            className="absolute left-0 right-0 top-[38%] bottom-[4%] flex items-center justify-center text-center px-4 z-20 will-change-opacity"
+            className="absolute left-0 right-0 top-[44%] bottom-[4%] flex items-center justify-center text-center px-4 sm:px-6 z-20 will-change-opacity"
           >
             <div
-              className="font-calligraphy text-[26px] sm:text-2xl md:text-4xl font-semibold text-[#fff3d6] flex items-center justify-center flex-wrap gap-1.5 leading-tight"
+              className="font-calligraphy text-xl sm:text-2xl md:text-3xl lg:text-[34px] font-bold flex items-center justify-center flex-wrap gap-x-2 gap-y-0.5 leading-tight text-white"
               style={{
                 textShadow:
-                  "1px 2px 5px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.8)",
+                  "0 2px 4px rgba(0, 0, 0, 0.95), 0 1px 2px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9)",
               }}
             >
-              <span className="capitalize">{groomName || "Hoàng Long"}</span>
-              <span className="text-[#eab308] text-xl sm:text-2xl md:text-3xl font-serif-title mx-1 font-bold">
+              <span className="capitalize text-white tracking-wide">
+                {groomName || "Hoàng Long"}
+              </span>
+              <span
+                className="text-[#fcd34d] text-lg sm:text-xl md:text-2xl font-serif-title mx-1 sm:mx-1.5 font-bold"
+                style={{
+                  textShadow:
+                    "0 2px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(252, 211, 77, 0.4)",
+                }}
+              >
                 &amp;
               </span>
-              <span className="capitalize">{brideName || "Bảo Ngọc"}</span>
+              <span className="capitalize text-white tracking-wide">
+                {brideName || "Bảo Ngọc"}
+              </span>
             </div>
           </div>
         </div>
@@ -251,10 +306,10 @@ export function InvitationCover({
         <div className="w-full flex justify-center z-10">
           <div
             ref={board3Ref}
-            className="relative w-[95%] sm:w-[90%] max-w-[340px] sm:max-w-[380px] md:max-w-[400px] mt-20 sm:mt-6 md:mt-4 z-10 flex items-center justify-center filter drop-shadow-2xl will-change-transform"
+            className="relative w-[95%] sm:w-[90%] md:w-full max-w-[340px] sm:max-w-[380px] md:max-w-[490px] lg:max-w-[520px] mt-20 sm:mt-6 md:mt-16 lg:mt-20 z-10 flex items-center justify-center filter drop-shadow-2xl will-change-transform"
           >
             {/* Họa tiết trang trí img_4.svg ở góc trên bên phải khung ảnh gỗ */}
-            <div className="absolute -top-26 right-[-70px] sm:-top-5 sm:-right-5 w-50 sm:w-28 md:w-32 z-30 pointer-events-none filter drop-shadow-md">
+            <div className="absolute -top-26 right-[-70px] sm:-top-5 sm:-right-5 md:-top-7 md:-right-7 w-50 sm:w-28 md:w-36 z-30 pointer-events-none filter drop-shadow-md">
               <img
                 src={img4Src}
                 alt="Họa tiết trang trí góc trên phải khung ảnh"
@@ -288,7 +343,7 @@ export function InvitationCover({
         {/* BẢNG 4 / BẢNG GỖ IMG_18 NẰM DƯỚI KHUNG ẢNH (KÍNH MỜI KHÁCH) */}
         <div
           ref={board4Ref}
-          className="relative w-[85%] sm:w-[80%] max-w-[320px] sm:max-w-[350px] mt-10 sm:mt-2 md:mt-1 z-20 flex items-center justify-center filter drop-shadow-xl pointer-events-auto"
+          className="relative w-[85%] sm:w-[80%] max-w-[320px] sm:max-w-[350px] md:max-w-[380px] mt-10 sm:mt-2 md:mt-6 lg:mt-8 z-20 flex items-center justify-center filter drop-shadow-xl pointer-events-auto"
         >
           <img
             src={img18Src}
@@ -298,14 +353,20 @@ export function InvitationCover({
             className="w-full h-auto object-contain"
           />
           <div className="absolute left-0 right-0 top-0 bottom-0 flex flex-col items-center justify-center text-center px-4 z-20">
-            <span className="font-decorative text-[10px] sm:text-xs tracking-[0.18em] font-bold text-[#fef08a] uppercase drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]">
+            <span
+              className="font-decorative text-[11px] sm:text-xs tracking-[0.2em] font-bold text-[#fde047] uppercase"
+              style={{
+                textShadow:
+                  "0 1px 2px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.9)",
+              }}
+            >
               Kính Mời
             </span>
             <span
-              className="font-calligraphy text-lg sm:text-2xl font-normal text-[#fff3d6] leading-tight mt-0.5"
+              className="font-calligraphy text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight mt-0.5 tracking-wide"
               style={{
                 textShadow:
-                  "1px 2px 5px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.8)",
+                  "0 2px 4px rgba(0, 0, 0, 0.95), 0 1px 2px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9)",
               }}
             >
               {guestDisplayName}

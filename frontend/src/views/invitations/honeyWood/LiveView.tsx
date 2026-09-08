@@ -127,19 +127,19 @@ export function LiveView({
             />
             <div className="relative pt-4">
               {/* thông tin chú rể & cô dâu */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
+              <GsapReveal direction="up" distance={35} duration={1.0}>
                 <MinimalCoupleSpotlight weddingData={weddingData} />
               </GsapReveal>
 
               {/* bộ sưu tập ảnh 3D Coverflow */}
-              <GsapReveal direction="right" distance={60} duration={1.2}>
+              <GsapReveal direction="up" distance={35} duration={1.0}>
                 <CoverflowGallery weddingData={weddingData} />
               </GsapReveal>
 
               {/* thông tin tiệc cưới */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
+              <GsapReveal direction="up" distance={35} duration={1.0}>
                 <EventInfo
-                  variantId="EventInfo1"
+                  variantId="wood"
                   weddingData={weddingData}
                   onOpenRsvpModal={() => setRsvpModalOpen(true)}
                   primaryColor={colorPalette.primaryColor}
@@ -149,7 +149,7 @@ export function LiveView({
 
               {/* địa điểm */}
               {primaryEvent && (
-                <GsapReveal direction="right" distance={60} duration={1.2}>
+                <GsapReveal direction="up" distance={35} duration={1.0}>
                   <VenueMap
                     variantId="minimal"
                     event={primaryEvent}
@@ -161,9 +161,9 @@ export function LiveView({
               )}
 
               {/* time line */}
-              <GsapReveal direction="left" distance={60} duration={1.2}>
+              <GsapReveal direction="up" distance={35} duration={1.0}>
                 <Timeline
-                  variant="Timeline1"
+                  variant="wood"
                   weddingData={weddingData}
                   primaryColor={colorPalette.primaryColor}
                   textColor={colorPalette.textColor}
