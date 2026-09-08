@@ -41,15 +41,21 @@ export function FamilyInvitationIntro({
 
             <AnimateView animation="fadeInLeft" delay={0.1} duration={1}>
               <div className="font-lora text-[14px] text-[#2C6E91] uppercase leading-snug">
-                <div>Ông. {groomFatherName || "Nguyễn Anh Tuấn"}</div>
-                <div>Bà. {groomMotherName || "Nguyễn Ngọc Bích"}</div>
+                {groomFatherName && groomFatherName.trim() ? (
+                  <div>Ông. {groomFatherName}</div>
+                ) : null}
+                {groomMotherName && groomMotherName.trim() ? (
+                  <div>Bà. {groomMotherName}</div>
+                ) : null}
               </div>
             </AnimateView>
 
             <AnimateView animation="fadeInLeft" delay={0.15} duration={1}>
-              <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/80 mt-0.5">
-                {groomAddress || "TP. Hà Nội"}
-              </p>
+              {groomAddress ? (
+                <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/80 mt-0.5">
+                  {groomAddress}
+                </p>
+              ) : null}
             </AnimateView>
           </div>
 
@@ -63,15 +69,21 @@ export function FamilyInvitationIntro({
 
             <AnimateView animation="fadeInRight" delay={0.1} duration={1}>
               <div className="font-lora text-[14px] text-[#2C6E91] uppercase leading-snug">
-                <div>Ông. {brideFatherName || "Nguyễn Minh Toàn"}</div>
-                <div>Bà. {brideMotherName || "Nguyễn Thu Nga"}</div>
+                {brideFatherName && brideFatherName.trim() ? (
+                  <div>Ông. {brideFatherName}</div>
+                ) : null}
+                {brideMotherName && brideMotherName.trim() ? (
+                  <div>Bà. {brideMotherName}</div>
+                ) : null}
               </div>
             </AnimateView>
 
             <AnimateView animation="fadeInRight" delay={0.15} duration={1}>
-              <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/80 mt-0.5">
-                {brideAddress || "TP. Hà Nội"}
-              </p>
+              {brideAddress ? (
+                <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/80 mt-0.5">
+                  {brideAddress}
+                </p>
+              ) : null}
             </AnimateView>
           </div>
         </div>

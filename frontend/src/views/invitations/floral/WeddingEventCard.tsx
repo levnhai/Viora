@@ -87,11 +87,11 @@ function AnimatedTextLine({
 }
 
 export function WeddingEventCard({ weddingData }: WeddingEventCardProps) {
-  // Family Info Fallbacks
-  const groomFather = weddingData.groomFatherName || "Nguyễn Văn Linh";
-  const groomMother = weddingData.groomMotherName || "Trần Thị Mai";
-  const brideFather = weddingData.brideFatherName || "Lê Văn Tuấn";
-  const brideMother = weddingData.brideMotherName || "Phạm Thị Cúc";
+  // Family Info
+  const groomFather = weddingData.groomFatherName;
+  const groomMother = weddingData.groomMotherName;
+  const brideFather = weddingData.brideFatherName;
+  const brideMother = weddingData.brideMotherName;
 
   // Events list with fallback if empty
   const eventsList: WeddingEvent[] =
@@ -128,16 +128,20 @@ export function WeddingEventCard({ weddingData }: WeddingEventCardProps) {
               >
                 NHÀ TRAI
               </h4>
-              <p
-                className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
-              >
-                Bố: <span className="font-bold text-[#231b15]">{groomFather}</span>
-              </p>
-              <p
-                className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
-              >
-                Mẹ: <span className="font-bold text-[#231b15]">{groomMother}</span>
-              </p>
+              {groomFather && groomFather.trim() ? (
+                <p
+                  className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
+                >
+                  Bố: <span className="font-bold text-[#231b15]">{groomFather}</span>
+                </p>
+              ) : null}
+              {groomMother && groomMother.trim() ? (
+                <p
+                  className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
+                >
+                  Mẹ: <span className="font-bold text-[#231b15]">{groomMother}</span>
+                </p>
+              ) : null}
             </div>
           </AnimatedTextLine>
 
@@ -149,16 +153,20 @@ export function WeddingEventCard({ weddingData }: WeddingEventCardProps) {
               >
                 NHÀ GÁI
               </h4>
-              <p
-                className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
-              >
-                Bố: <span className="font-bold text-[#231b15]">{brideFather}</span>
-              </p>
-              <p
-                className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
-              >
-                Mẹ: <span className="font-bold text-[#231b15]">{brideMother}</span>
-              </p>
+              {brideFather && brideFather.trim() ? (
+                <p
+                  className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
+                >
+                  Bố: <span className="font-bold text-[#231b15]">{brideFather}</span>
+                </p>
+              ) : null}
+              {brideMother && brideMother.trim() ? (
+                <p
+                  className={`${montserrat.className} text-sm sm:text-base text-[#3a2d24] font-medium leading-relaxed`}
+                >
+                  Mẹ: <span className="font-bold text-[#231b15]">{brideMother}</span>
+                </p>
+              ) : null}
             </div>
           </AnimatedTextLine>
         </div>

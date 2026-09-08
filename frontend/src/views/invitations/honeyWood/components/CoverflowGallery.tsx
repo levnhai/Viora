@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { GsapReveal } from "@/shared/ui/GsapReveal";
 import { WeddingData } from "@/entities/invitation/model/types";
-import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
+import { Maximize2 } from "lucide-react";
+import { FullImageModal } from "./FullImageModal";
 
 interface CoverflowGalleryProps {
   weddingData: WeddingData;
@@ -61,22 +62,7 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
     );
   };
 
-  // Keyboard navigation for Lightbox
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (lightboxIndex !== null) {
-        if (e.key === "Escape") setLightboxIndex(null);
-        if (e.key === "ArrowLeft")
-          setLightboxIndex(
-            (prev) => (prev! - 1 + imagesList.length) % imagesList.length,
-          );
-        if (e.key === "ArrowRight")
-          setLightboxIndex((prev) => (prev! + 1) % imagesList.length);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxIndex, imagesList.length]);
+
 
   return (
     <section className="relative py-12 px-4 select-none z-20 overflow-hidden">
@@ -233,46 +219,11 @@ export function CoverflowGallery({ weddingData }: CoverflowGalleryProps) {
 
       {/* Lightbox Full-screen Modal */}
       {lightboxIndex !== null && (
-        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-          <button
-            onClick={() => setLightboxIndex(null)}
-            className="absolute top-6 right-6 z-50 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all"
-          >
-            <X size={28} />
-          </button>
-
-          <button
-            onClick={() =>
-              setLightboxIndex(
-                (prev) => (prev! - 1 + imagesList.length) % imagesList.length,
-              )
-            }
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
-          >
-            <ChevronLeft size={32} />
-          </button>
-
-          <div className="relative max-w-4xl max-h-[85vh] aspect-[3/4] sm:aspect-auto flex items-center justify-center overflow-hidden rounded-xl">
-            <img
-              src={imagesList[lightboxIndex]}
-              alt="Lightbox View"
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            />
-          </div>
-
-          <button
-            onClick={() =>
-              setLightboxIndex((prev) => (prev! + 1) % imagesList.length)
-            }
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
-          >
-            <ChevronRight size={32} />
-          </button>
-
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm font-serif-title tracking-widest">
-            {lightboxIndex + 1} / {imagesList.length}
-          </div>
-        </div>
+        <FullImageModal
+          images={imagesList}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
     </section>
   );

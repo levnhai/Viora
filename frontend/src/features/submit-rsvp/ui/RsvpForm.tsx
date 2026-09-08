@@ -7,7 +7,7 @@ import { API_URL } from "@/shared/lib/config";
 interface RsvpFormProps {
   weddingSlug: string;
   prefilledName?: string;
-  theme?: "default" | "minimal" | "temp4";
+  theme?: "default" | "minimal" | "temp4" | "honeyWood";
   hideMessage?: boolean;
   primaryColor?: string;
   textColor?: string;
@@ -70,7 +70,8 @@ export function RsvpForm({
 
   const isMinimal = theme === "minimal";
   const isTemp4 = theme === "temp4";
-  const isCustom = isMinimal || isTemp4;
+  const isHoneyWood = theme === "honeyWood";
+  const isCustom = isMinimal || isTemp4 || isHoneyWood;
 
   const t = {
     primary: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
@@ -102,7 +103,7 @@ export function RsvpForm({
 
   return (
     <section
-      className={`py-10 px-4 max-w-lg mx-auto ${isCustom ? "" : "py-20"}`}
+      className={isHoneyWood ? "py-2 px-1 max-w-lg mx-auto" : `py-10 px-4 max-w-lg mx-auto ${isCustom ? "" : "py-20"}`}
     >
       {!isCustom && (
         <FadeIn>
@@ -151,17 +152,21 @@ export function RsvpForm({
           <form
             onSubmit={submitRsvp}
             className={
-              isCustom
-                ? "space-y-6 text-left"
-                : "bg-white rounded-2xl p-8 shadow-sm border space-y-5 text-left"
+              isHoneyWood
+                ? "bg-[#fdf8ee] rounded-2xl p-6 sm:p-7 shadow-lg border border-[#e7bf78]/40 space-y-5 text-left"
+                : isCustom
+                  ? "space-y-6 text-left"
+                  : "bg-white rounded-2xl p-8 shadow-sm border space-y-5 text-left"
             }
-            style={!isCustom ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
+            style={!isCustom && !isHoneyWood ? { borderColor: "rgba(201,130,142,0.2)" } : {}}
           >
+
             <div>
               <label
                 className="block text-xs uppercase tracking-wider mb-2 font-serif"
                 style={{
-                  color: isCustom ? t.primaryAlpha : "#7a5c4f",
+                  color: isHoneyWood ? "#4a2918" : isCustom ? t.primaryAlpha : "#7a5c4f",
+                  fontWeight: isHoneyWood ? 600 : 400,
                 }}
               >
                 Họ và tên *
@@ -173,28 +178,40 @@ export function RsvpForm({
                   setRsvpData({ ...rsvpData, name: e.target.value })
                 }
                 placeholder="Ví dụ: Nguyễn Văn A"
-                className={`w-full px-4 py-3 rounded-xl text-sm outline-none border transition-colors ${isCustom ? "bg-transparent" : ""}`}
+                className={`w-full px-4 py-3 rounded-xl text-sm outline-none border transition-colors ${
+                  isHoneyWood
+                    ? "bg-[#fbf3e4] border-[#d5a94d]/40 text-[#3c1f10] placeholder-[#4a2918]/40 focus:border-[#4a2918]"
+                    : isCustom
+                      ? "bg-transparent"
+                      : ""
+                }`}
                 style={
-                  isCustom
-                    ? {
-                        borderColor: t.border,
-                        color: t.text,
-                      }
-                    : {
-                        borderColor: "rgba(201,130,142,0.3)",
-                        backgroundColor: "#fdf6ef",
-                        color: "#2c1810",
-                      }
+                  isHoneyWood
+                    ? {}
+                    : isCustom
+                      ? {
+                          borderColor: t.border,
+                          color: t.text,
+                        }
+                      : {
+                          borderColor: "rgba(201,130,142,0.3)",
+                          backgroundColor: "#fdf6ef",
+                          color: "#2c1810",
+                        }
                 }
                 onFocus={(e) =>
-                  (e.target.style.borderColor = isCustom
-                    ? t.text
-                    : "#8b3a52")
+                  (e.target.style.borderColor = isHoneyWood
+                    ? "#4a2918"
+                    : isCustom
+                      ? t.text
+                      : "#8b3a52")
                 }
                 onBlur={(e) =>
-                  (e.target.style.borderColor = isCustom
-                    ? t.border
-                    : "rgba(201,130,142,0.3)")
+                  (e.target.style.borderColor = isHoneyWood
+                    ? "rgba(213,169,77,0.4)"
+                    : isCustom
+                      ? t.border
+                      : "rgba(201,130,142,0.3)")
                 }
               />
             </div>
@@ -202,7 +219,8 @@ export function RsvpForm({
               <label
                 className="block text-xs uppercase tracking-wider mb-2 font-serif"
                 style={{
-                  color: isCustom ? t.primaryAlpha : "#7a5c4f",
+                  color: isHoneyWood ? "#4a2918" : isCustom ? t.primaryAlpha : "#7a5c4f",
+                  fontWeight: isHoneyWood ? 600 : 400,
                 }}
               >
                 Bạn sẽ tham dự? *
@@ -220,36 +238,52 @@ export function RsvpForm({
                     }
                     className="py-3 px-2 rounded-xl text-[13px] border transition-all cursor-pointer font-serif"
                     style={
-                      isCustom
+                      isHoneyWood
                         ? {
                             borderColor:
                               rsvpData.attend === opt.val
-                                ? t.text
-                                : t.border,
+                                ? "#4a2918"
+                                : "rgba(74, 41, 24, 0.3)",
                             backgroundColor:
                               rsvpData.attend === opt.val
-                                ? t.primaryLight
+                                ? "#4a2918"
                                 : "transparent",
                             color:
                               rsvpData.attend === opt.val
-                                ? t.text
-                                : t.textLight,
+                                ? "#fef0d2"
+                                : "#4a2918",
+                            fontWeight: rsvpData.attend === opt.val ? 600 : 400,
                           }
-                        : {
-                            borderColor:
-                              rsvpData.attend === opt.val
-                                ? "#8b3a52"
-                                : "rgba(201,130,142,0.3)",
-                            backgroundColor:
-                              rsvpData.attend === opt.val
-                                ? "rgba(139,58,82,0.06)"
-                                : "transparent",
-                            color:
-                              rsvpData.attend === opt.val
-                                ? "#8b3a52"
-                                : "#7a5c4f",
-                            fontWeight: rsvpData.attend === opt.val ? 500 : 400,
-                          }
+                        : isCustom
+                          ? {
+                              borderColor:
+                                rsvpData.attend === opt.val
+                                  ? t.text
+                                  : t.border,
+                              backgroundColor:
+                                rsvpData.attend === opt.val
+                                  ? t.primaryLight
+                                  : "transparent",
+                              color:
+                                rsvpData.attend === opt.val
+                                  ? t.text
+                                  : t.textLight,
+                            }
+                          : {
+                              borderColor:
+                                rsvpData.attend === opt.val
+                                  ? "#8b3a52"
+                                  : "rgba(201,130,142,0.3)",
+                              backgroundColor:
+                                rsvpData.attend === opt.val
+                                  ? "rgba(139,58,82,0.06)"
+                                  : "transparent",
+                              color:
+                                rsvpData.attend === opt.val
+                                  ? "#8b3a52"
+                                  : "#7a5c4f",
+                              fontWeight: rsvpData.attend === opt.val ? 500 : 400,
+                            }
                     }
                   >
                     {opt.label}
@@ -262,7 +296,8 @@ export function RsvpForm({
                 <label
                   className="block text-xs uppercase tracking-wider mb-2 font-serif"
                   style={{
-                    color: isCustom ? t.primaryAlpha : "#7a5c4f",
+                    color: isHoneyWood ? "#4a2918" : isCustom ? t.primaryAlpha : "#7a5c4f",
+                    fontWeight: isHoneyWood ? 600 : 400,
                   }}
                 >
                   Số người tham dự
@@ -272,19 +307,25 @@ export function RsvpForm({
                   onChange={(e) =>
                     setRsvpData({ ...rsvpData, guests: e.target.value })
                   }
-                  className={`w-full px-4 h-[46px] rounded-xl text-sm outline-none border transition-colors ${isCustom ? "" : ""}`}
+                  className={`w-full px-4 h-[46px] rounded-xl text-sm outline-none border transition-colors ${
+                    isHoneyWood
+                      ? "bg-[#fbf3e4] border-[#d5a94d]/40 text-[#3c1f10] focus:border-[#4a2918]"
+                      : ""
+                  }`}
                   style={
-                    isCustom
-                      ? {
-                          borderColor: t.border,
-                          color: t.text,
-                          backgroundColor: t.selectBg,
-                        }
-                      : {
-                          borderColor: "rgba(201,130,142,0.3)",
-                          backgroundColor: "#fdf6ef",
-                          color: "#2c1810",
-                        }
+                    isHoneyWood
+                      ? {}
+                      : isCustom
+                        ? {
+                            borderColor: t.border,
+                            color: t.text,
+                            backgroundColor: t.selectBg,
+                          }
+                        : {
+                            borderColor: "rgba(201,130,142,0.3)",
+                            backgroundColor: "#fdf6ef",
+                            color: "#2c1810",
+                          }
                   }
                 >
                   {["1", "2", "3", "4", "5+"].map((n) => (
@@ -292,12 +333,17 @@ export function RsvpForm({
                       key={n}
                       value={n}
                       style={
-                        isCustom
+                        isHoneyWood
                           ? {
-                              backgroundColor: primaryColor || (isTemp4 ? "#1a1a1a" : "#001A08"),
-                              color: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+                              backgroundColor: "#fbf3e4",
+                              color: "#3c1f10",
                             }
-                          : {}
+                          : isCustom
+                            ? {
+                                backgroundColor: primaryColor || (isTemp4 ? "#1a1a1a" : "#001A08"),
+                                color: textColor || (isTemp4 ? "#7c6a60" : "rgb(225,188,124)"),
+                              }
+                            : {}
                       }
                     >
                       {n} người
@@ -308,19 +354,25 @@ export function RsvpForm({
             )}
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl text-sm font-serif uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90 cursor-pointer"
+              className={
+                isHoneyWood
+                  ? "w-full py-3.5 rounded-xl text-sm font-serif uppercase tracking-widest flex items-center justify-center gap-2 bg-gradient-to-r from-[#5b2d18] to-[#3c1f10] hover:from-[#6d361d] hover:to-[#4a2918] text-[#fef0d2] font-semibold border border-[#e7bf78]/40 shadow-md transition-all active:scale-[0.99] cursor-pointer"
+                  : "w-full py-3.5 rounded-xl text-sm font-serif uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90 cursor-pointer"
+              }
               style={
-                isCustom
-                  ? {
-                      backgroundColor: t.btnBg,
-                      color: t.btnText,
-                      fontWeight: 600,
-                    }
-                  : {
-                      backgroundColor: "#8b3a52",
-                      color: "white",
-                      fontWeight: 500,
-                    }
+                isHoneyWood
+                  ? {}
+                  : isCustom
+                    ? {
+                        backgroundColor: t.btnBg,
+                        color: t.btnText,
+                        fontWeight: 600,
+                      }
+                    : {
+                        backgroundColor: "#8b3a52",
+                        color: "white",
+                        fontWeight: 500,
+                      }
               }
             >
               <Send size={15} /> XÁC NHẬN

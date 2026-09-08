@@ -512,7 +512,7 @@ export function Envelope_8({
               : "opacity-100 scale-100"
           }`}
         >
-          <div className="absolute top-[52%] sm:top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-3 sm:gap-4 max-w-lg w-full px-4 text-center pointer-events-auto">
+          <div className="absolute top-[53%] sm:top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-3 sm:gap-4 max-w-lg w-full px-4 text-center pointer-events-auto">
             <div className="flex flex-col gap-4 sm:gap-6 w-[88%] sm:w-[82%] px-2 sm:px-4 my-1 sm:my-2">
               {/* TÊN CHÚ RỂ*/}
               <h1

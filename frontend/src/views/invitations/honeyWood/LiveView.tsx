@@ -228,15 +228,15 @@ export function LiveView({
                 className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                 onClick={() => setRsvpModalOpen(false)}
               />
-              <div className="bg-[#f6dfb5] rounded-3xl w-full max-w-md relative flex flex-col max-h-[90vh] overflow-hidden shadow-2xl border border-[#b87935]/50 animate-in fade-in zoom-in duration-300">
-                <div className="p-4 flex justify-between items-center border-b border-[#9a5a28]/25 shrink-0">
+              <div className="bg-[linear-gradient(155deg,#5b2d18_0%,#3c1f10_55%,#21120b_100%)] rounded-3xl w-full max-w-md relative flex flex-col max-h-[90vh] overflow-hidden shadow-[0_25px_60px_rgba(33,18,11,0.8)] border border-[#e7bf78]/40 animate-in fade-in zoom-in duration-300">
+                <div className="p-4 flex justify-between items-center border-b border-[#e7bf78]/20 shrink-0">
                   <div className="w-8" />
-                  <h3 className="text-lg text-[#5b2d18] font-serif tracking-widest uppercase">
+                  <h3 className="text-lg text-[#fcd34d] font-serif tracking-[0.2em] uppercase font-bold drop-shadow-md">
                     Xác Nhận Tham Dự
                   </h3>
                   <button
                     onClick={() => setRsvpModalOpen(false)}
-                    className="w-8 h-8 flex items-center justify-center text-[#5b2d18]/70 hover:text-[#5b2d18] transition-colors"
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-[#e7bf78] hover:text-[#fff1cf] hover:bg-white/10 transition-colors"
                   >
                     <X size={20} />
                   </button>
@@ -245,8 +245,7 @@ export function LiveView({
                   <RsvpForm
                     weddingSlug={weddingData.slug}
                     prefilledName={guestName}
-                    textColor={colorPalette.textColor}
-                    primaryColor="#d5a94d"
+                    theme="honeyWood"
                     hideMessage
                   />
                 </div>

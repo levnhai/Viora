@@ -66,3 +66,13 @@ html, body, iframe, * {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* Base input text color fallback to prevent white text on light input background */
+:is(input, select, textarea) {
+  color: #0f172a;
+}
+
+.dark :is(input, select, textarea) {
+  color: #f8fafc;
+}
+

@@ -7,6 +7,15 @@ interface MinimalCoupleSpotlightProps {
   weddingData: WeddingData;
 }
 
+const getParentTitle = (father?: string, mother?: string) => {
+  const hasFather = Boolean(father && father.trim());
+  const hasMother = Boolean(mother && mother.trim());
+  if (hasFather && hasMother) return "Ông Bà";
+  if (hasFather) return "Ông";
+  if (hasMother) return "Bà";
+  return "";
+};
+
 export function MinimalCoupleSpotlight({
   weddingData,
 }: MinimalCoupleSpotlightProps) {
@@ -24,6 +33,9 @@ export function MinimalCoupleSpotlight({
     weddingDate,
     weddingTime,
   } = weddingData;
+
+  const groomParentTitle = getParentTitle(groomFatherName, groomMotherName);
+  const brideParentTitle = getParentTitle(brideFatherName, brideMotherName);
 
   const events = weddingData?.events || [];
 
@@ -161,18 +173,26 @@ export function MinimalCoupleSpotlight({
             <div className="flex flex-row items-stretch justify-between w-full max-w-md mx-auto text-center">
               {/* Groom Side */}
               <div className="flex-1 pr-3 sm:pr-4 flex flex-col justify-start">
-                <p className="text-xs text-[#F2B8C5] uppercase tracking-wider mb-1 font-serif-title font-medium">
-                  Ông Bà
-                </p>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
-                  {groomFatherName || "Đặng Văn Thắng"}
-                </h3>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
-                  {groomMotherName || "Bùi Thị Mai"}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-[#FFF1F3] leading-tight font-medium opacity-90">
-                  {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
-                </p>
+                {groomParentTitle && (
+                  <p className="text-xs text-[#F2B8C5] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                    {groomParentTitle}
+                  </p>
+                )}
+                {groomFatherName && groomFatherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
+                    {groomFatherName}
+                  </h3>
+                ) : null}
+                {groomMotherName && groomMotherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
+                    {groomMotherName}
+                  </h3>
+                ) : null}
+                {groomAddress ? (
+                  <p className="text-[11px] sm:text-xs text-[#FFF1F3] leading-tight font-medium opacity-90">
+                    {groomAddress}
+                  </p>
+                ) : null}
               </div>
 
               {/* Vertical Divider */}
@@ -180,18 +200,26 @@ export function MinimalCoupleSpotlight({
 
               {/* Bride Side */}
               <div className="flex-1 pl-3 sm:pl-4 flex flex-col justify-start">
-                <p className="text-xs text-[#F2B8C5] uppercase tracking-wider mb-1 font-serif-title font-medium">
-                  Ông Bà
-                </p>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
-                  {brideFatherName || "Vũ Đức Trung"}
-                </h3>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
-                  {brideMotherName || "Ngô Thị Hạnh"}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-[#FFF1F3] leading-tight font-medium opacity-90">
-                  {brideAddress || "Quận 3, TP. Hồ Chí Minh"}
-                </p>
+                {brideParentTitle && (
+                  <p className="text-xs text-[#F2B8C5] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                    {brideParentTitle}
+                  </p>
+                )}
+                {brideFatherName && brideFatherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
+                    {brideFatherName}
+                  </h3>
+                ) : null}
+                {brideMotherName && brideMotherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
+                    {brideMotherName}
+                  </h3>
+                ) : null}
+                {brideAddress ? (
+                  <p className="text-[11px] sm:text-xs text-[#FFF1F3] leading-tight font-medium opacity-90">
+                    {brideAddress}
+                  </p>
+                ) : null}
               </div>
             </div>
           </GsapReveal>

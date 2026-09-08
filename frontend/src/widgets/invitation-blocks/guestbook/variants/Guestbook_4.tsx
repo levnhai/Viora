@@ -30,31 +30,7 @@ export function Guestbook_4({
     setGuestMsg("");
   }
 
-  const defaultMessages = [
-    {
-      name: "Duy Khang",
-      time: "12:30:49 26/7/2026",
-      msg: "Chúc mừng ngày vui của hai bạn, trăm năm hạnh phúc bền lâu!",
-    },
-    {
-      name: "Lan Chi",
-      time: "12:30:49 26/7/2026",
-      msg: "Đẹp đôi quá! Chúc hai bạn sống bên nhau đầu bạc răng long.",
-    },
-    {
-      name: "Tuấn Anh",
-      time: "12:30:49 26/7/2026",
-      msg: "Mừng hạnh phúc hai bạn! Chúc gia đình nhỏ luôn đầy ắp tiếng cười.",
-    },
-    {
-      name: "Khánh Vy",
-      time: "12:30:49 26/7/2026",
-      msg: "Chúc cô dâu chú rể luôn giữ được nụ cười này mãi mãi nhé!",
-    },
-  ];
-
-  const displayMessages =
-    messages && messages.length > 0 ? messages : defaultMessages;
+  const displayMessages = messages || [];
 
   return (
     <section className="py-12 sm:py-20 px-4 relative z-20 overflow-visible">
@@ -125,7 +101,7 @@ export function Guestbook_4({
         </GsapReveal>
 
         {/* Messages List */}
-        {displayMessages && displayMessages.length > 0 && (
+        {displayMessages && displayMessages.length > 0 ? (
           <GsapReveal
             delay={0.4}
             direction="up"
@@ -166,6 +142,10 @@ export function Guestbook_4({
               ))}
             </div>
           </GsapReveal>
+        ) : (
+          <div className="mt-8 text-center text-xs sm:text-sm font-serif opacity-75 italic" style={{ color: pColor }}>
+            Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời chúc cho dâu rể!
+          </div>
         )}
       </div>
     </section>

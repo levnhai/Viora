@@ -7,6 +7,15 @@ interface MinimalCoupleSpotlightProps {
   weddingData: WeddingData;
 }
 
+const getParentTitle = (father?: string, mother?: string) => {
+  const hasFather = Boolean(father && father.trim());
+  const hasMother = Boolean(mother && mother.trim());
+  if (hasFather && hasMother) return "Ông Bà";
+  if (hasFather) return "Ông";
+  if (hasMother) return "Bà";
+  return "";
+};
+
 export function MinimalCoupleSpotlight({
   weddingData,
 }: MinimalCoupleSpotlightProps) {
@@ -24,6 +33,9 @@ export function MinimalCoupleSpotlight({
     weddingDate,
     weddingTime,
   } = weddingData;
+
+  const groomParentTitle = getParentTitle(groomFatherName, groomMotherName);
+  const brideParentTitle = getParentTitle(brideFatherName, brideMotherName);
 
   const textColor = "rgb(124, 106, 96)";
 
@@ -127,30 +139,38 @@ export function MinimalCoupleSpotlight({
             <span className="text-[11px] uppercase tracking-widest font-semibold px-3 py-0.5 rounded-full bg-[#826639]/15 text-[#6e542c] inline-block mb-2">
               NHÀ TRAI
             </span>
-            <p
-              className="text-[12px] font-medium mb-1 opacity-80"
-              style={{ color: textColor }}
-            >
-              Ông Bà
-            </p>
-            <h3
-              className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
-              style={{ color: textColor }}
-            >
-              {groomFatherName || "Lê Văn Bình"}
-            </h3>
-            <h3
-              className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
-              style={{ color: textColor }}
-            >
-              {groomMotherName || "Trần Thị Hằng"}
-            </h3>
-            <p
-              className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
-              style={{ color: textColor }}
-            >
-              {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
-            </p>
+            {groomParentTitle && (
+              <p
+                className="text-[12px] font-medium mb-1 opacity-80"
+                style={{ color: textColor }}
+              >
+                {groomParentTitle}
+              </p>
+            )}
+            {groomFatherName && groomFatherName.trim() ? (
+              <h3
+                className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
+                style={{ color: textColor }}
+              >
+                {groomFatherName}
+              </h3>
+            ) : null}
+            {groomMotherName && groomMotherName.trim() ? (
+              <h3
+                className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
+                style={{ color: textColor }}
+              >
+                {groomMotherName}
+              </h3>
+            ) : null}
+            {groomAddress ? (
+              <p
+                className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
+                style={{ color: textColor }}
+              >
+                {groomAddress}
+              </p>
+            ) : null}
           </div>
 
           {/* Divider */}
@@ -161,30 +181,38 @@ export function MinimalCoupleSpotlight({
             <span className="text-[11px] uppercase tracking-widest font-semibold px-3 py-0.5 rounded-full bg-[#826639]/15 text-[#6e542c] inline-block mb-2">
               NHÀ GÁI
             </span>
-            <p
-              className="text-[12px] font-medium mb-1 opacity-80"
-              style={{ color: textColor }}
-            >
-              Ông Bà
-            </p>
-            <h3
-              className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
-              style={{ color: textColor }}
-            >
-              {brideFatherName || "Nguyễn Văn Lợi"}
-            </h3>
-            <h3
-              className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
-              style={{ color: textColor }}
-            >
-              {brideMotherName || "Vũ Thị Thanh"}
-            </h3>
-            <p
-              className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
-              style={{ color: textColor }}
-            >
-              {brideAddress || "Quận 3, TP. Hồ Chí Minh"}
-            </p>
+            {brideParentTitle && (
+              <p
+                className="text-[12px] font-medium mb-1 opacity-80"
+                style={{ color: textColor }}
+              >
+                {brideParentTitle}
+              </p>
+            )}
+            {brideFatherName && brideFatherName.trim() ? (
+              <h3
+                className="text-[15px] capitalize sm:text-[16px] font-bold mb-1"
+                style={{ color: textColor }}
+              >
+                {brideFatherName}
+              </h3>
+            ) : null}
+            {brideMotherName && brideMotherName.trim() ? (
+              <h3
+                className="text-[15px] capitalize sm:text-[16px] font-bold mb-2"
+                style={{ color: textColor }}
+              >
+                {brideMotherName}
+              </h3>
+            ) : null}
+            {brideAddress ? (
+              <p
+                className="text-[11px] capitalize leading-tight mx-auto max-w-[130px] opacity-75"
+                style={{ color: textColor }}
+              >
+                {brideAddress}
+              </p>
+            ) : null}
           </div>
         </GsapReveal>
 

@@ -16,7 +16,9 @@ export function AnalyticsTracker() {
     if (!visitorId) return;
     const socket = io(API_URL, { transports: ["websocket", "polling"], reconnectionAttempts: 5, reconnectionDelay: 2000 });
     socket.on("connect", () => socket.emit("identify-visitor", visitorId));
-    return () => socket.disconnect();
+    return () => {
+      socket.disconnect();
+    };
   }, [pathname]);
 
   return null;

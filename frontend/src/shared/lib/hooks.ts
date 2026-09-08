@@ -127,21 +127,13 @@ const DEFAULT_MOCK_GUESTBOOK: GuestMessage[] = [
 
 // quản lý sổ lưu bút đám cưới
 export function useGuestbook(weddingSlug: string) {
-  const [messages, setMessages] = useState<GuestMessage[]>(DEFAULT_MOCK_GUESTBOOK);
-
-  const isEmbedMode =
-    typeof window !== "undefined" &&
-    (window.location.search.includes("embed=true") || window.self !== window.top);
-
-  const isDemoMode =
-    !weddingSlug ||
-    weddingSlug === "preview" ||
-    weddingSlug === "demo" ||
-    weddingSlug.startsWith("temp_") ||
-    isEmbedMode;
+  const isPreview = !weddingSlug || weddingSlug === "preview" || weddingSlug === "demo";
+  const [messages, setMessages] = useState<GuestMessage[]>(
+    isPreview ? DEFAULT_MOCK_GUESTBOOK : []
+  );
 
   useEffect(() => {
-    if (isDemoMode) {
+    if (isPreview) {
       setMessages(DEFAULT_MOCK_GUESTBOOK);
       return;
     }
@@ -149,25 +141,25 @@ export function useGuestbook(weddingSlug: string) {
     fetch(`${API_URL}/api/weddings/${weddingSlug}/guestbook`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           const formatted = data.data.map((item: any) => ({
             name: item.name,
-            msg: item.message,
+            msg: item.message || item.msg || "",
             time: formatTimeAgo(item.createdAt),
           }));
           setMessages(formatted);
         } else {
-          setMessages(DEFAULT_MOCK_GUESTBOOK);
+          setMessages([]);
         }
       })
       .catch((err) => {
         console.error("Lỗi khi tải sổ lưu bút:", err);
-        setMessages(DEFAULT_MOCK_GUESTBOOK);
+        setMessages([]);
       });
-  }, [weddingSlug, isDemoMode]);
+  }, [weddingSlug, isPreview]);
 
   const handleSendMessage = async (name: string, msg: string) => {
-    if (isDemoMode) {
+    if (isPreview) {
       setMessages((prev) => [{ name: name || "Khách mời", msg, time: "Vừa xong" }, ...prev]);
       return { success: true };
     }

@@ -46,15 +46,21 @@ export function MinimalCoupleSpotlight({
               </p>
               <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
             </div>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize  mb-0">
-              {groomFatherName || "Lê Văn Bình"}
-            </h3>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize mb-0">
-              {groomMotherName || "Trần Thị Hằng"}
-            </h3>
-            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 max-w-[150px] mx-auto leading-relaxed">
-              {groomAddress || ""}
-            </p>
+            {groomFatherName && groomFatherName.trim() ? (
+              <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm mb-0">
+                {groomFatherName}
+              </h3>
+            ) : null}
+            {groomMotherName && groomMotherName.trim() ? (
+              <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm mb-0">
+                {groomMotherName}
+              </h3>
+            ) : null}
+            {groomAddress ? (
+              <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 max-w-[150px] mx-auto leading-relaxed">
+                {groomAddress}
+              </p>
+            ) : null}
           </div>
 
           <div className="space-y-2 flex-1">
@@ -65,15 +71,21 @@ export function MinimalCoupleSpotlight({
               </p>
               <div className="h-[1px] w-6 sm:w-10 bg-[rgb(225,188,124)]/30" />
             </div>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize mb-0">
-              {brideFatherName || "Nguyễn Văn Lợi"}
-            </h3>
-            <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm capitalize mb-0">
-              {brideMotherName || "Vũ Thị Thanh"}
-            </h3>
-            <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 max-w-[150px] mx-auto leading-relaxed">
-              {brideAddress || ""}
-            </p>
+            {brideFatherName && brideFatherName.trim() ? (
+              <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm mb-0">
+                {brideFatherName}
+              </h3>
+            ) : null}
+            {brideMotherName && brideMotherName.trim() ? (
+              <h3 className="text-base sm:text-lg font-serif text-[rgb(225,188,124)] capitalize drop-shadow-sm mb-0">
+                {brideMotherName}
+              </h3>
+            ) : null}
+            {brideAddress ? (
+              <p className="text-[10px] font-serif text-[rgb(225,188,124)]/50 max-w-[150px] mx-auto leading-relaxed">
+                {brideAddress}
+              </p>
+            ) : null}
           </div>
         </GsapReveal>
 

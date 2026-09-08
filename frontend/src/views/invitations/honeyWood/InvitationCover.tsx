@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { WeddingData } from "@/entities/invitation/model/types";
+import { FullImageModal } from "./components/FullImageModal";
 import img_12 from "@/shared/assets/image/wood/img_12.webp";
 import img_13 from "@/shared/assets/image/wood/img_13.svg";
 import img_14 from "@/shared/assets/image/wood/img_14.png";
@@ -17,6 +18,7 @@ export function InvitationCover({
   weddingData,
   guestName,
 }: InvitationCoverProps) {
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const { groomName, brideName, galleryImages, coverImageUrl } =
     weddingData || {};
 
@@ -318,13 +320,17 @@ export function InvitationCover({
             </div>
 
             {/* Ảnh cưới dâu rể lấp đầy 100% khung gỗ với tiêu điểm khuôn mặt ở giữa/trên */}
-            <div className="absolute left-[15%] right-[15%] top-[14%] bottom-[15%] flex items-center justify-center overflow-hidden rounded-[2px] bg-neutral-900 z-0">
+            <div
+              className="absolute left-[15%] right-[15%] top-[14%] bottom-[15%] flex items-center justify-center overflow-hidden rounded-[2px] bg-neutral-900 z-10 cursor-pointer group"
+              onClick={() => setIsPhotoModalOpen(true)}
+              title="Click để xem ảnh phóng to"
+            >
               <img
                 src={couplePhoto}
                 alt="Groom & Bride"
                 loading="eager"
                 decoding="async"
-                className="w-full h-full object-cover object-[center_20%] contrast-[1.03] hover:scale-105 transition-transform duration-700 z-10"
+                className="w-full h-full object-cover object-[center_20%] contrast-[1.03] group-hover:scale-105 transition-transform duration-700 z-10"
               />
               <div className="absolute inset-0 shadow-[inset_0_3px_10px_rgba(0,0,0,0.65)] pointer-events-none z-20" />
             </div>
@@ -374,6 +380,14 @@ export function InvitationCover({
           </div>
         </div>
       </div>
+
+      {isPhotoModalOpen && (
+        <FullImageModal
+          images={galleryImages && galleryImages.length > 0 ? galleryImages : [couplePhoto]}
+          initialIndex={0}
+          onClose={() => setIsPhotoModalOpen(false)}
+        />
+      )}
     </section>
   );
 }

@@ -7,6 +7,7 @@ import { InvitationEditorForm } from "./InvitationEditorForm";
 import { InvitationPreview } from "@/widgets/invitation-builder";
 import { PublishSuccessModal } from "@/widgets/invitation-builder";
 import { useInvitationCreate } from "@/views/admin";
+import { AdminThemeToggle } from "@/widgets/admin";
 import { API_URL } from "@/shared/lib/config";
 
 export function InvitationEditorScreen() {
@@ -175,7 +176,7 @@ export function InvitationEditorScreen() {
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col h-screen bg-[#f8fafc] overflow-hidden">
+    <div className="flex-1 w-full flex flex-col h-screen bg-[#f8fafc] dark:bg-slate-950 overflow-hidden text-slate-800 dark:text-slate-100">
       {/* Email / Publish Modal */}
       {isEmailModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -183,16 +184,16 @@ export function InvitationEditorScreen() {
             className="absolute inset-0 bg-[#1e1e2d]/80 backdrop-blur-sm"
             onClick={() => setIsEmailModalOpen(false)}
           ></div>
-          <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 flex flex-col animate-in fade-in zoom-in-95 duration-200">
-            <h3 className="text-xl font-bold text-slate-800 mb-1">
+          <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl w-full max-w-lg p-6 flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-1">
               Thông tin xuất bản thiệp
             </h3>
-            <p className="text-xs text-slate-500 mb-5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
               Vui lòng kiểm tra đường dẫn thiệp và thông tin tài khoản trước khi xuất bản
             </p>
 
             {publishError && (
-              <div className="p-3 mb-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-xs font-semibold flex items-center gap-2">
+              <div className="p-3 mb-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-semibold flex items-center gap-2">
                 <span>⚠️ {publishError}</span>
               </div>
             )}
@@ -200,25 +201,25 @@ export function InvitationEditorScreen() {
             <div className="space-y-4 mb-6">
               {/* Slug */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">
                   Mã đường dẫn thiệp (Slug) <span className="text-rose-500">*</span>
                 </label>
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-rose-500/20 focus-within:border-rose-500 transition-colors">
-                  <span className="text-xs text-slate-400 font-mono select-none">/w/</span>
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-rose-500/20 focus-within:border-rose-500 transition-colors">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 font-mono select-none">/w/</span>
                   <input
                     type="text"
                     placeholder="minh-quan-thu-ha"
-                    className="w-full bg-transparent text-sm font-semibold text-slate-700 focus:outline-none"
+                    className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
                     value={slugInput}
                     onChange={(e) => setSlugInput(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
                   />
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">Đường dẫn công khai duy nhất cho thiệp cưới này</p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Đường dẫn công khai duy nhất cho thiệp cưới này</p>
               </div>
 
               {/* Source (Nguồn thiệp) */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">
                   Nguồn thiệp (Kênh đến) <span className="text-rose-500">*</span>
                 </label>
                 <select
@@ -227,7 +228,7 @@ export function InvitationEditorScreen() {
                     setSource(e.target.value);
                     setPublishSettings({ ...publishSettings, source: e.target.value });
                   }}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-colors"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-colors"
                 >
                   <option value="fb">📘 Facebook (FB)</option>
                   <option value="zalo">💬 Zalo</option>
@@ -239,25 +240,25 @@ export function InvitationEditorScreen() {
               </div>
 
               {/* QR Preview + Details */}
-              <div className="grid grid-cols-3 gap-4 p-3 bg-slate-50 border border-slate-200 rounded-xl items-center">
-                <div className="flex flex-col items-center justify-center p-2 bg-white rounded-lg border border-slate-200 shrink-0">
+              <div className="grid grid-cols-3 gap-4 p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl items-center">
+                <div className="flex flex-col items-center justify-center p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shrink-0">
                   <img
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${typeof window !== "undefined" ? `${window.location.origin}/w/${slugInput}` : `https://wedding.com/w/${slugInput}`}`}
                     alt="QR Code"
                     className="w-20 h-20"
                   />
-                  <span className="text-[10px] text-slate-400 font-bold uppercase mt-1">Mã QR Xem trước</span>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase mt-1">Mã QR Xem trước</span>
                 </div>
                 <div className="col-span-2 space-y-3">
                   {/* Email */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Email khách hàng <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="email"
                       placeholder="VD: minh.lan@gmail.com"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-colors text-slate-700 bg-white"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-colors text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800"
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
                     />
@@ -265,14 +266,14 @@ export function InvitationEditorScreen() {
 
                   {/* Password */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Mật khẩu mặc định
                     </label>
                     <input
                       type="text"
                       readOnly
                       value="123456"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 bg-slate-100 text-slate-600 focus:outline-none"
+                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -282,7 +283,7 @@ export function InvitationEditorScreen() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsEmailModalOpen(false)}
-                className="px-5 py-2.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                className="px-5 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors"
               >
                 Hủy
               </button>
@@ -300,35 +301,36 @@ export function InvitationEditorScreen() {
       )}
 
       {/* Topbar */}
-      <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 z-10">
+      <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between shrink-0 z-10">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setStep("select_template")}
-            className="p-2 hover:bg-slate-100 text-slate-500 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h2 className="font-bold text-slate-800 text-sm">
+            <h2 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
               {isEditMode
                 ? "Chỉnh sửa thiệp cưới"
                 : activeTemplate?.name || "Tạo thiệp mới"}
             </h2>
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
               {isPublishing ? "Đang lưu..." : "Sẵn sàng lưu"}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
+          <AdminThemeToggle />
           <button
             onClick={handlePublish}
             disabled={isPublishing}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
           >
             <Save size={16} /> Lưu nháp
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <Eye size={16} /> Xem trước
           </button>
           <button
@@ -349,17 +351,17 @@ export function InvitationEditorScreen() {
       {/* Main Workspace */}
       <main className="flex-1 flex overflow-hidden">
         {/* Form Panel (Left + Middle combined) */}
-        <div className="w-[700px] flex shrink-0 border-r border-slate-200 bg-white z-0">
+        <div className="w-[700px] flex shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-0">
           <InvitationEditorForm />
         </div>
 
         {/* Preview Panel (Right) */}
-        <div className="flex-1 flex flex-col relative bg-slate-50 overflow-hidden">
+        <div className="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
           {/* Top Bar of Preview */}
-          <div className="h-12 border-b border-slate-200 flex items-center px-6 justify-between shrink-0 bg-white/50 backdrop-blur-sm">
-            <h3 className="text-sm font-bold text-slate-800">Xem trước</h3>
+          <div className="h-12 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between shrink-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Xem trước</h3>
             <div className="flex items-center gap-2">
-              <button className="p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 transition-colors">
+              <button className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 <svg
                   width="16"
                   height="16"
@@ -374,7 +376,7 @@ export function InvitationEditorScreen() {
                   <line x1="12" y1="18" x2="12.01" y2="18"></line>
                 </svg>
               </button>
-              <button className="p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 transition-colors">
+              <button className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 <svg
                   width="16"
                   height="16"

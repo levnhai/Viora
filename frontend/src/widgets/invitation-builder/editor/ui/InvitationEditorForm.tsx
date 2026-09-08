@@ -450,7 +450,7 @@ export function InvitationEditorForm() {
   return (
     <div className="flex w-full h-full">
       {/* Sidebar Menu */}
-      <div className="w-[180px] bg-slate-50 border-r border-slate-200 flex flex-col py-4 shrink-0 overflow-y-auto custom-scrollbar">
+      <div className="w-[180px] bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col py-4 shrink-0 overflow-y-auto custom-scrollbar">
         {visibleTabs.map((item) => {
           const Icon = item.icon;
           const isActive = editorActiveTab === item.id;
@@ -460,13 +460,13 @@ export function InvitationEditorForm() {
               onClick={() => setEditorActiveTab(item.id)}
               className={`flex items-center gap-3 px-4 py-3 text-[13px] font-medium transition-colors relative ${
                 isActive
-                  ? "text-rose-600 bg-rose-50/50"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50"
+                  ? "text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/40"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
               }`}
             >
               <Icon
                 size={16}
-                className={isActive ? "text-rose-500" : "text-slate-400"}
+                className={isActive ? "text-rose-500" : "text-slate-400 dark:text-slate-500"}
               />
               {item.id}
               {isActive && (
@@ -478,20 +478,20 @@ export function InvitationEditorForm() {
       </div>
 
       {/* Form Area */}
-      <div className="flex-1 flex flex-col bg-white overflow-y-auto custom-scrollbar p-6">
-        <h3 className="text-lg font-bold text-slate-800 mb-6">
+      <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 overflow-y-auto custom-scrollbar p-6">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6">
           {editorActiveTab}
         </h3>
 
         {editorActiveTab === "Thông tin cơ bản" && (
           <div className="space-y-6">
             <div className="space-y-4">
-              <h4 className="text-sm font-semibold text-slate-700">
+              <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Họ tên cô dâu chú rể
               </h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Tên chú rể
                   </label>
                   <input
@@ -500,11 +500,11 @@ export function InvitationEditorForm() {
                     onChange={(e) =>
                       setBasicInfo({ ...basicInfo, groomName: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Tên cô dâu
                   </label>
                   <input
@@ -513,7 +513,7 @@ export function InvitationEditorForm() {
                     onChange={(e) =>
                       setBasicInfo({ ...basicInfo, brideName: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                   />
                 </div>
               </div>
@@ -523,7 +523,7 @@ export function InvitationEditorForm() {
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">
+                      <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                         Ông (Bố chú rể)
                       </label>
                       <input
@@ -535,12 +535,12 @@ export function InvitationEditorForm() {
                             groomFatherName: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                         placeholder="Nguyễn Văn A"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">
+                      <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                         Bà (Mẹ chú rể)
                       </label>
                       <input
@@ -552,14 +552,14 @@ export function InvitationEditorForm() {
                             groomMotherName: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                         placeholder="Trần Thị B"
                       />
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">
+                      <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                         Ông (Bố cô dâu)
                       </label>
                       <input
@@ -571,12 +571,12 @@ export function InvitationEditorForm() {
                             brideFatherName: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                         placeholder="Lê Văn C"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">
+                      <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                         Bà (Mẹ cô dâu)
                       </label>
                       <input
@@ -588,7 +588,7 @@ export function InvitationEditorForm() {
                             brideMotherName: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                         placeholder="Phạm Thị D"
                       />
                     </div>
@@ -600,7 +600,7 @@ export function InvitationEditorForm() {
               {schema.basicInfo?.hasRankInfo && (
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1.5">
+                    <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                       Thứ bậc chú rể
                     </label>
                     <input
@@ -612,12 +612,12 @@ export function InvitationEditorForm() {
                           groomRank: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                       placeholder="VD: Trưởng nam"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1.5">
+                    <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                       Thứ bậc cô dâu
                     </label>
                     <input
@@ -629,7 +629,7 @@ export function InvitationEditorForm() {
                           brideRank: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                       placeholder="VD: Út nữ"
                     />
                   </div>
@@ -639,7 +639,7 @@ export function InvitationEditorForm() {
               {schema.basicInfo?.hasAddressInfo && (
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1.5">
+                    <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                       Địa chỉ nhà nam
                     </label>
                     <input
@@ -651,12 +651,12 @@ export function InvitationEditorForm() {
                           groomAddress: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                       placeholder="Số nhà, đường, phường, quận..."
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1.5">
+                    <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                       Địa chỉ nhà nữ
                     </label>
                     <input
@@ -668,7 +668,7 @@ export function InvitationEditorForm() {
                           brideAddress: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                      className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
                       placeholder="Số nhà, đường, phường, quận..."
                     />
                   </div>
@@ -677,9 +677,9 @@ export function InvitationEditorForm() {
             </div>
 
             {/* Thông tin Lễ & Tiệc Cưới (Multi-event Card Editor) */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
+            <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h4 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                   <CalendarClock size={16} className="text-rose-500" />
                   Thông tin Lễ & Tiệc Cưới (Nhiều sự kiện)
                 </h4>
@@ -687,21 +687,21 @@ export function InvitationEditorForm() {
                   <button
                     type="button"
                     onClick={() => handleAddWeddingEvent("LỄ TIỆC CƯỚI")}
-                    className="px-2 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-colors"
+                    className="px-2 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 rounded-lg text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
                   >
                     + Lễ Tiệc Cưới
                   </button>
                   <button
                     type="button"
                     onClick={() => handleAddWeddingEvent("LỄ THÀNH HÔN")}
-                    className="px-2 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-colors"
+                    className="px-2 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
                   >
                     + Lễ Thành Hôn
                   </button>
                   <button
                     type="button"
                     onClick={() => handleAddWeddingEvent("LỄ VU QUY")}
-                    className="px-2 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg text-xs font-semibold hover:bg-amber-100 transition-colors"
+                    className="px-2 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
                   >
                     + Lễ Vu Quy
                   </button>
@@ -714,10 +714,10 @@ export function InvitationEditorForm() {
                   return (
                     <div
                       key={eventId}
-                      className="p-4 border border-slate-200 rounded-2xl bg-slate-50/80 space-y-3 relative shadow-sm"
+                      className="p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 space-y-3 relative shadow-sm"
                     >
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <span className="font-bold text-xs text-slate-800 flex items-center gap-2">
+                      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                        <span className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-2">
                           <span className="w-5 h-5 rounded-full bg-rose-600 text-white text-[11px] flex items-center justify-center font-bold">
                             {index + 1}
                           </span>
@@ -727,7 +727,7 @@ export function InvitationEditorForm() {
                           <button
                             type="button"
                             onClick={() => handleRemoveWeddingEvent(eventId)}
-                            className="text-red-500 hover:text-red-700 text-xs font-medium flex items-center gap-1 cursor-pointer border-0 bg-transparent"
+                            className="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 text-xs font-medium flex items-center gap-1 cursor-pointer border-0 bg-transparent"
                           >
                             <Trash2 size={13} /> Xóa sự kiện
                           </button>
@@ -736,78 +736,78 @@ export function InvitationEditorForm() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                             Tiêu đề lễ
                           </label>
                           <input
                             type="text"
                             value={event.title}
                             onChange={(e) => handleUpdateWeddingEvent(eventId, "title", e.target.value)}
-                            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                             placeholder="LỄ TIỆC CƯỚI / LỄ THÀNH HÔN..."
                           />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                             Giờ tổ chức
                           </label>
                           <input
                             type="text"
                             value={event.time}
                             onChange={(e) => handleUpdateWeddingEvent(eventId, "time", e.target.value)}
-                            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                             placeholder="11:00 AM"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                           Ngày tổ chức
                         </label>
                         <input
                           type="date"
                           value={event.date}
                           onChange={(e) => handleUpdateWeddingEvent(eventId, "date", e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                           Tên địa điểm / Nhà hàng
                         </label>
                         <input
                           type="text"
                           value={event.locationName}
                           onChange={(e) => handleUpdateWeddingEvent(eventId, "locationName", e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           placeholder="Trung tâm hội nghị tiệc cưới Ninh Bình Legend..."
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                           Địa chỉ chi tiết
                         </label>
                         <input
                           type="text"
                           value={event.address}
                           onChange={(e) => handleUpdateWeddingEvent(eventId, "address", e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           placeholder="177 Đ. Lê Thái Tổ, Khu Đô Thị Xuân Thành, Hoa Lư..."
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                           Link Google Maps chỉ đường (Tuỳ chọn)
                         </label>
                         <input
                           type="text"
                           value={event.mapUrl || ""}
                           onChange={(e) => handleUpdateWeddingEvent(eventId, "mapUrl", e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-rose-500 bg-white"
+                          className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           placeholder="https://maps.google.com/..."
                         />
                       </div>
@@ -818,9 +818,9 @@ export function InvitationEditorForm() {
             </div>
 
             <div className="space-y-4">
-              <h4 className="text-sm font-semibold text-slate-700">Nhạc nền</h4>
+              <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Nhạc nền</h4>
               <div>
-                <label className="block text-xs text-slate-500 mb-1.5">
+                <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                   Link nhạc nền (tuỳ chọn)
                 </label>
 
@@ -841,7 +841,7 @@ export function InvitationEditorForm() {
                   return (
                     <div className="mb-3">
                       <select
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 bg-white cursor-pointer"
+                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 cursor-pointer"
                         onChange={(e) => {
                           setBasicInfo({
                             ...basicInfo,
@@ -871,13 +871,13 @@ export function InvitationEditorForm() {
                       })
                     }
                     placeholder="VD: /audio/wedding-song.mp3 hoặc dán link nhạc..."
-                    className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   />
                   <div className="relative shrink-0">
                     <button
                       type="button"
                       disabled={isUploading}
-                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50"
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50"
                     >
                       {isUploading ? (
                         <Loader2 size={16} className="animate-spin" />
@@ -903,17 +903,17 @@ export function InvitationEditorForm() {
 
         {editorActiveTab === "Lời ngỏ" && (
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-slate-700">
+            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               Lời ngỏ / Story
             </h4>
             <textarea
               rows={8}
               value={story}
               onChange={(e) => setStory(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 resize-none"
+              className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 resize-none text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               placeholder="Nhập lời ngỏ..."
             />
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Lời ngỏ sẽ được hiển thị ở phần đầu thiệp cưới của bạn.
             </p>
           </div>
@@ -921,18 +921,18 @@ export function InvitationEditorForm() {
 
         {editorActiveTab === "Quà mừng" && (
           <div className="space-y-6">
-            <h4 className="text-sm font-semibold text-slate-700">
+            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               Thông tin nhận quà mừng (Chuyển khoản)
             </h4>
 
             {/* Mừng cưới chú rể */}
-            <div className="p-4 border border-slate-200 rounded-xl space-y-4">
-              <h5 className="text-sm font-bold text-slate-800">
+            <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl space-y-4 bg-slate-50/50 dark:bg-slate-800/30">
+              <h5 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                 Mừng cưới Nhà trai (Chú rể)
               </h5>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Ngân hàng
                   </label>
                   <select
@@ -943,7 +943,7 @@ export function InvitationEditorForm() {
                         groomBankName: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 cursor-pointer"
                   >
                     <option value="">Chọn ngân hàng</option>
                     {banks.map((bank, idx) => (
@@ -954,7 +954,7 @@ export function InvitationEditorForm() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Tên chủ tài khoản
                   </label>
                   <input
@@ -966,12 +966,12 @@ export function InvitationEditorForm() {
                         groomAccountName: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     placeholder="VD: NGUYEN VAN A"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Số tài khoản
                   </label>
                   <input
@@ -983,17 +983,17 @@ export function InvitationEditorForm() {
                         groomAccountNumber: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     placeholder="Nhập số tài khoản"
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Ảnh mã QR
                   </label>
                   {giftInfo.groomQrUrl ? (
                     <div
-                      className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group cursor-pointer"
+                      className="relative w-32 h-32 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden group cursor-pointer"
                       onClick={() =>
                         setPreviewImage(giftInfo.groomQrUrl || null)
                       }
@@ -1014,7 +1014,7 @@ export function InvitationEditorForm() {
                       </button>
                     </div>
                   ) : (
-                    <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50">
+                    <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50 dark:bg-slate-800/50">
                       {isUploading ? (
                         <Loader2 size={24} className="mb-2 animate-spin" />
                       ) : (
@@ -1037,13 +1037,13 @@ export function InvitationEditorForm() {
             </div>
 
             {/* Mừng cưới cô dâu */}
-            <div className="p-4 border border-slate-200 rounded-xl space-y-4 mt-6">
-              <h5 className="text-sm font-bold text-slate-800">
+            <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl space-y-4 mt-6 bg-slate-50/50 dark:bg-slate-800/30">
+              <h5 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                 Mừng cưới Nhà gái (Cô dâu)
               </h5>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Ngân hàng
                   </label>
                   <select
@@ -1054,7 +1054,7 @@ export function InvitationEditorForm() {
                         brideBankName: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 cursor-pointer"
                   >
                     <option value="">Chọn ngân hàng</option>
                     {banks.map((bank, idx) => (
@@ -1065,7 +1065,7 @@ export function InvitationEditorForm() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Tên chủ tài khoản
                   </label>
                   <input
@@ -1077,12 +1077,12 @@ export function InvitationEditorForm() {
                         brideAccountName: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     placeholder="VD: NGUYEN THI B"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Số tài khoản
                   </label>
                   <input
@@ -1094,17 +1094,17 @@ export function InvitationEditorForm() {
                         brideAccountNumber: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     placeholder="Nhập số tài khoản"
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs text-slate-500 mb-1.5">
+                  <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                     Ảnh mã QR
                   </label>
                   {giftInfo.brideQrUrl ? (
                     <div
-                      className="relative w-32 h-32 border border-slate-200 rounded-lg overflow-hidden group cursor-pointer"
+                      className="relative w-32 h-32 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden group cursor-pointer"
                       onClick={() =>
                         setPreviewImage(giftInfo.brideQrUrl || null)
                       }
@@ -1125,7 +1125,7 @@ export function InvitationEditorForm() {
                       </button>
                     </div>
                   ) : (
-                    <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50">
+                    <div className="relative w-32 h-32 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-rose-400 hover:text-rose-500 transition-colors cursor-pointer bg-slate-50 dark:bg-slate-800/50">
                       {isUploading ? (
                         <Loader2 size={24} className="mb-2 animate-spin" />
                       ) : (
@@ -1152,13 +1152,13 @@ export function InvitationEditorForm() {
         {editorActiveTab === "Album ảnh" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-semibold text-slate-700">
+              <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Thư viện ảnh ({galleryImages.length} ảnh)
               </h4>
 
               <div className="relative">
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors ${isUploading ? "opacity-70 cursor-not-allowed" : ""}`}
+                  className={`flex items-center gap-2 px-4 py-2 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 rounded-lg text-sm font-semibold transition-colors ${isUploading ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
                   {isUploading ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -1182,7 +1182,7 @@ export function InvitationEditorForm() {
               {galleryImages.map((img, idx) => (
                 <div
                   key={img}
-                  className="relative aspect-square rounded-xl overflow-hidden group border border-slate-200"
+                  className="relative aspect-square rounded-xl overflow-hidden group border border-slate-200 dark:border-slate-700"
                 >
                   <img
                     src={img}
@@ -1202,18 +1202,18 @@ export function InvitationEditorForm() {
               ))}
 
               {galleryImages.length === 0 && (
-                <div className="col-span-3 py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 bg-slate-50">
-                  <Images size={32} className="mb-3 text-slate-300" />
-                  <p className="text-sm font-medium">
+                <div className="col-span-3 py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-800/40">
+                  <Images size={32} className="mb-3 text-slate-300 dark:text-slate-600" />
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                     Chưa có ảnh nào trong thư viện
                   </p>
-                  <p className="text-xs mt-1">
+                  <p className="text-xs mt-1 text-slate-400 dark:text-slate-500">
                     Nhấn nút "Tải ảnh lên" để thêm ảnh vào thiệp
                   </p>
                 </div>
               )}
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               * Gợi ý: Nên chọn ảnh chất lượng cao và có tỷ lệ đồng đều (tốt
               nhất là dọc hoặc vuông) để giao diện hiển thị đẹp nhất.
             </p>
@@ -1223,23 +1223,23 @@ export function InvitationEditorForm() {
         {editorActiveTab === "Timeline sự kiện" && (
           <div className="space-y-6">
             <div className="mb-2">
-              <h3 className="text-xl font-bold text-slate-800 mb-2">
+              <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
                 Timeline sự kiện
               </h3>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Thêm và chỉnh sửa các mốc sự kiện trong ngày trọng đại của bạn
               </p>
             </div>
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                     Danh sách sự kiện
                   </h4>
                 </div>
                 <button
                   onClick={handleAddEvent}
-                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-sm font-medium hover:bg-rose-100 transition-colors"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-lg text-sm font-medium hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
                 >
                   <Plus size={16} />
                   <span>Thêm sự kiện</span>
@@ -1252,7 +1252,7 @@ export function InvitationEditorForm() {
                   return (
                     <div
                       key={event.id}
-                      className="flex items-center space-x-4 p-4 border border-slate-100 bg-slate-50/50 shadow-sm rounded-xl hover:border-slate-200 transition-colors group relative"
+                      className="flex items-center space-x-4 p-4 border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 shadow-sm rounded-xl hover:border-slate-200 dark:hover:border-slate-700 transition-colors group relative"
                     >
                       <button
                         onClick={() => cycleIcon(event.id, event.icon)}
@@ -1263,9 +1263,9 @@ export function InvitationEditorForm() {
                       </button>
 
                       <div className="flex-1 grid grid-cols-12 gap-4 items-center">
-                        <div className="col-span-8 bg-white border border-slate-200 rounded-lg p-2 space-y-1">
+                        <div className="col-span-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 space-y-1">
                           <input
-                            className="font-bold text-sm text-slate-800 w-full outline-none border-b border-transparent focus:border-slate-300 bg-transparent px-1 placeholder-slate-400"
+                            className="font-bold text-sm text-slate-800 dark:text-slate-100 w-full outline-none border-b border-transparent focus:border-slate-300 dark:focus:border-slate-600 bg-transparent px-1 placeholder-slate-400 dark:placeholder-slate-500"
                             value={event.title}
                             onChange={(e) =>
                               updateEvent(event.id, "title", e.target.value)
@@ -1273,7 +1273,7 @@ export function InvitationEditorForm() {
                             placeholder="Tên sự kiện"
                           />
                           <input
-                            className="text-xs text-slate-500 w-full outline-none border-b border-transparent focus:border-slate-300 bg-transparent px-1 placeholder-slate-300"
+                            className="text-xs text-slate-500 dark:text-slate-400 w-full outline-none border-b border-transparent focus:border-slate-300 dark:focus:border-slate-600 bg-transparent px-1 placeholder-slate-300 dark:placeholder-slate-500"
                             value={event.description}
                             onChange={(e) =>
                               updateEvent(
@@ -1286,20 +1286,20 @@ export function InvitationEditorForm() {
                           />
                         </div>
                         <div className="col-span-4 h-full">
-                          <div className="bg-white border border-slate-200 rounded-lg p-2 h-full flex flex-col justify-center">
-                            <div className="text-[10px] text-slate-400 mb-1 font-medium uppercase tracking-wider">
+                          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 h-full flex flex-col justify-center">
+                            <div className="text-[10px] text-slate-400 dark:text-slate-500 mb-1 font-medium uppercase tracking-wider">
                               Thời gian
                             </div>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="time"
-                                className="text-sm font-semibold text-slate-700 w-full bg-transparent outline-none cursor-pointer"
+                                className="text-sm font-semibold text-slate-700 dark:text-slate-200 w-full bg-transparent outline-none cursor-pointer"
                                 value={event.time}
                                 onChange={(e) =>
                                   updateEvent(event.id, "time", e.target.value)
                                 }
                               />
-                              <Clock size={14} className="text-slate-400" />
+                              <Clock size={14} className="text-slate-400 dark:text-slate-500" />
                             </div>
                           </div>
                         </div>
@@ -1308,7 +1308,7 @@ export function InvitationEditorForm() {
                       {/* Nút X nổi lên bề mặt ở góc trên bên phải */}
                       <button
                         onClick={() => handleRemoveEvent(event.id)}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-rose-600 shadow-sm hover:shadow flex items-center justify-center transition-all cursor-pointer z-10 opacity-0 group-hover:opacity-100"
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:text-rose-600 shadow-sm hover:shadow flex items-center justify-center transition-all cursor-pointer z-10 opacity-0 group-hover:opacity-100"
                         title="Xóa sự kiện"
                       >
                         <X size={12} />
@@ -1318,7 +1318,7 @@ export function InvitationEditorForm() {
                 })}
               </div>
 
-              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 text-blue-700 rounded-xl mt-6 border border-blue-100">
+              <div className="flex items-start space-x-3 p-4 bg-blue-50/50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-xl mt-6 border border-blue-100 dark:border-blue-900/50">
                 <div className="mt-0.5">
                   <div className="w-4 h-4 rounded-full border border-blue-500 flex items-center justify-center text-[10px] font-bold">
                     i
@@ -1328,7 +1328,7 @@ export function InvitationEditorForm() {
                   <strong>Hướng dẫn:</strong> Kéo thả để sắp xếp thứ tự các sự
                   kiện. Thời gian sẽ hiển thị theo thứ tự từ trên xuống trong
                   thiệp cưới. <br />
-                  <span className="text-xs text-blue-500 mt-1 inline-block">
+                  <span className="text-xs text-blue-500 dark:text-blue-400 mt-1 inline-block">
                     Mẹo: Click vào biểu tượng tròn để đổi icon sự kiện.
                   </span>
                 </div>
@@ -1341,8 +1341,8 @@ export function InvitationEditorForm() {
         {editorActiveTab === "Ảnh & Video" && (
           <div className="p-8 max-w-2xl">
             <div className="mb-8">
-              <h3 className="text-lg font-bold text-slate-800">Ảnh & Video</h3>
-              <p className="text-sm text-slate-500 mt-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Ảnh & Video</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Thêm và quản lý hình ảnh, video hiển thị trên thiệp cưới
               </p>
             </div>
@@ -1351,17 +1351,17 @@ export function InvitationEditorForm() {
             {schema.cover?.hasCoverImage && (
               <div className="mb-10">
                 <div className="mb-4 flex flex-col">
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                     Ảnh bìa (Hero Image)
                   </h4>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Ảnh bìa sẽ hiển thị ở phần đầu của thiệp cưới
                   </p>
                 </div>
 
                 <div className="flex gap-4">
                   {basicInfo.coverImage ? (
-                    <div className="w-[200px] h-[220px] rounded-xl overflow-hidden border border-slate-200 shadow-sm relative group">
+                    <div className="w-[200px] h-[220px] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm relative group">
                       <img
                         src={basicInfo.coverImage}
                         className="w-full h-full object-cover"
@@ -1385,15 +1385,15 @@ export function InvitationEditorForm() {
                       </button>
                     </div>
                   ) : (
-                    <div className="w-[200px] h-[220px] rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-center text-slate-300">
+                    <div className="w-[200px] h-[220px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-center text-slate-300 dark:text-slate-600">
                       <ImageIcon size={48} strokeWidth={1} />
                     </div>
                   )}
 
                   <div
-                    className={`w-[200px] h-[220px] border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all rounded-xl flex flex-col items-center justify-center p-4 text-center relative ${basicInfo.coverImage ? "opacity-40 hover:opacity-100" : ""}`}
+                    className={`w-[200px] h-[220px] border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/30 transition-all rounded-xl flex flex-col items-center justify-center p-4 text-center relative ${basicInfo.coverImage ? "opacity-40 hover:opacity-100" : ""}`}
                   >
-                    <div className="w-12 h-12 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center text-slate-600 mb-4">
+                    <div className="w-12 h-12 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 mb-4">
                       {isUploading ? (
                         <Loader2
                           size={20}
@@ -1403,15 +1403,15 @@ export function InvitationEditorForm() {
                         <CloudUpload size={20} />
                       )}
                     </div>
-                    <h5 className="text-[13px] font-bold text-slate-800 mb-1">
+                    <h5 className="text-[13px] font-bold text-slate-800 dark:text-slate-100 mb-1">
                       Thay đổi ảnh bìa
                     </h5>
-                    <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2 leading-relaxed">
                       Định dạng: JPG,
                       <br />
                       PNG, WebP
                     </p>
-                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed">
                       Kích thước khuyến
                       <br />
                       nghị: 1920x1080px
@@ -1432,17 +1432,17 @@ export function InvitationEditorForm() {
             <div>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                     Ảnh & Video nổi bật
                   </h4>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Hiển thị trên trang chủ của thiệp cưới
                   </p>
                 </div>
                 <div className="relative">
                   <button
                     disabled={isUploading}
-                    className={`flex items-center justify-center gap-2 px-6 py-2.5 bg-rose-50 text-rose-600 rounded-xl text-sm font-bold transition-colors ${isUploading ? "opacity-70 cursor-not-allowed" : "hover:bg-rose-100"}`}
+                    className={`flex items-center justify-center gap-2 px-6 py-2.5 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl text-sm font-bold transition-colors ${isUploading ? "opacity-70 cursor-not-allowed" : "hover:bg-rose-100 dark:hover:bg-rose-900/50"}`}
                   >
                     {isUploading ? (
                       <Loader2 size={16} className="animate-spin" />
@@ -1466,9 +1466,9 @@ export function InvitationEditorForm() {
                 {galleryImages.map((img, idx) => (
                   <div
                     key={img}
-                    className="bg-white border border-slate-200 rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-shadow"
+                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-shadow"
                   >
-                    <div className="aspect-[4/3] relative bg-slate-100">
+                    <div className="aspect-[4/3] relative bg-slate-100 dark:bg-slate-900">
                       <img
                         src={img}
                         className="w-full h-full object-cover"
@@ -1489,24 +1489,24 @@ export function InvitationEditorForm() {
                     </div>
                     <div className="p-3">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-medium text-slate-700">
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
                           Ảnh {idx + 1}
                         </span>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <div className="relative">
-                            <button className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md">
+                            <button className="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-md">
                               <Edit2 size={14} />
                             </button>
                           </div>
                           <button
                             onClick={() => handleRemoveGalleryImage(img)}
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-md"
                           >
                             <Trash2 size={14} />
                           </button>
                         </div>
                       </div>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500">
                         1920 x 1280 • 2.0 MB
                       </span>
                     </div>
@@ -1514,33 +1514,33 @@ export function InvitationEditorForm() {
                 ))}
 
                 {galleryImages.length === 0 && (
-                  <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 bg-slate-50/50">
+                  <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 dark:text-slate-500 bg-slate-50/50 dark:bg-slate-800/40">
                     <ImageIcon
                       size={40}
-                      className="mb-3 text-slate-300"
+                      className="mb-3 text-slate-300 dark:text-slate-600"
                       strokeWidth={1}
                     />
-                    <p className="text-[13px] font-medium text-slate-500">
+                    <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400">
                       Chưa có ảnh/video nào
                     </p>
-                    <p className="text-[12px] mt-1 text-slate-400">
+                    <p className="text-[12px] mt-1 text-slate-400 dark:text-slate-500">
                       Nhấn nút "Thêm ảnh / video" để tải lên
                     </p>
                   </div>
                 )}
               </div>
 
-              <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3">
+              <div className="bg-blue-50/50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 rounded-xl p-4 flex gap-3">
                 <div className="mt-0.5">
-                  <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                  <div className="w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/60 flex items-center justify-center text-blue-600 dark:text-blue-400">
                     <Info size={12} />
                   </div>
                 </div>
                 <div>
-                  <h5 className="text-sm font-semibold text-blue-800 mb-1">
+                  <h5 className="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1">
                     Hướng dẫn
                   </h5>
-                  <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
+                  <ul className="text-xs text-blue-700 dark:text-blue-400 list-disc list-inside space-y-1">
                     <li>
                       Ảnh sẽ hiển thị theo thứ tự từ trái sang phải, từ trên
                       xuống dưới.

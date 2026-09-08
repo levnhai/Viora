@@ -7,6 +7,15 @@ interface MinimalCoupleSpotlightProps {
   weddingData: WeddingData;
 }
 
+const getParentTitle = (father?: string, mother?: string) => {
+  const hasFather = Boolean(father && father.trim());
+  const hasMother = Boolean(mother && mother.trim());
+  if (hasFather && hasMother) return "Ông Bà";
+  if (hasFather) return "Ông";
+  if (hasMother) return "Bà";
+  return "";
+};
+
 export function MinimalCoupleSpotlight({
   weddingData,
 }: MinimalCoupleSpotlightProps) {
@@ -24,6 +33,9 @@ export function MinimalCoupleSpotlight({
     weddingDate,
     weddingTime,
   } = weddingData;
+
+  const groomParentTitle = getParentTitle(groomFatherName, groomMotherName);
+  const brideParentTitle = getParentTitle(brideFatherName, brideMotherName);
 
   const events = weddingData?.events || [];
 
@@ -182,144 +194,181 @@ export function MinimalCoupleSpotlight({
 
         {/* Content Container */}
         <div className="relative z-10 flex flex-col items-center text-center">
-          {/* Header Title */}
-          <GsapReveal direction="up" distance={30}>
+          {/* Header Title - Chạy từng chữ từ TRÁI sang PHẢI */}
+          <GsapReveal direction="right" distance={45} duration={1.0} stagger={0.08}>
             <h2 className="font-serif-title tracking-[0.25em] text-xs sm:text-sm font-bold uppercase text-center mb-8 sm:mb-10 text-[#fcd34d] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              THÔNG TIN LỄ CƯỚI
+              <span className="inline-block mr-2">THÔNG</span>
+              <span className="inline-block mr-2">TIN</span>
+              <span className="inline-block mr-2">LỄ</span>
+              <span className="inline-block">CƯỚI</span>
             </h2>
           </GsapReveal>
 
-          {/* Parents Info Grid (Nhà Trai | Nhà Gái) */}
-          <GsapReveal
-            delay={0.1}
-            direction="up"
-            distance={40}
-            className="w-full mb-8"
-          >
+          {/* Parents Info Grid: Nhà Trai (Trái -> Phải) | Nhà Gái (Phải -> Trái) */}
+          <div className="w-full mb-8">
             <div className="flex flex-row items-stretch justify-between w-full max-w-md mx-auto text-center">
-              {/* Groom Side */}
-              <div className="flex-1 pr-3 sm:pr-4 flex flex-col justify-start">
-                <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
-                  Ông Bà
-                </p>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
-                  {groomFatherName || "Đặng Văn Thắng"}
-                </h3>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
-                  {groomMotherName || "Bùi Thị Mai"}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
-                  {groomAddress || "Quận 1, TP. Hồ Chí Minh"}
-                </p>
-              </div>
+              {/* Groom Side: Trượt mượt từ TRÁI sang PHẢI */}
+              <GsapReveal
+                delay={0.1}
+                direction="right"
+                distance={55}
+                duration={1.0}
+                className="flex-1 pr-3 sm:pr-4 flex flex-col justify-start"
+              >
+                {groomParentTitle && (
+                  <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                    {groomParentTitle}
+                  </p>
+                )}
+                {groomFatherName && groomFatherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
+                    {groomFatherName}
+                  </h3>
+                ) : null}
+                {groomMotherName && groomMotherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
+                    {groomMotherName}
+                  </h3>
+                ) : null}
+                {groomAddress ? (
+                  <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
+                    {groomAddress}
+                  </p>
+                ) : null}
+              </GsapReveal>
 
               {/* Vertical Divider */}
-              <div className="w-[1px] bg-[#e7bf78]/40 self-stretch my-1" />
+              <GsapReveal delay={0.15} direction="none">
+                <div className="w-[1px] bg-[#e7bf78]/40 h-full my-1" />
+              </GsapReveal>
 
-              {/* Bride Side */}
-              <div className="flex-1 pl-3 sm:pl-4 flex flex-col justify-start">
-                <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
-                  Ông Bà
-                </p>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
-                  {brideFatherName || "Vũ Đức Trung"}
-                </h3>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
-                  {brideMotherName || "Ngô Thị Hạnh"}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
-                  {brideAddress || "Quận 3, TP. Hồ Chí Minh"}
-                </p>
-              </div>
+              {/* Bride Side: Trượt mượt từ PHẢI sang TRÁI */}
+              <GsapReveal
+                delay={0.1}
+                direction="left"
+                distance={55}
+                duration={1.0}
+                className="flex-1 pl-3 sm:pl-4 flex flex-col justify-start"
+              >
+                {brideParentTitle && (
+                  <p className="text-xs text-[#e7bf78] uppercase tracking-wider mb-1 font-serif-title font-medium">
+                    {brideParentTitle}
+                  </p>
+                )}
+                {brideFatherName && brideFatherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug">
+                    {brideFatherName}
+                  </h3>
+                ) : null}
+                {brideMotherName && brideMotherName.trim() ? (
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-wide leading-snug mb-2">
+                    {brideMotherName}
+                  </h3>
+                ) : null}
+                {brideAddress ? (
+                  <p className="text-[11px] sm:text-xs text-[#f7e4bc] leading-tight font-medium opacity-90">
+                    {brideAddress}
+                  </p>
+                ) : null}
+              </GsapReveal>
             </div>
-          </GsapReveal>
+          </div>
 
-          {/* Announcement Intro */}
-          <GsapReveal delay={0.2} direction="up" distance={30}>
-            <div className="my-6 text-center">
+          {/* Announcement Intro: Dòng 1 (Trái -> Phải), Dòng 2 (Phải -> Trái) */}
+          <div className="my-6 text-center w-full flex flex-col items-center">
+            <GsapReveal delay={0.2} direction="right" distance={45} duration={0.9}>
               <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] leading-relaxed drop-shadow-xs">
                 TRÂN TRỌNG BÁO TIN
-                <br />
+              </p>
+            </GsapReveal>
+            <GsapReveal delay={0.25} direction="left" distance={45} duration={0.9}>
+              <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] leading-relaxed drop-shadow-xs">
                 {displayCeremonyTitle} CỦA CON CHÚNG TÔI
               </p>
-            </div>
-          </GsapReveal>
+            </GsapReveal>
+          </div>
 
-          {/* Bride & Groom Names */}
-          <GsapReveal
-            delay={0.3}
-            direction="up"
-            distance={40}
-            className="w-full my-4 flex flex-col items-center"
-          >
-            {/* Groom */}
-            <div className="flex flex-col items-center">
+          {/* Bride & Groom Names: Tên Chú Rể (Trái -> Phải), Tên Cô Dâu (Phải -> Trái) */}
+          <div className="w-full my-4 flex flex-col items-center">
+            {/* Groom - Trượt mượt từ TRÁI sang PHẢI */}
+            <GsapReveal delay={0.3} direction="right" distance={65} duration={1.1} className="flex flex-col items-center">
               <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold tracking-wide mb-1 leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 {groomName || "Đặng Hoàng Long"}
               </h3>
               <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">
                 {groomRank || "TRƯỞNG NAM"}
               </p>
-            </div>
+            </GsapReveal>
 
-            {/* Ampersand Icon */}
-            <div className="font-calligraphy text-3xl sm:text-4xl text-[#fcd34d] my-2 select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] animate-pulse">
-              &amp;
-            </div>
+            {/* Ampersand Icon - Fade & Scale ở giữa */}
+            <GsapReveal delay={0.35} direction="none">
+              <div className="font-calligraphy text-3xl sm:text-4xl text-[#fcd34d] my-2 select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] animate-pulse">
+                &amp;
+              </div>
+            </GsapReveal>
 
-            {/* Bride */}
-            <div className="flex flex-col items-center">
+            {/* Bride - Trượt mượt từ PHẢI sang TRÁI */}
+            <GsapReveal delay={0.4} direction="left" distance={65} duration={1.1} className="flex flex-col items-center">
               <h3 className="font-serif-title text-3xl sm:text-4xl md:text-[44px] font-bold tracking-wide mb-1 leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 {brideName || "Vũ Bảo Ngọc"}
               </h3>
               <p className="text-xs font-serif-title uppercase tracking-[0.25em] text-[#e7bf78] font-semibold">
                 {brideRank || "ÚT NỮ"}
               </p>
-            </div>
-          </GsapReveal>
+            </GsapReveal>
+          </div>
 
           {/* Ceremony Details & Structured Date Block */}
-          <GsapReveal
-            delay={0.4}
-            direction="up"
-            distance={40}
-            className="mt-8 pt-4 w-full flex flex-col items-center"
-          >
-            <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] mb-5 leading-relaxed">
-              {displayCeremonyTitle} ĐƯỢC CỬ HÀNH TẠI
-              <br />
-              <span className="font-bold text-white text-sm sm:text-base tracking-widest">
+          <div className="mt-8 pt-4 w-full flex flex-col items-center">
+            <GsapReveal delay={0.45} direction="right" distance={45}>
+              <p className="font-serif-title tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase text-[#f4d79d] leading-relaxed">
+                {displayCeremonyTitle} ĐƯỢC CỬ HÀNH TẠI
+              </p>
+            </GsapReveal>
+
+            <GsapReveal delay={0.5} direction="left" distance={45} className="mb-5">
+              <p className="font-bold text-white text-sm sm:text-base tracking-widest uppercase font-serif-title">
                 {ceremonyLocation}
-              </span>
-            </p>
+              </p>
+            </GsapReveal>
 
-            <div className="flex items-center justify-center gap-4 tracking-[0.2em] text-xs sm:text-sm font-bold uppercase text-[#fff0f0] mb-4">
-              <span>VÀO LÚC {ceremonyTime}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#e7bf78]" />
-              <span>{dInfo.dayOfWeek}</span>
-            </div>
-
-            {/* Date Box: Large Date | Month & Year */}
-            <div className="flex items-center justify-center gap-4 my-2">
-              <span className="font-serif-title text-4xl sm:text-5xl font-normal text-white tracking-tight drop-shadow-xs" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
-                {dInfo.date}
-              </span>
-              <div className="w-[1.5px] h-10 bg-[#e7bf78]/40" />
-              <div className="flex flex-col text-left font-serif-title uppercase leading-tight">
-                <span className="text-sm font-bold tracking-widest text-white">
-                  {dInfo.month}
-                </span>
-                <span className="text-xs sm:text-sm tracking-widest text-[#f4d79d] font-semibold" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
-                  {dInfo.year}
-                </span>
+            <GsapReveal delay={0.55} direction="right" distance={45}>
+              <div className="flex items-center justify-center gap-4 tracking-[0.2em] text-xs sm:text-sm font-bold uppercase text-[#fff0f0] mb-4">
+                <span>VÀO LÚC {ceremonyTime}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#e7bf78]" />
+                <span>{dInfo.dayOfWeek}</span>
               </div>
+            </GsapReveal>
+
+            {/* Date Box: Large Date (Trái -> Phải) | Month & Year (Phải -> Trái) */}
+            <div className="flex items-center justify-center gap-4 my-2">
+              <GsapReveal delay={0.6} direction="right" distance={45}>
+                <span className="font-serif-title text-4xl sm:text-5xl font-normal text-white tracking-tight drop-shadow-xs" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
+                  {dInfo.date}
+                </span>
+              </GsapReveal>
+              <GsapReveal delay={0.62} direction="none">
+                <div className="w-[1.5px] h-10 bg-[#e7bf78]/40" />
+              </GsapReveal>
+              <GsapReveal delay={0.65} direction="left" distance={45}>
+                <div className="flex flex-col text-left font-serif-title uppercase leading-tight">
+                  <span className="text-sm font-bold tracking-widest text-white">
+                    {dInfo.month}
+                  </span>
+                  <span className="text-xs sm:text-sm tracking-widest text-[#f4d79d] font-semibold" style={{ fontVariantNumeric: "lining-nums tabular-nums" }}>
+                    {dInfo.year}
+                  </span>
+                </div>
+              </GsapReveal>
             </div>
 
             {/* Lunar Date */}
-            <p className="text-xs font-serif-title uppercase tracking-widest text-[#f4d79d] font-medium mt-4 opacity-95">
-              {lunarDateStr || "(TỨC NGÀY 15 THÁNG 11 NĂM ẤT TỴ)"}
-            </p>
-          </GsapReveal>
+            <GsapReveal delay={0.7} direction="right" distance={35}>
+              <p className="text-xs font-serif-title uppercase tracking-widest text-[#f4d79d] font-medium mt-4 opacity-95">
+                {lunarDateStr || "(TỨC NGÀY 15 THÁNG 11 NĂM ẤT TỴ)"}
+              </p>
+            </GsapReveal>
+          </div>
         </div>
       </div>
     </section>

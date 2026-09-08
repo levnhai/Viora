@@ -19,7 +19,14 @@ export function GiftRegistry({ giftInfo }: GiftRegistryProps) {
     setTimeout(() => setCopied(null), 2000);
   }
 
-  const accounts = [];
+  const accounts: Array<{
+    bank: string;
+    name: string;
+    number: string;
+    qrUrl?: string;
+    title: string;
+    key: string;
+  }> = [];
   if (giftInfo.groomBankName && giftInfo.groomAccountNumber) {
     accounts.push({
       bank: giftInfo.groomBankName,
