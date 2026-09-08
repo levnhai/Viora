@@ -1,20 +1,26 @@
 import { Controller, Post, Body, Res, Req, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
+
+import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from './auth.guard';
 import { AdminGuard } from './admin.guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 import { ChangeAdminCredentialsDto } from './dto/change-credentials.dto';
 import * as express from 'express';
+import type { AuthenticatedRequest } from '../../common/interfaces/request.interface';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   private setTokenCookie(res: express.Response, token: string) {
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProd,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -34,11 +40,9 @@ export class AuthController {
     this.setTokenCookie(res, data.token);
     return {
       success: true,
-      message: 'Đăng nhập thành công!',
       data: {
         token: data.token,
         role: data.role,
-        weddingSlug: data.weddingSlug,
         name: data.name,
         email: data.email,
       },
@@ -48,12 +52,12 @@ export class AuthController {
   @Post('admin/change-credentials')
   @UseGuards(AuthGuard, AdminGuard)
   async changeAdminCredentials(
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
     @Body() body: ChangeAdminCredentialsDto,
     @Res({ passthrough: true }) res: express.Response,
   ) {
     const data = await this.authService.changeAdminCredentials(
-      req.user.id,
+      req.user?.id || '',
       body.currentPassword,
       body.newEmail,
       body.newPassword,
@@ -63,12 +67,12 @@ export class AuthController {
   }
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('register')
-  async register(@Body() loginDto: LoginDto) {
+  async register(@Body() registerDto: RegisterDto) {
     const data = await this.authService.register(
-      loginDto.username,
-      loginDto.password,
-      loginDto.fullName,
-      loginDto.phone,
+      registerDto.username,
+      registerDto.password,
+      registerDto.fullName,
+      registerDto.phone,
     );
     return {
       success: true,
@@ -171,7 +175,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: express.Response) {
+  logout(@Res({ passthrough: true }) res: express.Response) {
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

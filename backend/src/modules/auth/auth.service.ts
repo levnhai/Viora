@@ -44,7 +44,10 @@ export class AuthService {
 
     // Tương thích ngược: kiểm tra hash SHA-256 cũ
     try {
-      const expected = crypto.createHash('sha256').update(password).digest('hex');
+      const expected = crypto
+        .createHash('sha256')
+        .update(password)
+        .digest('hex');
       if (Buffer.byteLength(storedHash) !== Buffer.byteLength(expected)) {
         return false;
       }

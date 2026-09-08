@@ -87,7 +87,7 @@ export class MediaService {
     return this.mediaModel.find(query).sort({ order: 1, createdAt: -1 }).exec();
   }
 
-  async deleteMedia(id: string, ownerId: string): Promise<any> {
+  async deleteMedia(id: string, ownerId: string): Promise<MediaDocument> {
     const media = await this.mediaModel.findOne({
       _id: new Types.ObjectId(id),
       ownerId: new Types.ObjectId(ownerId),

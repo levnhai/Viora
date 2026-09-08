@@ -32,7 +32,6 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Cho phép requests không có origin (server-to-server, mobile app, healthcheck)
       if (!origin) return callback(null, true);
       if (
         allowedOrigins.includes(origin) ||
@@ -62,7 +61,7 @@ async function bootstrap() {
 
   // Swagger Documentation Setup
   const config = new DocumentBuilder()
-    .setTitle('Viora - Online Invitation API')
+    .setTitle('2H - Online Invitation API')
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -84,12 +83,8 @@ async function bootstrap() {
     },
   };
 
-  // Hỗ trợ nhiều đường dẫn phổ biến
+  // Swagger
   SwaggerModule.setup('api/docs', app, document, swaggerOptions);
-  SwaggerModule.setup('api/doc', app, document, swaggerOptions);
-  SwaggerModule.setup('swagger', app, document, swaggerOptions);
-  SwaggerModule.setup('docs', app, document, swaggerOptions);
-
   const port = process.env.PORT || 8080;
   await app.listen(port, '0.0.0.0');
 }

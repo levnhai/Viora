@@ -16,10 +16,29 @@ import { AuthGuard } from '../auth/auth.guard';
 import { CreateRsvpDto } from './dto/create-rsvp.dto';
 import { CreateGuestDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
+import type {
+  AuthenticatedRequest,
+  JwtUserPayload,
+} from '../../common/interfaces/request.interface';
 
 @Controller('weddings/:slug')
 export class GuestsController {
   constructor(private readonly guestsService: GuestsService) {}
+
+  private checkWeddingAccess(
+    user: JwtUserPayload | undefined,
+    slug: string,
+    actionMsg: string,
+  ) {
+    if (
+      !user ||
+      (user.role !== 'admin' &&
+        user.role !== 'staff' &&
+        user.weddingSlug !== slug)
+    ) {
+      throw new ForbiddenException(actionMsg);
+    }
+  }
 
   // RSVP Endpoints
   @Throttle({ default: { limit: 10, ttl: 60000 } })
@@ -38,17 +57,15 @@ export class GuestsController {
 
   @Get('rsvp')
   @UseGuards(AuthGuard)
-  async getRsvps(@Param('slug') slug: string, @Req() req: any) {
-    const user = req.user;
-    if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
-    ) {
-      throw new ForbiddenException(
-        'Bạn không có quyền xem danh sách RSVP của thiệp cưới này!',
-      );
-    }
+  async getRsvps(
+    @Param('slug') slug: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    this.checkWeddingAccess(
+      req.user,
+      slug,
+      'Bạn không có quyền xem danh sách RSVP của thiệp cưới này!',
+    );
     const data = await this.guestsService.findRsvps(slug);
     return {
       success: true,
@@ -62,18 +79,13 @@ export class GuestsController {
   async createGuest(
     @Param('slug') slug: string,
     @Body() guestDto: CreateGuestDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
-    const user = req.user;
-    if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
-    ) {
-      throw new ForbiddenException(
-        'Bạn không có quyền quản lý danh sách khách mời của thiệp cưới này!',
-      );
-    }
+    this.checkWeddingAccess(
+      req.user,
+      slug,
+      'Bạn không có quyền quản lý danh sách khách mời của thiệp cưới này!',
+    );
     const data = await this.guestsService.createGuest(slug, guestDto);
     return {
       success: true,
@@ -84,17 +96,15 @@ export class GuestsController {
 
   @Get('guests')
   @UseGuards(AuthGuard)
-  async getGuests(@Param('slug') slug: string, @Req() req: any) {
-    const user = req.user;
-    if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
-    ) {
-      throw new ForbiddenException(
-        'Bạn không có quyền xem danh sách khách mời của thiệp cưới này!',
-      );
-    }
+  async getGuests(
+    @Param('slug') slug: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    this.checkWeddingAccess(
+      req.user,
+      slug,
+      'Bạn không có quyền xem danh sách khách mời của thiệp cưới này!',
+    );
     const data = await this.guestsService.findGuests(slug);
     return {
       success: true,
@@ -108,18 +118,13 @@ export class GuestsController {
     @Param('slug') slug: string,
     @Param('id') id: string,
     @Body() guestDto: UpdateGuestDto,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
-    const user = req.user;
-    if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
-    ) {
-      throw new ForbiddenException(
-        'Bạn không có quyền cập nhật khách mời của thiệp cưới này!',
-      );
-    }
+    this.checkWeddingAccess(
+      req.user,
+      slug,
+      'Bạn không có quyền cập nhật khách mời của thiệp cưới này!',
+    );
     const data = await this.guestsService.updateGuest(slug, id, guestDto);
     return {
       success: true,
@@ -133,18 +138,13 @@ export class GuestsController {
   async deleteGuest(
     @Param('slug') slug: string,
     @Param('id') id: string,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
-    const user = req.user;
-    if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
-    ) {
-      throw new ForbiddenException(
-        'Bạn không có quyền xóa khách mời của thiệp cưới này!',
-      );
-    }
+    this.checkWeddingAccess(
+      req.user,
+      slug,
+      'Bạn không có quyền xóa khách mời của thiệp cưới này!',
+    );
     await this.guestsService.deleteGuest(slug, id);
     return {
       success: true,

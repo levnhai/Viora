@@ -1,11 +1,22 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { HttpExceptionFilter } from './http-exception.filter';
+
+interface MockResponse {
+  status: jest.Mock;
+  json: jest.Mock;
+}
+
+interface MockRequest {
+  method: string;
+  url: string;
+}
 
 describe('HttpExceptionFilter', () => {
   let filter: HttpExceptionFilter;
-  let mockResponse: any;
-  let mockRequest: any;
-  let mockArgumentsHost: any;
+  let mockResponse: MockResponse;
+  let mockRequest: MockRequest;
+  let mockArgumentsHost: ArgumentsHost;
 
   beforeEach(() => {
     filter = new HttpExceptionFilter();
@@ -19,14 +30,17 @@ describe('HttpExceptionFilter', () => {
     };
     mockArgumentsHost = {
       switchToHttp: jest.fn().mockReturnValue({
-        getResponse: () => mockResponse,
-        getRequest: () => mockRequest,
+        getResponse: () => mockResponse as unknown as Response,
+        getRequest: () => mockRequest as unknown as Request,
       }),
-    };
+    } as unknown as ArgumentsHost;
   });
 
   it('xử lý HttpException thông thường và trả về đúng statusCode', () => {
-    const exception = new HttpException('Forbidden access', HttpStatus.FORBIDDEN);
+    const exception = new HttpException(
+      'Forbidden access',
+      HttpStatus.FORBIDDEN,
+    );
     filter.catch(exception, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);

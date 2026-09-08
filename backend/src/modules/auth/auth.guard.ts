@@ -34,9 +34,13 @@ export class AuthGuard implements CanActivate {
       return true;
     } catch (err) {
       if (err instanceof TokenExpiredError) {
-        throw new UnauthorizedException('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!');
+        throw new UnauthorizedException(
+          'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!',
+        );
       }
-      throw new UnauthorizedException('Mã token không hợp lệ hoặc đã bị chỉnh sửa!');
+      throw new UnauthorizedException(
+        'Mã token không hợp lệ hoặc đã bị chỉnh sửa!',
+      );
     }
   }
 }

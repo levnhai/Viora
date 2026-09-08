@@ -9,6 +9,8 @@ import {
 } from '../guestbooks/schemas/guestbook.schema';
 import { Guest, GuestDocument } from '../guests/schemas/guest.schema';
 
+import { UpdateProfileDto } from './dto/update-profile.dto';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -85,7 +87,7 @@ export class UserService {
     };
   }
 
-  async updateProfile(userId: string, updateDto: any) {
+  async updateProfile(userId: string, updateDto: UpdateProfileDto) {
     const user = await this.userModel.findById(userId).exec();
     if (!user) {
       throw new NotFoundException('Người dùng không tồn tại!');

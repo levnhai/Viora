@@ -105,7 +105,9 @@ describe('AuthGuard', () => {
     };
 
     await expect(authGuard.canActivate(mockContext)).rejects.toThrow(
-      new UnauthorizedException('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!'),
+      new UnauthorizedException(
+        'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!',
+      ),
     );
   });
 });

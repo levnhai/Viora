@@ -13,7 +13,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { TemplatesModule } from './modules/templates/templates.module';
 import { MediaModule } from './modules/media/media.module';
-import { NewsModule } from './modules/news/news.module';
 import { SocketModule } from './modules/socket/socket.module';
 import { TemplateRequestsModule } from './modules/template-requests/template-requests.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
@@ -50,7 +49,6 @@ import { AppCacheModule } from './modules/cache/cache.module';
     UsersModule,
     TemplatesModule,
     MediaModule,
-    NewsModule,
     SocketModule,
     TemplateRequestsModule,
     AnalyticsModule,

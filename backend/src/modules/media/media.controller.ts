@@ -11,10 +11,12 @@ import {
   Param,
   Delete,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from './media.service';
 import { AuthGuard } from '../auth/auth.guard';
+import type { AuthenticatedRequest } from '../../common/interfaces/request.interface';
 
 @Controller('media')
 @UseGuards(AuthGuard)
@@ -25,7 +27,7 @@ export class MediaController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
     @Body('type') type: string,
     @Body('weddingId') weddingId?: string,
     @Body('slug') slug?: string,
@@ -36,7 +38,10 @@ export class MediaController {
 
     // type có thể là 'gallery', 'cover', 'avatar',...
     const mediaType = type || 'gallery';
-    const ownerId = req.user._id || req.user.id;
+    const ownerId = req.user?.id || req.user?._id;
+    if (!ownerId) {
+      throw new UnauthorizedException('Không tìm thấy thông tin người dùng');
+    }
 
     return this.mediaService.uploadMedia(
       file,
@@ -48,8 +53,14 @@ export class MediaController {
   }
 
   @Get('my-media')
-  async getMyMedia(@Req() req: any, @Query('type') type?: string) {
-    const ownerId = req.user._id || req.user.id;
+  async getMyMedia(
+    @Req() req: AuthenticatedRequest,
+    @Query('type') type?: string,
+  ) {
+    const ownerId = req.user?.id || req.user?._id;
+    if (!ownerId) {
+      throw new UnauthorizedException('Không tìm thấy thông tin người dùng');
+    }
     return this.mediaService.getMediaByUser(ownerId, type);
   }
 
@@ -62,8 +73,11 @@ export class MediaController {
   }
 
   @Delete(':id')
-  async deleteMedia(@Param('id') id: string, @Req() req: any) {
-    const ownerId = req.user._id || req.user.id;
+  async deleteMedia(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    const ownerId = req.user?.id || req.user?._id;
+    if (!ownerId) {
+      throw new UnauthorizedException('Không tìm thấy thông tin người dùng');
+    }
     return this.mediaService.deleteMedia(id, ownerId);
   }
 }

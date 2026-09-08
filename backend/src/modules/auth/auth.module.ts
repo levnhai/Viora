@@ -21,7 +21,8 @@ import { Otp, OtpSchema } from './schemas/otp.schema';
           configService.get<string>('JWT_SECRET') ||
           'viora_jwt_secret_key_2026_safe',
         signOptions: {
-          expiresIn: (configService.get<string>('JWT_EXPIRES_IN') || '7d') as any,
+          expiresIn: (configService.get<string>('JWT_EXPIRES_IN') ||
+            '7d') as any,
         },
       }),
     }),

@@ -14,6 +14,8 @@ import { GuestbooksService } from './guestbooks.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateGuestbookDto } from './dto/create-guestbook.dto';
 
+import type { AuthenticatedRequest } from '../../common/interfaces/request.interface';
+
 @Controller('weddings/:slug/guestbook')
 export class GuestbooksController {
   constructor(private readonly guestbooksService: GuestbooksService) {}
@@ -49,13 +51,14 @@ export class GuestbooksController {
   async deleteGuestbook(
     @Param('slug') slug: string,
     @Param('id') id: string,
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
   ) {
     const user = req.user;
     if (
-      user.role !== 'admin' &&
-      user.role !== 'staff' &&
-      user.weddingSlug !== slug
+      !user ||
+      (user.role !== 'admin' &&
+        user.role !== 'staff' &&
+        user.weddingSlug !== slug)
     ) {
       throw new ForbiddenException(
         'Bạn không có quyền xóa lời chúc của thiệp cưới này!',
