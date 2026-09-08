@@ -48,14 +48,42 @@ export const useBuyerDashboard = () => {
 
   // Fetch initial data
   const fetchData = useCallback(async () => {
-    if (!weddingSlug) {
+    let currentSlug = weddingSlug;
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const authHeaders: Record<string, string> = {};
+    if (token) {
+      authHeaders["Authorization"] = `Bearer ${token}`;
+    }
+
+    // Nếu chưa có slug từ localStorage, tự động hỏi Backend thiệp cưới của user này
+    if (!currentSlug) {
+      try {
+        const myWeddingRes = await fetch(`${API_URL}/api/weddings/my-wedding`, {
+          headers: authHeaders,
+          credentials: "include",
+        });
+        if (myWeddingRes.ok) {
+          const myWeddingJson = await myWeddingRes.json();
+          if (myWeddingJson?.data?.slug) {
+            currentSlug = myWeddingJson.data.slug;
+            localStorage.setItem("weddingSlug", currentSlug!);
+            setWeddingSlug(currentSlug);
+          }
+        }
+      } catch (e) {
+        console.error("Lỗi lấy thiệp cưới cá nhân:", e);
+      }
+    }
+
+    if (!currentSlug) {
       setLoading(false);
       return;
     }
     
     try {
       // 1. Fetch wedding details
-      const weddingRes = await fetch(`${API_URL}/api/weddings/${weddingSlug}`, {
+      const weddingRes = await fetch(`${API_URL}/api/weddings/${currentSlug}`, {
+        headers: authHeaders,
         credentials: "include",
       });
       if (weddingRes.ok) {
@@ -67,8 +95,8 @@ export const useBuyerDashboard = () => {
 
       // 2. Fetch Guests
       const guestRes = await fetch(
-        `${API_URL}/api/weddings/${weddingSlug}/guests`,
-        { credentials: "include" }
+        `${API_URL}/api/weddings/${currentSlug}/guests`,
+        { headers: authHeaders, credentials: "include" }
       );
       if (guestRes.ok) {
         const guestJson = await guestRes.json();
@@ -77,8 +105,8 @@ export const useBuyerDashboard = () => {
 
       // 3. Fetch RSVPs
       const rsvpRes = await fetch(
-        `${API_URL}/api/weddings/${weddingSlug}/rsvp`,
-        { credentials: "include" }
+        `${API_URL}/api/weddings/${currentSlug}/rsvp`,
+        { headers: authHeaders, credentials: "include" }
       );
       if (rsvpRes.ok) {
         const rsvpJson = await rsvpRes.json();
@@ -87,8 +115,8 @@ export const useBuyerDashboard = () => {
 
       // 4. Fetch Guestbook
       const gbRes = await fetch(
-        `${API_URL}/api/weddings/${weddingSlug}/guestbook`,
-        { credentials: "include" }
+        `${API_URL}/api/weddings/${currentSlug}/guestbook`,
+        { headers: authHeaders, credentials: "include" }
       );
       if (gbRes.ok) {
         const gbJson = await gbRes.json();
@@ -102,13 +130,10 @@ export const useBuyerDashboard = () => {
   }, [weddingSlug]);
 
   useEffect(() => {
-    if (weddingSlug) {
+    if (hasMounted) {
       fetchData();
-    } else if (hasMounted) {
-      // If mounted but no slug (new user)
-      setLoading(false);
     }
-  }, [weddingSlug, hasMounted, fetchData]);
+  }, [hasMounted, fetchData]);
 
   // Realtime Socket.io listener
   useEffect(() => {

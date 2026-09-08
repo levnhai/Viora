@@ -153,6 +153,11 @@ export function InvitationEditorScreen() {
         throw new Error(data.message || "Không thể xuất bản thiệp cưới");
       }
 
+      const publishedSlug = data.data?.slug || finalSlug;
+      if (publishedSlug) {
+        localStorage.setItem("weddingSlug", publishedSlug);
+      }
+
       setIsEmailModalOpen(false);
 
       if (data.data?.credentials) {

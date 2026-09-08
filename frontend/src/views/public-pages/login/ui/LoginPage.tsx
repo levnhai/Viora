@@ -22,12 +22,16 @@ interface UserSessionData {
   name: string;
   picture?: string;
   weddingSlug?: string;
+  token?: string;
 }
 
 const saveUserSession = (data: UserSessionData) => {
   localStorage.setItem("role", data.role);
   localStorage.setItem("username", data.username);
   localStorage.setItem("name", data.name);
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+  }
   if (data.picture) {
     localStorage.setItem("picture", data.picture);
   } else {
@@ -70,7 +74,7 @@ export function LoginPage() {
     setLoading(true);
     try {
       const data = await authService.login(emailInput, passInput);
-      const { role, weddingSlug, name, email: resEmail } = data;
+      const { role, weddingSlug, name, email: resEmail, token } = data;
 
       if (role === "admin") {
         throw new Error("tài khoản không tồn tại!");
@@ -81,6 +85,7 @@ export function LoginPage() {
         username: resEmail || emailInput,
         name: name || (resEmail || emailInput).split("@")[0],
         weddingSlug,
+        token,
       });
 
       confetti({ particleCount: 100, spread: 60 });
@@ -118,13 +123,14 @@ export function LoginPage() {
     setLoading(true);
     try {
       const data = await authService.registerVerifyOtp(email, code);
-      const { role, weddingSlug, name, email: resEmail } = data;
+      const { role, weddingSlug, name, email: resEmail, token } = data;
 
       saveUserSession({
         role,
         username: resEmail || email,
         name: name || (resEmail || email).split("@")[0],
         weddingSlug,
+        token,
       });
 
       setMode("register-success");

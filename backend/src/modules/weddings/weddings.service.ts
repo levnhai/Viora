@@ -926,4 +926,17 @@ export class WeddingsService {
 
     return result;
   }
+
+  async getMyWedding(userId: string) {
+    const user = await this.userModel.findById(userId).exec();
+    if (user && user.weddingSlug) {
+      const wedding = await this.weddingModel.findOne({ slug: user.weddingSlug, deletedAt: null }).exec();
+      if (wedding) return wedding;
+    }
+    const wedding = await this.weddingModel
+      .findOne({ userId, deletedAt: null })
+      .sort({ createdAt: -1 })
+      .exec();
+    return wedding || null;
+  }
 }

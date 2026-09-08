@@ -69,6 +69,21 @@ export class WeddingsController {
     };
   }
 
+  // API lấy thông tin thiệp cưới của User hiện tại (Dashboard)
+  @Get('my-wedding')
+  @UseGuards(AuthGuard)
+  async getMyWedding(@Req() req: AuthenticatedRequest) {
+    const user = req.user;
+    if (!user) {
+      throw new UnauthorizedException('Không tìm thấy thông tin người dùng');
+    }
+    const data: unknown = await this.weddingsService.getMyWedding(user.id);
+    return {
+      success: true,
+      data,
+    };
+  }
+
   // API render mới - Tối ưu hóa render cho Frontend chỉ với 1 API duy nhất
   @Get(':slug/render')
   async getRenderData(@Param('slug') slug: string) {
