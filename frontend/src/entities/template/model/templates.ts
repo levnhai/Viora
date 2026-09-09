@@ -441,7 +441,7 @@ export const TEMPLATES: TemplateConfig[] = [
   {
     id: 12,
     code: "temp_12",
-    name: "Hoàng Kim - Warm Terracotta",
+    name: "Trầm Thu - Warm Terracotta",
     style: "Cổ Điển & Tinh Tế",
     tags: ["Terracotta", "Vintage Romance", "Monthly Calendar", "Hot"],
     isNew: true,

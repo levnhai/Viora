@@ -101,4 +101,16 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 12,
+    code: 'temp_12',
+    name: 'Trầm Thu - Warm Terracotta',
+    thumbnail:
+      'https://cdn.taothiep.com/wedding-user-assets/images/cmp2snpce001501myev2iysu3/89ebe947-8dab-4bd4-87c1-5c3a219d9add.webp',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];

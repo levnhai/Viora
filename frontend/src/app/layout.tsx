@@ -5,6 +5,7 @@ import GoogleOAuthProviderWrapper from "./GoogleOAuthProviderWrapper";
 import { BottomNav } from "@/widgets/common";
 import { FloatingZaloContact } from "@/widgets/common";
 import { AnalyticsTracker } from "@/shared/lib/analytics/AnalyticsTracker";
+import { DisableDevtool } from "@/shared/lib/security/DisableDevtool";
 
 
 export const viewport: Viewport = {
@@ -92,6 +93,7 @@ export default function RootLayout({
       <body style={{ height: "100%", margin: 0 }} suppressHydrationWarning>
         <div id="root" style={{ height: "100%" }}>
           <GoogleOAuthProviderWrapper>
+            <DisableDevtool />
             <Suspense fallback={null}>
               <AnalyticsTracker />
             </Suspense>
