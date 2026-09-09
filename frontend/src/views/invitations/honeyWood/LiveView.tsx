@@ -63,6 +63,7 @@ export function LiveView({
     if (!result.success) {
       alert(result.error || "Gửi lời chúc thất bại!");
     }
+    return result;
   };
 
   const events = weddingData?.events || [];

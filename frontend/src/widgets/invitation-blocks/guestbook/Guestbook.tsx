@@ -8,7 +8,7 @@ export type GuestbookKey = "minimal" | "guestbook_4";
 export interface GuestbookProps {
   variantId: GuestbookKey;
   messages: GuestMessage[];
-  onSendMessage: (name: string, msg: string) => void;
+  onSendMessage: (name: string, msg: string) => void | Promise<any>;
   guestName?: string;
   primaryColor?: string;
   textColor?: string;
