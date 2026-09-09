@@ -233,7 +233,7 @@ export function InvitationCover({
       </div>
 
       {/* CỤM BẢNG GỖ & KHUNG ẢNH CỦA DÂU RỂ */}
-      <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md md:max-w-[560px] lg:max-w-[580px] pointer-events-none z-10 flex flex-col items-center">
+      <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-full max-w-[400px] sm:max-w-md md:max-w-[560px] lg:max-w-[590px] pointer-events-none z-10 flex flex-col items-center">
         {/* BẢNG 1: BẢNG GỖ TREO PHÍA TRÊN (SAVE THE DATE) */}
         <div
           ref={board1Ref}
@@ -265,7 +265,7 @@ export function InvitationCover({
         {/* BẢNG 2: BẢNG GỖ TREO NỐI TRỰC TIẾP NGAY BÊN DƯỚI BẢNG 1 (TÊN CÔ DÂU VÀ CHÚ RỂ) */}
         <div
           ref={board2Ref}
-          className="relative w-[85%] sm:w-[80%] -mt-[40px] sm:-mt-[44px] md:max-w-[420px] z-0 flex items-center justify-center transform-gpu will-change-transform"
+          className="relative w-[98%] sm:w-[94%] -mt-[44px] sm:-mt-[48px] md:max-w-[490px] lg:max-w-[520px] z-0 flex items-center justify-center transform-gpu will-change-transform filter drop-shadow-xl"
         >
           <img
             src={img14Src}
@@ -276,28 +276,28 @@ export function InvitationCover({
           />
           <div
             ref={textNamesRef}
-            className="absolute left-0 right-0 top-[44%] bottom-[4%] flex items-center justify-center text-center px-4 sm:px-6 z-20 will-change-opacity"
+            className="absolute left-0 right-0 top-[41%] bottom-[4%] flex items-center justify-center text-center px-3 sm:px-6 z-20 will-change-opacity"
           >
             <div
-              className="font-calligraphy text-xl sm:text-2xl md:text-3xl lg:text-[34px] font-bold flex items-center justify-center flex-wrap gap-x-2 gap-y-0.5 leading-tight text-white"
+              className="font-calligraphy text-[26px] sm:text-[32px] md:text-[40px] lg:text-[46px] font-bold flex items-center justify-center flex-wrap gap-x-2.5 gap-y-0.5 leading-none sm:leading-tight text-white"
               style={{
                 textShadow:
-                  "0 2px 4px rgba(0, 0, 0, 0.95), 0 1px 2px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9)",
+                  "0 2px 5px rgba(0, 0, 0, 0.98), 0 1px 2px rgba(0, 0, 0, 0.98), 0 0 12px rgba(0, 0, 0, 0.95)",
               }}
             >
-              <span className="capitalize text-white tracking-wide">
+              <span className="capitalize text-white tracking-wide drop-shadow-md">
                 {groomName || "Hoàng Long"}
               </span>
               <span
-                className="text-[#fcd34d] text-lg sm:text-xl md:text-2xl font-serif-title mx-1 sm:mx-1.5 font-bold"
+                className="text-[#fcd34d] text-[20px] sm:text-2xl md:text-3xl font-serif-title mx-1.5 font-bold"
                 style={{
                   textShadow:
-                    "0 2px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(252, 211, 77, 0.4)",
+                    "0 2px 5px rgba(0, 0, 0, 0.98), 0 0 10px rgba(252, 211, 77, 0.5)",
                 }}
               >
                 &amp;
               </span>
-              <span className="capitalize text-white tracking-wide">
+              <span className="capitalize text-white tracking-wide drop-shadow-md">
                 {brideName || "Bảo Ngọc"}
               </span>
             </div>
@@ -308,7 +308,7 @@ export function InvitationCover({
         <div className="w-full flex justify-center z-10">
           <div
             ref={board3Ref}
-            className="relative w-[95%] sm:w-[90%] md:w-full max-w-[340px] sm:max-w-[380px] md:max-w-[490px] lg:max-w-[520px] mt-20 sm:mt-6 md:mt-16 lg:mt-20 z-10 flex items-center justify-center filter drop-shadow-2xl will-change-transform"
+            className="relative w-[95%] sm:w-[90%] md:w-full max-w-[340px] sm:max-w-[380px] md:max-w-[490px] lg:max-w-[520px] mt-11 sm:mt-6 md:mt-14 lg:mt-18 z-10 flex items-center justify-center filter drop-shadow-2xl will-change-transform"
           >
             {/* Họa tiết trang trí img_4.svg ở góc trên bên phải khung ảnh gỗ */}
             <div className="absolute -top-26 right-[-70px] sm:-top-5 sm:-right-5 md:-top-7 md:-right-7 w-50 sm:w-28 md:w-36 z-30 pointer-events-none filter drop-shadow-md">
