@@ -265,7 +265,7 @@ export function InvitationCover({
         {/* BẢNG 2: BẢNG GỖ TREO NỐI TRỰC TIẾP NGAY BÊN DƯỚI BẢNG 1 (TÊN CÔ DÂU VÀ CHÚ RỂ) */}
         <div
           ref={board2Ref}
-          className="relative w-[98%] sm:w-[94%] -mt-[44px] sm:-mt-[48px] md:max-w-[490px] lg:max-w-[520px] z-0 flex items-center justify-center transform-gpu will-change-transform filter drop-shadow-xl"
+          className="relative w-[98%] sm:w-[80%] -mt-[44px] sm:-mt-[44px] md:max-w-[420px] z-0 flex items-center justify-center transform-gpu will-change-transform filter drop-shadow-xl"
         >
           <img
             src={img14Src}
@@ -279,7 +279,7 @@ export function InvitationCover({
             className="absolute left-0 right-0 top-[41%] bottom-[4%] flex items-center justify-center text-center px-3 sm:px-6 z-20 will-change-opacity"
           >
             <div
-              className="font-calligraphy text-[26px] sm:text-[32px] md:text-[40px] lg:text-[46px] font-bold flex items-center justify-center flex-wrap gap-x-2.5 gap-y-0.5 leading-none sm:leading-tight text-white"
+              className="font-calligraphy text-[26px] sm:text-2xl md:text-3xl lg:text-[34px] font-bold flex items-center justify-center flex-wrap gap-x-2.5 gap-y-0.5 leading-none sm:leading-tight text-white"
               style={{
                 textShadow:
                   "0 2px 5px rgba(0, 0, 0, 0.98), 0 1px 2px rgba(0, 0, 0, 0.98), 0 0 12px rgba(0, 0, 0, 0.95)",
@@ -289,7 +289,7 @@ export function InvitationCover({
                 {groomName || "Hoàng Long"}
               </span>
               <span
-                className="text-[#fcd34d] text-[20px] sm:text-2xl md:text-3xl font-serif-title mx-1.5 font-bold"
+                className="text-[#fcd34d] text-[20px] sm:text-xl md:text-2xl font-serif-title mx-1.5 font-bold"
                 style={{
                   textShadow:
                     "0 2px 5px rgba(0, 0, 0, 0.98), 0 0 10px rgba(252, 211, 77, 0.5)",

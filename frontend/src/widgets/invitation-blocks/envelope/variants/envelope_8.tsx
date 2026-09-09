@@ -234,12 +234,37 @@ export function Envelope_8({
     return () => ctx.revert();
   }, []);
 
-  const weddingDateLabel = weddingDate
-    ? formatVietnameseDate(weddingDate, {
-        includeWeekday: true,
-        time: weddingTime,
-      })
-    : "";
+  const getWeddingDates = () => {
+    if (!weddingDate) return { main: "", next: "" };
+    try {
+      const d = new Date(weddingDate);
+      if (isNaN(d.getTime())) return { main: String(weddingDate), next: "" };
+
+      const formatFirstLetterOnly = (dateObj: Date) => {
+        const raw = formatVietnameseDate(dateObj, {
+          includeWeekday: true,
+          time: weddingTime,
+        });
+        return raw
+          .replace(/Thứ\s+[A-ZÀ-Ỹa-zà-ỹ]+/i, (match) => {
+            return match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
+          })
+          .replace(/Chủ\s+Nhật/i, "Chủ nhật");
+      };
+
+      const main = formatFirstLetterOnly(d);
+
+      const nextDay = new Date(d);
+      nextDay.setDate(d.getDate() + 1);
+      const next = formatFirstLetterOnly(nextDay);
+
+      return { main, next };
+    } catch {
+      return { main: String(weddingDate), next: "" };
+    }
+  };
+
+  const { main: weddingDateLabel, next: nextDateLabel } = getWeddingDates();
 
   return (
     <div
@@ -512,17 +537,17 @@ export function Envelope_8({
               : "opacity-100 scale-100"
           }`}
         >
-          <div className="absolute top-[53%] sm:top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-3 sm:gap-4 max-w-lg w-full px-4 text-center pointer-events-auto">
-            <div className="flex flex-col gap-4 sm:gap-6 w-[88%] sm:w-[82%] px-2 sm:px-4 my-1 sm:my-2">
+          <div className="absolute top-[52%] sm:top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-3 sm:gap-4 max-w-lg w-full px-4 text-center pointer-events-auto">
+            <div className="flex flex-col gap-6 sm:gap-6 w-[94%] sm:w-[82%] px-2 sm:px-4 my-1 sm:my-2 translate-y-[22px]">
               {/* TÊN CHÚ RỂ*/}
               <h1
                 ref={groomRef}
-                className="self-start text-left text-5xl sm:text-6xl text-amber-100 font-normal leading-tight tracking-wide ml-1 sm:ml-3 -translate-x-2 sm:-translate-x-3"
+                className="self-start text-left text-[56px] sm:text-6xl text-amber-100 font-normal leading-tight tracking-wide ml-1 sm:ml-3 -translate-x-1 sm:-translate-x-3"
                 style={{
                   fontFamily: "'Great Vibes', cursive",
                   textShadow:
-                    "0 6px 22px rgba(0,0,0,0.95), 0 2px 6px rgba(0,0,0,0.9), 0 0 32px rgba(212,175,55,0.45)",
-                  filter: "drop-shadow(0 10px 22px rgba(0,0,0,0.95))",
+                    "0 6px 24px rgba(0,0,0,0.98), 0 2px 8px rgba(0,0,0,0.95), 0 0 36px rgba(212,175,55,0.5)",
+                  filter: "drop-shadow(0 10px 24px rgba(0,0,0,0.95))",
                 }}
               >
                 {groomName || "Văn An"}
@@ -531,12 +556,12 @@ export function Envelope_8({
               {/* KÝ TỰ & */}
               <span
                 ref={ampersandRef}
-                className="self-center text-4xl sm:text-5xl text-amber-300 -my-2 sm:-my-3 font-light italic"
+                className="self-center text-5xl sm:text-5xl text-amber-300 my-1 sm:-my-3 font-light italic"
                 style={{
                   fontFamily: "'Great Vibes', cursive",
                   textShadow:
-                    "0 4px 14px rgba(0,0,0,0.95), 0 0 24px rgba(212,175,55,0.6)",
-                  filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.9))",
+                    "0 4px 16px rgba(0,0,0,0.95), 0 0 28px rgba(212,175,55,0.7)",
+                  filter: "drop-shadow(0 6px 16px rgba(0,0,0,0.9))",
                 }}
               >
                 &
@@ -545,12 +570,12 @@ export function Envelope_8({
               {/* TÊN CÔ DÂU*/}
               <h1
                 ref={brideRef}
-                className="self-end text-right text-5xl sm:text-6xl text-amber-100 font-normal leading-tight tracking-wide mr-1 sm:mr-3 translate-x-2 sm:translate-x-3"
+                className="self-end text-right text-[56px] sm:text-6xl text-amber-100 font-normal leading-tight tracking-wide mr-1 sm:mr-3 translate-x-1 sm:translate-x-3"
                 style={{
                   fontFamily: "'Great Vibes', cursive",
                   textShadow:
-                    "0 6px 22px rgba(0,0,0,0.95), 0 2px 6px rgba(0,0,0,0.9), 0 0 32px rgba(212,175,55,0.45)",
-                  filter: "drop-shadow(0 10px 22px rgba(0,0,0,0.95))",
+                    "0 6px 24px rgba(0,0,0,0.98), 0 2px 8px rgba(0,0,0,0.95), 0 0 36px rgba(212,175,55,0.5)",
+                  filter: "drop-shadow(0 10px 24px rgba(0,0,0,0.95))",
                 }}
               >
                 {brideName || "Thị Bình"}
@@ -561,12 +586,15 @@ export function Envelope_8({
             {weddingDateLabel && (
               <div
                 ref={dateRef}
-                className="mt-1 flex flex-col items-center gap-2"
+                className="mt-12 sm:mt-2 flex flex-col items-center gap-2"
               >
-                <div className="h-[2px] w-36 sm:w-48 bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
-                <span className="text-sm sm:text-base font-serif italic text-amber-200 tracking-widest uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                  {weddingDateLabel}
-                </span>
+                <div className="h-[2px] w-52 sm:w-48 bg-gradient-to-r from-transparent via-amber-400/90 to-transparent" />
+                <div className="flex flex-col items-center gap-1 text-[18px] sm:text-sm md:text-base font-serif font-medium italic text-amber-100 tracking-wide sm:tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.98)]">
+                  <span>{weddingDateLabel}</span>
+                  {nextDateLabel && (
+                    <span className="text-amber-200/95">{nextDateLabel}</span>
+                  )}
+                </div>
               </div>
             )}
           </div>
