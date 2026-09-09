@@ -119,69 +119,69 @@ export function WeddingCountdown({
   }, [weddingDate, weddingTime]);
 
   return (
-    <section className="relative w-full bg-white text-[#2C6E91] pt-8 pb-10 px-3 text-center overflow-hidden">
-      <div className="max-w-[430px] mx-auto">
+    <section className="relative w-full bg-white text-[#2C6E91] pt-8 pb-10 px-4 sm:px-6 md:px-8 text-center overflow-hidden">
+      <div className="w-full max-w-2xl mx-auto">
         {/* 1. Tiêu đề Hẹn Gặp (y=4705, font Luxurious 48px #2C6E91) */}
         <AnimateView animation="zoomIn" duration={1}>
           <h2
-            className="text-[34px] sm:text-[44px] text-[#2C6E91] font-normal leading-tight mb-3 select-none"
+            className="text-[34px] sm:text-[44px] md:text-[50px] text-[#2C6E91] font-normal leading-tight mb-3 select-none"
             style={{ fontFamily: "'Luxurious', 'Playfair Display', serif" }}
           >
             Đừng quên mình có hẹn nhé!
           </h2>
         </AnimateView>
 
-        {/* 2. Dãy số đếm ngược (y=4782, flipInX) & Nhãn (y=4846, zoomIn) */}
+        {/* 2. Dãy số đếm ngược & Nhãn */}
         <AnimateView animation="flipInX" delay={0.1} duration={1.2}>
-          <div className="flex justify-center items-center gap-4 sm:gap-6 max-w-[320px] mx-auto select-none">
+          <div className="grid grid-cols-4 gap-2 sm:gap-4 md:gap-6 max-w-[340px] sm:max-w-[420px] md:max-w-[480px] mx-auto select-none mt-4">
             {/* Ngày */}
-            <div className="flex flex-col items-center w-14">
+            <div className="flex flex-col items-center justify-center bg-[#2C6E91]/5 border border-[#2C6E91]/20 rounded-2xl py-3 md:py-4 px-1 shadow-xs">
               <span
-                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
-                style={{ fontFamily: "'Alisheia', sans-serif" }}
+                className="text-[34px] sm:text-[40px] md:text-[46px] text-[#2C6E91] leading-none font-normal"
+                style={{ fontFamily: "'Alisheia', 'Playfair Display', serif" }}
               >
                 {timeLeft.days}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
+              <span className="font-lora text-[11px] sm:text-[12px] md:text-[13px] uppercase tracking-wider text-[#2C6E91]/80 mt-1.5 font-medium">
                 Ngày
               </span>
             </div>
 
             {/* Giờ */}
-            <div className="flex flex-col items-center w-14">
+            <div className="flex flex-col items-center justify-center bg-[#2C6E91]/5 border border-[#2C6E91]/20 rounded-2xl py-3 md:py-4 px-1 shadow-xs">
               <span
-                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
-                style={{ fontFamily: "'Alisheia', sans-serif" }}
+                className="text-[34px] sm:text-[40px] md:text-[46px] text-[#2C6E91] leading-none font-normal"
+                style={{ fontFamily: "'Alisheia', 'Playfair Display', serif" }}
               >
                 {timeLeft.hours}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
+              <span className="font-lora text-[11px] sm:text-[12px] md:text-[13px] uppercase tracking-wider text-[#2C6E91]/80 mt-1.5 font-medium">
                 Giờ
               </span>
             </div>
 
             {/* Phút */}
-            <div className="flex flex-col items-center w-14">
+            <div className="flex flex-col items-center justify-center bg-[#2C6E91]/5 border border-[#2C6E91]/20 rounded-2xl py-3 md:py-4 px-1 shadow-xs">
               <span
-                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
-                style={{ fontFamily: "'Alisheia', sans-serif" }}
+                className="text-[34px] sm:text-[40px] md:text-[46px] text-[#2C6E91] leading-none font-normal"
+                style={{ fontFamily: "'Alisheia', 'Playfair Display', serif" }}
               >
                 {timeLeft.minutes}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
+              <span className="font-lora text-[11px] sm:text-[12px] md:text-[13px] uppercase tracking-wider text-[#2C6E91]/80 mt-1.5 font-medium">
                 Phút
               </span>
             </div>
 
             {/* Giây */}
-            <div className="flex flex-col items-center w-14">
+            <div className="flex flex-col items-center justify-center bg-[#2C6E91]/5 border border-[#2C6E91]/20 rounded-2xl py-3 md:py-4 px-1 shadow-xs">
               <span
-                className="text-[36px] sm:text-[42px] text-[#2C6E91] leading-none font-normal"
-                style={{ fontFamily: "'Alisheia', sans-serif" }}
+                className="text-[34px] sm:text-[40px] md:text-[46px] text-[#2C6E91] leading-none font-normal"
+                style={{ fontFamily: "'Alisheia', 'Playfair Display', serif" }}
               >
                 {timeLeft.seconds}
               </span>
-              <span className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91] mt-1 font-normal">
+              <span className="font-lora text-[11px] sm:text-[12px] md:text-[13px] uppercase tracking-wider text-[#2C6E91]/80 mt-1.5 font-medium">
                 Giây
               </span>
             </div>
@@ -191,3 +191,4 @@ export function WeddingCountdown({
     </section>
   );
 }
+

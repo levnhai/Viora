@@ -17,42 +17,52 @@ export function ThankYouSection({ weddingData }: ThankYouSectionProps) {
 
   return (
     <footer className="relative w-full overflow-hidden bg-black text-white">
-      {/* 1. Background Image with Dark Overlay (y=4933, w: 430, h: 314) */}
-      <div className="relative w-full aspect-[430/320] overflow-hidden">
+      {/* 1. Background Image with Dark Overlay */}
+      <div className="relative w-full aspect-[430/340] min-h-[320px] md:min-h-[380px] overflow-hidden">
         <img
           src={closingImage}
           alt="Thank you"
           className="w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Gradient Overlay (y=5062) */}
+        {/* Gradient Overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.65) 50%, rgba(0, 0, 0, 0.9) 100%)",
+              "linear-gradient(rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.65) 50%, rgba(0, 0, 0, 0.92) 100%)",
           }}
         />
 
         {/* Content Container */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-6 z-10 select-none">
-          {/* Tiêu đề Thank you (y=5061, font Edwardian 38px) */}
+          {/* Tiêu đề Thank you */}
           <AnimateView animation="fadeInUp" duration={1}>
             <h2
-              className="text-[36px] sm:text-[42px] text-white font-normal leading-tight mb-2 select-none"
-              style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
+              className="text-[38px] sm:text-[46px] md:text-[52px] text-white font-normal leading-tight mb-2 select-none drop-shadow-md"
+              style={{ fontFamily: "'Edwardian', 'Pinyon Script', cursive" }}
             >
               Thank you
             </h2>
           </AnimateView>
 
-          {/* Lời Cảm Ơn (y=5128, font Lora 14px text-center) */}
+          {/* Lời Cảm Ơn */}
           <AnimateView animation="fadeInUp" delay={0.1} duration={1}>
-            <p className="font-lora text-[13px] sm:text-[14px] text-white/95 leading-relaxed text-center max-w-[400px] mx-auto">
+            <p className="font-lora text-[13px] sm:text-[14px] md:text-[15px] text-white/95 leading-relaxed text-center max-w-[380px] sm:max-w-md md:max-w-lg mx-auto px-2">
               Cảm ơn Quý Khách đã dành tình cảm cho gia đình chúng tôi! Sự hiện
               diện của Quý Khách chính là món quà ý nghĩa nhất, gia đình chúng
               tôi vô cùng trân quý khi được cùng Quý Khách chia sẻ niềm hạnh phúc
               trong ngày trọng đại này.
+            </p>
+          </AnimateView>
+
+          {/* Chữ ký dâu rể */}
+          <AnimateView animation="fadeInUp" delay={0.2} duration={1.2}>
+            <p
+              className="text-[28px] sm:text-[34px] md:text-[38px] text-white/95 leading-tight select-none mt-3 capitalize tracking-wide drop-shadow-md"
+              style={{ fontFamily: "'Edwardian', 'Pinyon Script', cursive" }}
+            >
+              {groomName || "Tuấn Anh"} &amp; {brideName || "Bích Ngọc"}
             </p>
           </AnimateView>
         </div>
@@ -60,3 +70,4 @@ export function ThankYouSection({ weddingData }: ThankYouSectionProps) {
     </footer>
   );
 }
+

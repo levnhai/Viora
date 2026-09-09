@@ -16,7 +16,7 @@ import { RunningMarquee } from "@/widgets/invitation-blocks";
 
 import { WeddingData } from "@/entities/invitation/model/types";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
-import { formatDateToDDMMYYYY } from "@/shared/lib/utils/date";
+import { formatToDDMMYYYY } from "@/shared/lib/utils/date";
 
 interface LiveViewProps {
   weddingData: WeddingData;
@@ -31,9 +31,9 @@ export function LiveView({
 }: LiveViewProps) {
   const [giftModalOpen, setGiftModalOpen] = useState(false);
 
-  const { playing, togglePlay, autoPlayOnce, audioRef } = useWeddingMusic(
-    weddingData.musicUrl
-  );
+  const musicSource = weddingData.musicUrl?.trim() || "/audio/wedding-song.mp3";
+
+  const { playing, togglePlay, autoPlayOnce, audioRef } = useWeddingMusic(musicSource);
   const { messages, handleSendMessage } = useGuestbook(weddingData.slug);
 
   const onSendMessage = async (name: string, msg: string) => {
@@ -43,107 +43,51 @@ export function LiveView({
     }
   };
 
-  const formattedDate = weddingData.weddingDate
-    ? formatDateToDDMMYYYY(weddingData.weddingDate)
-    : "26.12.2026";
+  const formattedDate = formatToDDMMYYYY(weddingData.weddingDate, ".");
 
   const marqueeText = `${weddingData.groomName || "Tuấn Anh"} & ${weddingData.brideName || "Bích Ngọc"} • SAVE OUR DATE • ${formattedDate} • THE WEDDING`;
 
   return (
     <div className="w-full min-h-screen relative font-serif text-[#2C2018] bg-[#EDE9E1] flex justify-center selection:bg-[#2C6E91] selection:text-white">
-      {/* Import Animate.css cho toàn bộ hiệu ứng chữ chạy và hoạt ảnh */}
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-      />
-
-      {/* Import 7 Web Fonts đặc trưng của mẫu thiepcuoimau30 */}
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/alisheia/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/arcittya-begatri/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/edwardian/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/hastegi/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/lora/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/luxurious/font.css"
-        rel="stylesheet"
-      />
-      <link
-        href="https://cdn.taothiep.com/wedding-app-assets/fonts/uvn/font.css"
-        rel="stylesheet"
-      />
-
-      {/* Sound Bar Animation Keyframes & Helper Styles */}
-      <style>{`
-        .font-luxurious { font-family: 'Luxurious', 'Playfair Display', serif; }
-        .font-edwardian { font-family: 'Edwardian', 'Pinyon', cursive; }
-        .font-hastegi { font-family: 'Hastegi', 'Plus Jakarta Sans', sans-serif; }
-        .font-lora { font-family: 'Lora', Georgia, serif; }
-        .font-alisheia { font-family: 'Alisheia', sans-serif; }
-        .font-uvn { font-family: 'UVN', serif; }
-        .font-arcittya { font-family: 'Arcittya Begatri', serif; }
-
-        @keyframes soundWave1 { 0%, 100% { height: 2px; } 20% { height: 5px; } 40% { height: 8px; } 60% { height: 3px; } 80% { height: 7px; } }
-        @keyframes soundWave2 { 0%, 100% { height: 3px; } 20% { height: 7px; } 40% { height: 2px; } 60% { height: 8px; } 80% { height: 4px; } }
-        @keyframes soundWave3 { 0%, 100% { height: 2px; } 20% { height: 8px; } 40% { height: 4px; } 60% { height: 7px; } 80% { height: 3px; } }
-        @keyframes soundWave4 { 0%, 100% { height: 4px; } 20% { height: 3px; } 40% { height: 7px; } 60% { height: 2px; } 80% { height: 8px; } }
-        .animate-sound-1 { animation: soundWave1 1.4s ease-in-out infinite; }
-        .animate-sound-2 { animation: soundWave2 1.6s ease-in-out infinite 0.2s; }
-        .animate-sound-3 { animation: soundWave3 1.8s ease-in-out infinite 0.4s; }
-        .animate-sound-4 { animation: soundWave4 1.5s ease-in-out infinite 0.1s; }
-      `}</style>
-
-      {/* Màn hình mở cửa 2 cánh nổi trên mẫu thiệp khi vừa mount */}
       {previewMode !== "invitation" && (
         <GatefoldCurtainOverlay
+          accentColor="#2C6E91"
+          gradientTop="#3881A7"
+          gradientBottom="#1F516C"
           onComplete={() => {
-            if (weddingData.musicUrl) autoPlayOnce();
+            autoPlayOnce();
           }}
         />
       )}
 
-      {/* Toàn Bộ Thân Thiệp Cưới (Chuẩn Mobile Viewport 430px) */}
-      <div className="w-full max-w-[430px] min-h-screen bg-white shadow-2xl relative z-10 flex flex-col overflow-hidden">
+      {/* Toàn Bộ Thiệp Cưới */}
+      <div className="w-full max-w-[480px] md:max-w-xl lg:max-w-2xl min-h-screen bg-white shadow-2xl relative z-10 flex flex-col overflow-hidden ring-1 ring-black/5">
         {/* 1. Hero Cover */}
         <InvitationCover
           weddingData={weddingData}
           guestName={guestName}
         />
 
-        {/* Dải Băng Chữ Chạy Vô Tận (Marquee Ticker) */}
+        {/* Dải Băng Chữ Chạy */}
         <RunningMarquee
           text={marqueeText}
           speed={22}
           className="bg-[#2C6E91] text-white py-2 text-[11px] sm:text-xs uppercase tracking-[0.25em] font-lora shadow-inner"
         />
 
-        {/* 2. Câu Chuyện Tình Yêu & Chân Dung So Le Độc Đáo */}
+        {/* 2. Câu Chuyện Tình Yêu */}
         <LoveStorySpotlight weddingData={weddingData} />
 
-        {/* 3. Lời Mời Trang Trọng & Thông Tin Hai Họ */}
+        {/* 3. Lời Mời & Thông Tin Hai Họ */}
         <FamilyInvitationIntro weddingData={weddingData} />
 
-        {/* 4. Lịch Sự Kiện Cưới (2 Tiệc) */}
+        {/* 4. Lịch Sự Kiện Cưới */}
         <EventScheduleCard weddingData={weddingData} />
 
-        {/* 5. Lịch Tháng (Calendar Grid Trên Nền Ảnh) */}
+        {/* 5. Lịch Tháng*/}
         <MonthlyCalendarCard weddingData={weddingData} />
 
-        {/* Dải Chữ Chạy Nghệ Thuật Giữa Lịch và Album */}
+        {/* Dải Chữ Chạy */}
         <RunningMarquee
           text="FOREVER TOGETHER • HAPPY WEDDING • BEST WISHES"
           speed={28}
@@ -162,7 +106,7 @@ export function LiveView({
           onOpenGiftModal={() => setGiftModalOpen(true)}
         />
 
-        {/* 8. Đếm Ngược Countdown "Đừng quên mình có hẹn nhé!" */}
+        {/* 8. Đếm Ngược */}
         <WeddingCountdown
           weddingDate={weddingData.weddingDate || weddingData.events?.[0]?.date}
           weddingTime={weddingData.weddingTime || weddingData.events?.[0]?.time}
@@ -176,9 +120,11 @@ export function LiveView({
           weddingData={weddingData}
           isOpen={giftModalOpen}
           onClose={() => setGiftModalOpen(false)}
+          accentColor="#2C6E91"
+          hoverColor="#1F516C"
         />
 
-        {/* Nút Điều Khiển Nhạc Sóng Âm (Floating Music Control) */}
+        {/* Nút Điều Khiển Nhạc Sóng Âm */}
         <button
           onClick={togglePlay}
           className={`fixed top-4 right-4 z-40 h-8 px-2.5 flex items-center gap-1.5 rounded-full transition-all duration-300 shadow-md cursor-pointer ${
@@ -206,7 +152,7 @@ export function LiveView({
         {/* Audio Tag */}
         <audio ref={audioRef} loop preload="auto">
           <source
-            src={(weddingData as any).musicUrl || "/audio/wedding-song.mp3"}
+            src={musicSource}
             type="audio/mpeg"
           />
         </audio>

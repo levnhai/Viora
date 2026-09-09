@@ -1,6 +1,7 @@
 import { WeddingData } from "@/entities/invitation/model/types";
 import { AnimateView } from "@/widgets/invitation-blocks";
 import { Heart } from "lucide-react";
+import { parseDateRobust } from "@/shared/lib/utils/date";
 
 interface MonthlyCalendarCardProps {
   weddingData: WeddingData;
@@ -14,11 +15,11 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
     coverImage ||
     "https://cdn.taothiep.com/wedding-user-assets/images/cmp2snpce001501myev2iysu3/acee2e70-23fa-40cb-8e78-881e8e275b13.webp?crop=178,143,444,315&zoom=1.8";
 
-  // Parse wedding date for month and selected day
-  const dateObj = weddingDate ? new Date(weddingDate) : new Date("2026-12-26");
-  const year = isNaN(dateObj.getFullYear()) ? 2026 : dateObj.getFullYear();
-  const month = isNaN(dateObj.getMonth()) ? 11 : dateObj.getMonth(); // 0-indexed
-  const selectedDay = isNaN(dateObj.getDate()) ? 26 : dateObj.getDate();
+  // Parse wedding date with robust parser
+  const dateObj = parseDateRobust(weddingDate);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth(); // 0-indexed
+  const selectedDay = dateObj.getDate();
 
   // Get total days in this month
   const totalDays = new Date(year, month + 1, 0).getDate();
@@ -38,8 +39,8 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
 
   return (
     <section className="relative w-full overflow-hidden bg-[#2C6E91] text-white">
-      {/* Background Image Container with Overlay (y=2445, 430x305) */}
-      <div className="relative w-full aspect-[430/320] overflow-hidden">
+      {/* Background Image Container with Overlay */}
+      <div className="relative w-full aspect-[430/340] min-h-[330px] md:min-h-[380px] overflow-hidden">
         <img
           src={bgImage}
           alt="Calendar background"
@@ -47,23 +48,23 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
         />
 
         {/* Gradient dark overlay */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-none" />
+        <div className="absolute inset-0 bg-black/65 backdrop-blur-[2px] pointer-events-none" />
 
         {/* Calendar Content Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-4 z-10 select-none">
-          {/* Tiêu đề Tháng (y=2465) */}
+          {/* Tiêu đề Tháng */}
           <AnimateView animation="fadeInUp" duration={1}>
             <h3
-              className="text-[28px] sm:text-[34px] font-normal tracking-wide text-white drop-shadow-md mb-2 text-center"
-              style={{ fontFamily: "'Luxurious', 'Lora', serif" }}
+              className="text-[28px] sm:text-[34px] md:text-[38px] font-normal tracking-wide text-white drop-shadow-md mb-2 text-center"
+              style={{ fontFamily: "'Luxurious', 'Playfair Display', serif" }}
             >
               Tháng {month + 1} - {year}
             </h3>
           </AnimateView>
 
-          {/* Lưới Lịch Tháng (y=2512) */}
-          <AnimateView animation="fadeInUp" delay={0.15} duration={1} className="w-full max-w-[340px]">
-            <div className="bg-black/25 backdrop-blur-md rounded-2xl p-3 border border-white/20 shadow-xl">
+          {/* Lưới Lịch Tháng */}
+          <AnimateView animation="fadeInUp" delay={0.15} duration={1} className="w-full max-w-[340px] sm:max-w-[390px] md:max-w-[430px]">
+            <div className="bg-black/30 backdrop-blur-md rounded-2xl p-3 border border-white/20 shadow-2xl">
               {/* Day names header */}
               <div className="grid grid-cols-7 gap-1 text-center mb-2">
                 {daysOfWeek.map((d, i) => (
@@ -111,3 +112,4 @@ export function MonthlyCalendarCard({ weddingData }: MonthlyCalendarCardProps) {
     </section>
   );
 }
+

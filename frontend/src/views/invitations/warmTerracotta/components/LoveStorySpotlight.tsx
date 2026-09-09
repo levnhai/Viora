@@ -13,6 +13,11 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
     brideImage,
     galleryImages,
     story,
+    groomTitle,
+    brideTitle,
+    groomRank,
+    brideRank,
+    displayOrder,
   } = weddingData;
 
   const defaultBrideImg =
@@ -29,87 +34,104 @@ export function LoveStorySpotlight({ weddingData }: LoveStorySpotlightProps) {
     story ||
     "Mỗi câu chuyện tình yêu đều có một khởi đầu riêng, và câu chuyện của chúng mình được viết nên từ những điều giản dị nhất. Qua từng ngày, tình yêu lớn dần theo sự thấu hiểu, sẻ chia và những lời hẹn ước cho tương lai.";
 
+  const isGroomFirst = displayOrder === "groom_first";
+
+  const brideCard = (
+    <div key="bride-card" className="grid grid-cols-2 gap-3 sm:gap-6 md:gap-8 items-center">
+      {/* Ảnh Cô Dâu (Trái) */}
+      <AnimateView animation="fadeInLeft" delay={0.2} duration={1.2}>
+        <div className="w-full aspect-[210/310] overflow-hidden rounded-none shadow-md bg-stone-100 group">
+          <img
+            src={defaultBrideImg}
+            alt={brideName || "Cô dâu"}
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+          />
+        </div>
+      </AnimateView>
+
+      {/* Chữ Cô Dâu & Tên (Phải) */}
+      <AnimateView animation="fadeInRight" delay={0.25} duration={1.2}>
+        <div className="flex flex-col items-center justify-center text-center p-2">
+          <span className="font-lora text-[18px] sm:text-[20px] md:text-[22px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
+            Cô dâu
+          </span>
+          <h3
+            className="text-[32px] sm:text-[40px] md:text-[46px] text-[#2C6E91] font-normal leading-tight capitalize"
+            style={{ fontFamily: "'Edwardian', 'Pinyon Script', cursive" }}
+          >
+            {brideName || "Bích Ngọc"}
+          </h3>
+          {(brideTitle || brideRank) && (
+            <span className="font-lora text-xs md:text-sm uppercase tracking-wider text-[#2C6E91]/75 mt-1 font-medium">
+              ({brideTitle || brideRank})
+            </span>
+          )}
+        </div>
+      </AnimateView>
+    </div>
+  );
+
+  const groomCard = (
+    <div key="groom-card" className="grid grid-cols-2 gap-3 sm:gap-6 md:gap-8 items-center">
+      {/* Chữ Chú Rể & Tên (Trái) */}
+      <AnimateView animation="fadeInLeft" delay={0.3} duration={1.2}>
+        <div className="flex flex-col items-center justify-center text-center p-2">
+          <span className="font-lora text-[18px] sm:text-[20px] md:text-[22px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
+            Chú rể
+          </span>
+          <h3
+            className="text-[32px] sm:text-[40px] md:text-[46px] text-[#2C6E91] font-normal leading-tight capitalize"
+            style={{ fontFamily: "'Edwardian', 'Pinyon Script', cursive" }}
+          >
+            {groomName || "Tuấn Anh"}
+          </h3>
+          {(groomTitle || groomRank) && (
+            <span className="font-lora text-xs md:text-sm uppercase tracking-wider text-[#2C6E91]/75 mt-1 font-medium">
+              ({groomTitle || groomRank})
+            </span>
+          )}
+        </div>
+      </AnimateView>
+
+      {/* Ảnh Chú Rể (Phải) */}
+      <AnimateView animation="fadeInRight" delay={0.35} duration={1.2}>
+        <div className="w-full aspect-[210/310] overflow-hidden rounded-none shadow-md bg-stone-100 group">
+          <img
+            src={defaultGroomImg}
+            alt={groomName || "Chú rể"}
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+          />
+        </div>
+      </AnimateView>
+    </div>
+  );
+
   return (
-    <section className="relative w-full bg-white text-[#2C6E91] pt-10 pb-8 px-3 overflow-hidden">
-      <div className="max-w-[430px] mx-auto">
-        {/* 1. Tiêu đề câu chuyện tình yêu (y=745, font Luxurious 48px #2C6E91) */}
+    <section className="relative w-full bg-white text-[#2C6E91] pt-10 pb-8 px-4 sm:px-6 md:px-8 overflow-hidden">
+      <div className="w-full max-w-2xl mx-auto">
+        {/* 1. Tiêu đề câu chuyện tình yêu */}
         <AnimateView animation="fadeInUp" duration={1.2}>
           <h2
-            className="text-[36px] sm:text-[44px] text-[#2C6E91] font-normal leading-tight text-center mb-3 select-none"
+            className="text-[36px] sm:text-[44px] md:text-[50px] text-[#2C6E91] font-normal leading-tight text-center mb-3 select-none"
             style={{ fontFamily: "'Luxurious', 'Playfair Display', serif" }}
           >
             Hai Trái Tim, Một Hành Trình
           </h2>
         </AnimateView>
 
-        {/* 2. Đoạn văn giới thiệu (y=800, font Lora 14px text-justify line-height 1.8) */}
+        {/* 2. Đoạn văn giới thiệu */}
         <AnimateView animation="fadeInUp" delay={0.15} duration={1}>
-          <p className="font-lora text-[13px] sm:text-[14px] text-[#2C6E91]/90 leading-[1.8] text-justify px-2 mb-8">
+          <p className="font-lora text-[13px] sm:text-[14px] md:text-[15px] text-[#2C6E91]/90 leading-[1.8] text-justify px-2 mb-8">
             {defaultStory}
           </p>
         </AnimateView>
 
         {/* 3. Bố Cục Chân Dung So Le Dích Dắc Độc Đáo */}
-        <div className="space-y-4">
-          {/* Hàng 1: [Ảnh Cô Dâu Trái 210x310] + [Chữ Cô Dâu Phải] */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 items-center">
-            {/* Ảnh Cô Dâu (Trái) */}
-            <AnimateView animation="fadeInLeft" delay={0.2} duration={1.2}>
-              <div className="w-full aspect-[210/310] overflow-hidden rounded-none shadow-md bg-stone-100">
-                <img
-                  src={defaultBrideImg}
-                  alt={brideName || "Cô dâu"}
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-            </AnimateView>
-
-            {/* Chữ Cô Dâu & Tên (Phải) */}
-            <AnimateView animation="fadeInRight" delay={0.25} duration={1.2}>
-              <div className="flex flex-col items-center justify-center text-center p-2">
-                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
-                  Cô dâu
-                </span>
-                <h3
-                  className="text-[32px] sm:text-[40px] text-[#2C6E91] font-normal leading-tight capitalize"
-                  style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
-                >
-                  {brideName || "Bích Ngọc"}
-                </h3>
-              </div>
-            </AnimateView>
-          </div>
-
-          {/* Hàng 2: [Chữ Chú Rể Trái] + [Ảnh Chú Rể Phải 210x310] */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 items-center">
-            {/* Chữ Chú Rể & Tên (Trái) */}
-            <AnimateView animation="fadeInLeft" delay={0.3} duration={1.2}>
-              <div className="flex flex-col items-center justify-center text-center p-2">
-                <span className="font-lora text-[18px] sm:text-[20px] uppercase font-semibold text-[#2C6E91] tracking-wider mb-1">
-                  Chú rể
-                </span>
-                <h3
-                  className="text-[32px] sm:text-[40px] text-[#2C6E91] font-normal leading-tight capitalize"
-                  style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
-                >
-                  {groomName || "Tuấn Anh"}
-                </h3>
-              </div>
-            </AnimateView>
-
-            {/* Ảnh Chú Rể (Phải) */}
-            <AnimateView animation="fadeInRight" delay={0.35} duration={1.2}>
-              <div className="w-full aspect-[210/310] overflow-hidden rounded-none shadow-md bg-stone-100">
-                <img
-                  src={defaultGroomImg}
-                  alt={groomName || "Chú rể"}
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-            </AnimateView>
-          </div>
+        <div className="space-y-4 sm:space-y-6">
+          {isGroomFirst ? [groomCard, brideCard] : [brideCard, groomCard]}
         </div>
       </div>
     </section>
   );
 }
+

@@ -1,6 +1,6 @@
 import { WeddingData } from "@/entities/invitation/model/types";
 import { AnimateView } from "@/widgets/invitation-blocks";
-import { formatDateToDDMMYYYY } from "@/shared/lib/utils/date";
+import { formatToDDMMYYYY } from "@/shared/lib/utils/date";
 
 interface InvitationCoverProps {
   weddingData: WeddingData;
@@ -24,56 +24,58 @@ export function InvitationCover({
     (galleryImages && galleryImages.length > 0 ? galleryImages[0] : null) ||
     "https://cdn.taothiep.com/wedding-user-assets/images/cmp2snpce001501myev2iysu3/89ebe947-8dab-4bd4-87c1-5c3a219d9add.webp";
 
-  const formattedDate = weddingDate ? formatDateToDDMMYYYY(weddingDate) : "26.12.2026";
+  const formattedDate = formatToDDMMYYYY(weddingDate, ".");
 
   return (
     <section className="relative w-full bg-white text-[#2C2018]">
-      {/* 1. Hero Image Container (y=0 -> y=700) */}
-      <div className="relative w-full aspect-[430/700] overflow-hidden">
+      {/* 1. Hero Image Container */}
+      <div className="relative w-full aspect-[430/700] md:aspect-[430/620] overflow-hidden">
         <img
           src={displayCoverImage}
-          alt={`${groomName} & ${brideName}`}
+          alt={`${groomName || "Chú rể"} & ${brideName || "Cô dâu"}`}
           className="w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Gradient Overlay từ y=455 (h=245px) */}
+        {/* Gradient Overlay từ đáy lên: chuyển sang nền sáng kem giúp chữ màu xanh #2C6E91 hiển thị sắc nét, tương phản hoàn hảo */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[42%] pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[52%] pointer-events-none"
           style={{
             background:
-              "linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.75) 100%)",
+              "linear-gradient(to top, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.85) 45%, rgba(255, 255, 255, 0.35) 75%, rgba(255, 255, 255, 0) 100%)",
           }}
         />
 
         {/* Content Over the Hero Image */}
-        <div className="absolute inset-x-0 bottom-0 pb-8 pt-12 flex flex-col items-center justify-end text-center z-10 select-none px-4">
-          {/* the wedding of (font Edwardian / Arcittya 32px) */}
+        <div className="absolute inset-x-0 bottom-0 pb-6 pt-10 flex flex-col items-center justify-end text-center z-10 select-none px-4">
+          {/* the wedding of */}
           <AnimateView animation="fadeInUp" duration={1.2}>
             <p
-              className="text-[32px] sm:text-[38px] text-white/90 leading-tight drop-shadow-md select-none -mb-1"
-              style={{ fontFamily: "'Edwardian', 'Pinyon', cursive" }}
+              className="text-[28px] sm:text-[34px] md:text-[40px] text-[#2C6E91]/80 leading-tight select-none -mb-1"
+              style={{ fontFamily: "'Dancing Script', 'Alex Brush', 'Edwardian', 'Pinyon Script', cursive" }}
             >
               the wedding of
             </p>
           </AnimateView>
 
-          {/* Tên dâu rể (font Hastegi 42px - 48px uppercase) */}
+          {/* Tên dâu rể */}
           <AnimateView animation="fadeInUp" delay={0.15} duration={1.2}>
             <h1
-              className="text-3xl sm:text-[44px] leading-tight uppercase text-white font-normal tracking-wide drop-shadow-lg my-1 flex items-center justify-center gap-2 flex-wrap"
-              style={{ fontFamily: "'Hastegi', sans-serif" }}
+              className="text-[48px] sm:text-[62px] md:text-[72px] lg:text-[78px] leading-[1.1] capitalize text-[#2C6E91] font-bold tracking-normal my-1 flex items-center justify-center gap-2 sm:gap-3 flex-wrap select-none drop-shadow-xs"
+              style={{
+                fontFamily: "'Dancing Script', 'Alex Brush', 'Edwardian', 'Pinyon Script', cursive",
+              }}
             >
               <span>{groomName || "Tuấn Anh"}</span>
-              <span className="font-serif italic text-2xl sm:text-3xl opacity-80">&amp;</span>
+              <span className="text-[34px] sm:text-[46px] md:text-[54px] text-[#2C6E91]/75 mx-1 font-serif italic">&amp;</span>
               <span>{brideName || "Bích Ngọc"}</span>
             </h1>
           </AnimateView>
 
-          {/* Ngày cưới (font Hastegi 24px) */}
+          {/* Ngày cưới */}
           <AnimateView animation="fadeInUp" delay={0.25} duration={1}>
             <p
-              className="text-lg sm:text-[24px] uppercase text-white tracking-[0.2em] font-normal drop-shadow-md mt-1"
-              style={{ fontFamily: "'Hastegi', sans-serif" }}
+              className="text-base sm:text-[20px] md:text-[22px] uppercase text-[#2C6E91]/90 tracking-[0.25em] font-semibold mt-1"
+              style={{ fontFamily: "'Hastegi', 'Plus Jakarta Sans', sans-serif" }}
             >
               {formattedDate}
             </p>
@@ -81,10 +83,10 @@ export function InvitationCover({
         </div>
       </div>
 
-      {/* Guest Name banner nếu có */}
+      {/* khách mời*/}
       {guestName && (
-        <AnimateView animation="fadeInUp" delay={0.3} duration={1} className="w-full max-w-[390px] mx-auto px-4 mt-4">
-          <div className="bg-[#2C6E91]/10 border border-[#2C6E91]/30 rounded-full py-1.5 px-4 text-center">
+        <AnimateView animation="fadeInUp" delay={0.3} duration={1} className="w-full max-w-[390px] md:max-w-md mx-auto px-4 mt-4">
+          <div className="bg-[#2C6E91]/10 border border-[#2C6E91]/30 rounded-full py-1.5 px-4 text-center shadow-sm">
             <p className="text-xs text-[#2C6E91] font-lora uppercase tracking-wider">
               Kính mời: <strong className="font-bold text-[#2C2018]">{guestName}</strong>
             </p>
@@ -94,3 +96,4 @@ export function InvitationCover({
     </section>
   );
 }
+
