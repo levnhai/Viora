@@ -26,20 +26,26 @@ async function bootstrap() {
     'http://127.0.0.1:3000',
   ];
   const configuredOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
+    ? process.env.FRONTEND_URL.split(',').map((url) => url.trim().replace(/\/$/, ''))
     : [];
   const allowedOrigins = [...defaultOrigins, ...configuredOrigins];
 
   app.enableCors({
     origin: (origin, callback) => {
+      // Cho phép request không có origin (như curl, mobile app, server-to-server)
       if (!origin) return callback(null, true);
+
+      // Cho phép trong môi trường dev hoặc origin nằm trong danh sách whitelist
       if (
+        process.env.NODE_ENV !== 'production' ||
         allowedOrigins.includes(origin) ||
-        process.env.NODE_ENV !== 'production'
+        // Tự động cho phép các preview domain của Vercel hoặc Railway nếu cần
+        /^https:\/\/.*\.vercel\.app$/.test(origin) ||
+        /^https:\/\/.*\.up\.railway\.app$/.test(origin)
       ) {
         return callback(null, true);
       }
-      return callback(new Error(`CORS blocked for origin: ${origin}`), false);
+      return callback(null, false);
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
-import { API_URL } from "@/shared/lib/config";
+import { SOCKET_URL } from "@/shared/lib/config";
 import { fetchRealtimeOnline } from "../api/analyticsApi";
 
 export const useRealtimeOnline = () => {
@@ -12,7 +12,7 @@ export const useRealtimeOnline = () => {
     let fallbackInterval: NodeJS.Timeout | null = null;
 
     try {
-      socket = io(API_URL, {
+      socket = io(SOCKET_URL, {
         transports: ["websocket", "polling"],
         reconnectionAttempts: 5,
         reconnectionDelay: 3000,
