@@ -88,7 +88,9 @@ export function AdminDashboardPage() {
 
   // Fallback data when offline or not yet synchronized
   const kpi = dashboardData?.kpi || {
-    totalWeddings: 10,
+    totalWeddings: 0,
+    paidWeddings: 0,
+    totalRevenue: 0,
     totalGuests: 0,
     totalViews: 1,
   };
@@ -114,9 +116,14 @@ export function AdminDashboardPage() {
       ? "Chào buổi chiều"
       : "Chào buổi tối";
 
-  // Calculate dynamic revenue based on range
+  // Calculate dynamic revenue based on real weddings (exclude demo)
   const totalW = kpi.totalWeddings || 0;
-  const calculatedRevenue = totalW > 0 ? totalW * 149000 : 149000;
+  const paidWeddingsCount =
+    typeof kpi.paidWeddings === "number" ? kpi.paidWeddings : 0;
+  const calculatedRevenue =
+    typeof kpi.totalRevenue === "number"
+      ? kpi.totalRevenue
+      : paidWeddingsCount * 149000;
 
   // Returning rate
   const returningRate = analyticsData?.kpi?.returningRate || 100;
@@ -149,54 +156,63 @@ export function AdminDashboardPage() {
   return (
     <AdminLayout onlineCount={onlineCount}>
       {/* 1. Top Greeting & Quick Actions Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-lg sm:text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-              {greeting}, Super Admin 👋
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold border border-emerald-200/60 dark:border-emerald-900/40">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Hệ thống ổn định
-            </span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-            <span>Trang chủ</span>
-            <ChevronRight size={12} />
-            <span className="font-semibold text-slate-700 dark:text-slate-200">
-              Trung tâm điều hành & phân tích số liệu
-            </span>
-          </p>
-        </div>
-
-        {/* Quick Action buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <Link
-            href="/admin/template-requests"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200/60 dark:border-slate-700/60"
-          >
-            <Inbox size={15} className="text-amber-500" />
-            <span>Yêu cầu làm thiệp</span>
-            {allRequests.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-white text-[10px] font-mono">
-                {allRequests.length}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-white via-white to-indigo-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/20 p-5 sm:p-6 lg:p-7 border border-slate-200/80 dark:border-slate-800/80 shadow-xs transition-all">
+        {/* Subtle background glow circle */}
+        <div className="absolute top-0 right-1/4 w-72 h-72 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                {greeting}, Super Admin 👋
+              </h1>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs sm:text-[13px] font-bold border border-emerald-500/20 shadow-2xs">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                </span>
+                Hệ thống ổn định
               </span>
-            )}
-          </Link>
+            </div>
+            <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-2">
+              <span className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium">Bảng điều khiển</span>
+              <ChevronRight size={14} className="text-slate-400 dark:text-slate-500" />
+              <span className="font-semibold text-slate-700 dark:text-slate-200">
+                Trung tâm điều hành & phân tích số liệu thời gian thực
+              </span>
+            </div>
+          </div>
 
-          <Link
-            href="/admin/invitations/create"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition-all hover:scale-[1.02]"
-          >
-            <PlusCircle size={15} />
-            <span>+ Tạo thiệp mới</span>
-          </Link>
+          {/* Quick Action buttons */}
+          <div className="flex items-center gap-3 flex-wrap shrink-0">
+            <Link
+              href="/admin/template-requests"
+              className="h-11 flex items-center gap-2.5 px-4.5 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold transition-all border border-slate-200/90 dark:border-slate-700/80 shadow-2xs hover:shadow-xs active:scale-[0.98]"
+            >
+              <Inbox size={18} className="text-amber-500" />
+              <span>Yêu cầu làm thiệp</span>
+              {allRequests.length > 0 && (
+                <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white text-xs font-black tabular-nums shadow-2xs">
+                  {allRequests.length}
+                </span>
+              )}
+            </Link>
+
+            <Link
+              href="/admin/invitations/create"
+              className="h-11 flex items-center gap-2.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-indigo-500/25 transition-all active:scale-[0.98] hover:shadow-indigo-500/35"
+            >
+              <PlusCircle size={18} />
+              <span>Tạo thiệp mới</span>
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* 2. Primary KPI Cards Grid */}
       <PrimaryKpiGrid
         revenue={calculatedRevenue}
+        paidWeddings={paidWeddingsCount}
         totalWeddings={totalW}
         pendingRequests={allRequests.length}
         totalViews={totalViews}

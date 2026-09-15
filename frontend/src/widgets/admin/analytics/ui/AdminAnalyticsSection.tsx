@@ -104,6 +104,10 @@ export function AdminAnalyticsSection({
   // Tính toán số liệu vận hành và doanh thu lọc theo mốc thời gian range
   const operationalStats = (() => {
     const totalW = dashboardKpi?.totalWeddings || 0;
+    const paidW =
+      typeof dashboardKpi?.paidWeddings === "number"
+        ? dashboardKpi.paidWeddings
+        : (dashboardKpi?.source !== "demo" ? totalW : 0);
     const totalG = dashboardKpi?.totalGuests || 0;
     const allRequests = requests || [];
 
@@ -127,28 +131,28 @@ export function AdminAnalyticsSection({
 
     const totalWeddings = totalW; // Luôn luôn lấy tổng số thiệp cưới toàn hệ thống
 
-    // Khách mời và doanh thu tính theo mốc thời gian đã chọn
+    // Khách mời và doanh thu tính theo mốc thời gian đã chọn (chỉ tính thiệp thực tế, không tính demo)
     let periodGuests = 0;
     let periodRevenue = 0;
 
     if (range === "today") {
       periodGuests = totalG > 0 ? Math.min(totalG, Math.floor(totalG * 0.1)) : 0;
       // Doanh thu hôm nay
-      const todayWeddings = totalW > 0 ? Math.floor(totalW * 0.1) : 0;
+      const todayWeddings = paidW > 0 ? Math.floor(paidW * 0.1) : 0;
       const todayRequestsRevenue = filteredReqs.filter(
         (r: any) => r.status === "completed" || r.status === "contacted"
       ).length * 149000;
       periodRevenue = todayWeddings * 149000 + todayRequestsRevenue;
     } else if (range === "7days") {
       periodGuests = totalG > 0 ? Math.min(totalG, Math.max(1, Math.round(totalG * 0.4))) : 0;
-      const weekWeddings = totalW > 0 ? Math.max(1, Math.round(totalW * 0.4)) : 0;
+      const weekWeddings = paidW > 0 ? Math.max(1, Math.round(paidW * 0.4)) : 0;
       const weekRequestsRevenue = filteredReqs.filter(
         (r: any) => r.status === "completed" || r.status === "contacted"
       ).length * 149000;
       periodRevenue = weekWeddings * 149000 + weekRequestsRevenue;
     } else if (range === "30days") {
       periodGuests = totalG > 0 ? Math.min(totalG, Math.max(1, Math.round(totalG * 0.8))) : 0;
-      const monthWeddings = totalW > 0 ? Math.max(1, Math.round(totalW * 0.8)) : 0;
+      const monthWeddings = paidW > 0 ? Math.max(1, Math.round(paidW * 0.8)) : 0;
       const monthRequestsRevenue = filteredReqs.filter(
         (r: any) => r.status === "completed" || r.status === "contacted"
       ).length * 149000;
@@ -159,7 +163,7 @@ export function AdminAnalyticsSection({
       const yearRequestsRevenue = filteredReqs.filter(
         (r: any) => r.status === "completed" || r.status === "contacted"
       ).length * 149000;
-      periodRevenue = totalW * 149000 + yearRequestsRevenue;
+      periodRevenue = paidW * 149000 + yearRequestsRevenue;
     }
 
     return {

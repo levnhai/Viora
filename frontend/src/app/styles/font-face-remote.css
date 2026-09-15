@@ -8,7 +8,6 @@
   font-display: swap;
 }
 
-/* Nhật Bình Đỏ (Figma 7907:35) — SVN-HC licensed fonts */
 @font-face {
   font-family: "SVN-HC Pacifico";
   src: url("https://chungdoi.com/fonts/SVN-HC-Pacifico.otf") format("opentype");

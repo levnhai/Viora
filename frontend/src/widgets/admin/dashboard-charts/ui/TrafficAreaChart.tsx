@@ -54,34 +54,41 @@ export function TrafficAreaChart({
   ] as const;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-5 sm:p-6 lg:p-7 shadow-xs flex flex-col justify-between">
       {/* Chart Top Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-slate-800/80">
         <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2">
-              <Activity className="w-4 h-4 text-indigo-500" />
-              Lưu lượng & Hành vi truy cập
-            </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-900/50">
-              Live
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+              <Activity className="w-4.5 h-4.5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                  Lưu lượng & Hành vi truy cập
+                </h3>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                Phân tích lượt xem trang và số lượng khách xem thiệp
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Phân tích số lượt xem trang và lượng khách ghé thăm các thiệp cưới
-          </p>
         </div>
 
         {/* Range Selector & Refresh button */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           {/* Metric switcher */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold">
+          <div className="flex items-center bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-xl text-xs font-semibold border border-slate-200/60 dark:border-slate-700/60">
             <button
               onClick={() => setMetric("pageviews")}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-xs ${
                 metric === "pageviews"
-                  ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs font-bold"
+                  : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
               <Eye size={13} />
@@ -89,10 +96,10 @@ export function TrafficAreaChart({
             </button>
             <button
               onClick={() => setMetric("visitors")}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-xs ${
                 metric === "visitors"
-                  ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs font-bold"
+                  : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
               <Users size={13} />
@@ -101,15 +108,15 @@ export function TrafficAreaChart({
           </div>
 
           {/* Time range pills */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold">
+          <div className="flex items-center bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-xl text-xs font-semibold border border-slate-200/60 dark:border-slate-700/60">
             {ranges.map((r) => (
               <button
                 key={r.key}
                 onClick={() => onRangeChange(r.key)}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all text-xs ${
                   range === r.key
-                    ? "bg-indigo-600 text-white shadow-xs"
-                    : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                    ? "bg-indigo-600 text-white shadow-xs font-bold"
+                    : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
                 }`}
               >
                 {r.label}
@@ -121,11 +128,11 @@ export function TrafficAreaChart({
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors disabled:opacity-50"
+            className="p-2 rounded-xl border border-slate-200/90 dark:border-slate-700/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors disabled:opacity-50 shrink-0"
             title="Làm mới dữ liệu"
           >
             <RefreshCw
-              size={15}
+              size={14}
               className={`${isRefreshing ? "animate-spin text-indigo-600" : ""}`}
             />
           </button>
@@ -133,7 +140,7 @@ export function TrafficAreaChart({
       </div>
 
       {/* Main Area Chart Canvas */}
-      <div className="h-[280px] sm:h-[320px] w-full pt-4">
+      <div className="h-[340px] sm:h-[380px] lg:h-[400px] w-full pt-4">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData}
@@ -171,27 +178,27 @@ export function TrafficAreaChart({
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-slate-900/95 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs backdrop-blur-md">
-                      <div className="font-bold text-slate-300 border-b border-slate-700/80 pb-1 mb-1.5">
+                    <div className="bg-slate-900/95 text-white p-3.5 rounded-xl shadow-xl border border-slate-700/80 text-xs backdrop-blur-md">
+                      <div className="font-bold text-slate-300 border-b border-slate-700/80 pb-1.5 mb-2">
                         Thời gian: {label}
                       </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between gap-4">
-                          <span className="flex items-center gap-1.5 text-indigo-400">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-6">
+                          <span className="flex items-center gap-1.5 text-indigo-400 font-medium">
                             <span className="w-2 h-2 rounded-full bg-indigo-500" />
                             Lượt xem trang:
                           </span>
-                          <strong className="font-mono">
+                          <strong className="font-bold tabular-nums text-white">
                             {payload[0]?.value || 0}
                           </strong>
                         </div>
                         {payload[1] && (
-                          <div className="flex items-center justify-between gap-4">
-                            <span className="flex items-center gap-1.5 text-rose-400">
+                          <div className="flex items-center justify-between gap-6">
+                            <span className="flex items-center gap-1.5 text-rose-400 font-medium">
                               <span className="w-2 h-2 rounded-full bg-rose-500" />
                               Khách truy cập:
                             </span>
-                            <strong className="font-mono">
+                            <strong className="font-bold tabular-nums text-white">
                               {payload[1]?.value || 0}
                             </strong>
                           </div>

@@ -19,11 +19,24 @@ export class DashboardService {
 
   async getDashboardStats() {
     // 1. Top KPI Cards
-    const totalWeddings = await this.weddingModel.countDocuments();
+    const totalWeddings = await this.weddingModel.countDocuments({
+      deletedAt: null,
+    });
+
+    // Chỉ đếm các thiệp thực tế của khách hàng (loại trừ thiệp mẫu source: 'demo')
+    const paidWeddings = await this.weddingModel.countDocuments({
+      source: { $ne: 'demo' },
+      deletedAt: null,
+    });
+
+    // Doanh thu chỉ tính từ các thiệp thực tế (149.000 đ / thiệp)
+    const totalRevenue = paidWeddings * 149000;
+
     const totalGuests = await this.guestModel.countDocuments();
 
     // Aggregate Views
     const viewsAgg = await this.weddingModel.aggregate([
+      { $match: { deletedAt: null } },
       { $group: { _id: null, totalViews: { $sum: '$views' } } },
     ]);
     const totalViews = viewsAgg.length > 0 ? viewsAgg[0].totalViews : 0;
@@ -177,6 +190,8 @@ export class DashboardService {
     return {
       kpi: {
         totalWeddings,
+        paidWeddings,
+        totalRevenue,
         totalGuests,
         rsvpConfirmed,
         rsvpDeclined,

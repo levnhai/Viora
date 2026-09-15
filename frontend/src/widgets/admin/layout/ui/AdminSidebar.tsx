@@ -15,6 +15,9 @@ import {
   MessageSquare,
   PanelLeftClose,
   PanelLeft,
+  Layers,
+  Sparkles,
+  Radio,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -38,35 +41,35 @@ export function AdminSidebar({
   const isSettingsActive = pathname.startsWith("/admin/settings");
 
   const navItemClass = (isActive: boolean) =>
-    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group relative select-none ${
+    `relative flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 group select-none ${
       isActive
-        ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/25 font-bold"
-        : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 font-semibold"
+        ? "bg-gradient-to-r from-indigo-600 via-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25 font-bold"
+        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/90 dark:hover:bg-slate-800/70"
     } ${isCollapsed ? "justify-center px-0" : ""}`;
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-r border-slate-200/90 dark:border-slate-800 select-none shadow-xs transition-colors">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-r border-slate-200/80 dark:border-slate-800/80 select-none shadow-xs transition-colors">
       {/* Brand / Logo */}
       <div
-        className={`h-16 flex items-center border-b border-slate-100 dark:border-slate-800 shrink-0 transition-all duration-300 ${
+        className={`h-16 sm:h-[70px] flex items-center border-b border-slate-100 dark:border-slate-800/80 shrink-0 transition-all duration-300 ${
           isCollapsed ? "justify-center px-2" : "justify-between px-5"
         }`}
       >
-        <Link href="/admin" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 via-pink-500 to-indigo-600 flex items-center justify-center shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform shrink-0">
-            <Heart size={18} className="text-white fill-white" />
+        <Link href="/admin" className="flex items-center gap-3.5 group">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-indigo-600 flex items-center justify-center shadow-md shadow-rose-500/20 group-hover:scale-105 group-hover:shadow-rose-500/35 transition-all shrink-0">
+            <Heart size={20} className="text-white fill-white" />
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-black tracking-wide text-slate-900 dark:text-white font-sans">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-black tracking-wider text-slate-900 dark:text-white font-sans">
                   VIORA
                 </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-black bg-gradient-to-r from-indigo-500/15 to-violet-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/25 tracking-widest shadow-2xs">
                   PRO
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 dark:text-slate-400 font-medium tracking-tight">
+              <p className="text-[11px] text-slate-400 font-medium tracking-tight">
                 Wedding & Event Admin
               </p>
             </div>
@@ -77,7 +80,7 @@ export function AdminSidebar({
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="md:hidden p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <ChevronLeft size={18} />
           </button>
@@ -85,11 +88,11 @@ export function AdminSidebar({
       </div>
 
       {/* Navigation Groups */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-5.5 custom-admin-scrollbar">
         {/* SECTION: TỔNG QUAN */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <p className="px-3 text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-2">
+            <p className="px-3 text-[11px] font-extrabold text-slate-400/90 dark:text-slate-500 uppercase tracking-widest mb-2">
               Trung tâm điều hành
             </p>
           )}
@@ -100,8 +103,10 @@ export function AdminSidebar({
           >
             <LayoutDashboard
               size={18}
-              className={`shrink-0 ${
-                isDashboardActive ? "text-white" : "text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400"
+              className={`shrink-0 transition-transform group-hover:scale-110 ${
+                isDashboardActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400"
               }`}
             />
             {!isCollapsed && <span>Tổng quan</span>}
@@ -111,7 +116,7 @@ export function AdminSidebar({
         {/* SECTION: VẬN HÀNH THIỆP CƯỚI */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <p className="px-3 text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-2">
+            <p className="px-3 text-[11px] font-extrabold text-slate-400/90 dark:text-slate-500 uppercase tracking-widest mb-2">
               Quản lý thiệp cưới
             </p>
           )}
@@ -123,20 +128,20 @@ export function AdminSidebar({
                 if (isCollapsed) setIsCollapsed(false);
                 setIsWeddingMenuOpen(!isWeddingMenuOpen);
               }}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
                 isInvitationsActive || isCreateActive || isRequestsActive
-                  ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50/80 dark:bg-indigo-950/60 font-bold"
-                  : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80"
+                  ? "text-indigo-600 dark:text-indigo-300 bg-indigo-50/70 dark:bg-indigo-950/50 font-bold border border-indigo-200/50 dark:border-indigo-900/40"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/90 dark:hover:bg-slate-800/70"
               } ${isCollapsed ? "justify-center px-0" : ""}`}
               title="Thiệp cưới"
             >
               <div className="flex items-center gap-3">
                 <Heart
                   size={18}
-                  className={`shrink-0 ${
+                  className={`shrink-0 transition-transform group-hover:scale-110 ${
                     isInvitationsActive || isCreateActive || isRequestsActive
                       ? "text-rose-500 fill-rose-500/20"
-                      : "text-rose-500"
+                      : "text-rose-500/90"
                   }`}
                 />
                 {!isCollapsed && <span>Thiệp sự kiện</span>}
@@ -145,7 +150,7 @@ export function AdminSidebar({
                 <ChevronDown
                   size={14}
                   className={`transition-transform duration-200 text-slate-400 ${
-                    isWeddingMenuOpen ? "rotate-180 text-slate-600 dark:text-slate-300" : ""
+                    isWeddingMenuOpen ? "rotate-180 text-slate-700 dark:text-slate-200" : ""
                   }`}
                 />
               )}
@@ -153,44 +158,48 @@ export function AdminSidebar({
 
             {/* Sub-menu */}
             {!isCollapsed && isWeddingMenuOpen && (
-              <div className="pl-6 pr-1 pt-1 space-y-1 border-l-2 border-slate-100 dark:border-slate-800 ml-4 my-1">
+              <div className="pl-3.5 pr-1 pt-1.5 space-y-1 border-l-2 border-slate-100 dark:border-slate-800 ml-5 my-1">
+                {/* 1. Danh sách thiệp */}
                 <Link
                   href="/admin/invitations"
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs sm:text-[13px] transition-all ${
                     isInvitationsActive
-                      ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 font-bold"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 font-medium"
+                      ? "text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 font-bold"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium"
                   }`}
                 >
+                  <Layers size={14} className={isInvitationsActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400"} />
                   <span>Danh sách thiệp</span>
                 </Link>
 
+                {/* 2. Tạo thiệp mới */}
                 <Link
                   href="/admin/invitations/create"
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-colors ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs sm:text-[13px] transition-all ${
                     isCreateActive
-                      ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 font-bold"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 font-medium"
+                      ? "text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 font-bold"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium"
                   }`}
                 >
-                  <PlusCircle size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <PlusCircle size={14} className="text-emerald-500 shrink-0" />
                   <span>Tạo thiệp mới</span>
                 </Link>
 
+                {/* 3. Yêu cầu làm thiệp */}
                 <Link
                   href="/admin/template-requests"
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
+                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-[13px] transition-all ${
                     isRequestsActive
-                      ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 font-bold"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 font-medium"
+                      ? "text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 font-bold"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <Inbox size={14} className="text-amber-600 dark:text-amber-400" />
+                  <span className="flex items-center gap-2.5">
+                    <Inbox size={14} className="text-amber-500 shrink-0" />
                     <span>Yêu cầu làm thiệp</span>
                   </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                    Hot
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-2xs tracking-wider">
+                    HOT
                   </span>
                 </Link>
               </div>
@@ -201,7 +210,7 @@ export function AdminSidebar({
         {/* SECTION: QUẢN LÝ DỮ LIỆU & TƯƠNG TÁC */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <p className="px-3 text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-2">
+            <p className="px-3 text-[11px] font-extrabold text-slate-400/90 dark:text-slate-500 uppercase tracking-widest mb-2">
               Khách mời & Tương tác
             </p>
           )}
@@ -211,7 +220,7 @@ export function AdminSidebar({
             className={navItemClass(false)}
             title="Quản lý khách mời và RSVP"
           >
-            <Users size={18} className="shrink-0 text-sky-600 dark:text-sky-400" />
+            <Users size={18} className="shrink-0 text-slate-400 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors" />
             {!isCollapsed && <span>Khách mời & RSVP</span>}
           </Link>
 
@@ -220,7 +229,7 @@ export function AdminSidebar({
             className={navItemClass(false)}
             title="Sổ lưu bút & Lời chúc"
           >
-            <MessageSquare size={18} className="shrink-0 text-pink-600 dark:text-pink-400" />
+            <MessageSquare size={18} className="shrink-0 text-slate-400 group-hover:text-pink-500 dark:group-hover:text-pink-400 transition-colors" />
             {!isCollapsed && <span>Sổ lưu bút & Lời chúc</span>}
           </Link>
         </div>
@@ -228,7 +237,7 @@ export function AdminSidebar({
         {/* SECTION: HỆ THỐNG */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <p className="px-3 text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-2">
+            <p className="px-3 text-[11px] font-extrabold text-slate-400/90 dark:text-slate-500 uppercase tracking-widest mb-2">
               Hệ thống
             </p>
           )}
@@ -239,8 +248,10 @@ export function AdminSidebar({
           >
             <Settings
               size={18}
-              className={`shrink-0 ${
-                isSettingsActive ? "text-white" : "text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400"
+              className={`shrink-0 transition-transform group-hover:scale-110 ${
+                isSettingsActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400"
               }`}
             />
             {!isCollapsed && <span>Cài đặt hệ thống</span>}
@@ -249,20 +260,20 @@ export function AdminSidebar({
       </nav>
 
       {/* Footer / Status Card */}
-      <div className="p-3 border-t border-slate-100 dark:border-slate-800 shrink-0 space-y-2">
+      <div className="p-3.5 border-t border-slate-100 dark:border-slate-800/80 shrink-0 space-y-2 pb-3.5">
         {!isCollapsed && (
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="p-2.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between shadow-2xs backdrop-blur-xs">
+            <div className="flex items-center gap-2.5">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
               <div>
-                <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200">Socket Live</p>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400">Kết nối ổn định</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-slate-100">Socket Live</p>
+                <p className="text-[10px] text-slate-400 font-medium">Kết nối thời gian thực</p>
               </div>
             </div>
-            <span className="text-[10px] font-mono font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-200 dark:border-indigo-800">
+            <span className="text-[11px] font-mono font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-2 py-0.5 rounded-lg border border-indigo-200/80 dark:border-indigo-800/60 tabular-nums">
               v2.4
             </span>
           </div>
@@ -271,14 +282,14 @@ export function AdminSidebar({
         {/* Collapse Toggle Button */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           title={isCollapsed ? "Mở rộng sidebar" : "Thu gọn sidebar"}
         >
           {isCollapsed ? (
-            <PanelLeft size={18} />
+            <PanelLeft size={17} />
           ) : (
             <>
-              <PanelLeftClose size={16} />
+              <PanelLeftClose size={15} />
               <span>Thu gọn menu</span>
             </>
           )}
@@ -292,7 +303,7 @@ export function AdminSidebar({
       {/* Desktop Sidebar */}
       <aside
         className={`h-screen sticky top-0 shrink-0 hidden md:block transition-all duration-300 z-40 ${
-          isCollapsed ? "w-[72px]" : "w-[260px]"
+          isCollapsed ? "w-[76px]" : "w-[275px]"
         }`}
       >
         {sidebarContent}

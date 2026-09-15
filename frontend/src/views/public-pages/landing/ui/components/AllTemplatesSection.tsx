@@ -12,6 +12,7 @@ import { PreviewModal } from "@/entities/template/ui/PreviewModal";
 import { CreateInvitationModal } from "@/entities/template/ui/CreateInvitationModal";
 import { fetchDemoInvitations } from "@/entities/invitation/api/invitation.api";
 import { PackageComparisonSection } from "./PackageComparisonSection";
+import { CustomerReviewsSection } from "./CustomerReviewsSection";
 
 const TIER_TABS = [
   { id: "all", label: "Tất cả mẫu" },
@@ -230,6 +231,9 @@ export function AllTemplatesSection() {
 
         {/* giá */}
         <PackageComparisonSection />
+
+        {/* Khách hàng nói gì về chúng tôi */}
+        <CustomerReviewsSection />
       </div>
 
       {/* Preview Modal */}
