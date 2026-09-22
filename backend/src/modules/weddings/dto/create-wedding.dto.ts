@@ -114,9 +114,8 @@ export class CreateWeddingDto {
   @IsString()
   slug: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  templateId: number;
+  @IsNotEmpty({ message: 'Template ID không được để trống' })
+  templateId: string | number;
 
   @IsNotEmpty()
   @IsString()

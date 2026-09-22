@@ -67,14 +67,11 @@ html, body, iframe, * {
   scrollbar-width: none !important;
 }
 
-/* Base input text color fallback to prevent white text on light input background */
+/* Base input text color fallback */
 :is(input, select, textarea) {
-  color: #0f172a;
+  color: inherit;
 }
 
-.dark :is(input, select, textarea) {
-  color: #f8fafc;
-}
 
 /* ==========================================================================
    Admin Theme & Typography Enhancements

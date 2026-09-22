@@ -9,3 +9,4 @@ export { LiveView as LinenCreamView } from "./LinenCream/LiveView";
 export { LiveView as MinimalHongView } from "./minimal-hong/LiveView";
 export { LiveView as SageOliveView } from "./sageOlive/LiveView";
 export { LiveView as WarmTerracottaView } from "./warmTerracotta/LiveView";
+export { LiveView as BaroqueDarkRedView } from "./baroqueDarkRed/LiveView";

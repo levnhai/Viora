@@ -113,4 +113,16 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 13,
+    code: 'temp_13',
+    name: 'Baroque - Đỏ Đậm',
+    thumbnail:
+      '/images/themes/baroque-v2-dark-red/bg.webp',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];

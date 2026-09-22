@@ -29,7 +29,7 @@ export function WeddingInvitationDemoPage({
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       embedMode = params.get("embed") === "true";
-      tId = params.get("templateId");
+      tId = params.get("templateId") || params.get("template") || params.get("code") || params.get("id");
       const toParam = params.get("to") || params.get("guest");
       if (toParam) setGuestName(toParam);
       setIsEmbed(embedMode);
