@@ -70,7 +70,12 @@ export function AllTemplatesSection() {
     });
   }
 
-  const allTemplates: TemplateConfig[] = demoTemplates;
+  const allTemplates: TemplateConfig[] = [...demoTemplates];
+  for (const tpl of TEMPLATES) {
+    if (!seenCodes.has(tpl.code) && !seenCodes.has(String(tpl.id))) {
+      allTemplates.push(tpl);
+    }
+  }
 
   const filteredTemplates = allTemplates.filter((tpl) => {
     const matchesSearch =

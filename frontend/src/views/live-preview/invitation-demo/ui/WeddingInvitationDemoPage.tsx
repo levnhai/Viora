@@ -115,16 +115,23 @@ export function WeddingInvitationDemoPage({
   }
 
   const getThemeClass = (code: string) => {
-    const tpl = TEMPLATES.find((t) => t.code === code);
+    const tpl = TEMPLATES.find((t) => t.code === code || String(t.id) === code);
     return tpl ? tpl.themeClass : "theme-pink";
   };
 
   const currentTheme = getThemeClass(weddingData.templateId);
   const tplPackage = getTemplatePackage(weddingData.templateId);
   const LiveView = tplPackage.LiveView;
+  const currentTpl = TEMPLATES.find(
+    (t) => t.code === weddingData.templateId || String(t.id) === weddingData.templateId
+  );
+  const bgColor = currentTpl?.bgColor;
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${currentTheme}`}>
+    <div
+      className={`min-h-screen transition-all duration-500 ${currentTheme}`}
+      style={bgColor ? { backgroundColor: bgColor } : undefined}
+    >
       {/* Render đúng template package tương ứng */}
       <LiveView
         weddingData={weddingData}

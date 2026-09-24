@@ -21,6 +21,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+    ],
+  },
   webpack: (config, { dev }) => {
     config.resolve.alias['figma:asset'] = path.resolve(__dirname, 'src/assets');
     if (dev) {

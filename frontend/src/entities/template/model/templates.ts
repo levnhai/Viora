@@ -519,6 +519,48 @@ export const TEMPLATES: TemplateConfig[] = [
       gift: { enabled: true },
     },
   },
+  {
+    id: 14,
+    code: "temp_14",
+    name: "Lễ Tốt Nghiệp - Mai Trang",
+    style: "Tốt Nghiệp",
+    tags: ["Tốt Nghiệp", "Cử Nhân", "Navy & Gold", "Trang Trọng", "Hot"],
+    isNew: true,
+    isHot: true,
+    preview:
+      "https://static.ladipage.net/69b247cf4f6ddc0012f0ce55/1784774420884_3379540865962086579_g2668429489759155549_fd36d587f191f01454f7c7ef8dba84a8-20260724163024-ilyzg.jpg",
+    themeClass: "theme-dusty-rose",
+    tier: "standard",
+    price: 149000,
+    originalPrice: 250000,
+    features: [
+      "Khung film 4 ảnh dọc & dải nơ hồng pastel",
+      "Thẻ lịch tháng & sticker trái tim ngày tốt nghiệp",
+      "Lịch trình buổi lễ (Làm lễ & Chụp ảnh kỷ niệm)",
+      "Đếm ngược thời gian, My Story & Album of Graduate",
+      "Xác nhận tham dự (RSVP) & Thank You Card",
+    ],
+    accentColor: "#7B2D37",
+    bgColor: "#EEDDDD",
+    textColor: "#7B2D37",
+    envelopeKey: "minimal",
+    timelineKey: "simple",
+    galleryKey: "grid",
+    schema: {
+      basicInfo: {
+        hasParentsInfo: false,
+        hasRankInfo: false,
+        hasAddressInfo: true,
+      },
+      cover: { hasBackgroundVideo: false, hasCoverImage: true },
+      spotlight: { hasGroomBrideImages: true, showTitles: true },
+      timeline: { enabled: true },
+      gallery: { maxImages: 20 },
+      story: { enabled: true },
+      rsvp: { enabled: true },
+      gift: { enabled: true },
+    },
+  },
 ];
 
 export function hasDemoForTemplate(tpl: any, demos: any[]): boolean {

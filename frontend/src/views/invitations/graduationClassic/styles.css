@@ -1,0 +1,78 @@
+/* Full exact styles from LadiPage template */
+@font-face {
+  font-family: 'Daytonica';
+  src: url('/fonts/graduation/daytonica.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Hastegi';
+  src: url('/fonts/graduation/hastegi.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LoraCustom';
+  src: url('/fonts/graduation/lora.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NVNErotique';
+  src: url('/fonts/graduation/nvnerotique.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'MorginaItalic';
+  src: url('/fonts/graduation/morgina.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'UVNHoaTay';
+  src: url('/fonts/graduation/uvnhoatay.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ralsihten';
+  src: url('/fonts/graduation/ralsihten.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ecatherina';
+  src: url('/fonts/graduation/ecatherina.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ergisa';
+  src: url('/fonts/graduation/ergisa.otf') format('opentype');
+  font-display: swap;
+}
+
+.grad-page {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  position: relative;
+  background-color: #F8F6F3;
+  color: #8F323B;
+  overflow: hidden;
+  font-family: 'Hastegi', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.grad-section {
+  width: 420px;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes swayRibbon {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.animate-sway {
+  transform-origin: top center;
+  animation: swayRibbon 3.5s ease-in-out infinite;
+}

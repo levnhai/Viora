@@ -23,6 +23,29 @@
   font-family: 'EB Garamond', serif;
 }
 
+.theme-dusty-rose {
+  --background: rgb(248, 246, 243);
+  --foreground: #8f323b;
+  --card: #f8f6f3;
+  --card-foreground: #8f323b;
+  --popover: #f8f6f3;
+  --popover-foreground: #8f323b;
+  --primary: #8f323b;
+  --primary-foreground: #ffffff;
+  --secondary: #fce8eb;
+  --secondary-foreground: #8f323b;
+  --muted: #f4ece6;
+  --muted-foreground: #a36b72;
+  --accent: #dca3aa;
+  --accent-foreground: #8f323b;
+  --border: rgba(143, 50, 59, 0.15);
+  --ring: #8f323b;
+  background-color: rgb(248, 246, 243);
+}
+.theme-dusty-rose h1, .theme-dusty-rose h2, .theme-dusty-rose h3, .theme-dusty-rose h4 {
+  font-family: 'LoraCustom', 'Lora', serif;
+}
+
 .theme-green {
   --background: #f4f8f6;
   --foreground: #1c2d24;
