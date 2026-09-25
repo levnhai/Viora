@@ -50,6 +50,9 @@ export function WeddingInvitationDemoPage({
           return "royal-demo";
         case "black-elegant":
           return "lavender-demo";
+        case "temp_14":
+        case "14":
+          return "thiep-tot-nghiep-mai-trang";
         default:
           return "vanan-thibinh";
       }

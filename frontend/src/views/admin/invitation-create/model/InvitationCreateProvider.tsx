@@ -236,6 +236,52 @@ export function InvitationCreateProvider({
 
   const [events, setEvents] = useState<WeddingEvent[]>(initialEventsFromDb);
 
+  // Auto-sync graduation defaults if template is graduation and data is still default
+  useEffect(() => {
+    if (!activeTemplate || isEditMode) return;
+    const isGraduation =
+      activeTemplate.code === "temp_14" ||
+      activeTemplate.tags?.includes("Tốt Nghiệp") ||
+      (activeTemplate as any).style === "Tốt Nghiệp";
+
+    if (isGraduation) {
+      setBasicInfo((prev) => {
+        if (prev.groomName === "Minh Quân" && prev.brideName === "Thu Hà") {
+          return {
+            ...prev,
+            groomName: "Đặng",
+            brideName: "Mai Trang",
+            locationName: "HỘI TRƯỜNG C2 - ĐẠI HỌC BÁCH KHOA HÀ NỘI",
+            address: "Số 1 Đại Cồ Việt, Bách Khoa, Hai Bà Trưng, Hà Nội",
+            weddingDate: "2026-09-26",
+            weddingTime: "08:30 AM",
+          };
+        }
+        return prev;
+      });
+
+      setEvents((prev) => {
+        if (
+          prev.length === 1 &&
+          (prev[0].title === "LỄ TIỆC CƯỚI" || prev[0].title === "LỄ THÀNH HÔN")
+        ) {
+          return [
+            {
+              id: prev[0].id || "evt_1",
+              title: "LỄ TỐT NGHIỆP",
+              time: "08:30 AM",
+              date: "2026-09-26",
+              locationName: "HỘI TRƯỜNG C2 - ĐẠI HỌC BÁCH KHOA HÀ NỘI",
+              address: "Số 1 Đại Cồ Việt, Bách Khoa, Hai Bà Trưng, Hà Nội",
+              mapUrl: "",
+            },
+          ];
+        }
+        return prev;
+      });
+    }
+  }, [activeTemplate, isEditMode]);
+
   // Auto-sync primary event (events[0]) back to basicInfo for backward compatibility
   useEffect(() => {
     if (events && events.length > 0) {

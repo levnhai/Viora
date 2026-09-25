@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Sparkles, MailOpen } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
 
@@ -43,22 +42,20 @@ export function InvitationCover({
       <div className="relative w-full max-w-[380px] aspect-[4/5] sm:aspect-[3/4] flex flex-col items-center justify-between p-6 sm:p-8 rounded-2xl bg-[#FFF9FA] border border-[#9B343D]/25 shadow-[0_20px_50px_rgba(155,52,61,0.15)] text-center overflow-hidden">
         {/* Top Wax Seal Bow */}
         <div className="absolute -top-3 -right-3 w-16 h-16 pointer-events-none z-20">
-          <Image
+          <img
             src="https://w.ladicdn.com/s450x450/69b247cf4f6ddc0012f0ce55/elements-thiep-16-20260723042420-yfzqc.png"
             alt="Wax Seal Bow"
-            fill
-            className="object-contain drop-shadow-md"
+            className="w-full h-full object-contain drop-shadow-md"
           />
         </div>
 
         {/* Top Emblem & Header */}
         <div className="flex flex-col items-center gap-1 pt-2 z-10">
           <div className="w-12 h-12 relative pointer-events-none mb-1">
-            <Image
+            <img
               src="https://w.ladicdn.com/s550x550/69b247cf4f6ddc0012f0ce55/elements-thiep-17-20260723043335-d3sit.png"
               alt="Graduation Cap"
-              fill
-              className="object-contain"
+              className="w-full h-full object-contain"
             />
           </div>
           <span className="text-[12px] font-hastegi tracking-[0.25em] uppercase text-[#9B343D] font-bold flex items-center gap-1.5">

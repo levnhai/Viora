@@ -447,6 +447,11 @@ export function InvitationEditorForm() {
     }
   }, [activeTemplate, editorActiveTab, setEditorActiveTab, visibleTabs]);
 
+  const isGraduation =
+    activeTemplate?.code === "temp_14" ||
+    activeTemplate?.tags?.includes("Tốt Nghiệp") ||
+    (activeTemplate as any)?.style === "Tốt Nghiệp";
+
   return (
     <div className="flex w-full h-full">
       {/* Sidebar Menu */}
@@ -487,16 +492,17 @@ export function InvitationEditorForm() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                Họ tên cô dâu chú rể
+                {isGraduation ? "🎓 Thông tin Tân Cử Nhân" : "Họ tên cô dâu chú rể"}
               </h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
-                    Tên chú rể
+                    {isGraduation ? "Họ & tên đệm (In hoa nhỏ)" : "Tên chú rể"}
                   </label>
                   <input
                     type="text"
                     value={basicInfo.groomName}
+                    placeholder={isGraduation ? "VD: ĐẶNG" : "Nguyễn Văn A"}
                     onChange={(e) =>
                       setBasicInfo({ ...basicInfo, groomName: e.target.value })
                     }
@@ -505,11 +511,12 @@ export function InvitationEditorForm() {
                 </div>
                 <div>
                   <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1.5">
-                    Tên cô dâu
+                    {isGraduation ? "Tên cử nhân (Chữ nghệ thuật)" : "Tên cô dâu"}
                   </label>
                   <input
                     type="text"
                     value={basicInfo.brideName}
+                    placeholder={isGraduation ? "VD: Mai Trang" : "Trần Thị B"}
                     onChange={(e) =>
                       setBasicInfo({ ...basicInfo, brideName: e.target.value })
                     }
@@ -517,6 +524,11 @@ export function InvitationEditorForm() {
                   />
                 </div>
               </div>
+              {isGraduation && (
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 italic">
+                  * Tên sẽ được hiển thị chuẩn phong cách thiệp tốt nghiệp: Họ in hoa phía trên và Tên thư pháp lớn phía dưới.
+                </p>
+              )}
 
               {/* Tên cha mẹ cô dâu chú rể */}
               {schema.basicInfo?.hasParentsInfo && (
@@ -681,30 +693,60 @@ export function InvitationEditorForm() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                   <CalendarClock size={16} className="text-rose-500" />
-                  Thông tin Lễ & Tiệc Cưới (Nhiều sự kiện)
+                  {isGraduation
+                    ? "Thông tin Lễ Tốt Nghiệp & Tiệc Mừng (Nhiều sự kiện)"
+                    : "Thông tin Lễ & Tiệc Cưới (Nhiều sự kiện)"}
                 </h4>
                 <div className="flex gap-1.5 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={() => handleAddWeddingEvent("LỄ TIỆC CƯỚI")}
-                    className="px-2 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 rounded-lg text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
-                  >
-                    + Lễ Tiệc Cưới
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddWeddingEvent("LỄ THÀNH HÔN")}
-                    className="px-2 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
-                  >
-                    + Lễ Thành Hôn
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleAddWeddingEvent("LỄ VU QUY")}
-                    className="px-2 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
-                  >
-                    + Lễ Vu Quy
-                  </button>
+                  {isGraduation ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("LỄ TỐT NGHIỆP")}
+                        className="px-2 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 rounded-lg text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
+                      >
+                        + Lễ Tốt Nghiệp
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("LỄ TRAO BẰNG")}
+                        className="px-2 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                      >
+                        + Lễ Trao Bằng
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("TIỆC MỪNG TỐT NGHIỆP")}
+                        className="px-2 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                      >
+                        + Tiệc Mừng
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("LỄ TIỆC CƯỚI")}
+                        className="px-2 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 rounded-lg text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
+                      >
+                        + Lễ Tiệc Cưới
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("LỄ THÀNH HÔN")}
+                        className="px-2 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                      >
+                        + Lễ Thành Hôn
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddWeddingEvent("LỄ VU QUY")}
+                        className="px-2 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                      >
+                        + Lễ Vu Quy
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 

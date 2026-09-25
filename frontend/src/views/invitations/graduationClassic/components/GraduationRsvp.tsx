@@ -1,132 +1,171 @@
 import { useState } from "react";
-import { WeddingData } from "@/entities/invitation/model/types";
 
 interface GraduationRsvpProps {
-  weddingData: WeddingData;
   guestName?: string;
-  onSendMessage?: (name: string, message: string) => Promise<void>;
+  onSendMessage: (name: string, message: string) => Promise<any>;
 }
 
 export function GraduationRsvp({
   guestName = "",
   onSendMessage,
 }: GraduationRsvpProps) {
-  const [name, setName] = useState(guestName);
-  const [attendance, setAttendance] = useState("yes");
-  const [relationship, setRelationship] = useState("Bạn bè");
-  const [message, setMessage] = useState("");
+  const [rsvpName, setRsvpName] = useState(guestName);
+  const [rsvpAttend, setRsvpAttend] = useState("Tôi chắc chắn sẽ đến");
+  const [rsvpMsg, setRsvpMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmitRsvp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) {
-      alert("Vui lòng nhập tên của bạn");
-      return;
-    }
+    if (!rsvpName.trim()) return;
     setSubmitting(true);
-    try {
-      const fullMessage = `[Tham dự: ${
-        attendance === "yes" ? "Sẽ đến" : "Rất tiếc không thể đến"
-      } - Mối quan hệ: ${relationship}] ${message}`;
-      if (onSendMessage) {
-        await onSendMessage(name, fullMessage);
-      }
-      setSubmitted(true);
-    } catch {
-      alert("Có lỗi xảy ra, vui lòng thử lại sau!");
-    } finally {
-      setSubmitting(false);
-    }
+    await onSendMessage(rsvpName, `[Xác nhận: ${rsvpAttend}] ${rsvpMsg}`);
+    setSubmitting(false);
+    setShowPopup(true);
   };
 
   return (
-    <section className="w-full relative min-h-[384px] bg-[#F8F6F3] flex flex-col items-center pt-8 pb-10 px-5">
-      {/* 1. Header Invitation Note */}
-      <div className="w-full max-w-[375px] text-center mb-6">
-        <p className="text-[14.5px] font-hastegi text-[#9B343D] leading-relaxed tracking-wide">
-          Rất mong có bạn đến chung vui cùng mình!
-          <br />
-          Xin vui lòng xác nhận sự có mặt của bạn để mình chuẩn bị đón tiếp một
-          cách chu đáo nhất.
-          <br />
-          <span className="font-semibold">Xin cảm ơn!</span>
-        </p>
-      </div>
-
-      {/* 2. RSVP Form Container */}
-      <div className="w-full max-w-[355px]">
-        {submitted ? (
-          <div className="bg-white/80 border border-[#9B343D]/30 rounded-2xl p-6 text-center shadow-sm">
-            <h4 className="text-[18px] font-hastegi font-bold text-[#9B343D] mb-1">
-              Xác Nhận Thành Công!
-            </h4>
-            <p className="text-[14px] font-hastegi text-[#9B343D]/80">
-              Cảm ơn {name} đã phản hồi lời mời tốt nghiệp. Hẹn gặp lại bạn nhé!
-            </p>
+    <>
+      <div id="SECTION11" className="ladi-section" suppressHydrationWarning>
+        <div className="ladi-section-background"></div>
+        <div className="ladi-container">
+          <div id="BOX87" className="ladi-element"><div className="ladi-box"></div></div>
+          <div id="HEADLINE93" className="ladi-element">
+            <h3 className="ladi-headline">
+              <span>Rất mong có bạn đến chung vui cùng mình!</span>
+              <br />
+              <span>Xin vui lòng xác nhận sự có mặt của bạn để mình chuẩn bị đón tiếp một cách chu đáo nhất.</span>
+              <br />
+              <span>Xin cảm ơn!</span>
+            </h3>
           </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-3 font-hastegi text-[#9B343D]"
-          >
-            {/* Tên khách mời */}
-            <div>
-              <input
-                type="text"
-                placeholder="Tên của bạn"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full h-10 px-4 rounded-xl bg-white border border-[#9B343D]/30 focus:border-[#9B343D] outline-none text-[14px] placeholder-[#9B343D]/50 shadow-inner"
-              />
-            </div>
 
-            {/* Mối quan hệ */}
-            <div className="grid grid-cols-2 gap-2">
-              <select
-                value={relationship}
-                onChange={(e) => setRelationship(e.target.value)}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-[#9B343D]/30 focus:border-[#9B343D] outline-none text-[13.5px] text-[#9B343D] shadow-inner"
+          <div id="FORM4" className="ladi-element">
+            <form onSubmit={handleSubmitRsvp} className="ladi-form">
+              <div
+                id="BUTTON5"
+                className="ladi-element"
+                onClick={() => {
+                  const form = document.querySelector('.ladi-form') as HTMLFormElement;
+                  if (form) form.requestSubmit();
+                }}
               >
-                <option value="Bạn bè">Bạn bè</option>
-                <option value="Người thân / Gia đình">Người thân / Gia đình</option>
-                <option value="Thầy cô">Thầy cô</option>
-                <option value="Đồng nghiệp">Đồng nghiệp</option>
-              </select>
+                <div className="ladi-button">
+                  <div className="ladi-button-background"></div>
+                  <div id="BUTTON_TEXT5" className="ladi-element ladi-button-headline">
+                    <p className="ladi-headline">{submitting ? "ĐANG GỬI..." : "XÁC NHẬN"}</p>
+                  </div>
+                </div>
+              </div>
 
-              <select
-                value={attendance}
-                onChange={(e) => setAttendance(e.target.value)}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-[#9B343D]/30 focus:border-[#9B343D] outline-none text-[13.5px] text-[#9B343D] shadow-inner"
-              >
-                <option value="yes">Mình sẽ tham gia</option>
-                <option value="no">Tiếc quá, mình bận</option>
-              </select>
-            </div>
+              {/* Tên khách mời */}
+              <div id="FORM_ITEM13" className="ladi-element">
+                <div className="ladi-form-item-container">
+                  <div className="ladi-form-item-background"></div>
+                  <div className="ladi-form-item">
+                    <input
+                      name="name"
+                      required
+                      className="ladi-form-control"
+                      type="text"
+                      placeholder="Tên của bạn"
+                      value={rsvpName}
+                      onChange={(e) => setRsvpName(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
 
-            {/* Lời chúc */}
-            <div>
-              <textarea
-                placeholder="Gửi lời chúc đến tân cử nhân..."
-                rows={2}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full p-3 rounded-xl bg-white border border-[#9B343D]/30 focus:border-[#9B343D] outline-none text-[14px] placeholder-[#9B343D]/50 shadow-inner resize-none"
-              />
-            </div>
+              {/* Lời chúc */}
+              <div id="FORM_ITEM14" className="ladi-element">
+                <div className="ladi-form-item-container">
+                  <div className="ladi-form-item-background"></div>
+                  <div className="ladi-form-item">
+                    <textarea
+                      name="message"
+                      className="ladi-form-control"
+                      placeholder="Gửi lời chúc đến tân cử nhân"
+                      value={rsvpMsg}
+                      onChange={(e) => setRsvpMsg(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full h-[44px] rounded-[22px] bg-[#9B343D]/90 hover:bg-[#9B343D] text-white font-hastegi font-bold text-[17px] uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center mt-1"
-            >
-              {submitting ? "Đang gửi..." : "XÁC NHẬN"}
-            </button>
-          </form>
-        )}
+              {/* Bạn sẽ đến chứ? */}
+              <div id="FORM_ITEM15" className="ladi-element">
+                <div className="ladi-form-item-container">
+                  <div className="ladi-form-item-background"></div>
+                  <div className="ladi-form-item">
+                    <select
+                      name="form_item10"
+                      className="ladi-form-control ladi-form-control-select"
+                      value={rsvpAttend}
+                      onChange={(e) => setRsvpAttend(e.target.value)}
+                    >
+                      <option value="Tôi chắc chắn sẽ đến">Tôi chắc chắn sẽ đến</option>
+                      <option value="Xin lỗi tôi bận rồi">Xin lỗi tôi bận rồi</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </section>
+
+      {/* POPUP Xác nhận thành công */}
+      {showPopup && (
+        <div
+          id="SECTION_POPUP"
+          className="ladi-section"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            className="backdrop-popup"
+            onClick={() => setShowPopup(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.5)",
+            }}
+          ></div>
+          <div id="POPUP1" className="ladi-element" style={{ position: "relative", zIndex: 1000 }}>
+            <div className="ladi-popup">
+              <div className="ladi-popup-background"></div>
+              <div id="HEADLINE95" className="ladi-element" style={{ position: "static", padding: "20px", textAlign: "center" }}>
+                <h3 className="ladi-headline" style={{ color: "#8F323B" }}>
+                  <span>Cảm ơn bạn đã dành thời gian phản hồi.</span>
+                  <br />
+                  <span>Mình vô cùng trân quý sự quan tâm của bạn.</span>
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowPopup(false)}
+                style={{
+                  margin: "10px auto 20px auto",
+                  display: "block",
+                  padding: "8px 24px",
+                  borderRadius: "20px",
+                  backgroundColor: "#8F323B",
+                  color: "#fff",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

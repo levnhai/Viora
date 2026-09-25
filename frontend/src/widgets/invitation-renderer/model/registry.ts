@@ -18,12 +18,7 @@ import { LiveView as MinimalHongView } from "@/views/invitations/minimal-hong/Li
 import { LiveView as SageOliveView } from "@/views/invitations/sageOlive/LiveView";
 import { LiveView as WarmTerracottaView } from "@/views/invitations/warmTerracotta/LiveView";
 import { LiveView as BaroqueDarkRedView } from "@/views/invitations/baroqueDarkRed/LiveView";
-import dynamic from "next/dynamic";
-
-const GraduationClassicView = dynamic<TemplateProps>(
-  () => import("@/views/invitations/graduationClassic/LiveView").then((mod) => mod.LiveView),
-  { ssr: false }
-);
+import { LiveView as GraduationClassicView } from "@/views/invitations/graduationClassic/LiveView";
 
 const LegacyMockEditView = () => null;
 

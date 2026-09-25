@@ -8,20 +8,21 @@ export function BottomNav() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const tabParam = searchParams.get("tab");
+  const tabParam = searchParams?.get("tab");
 
+  const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const role = localStorage.getItem("role");
-    const slug = localStorage.getItem("weddingSlug");
     if (role) {
       setIsLoggedIn(true);
     }
   }, [pathname, searchParams]);
 
-  if (!isLoggedIn) return null;
-  if (!pathname.startsWith("/dashboard")) return null;
+  if (!mounted || !isLoggedIn) return null;
+  if (!pathname?.startsWith("/dashboard")) return null;
 
   // Detect active tab based on URL path/query
   let activeTab = "overview";

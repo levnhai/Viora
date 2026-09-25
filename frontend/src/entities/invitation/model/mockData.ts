@@ -78,13 +78,13 @@ export const DEFAULT_DEMO_WEDDING_DATA: WeddingData = {
 export const GRADUATION_DEMO_DATA: WeddingData = {
   slug: "thiep-tot-nghiep-mai-trang",
   templateId: "temp_14",
-  groomName: "Đặng Mai Trang",
-  groomShortName: "Mai Trang",
-  brideName: "Đặng Mai Trang",
-  brideShortName: "Mai Trang",
+  groomName: "Lê Hoàng Oanh",
+  groomShortName: "Hoàng Oanh",
+  brideName: "Lê Hoàng Oanh",
+  brideShortName: "Hoàng Oanh",
   brideTitle: "Tân Cử Nhân • PR41",
   groomTitle: "Tân Cử Nhân • PR41",
-  weddingDate: "2026-07-26",
+  weddingDate: "2026-09-26",
   weddingTime: "09:00",
   musicUrl:
     "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
@@ -94,7 +94,7 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
     {
       title: "Lễ Tốt Nghiệp",
       time: "09:00 AM",
-      date: "26/07/2026",
+      date: "26/09/2026",
       locationName: "Học viện Báo chí và Tuyên truyền",
       address: "36 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội",
       mapUrl:

@@ -40,7 +40,6 @@
   --accent-foreground: #8f323b;
   --border: rgba(143, 50, 59, 0.15);
   --ring: #8f323b;
-  background-color: rgb(248, 246, 243);
 }
 .theme-dusty-rose h1, .theme-dusty-rose h2, .theme-dusty-rose h3, .theme-dusty-rose h4 {
   font-family: 'LoraCustom', 'Lora', serif;

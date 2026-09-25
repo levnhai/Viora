@@ -52,13 +52,17 @@ export function RecentWeddingsList({ weddings = [] }: RecentWeddingsListProps) {
               wedding.title ||
               `${wedding.groomName || "Chú rể"} & ${wedding.brideName || "Cô dâu"}`;
             const slug = wedding.slug || `wedding-${idx + 1}`;
-            const weddingDate = wedding.date
-              ? new Date(wedding.date).toLocaleDateString("vi-VN", {
+            let weddingDate = "Chưa đặt ngày";
+            if (wedding.date) {
+              const d = new Date(wedding.date);
+              if (!isNaN(d.getTime())) {
+                weddingDate = d.toLocaleDateString("vi-VN", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
-                })
-              : "Chưa đặt ngày";
+                });
+              }
+            }
             const isPublished = wedding.isPublished !== false;
 
             return (

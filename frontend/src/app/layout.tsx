@@ -60,38 +60,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <head>
-        <link
-          rel="preload"
-          href="/fonts/hastegi.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/arcittya-begatri.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/pinyon.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/alisheia.woff"
-          as="font"
-          type="font/woff"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body style={{ height: "100%", margin: 0 }} suppressHydrationWarning>
-        <div id="root" style={{ height: "100%" }}>
+        <div id="root" style={{ height: "100%" }} suppressHydrationWarning>
           <GoogleOAuthProviderWrapper>
             <DisableDevtool />
             <Suspense fallback={null}>

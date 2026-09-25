@@ -541,7 +541,7 @@ export const TEMPLATES: TemplateConfig[] = [
       "Xác nhận tham dự (RSVP) & Thank You Card",
     ],
     accentColor: "#7B2D37",
-    bgColor: "#EEDDDD",
+    bgColor: "#ffffff",
     textColor: "#7B2D37",
     envelopeKey: "minimal",
     timelineKey: "simple",
@@ -550,7 +550,7 @@ export const TEMPLATES: TemplateConfig[] = [
       basicInfo: {
         hasParentsInfo: false,
         hasRankInfo: false,
-        hasAddressInfo: true,
+        hasAddressInfo: false,
       },
       cover: { hasBackgroundVideo: false, hasCoverImage: true },
       spotlight: { hasGroomBrideImages: true, showTitles: true },
