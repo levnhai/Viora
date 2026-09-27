@@ -84,8 +84,8 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   brideShortName: "Hoàng Oanh",
   brideTitle: "Tân Cử Nhân • PR41",
   groomTitle: "Tân Cử Nhân • PR41",
-  weddingDate: "2026-09-26",
-  weddingTime: "09:00",
+  weddingDate: "2026-10-03",
+  weddingTime: "11:00",
   musicUrl:
     "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
   coverImage:
@@ -94,11 +94,11 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
     {
       title: "Lễ Tốt Nghiệp",
       time: "11:00 AM",
-      date: "26/09/2026",
-      locationName: "Học viện Báo chí và Tuyên truyền",
-      address: "36 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội",
+      date: "03/10/2026",
+      locationName: "DONG NAI TECHNOLOGY UNIVERSITY",
+      address: "Nguyen Khuyen Street, Quarter 5, Trang Dai, Dong Nai",
       mapUrl:
-        "https://maps.google.com/?q=Học+viện+Báo+chí+và+Tuyên+truyền+36+Xuân+Thủy+Cầu+Giấy+Hà+Nội",
+        "https://maps.app.goo.gl/VR2KpPRHeqJvYrt37",
     },
   ],
   timeline: [
