@@ -118,10 +118,6 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   galleryImages: [
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438074/6821c23c-ba0d-4cee-b1a8-e611b01bce71_j0yepk.jpg",
-    "https://w.ladicdn.com/s500x500/69b247cf4f6ddc0012f0ce55/1784774421170_3379540865962086579_g2668429489759155549_987364ad977145acecd0b9ccee916950-20260723163343-c0hna.jpg",
-    "https://w.ladicdn.com/s500x500/69b247cf4f6ddc0012f0ce55/1784774421188_3379540865962086579_g2668429489759155549_fe35cc6df98c1db7d8bc02d16a94ec2b-20260723163344-wkfcw.jpg",
-    "https://w.ladicdn.com/s600x700/69b247cf4f6ddc0012f0ce55/1784774421207_3379540865962086579_g2668429489759155549_71b2b5cc2bcacd5f768e5326672dd240-20260723164950-hh5qm.jpg",
-    "https://w.ladicdn.com/s600x700/69b247cf4f6ddc0012f0ce55/1784774420787_3379540865962086579_g2668429489759155549_a8531f9f1720db53f2fcb1f991cb04ac-20260723164950-axhdc.jpg",
   ],
   giftInfo: {
     groomBankName: "Techcombank",

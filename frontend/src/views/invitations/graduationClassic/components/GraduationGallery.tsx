@@ -100,7 +100,7 @@ export function GraduationGallery({
 
                   {/* Gallery Image */}
                   <div
-                    className="ladi-gallery-view-item selected overflow-hidden"
+                    className="ladi-gallery-view-item selected overflow-hidden bg-slate-900/10"
                     style={{
                       width: "100%",
                       height: "100%",
@@ -109,6 +109,25 @@ export function GraduationGallery({
                       zIndex: 15,
                     }}
                   >
+                    {/* Blurred background to fill empty spaces gracefully */}
+                    <img
+                      src={currentImgSrc}
+                      alt=""
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        filter: "blur(12px)",
+                        opacity: 0.35,
+                        transform: "scale(1.1)",
+                        pointerEvents: "none",
+                        zIndex: 14,
+                      }}
+                    />
+                    {/* Main image with objectFit contain so no people are cropped on the sides */}
                     <img
                       key={currentIdx}
                       src={currentImgSrc}
@@ -117,7 +136,7 @@ export function GraduationGallery({
                       style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover",
+                        objectFit: "contain",
                         objectPosition: "center",
                         display: "block",
                         position: "relative",
