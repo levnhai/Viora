@@ -55,10 +55,27 @@ export async function generateMetadata({
   const wd = await fetchWeddingDataServer(weddingSlug);
 
   if (wd) {
+    const isGraduation =
+      wd.templateId === "temp_14" ||
+      wd.templateId === "14" ||
+      weddingSlug.includes("tot-nghiep") ||
+      weddingSlug.includes("le-hoangoanh");
+
     const groomName = wd.groomName || "Chú Rể";
     const brideName = wd.brideName || "Cô Dâu";
+
+    let graduateName = "Lê Hoàng Oanh";
+    if (wd.groomName && wd.brideName && wd.groomName.toLowerCase() !== wd.brideName.toLowerCase()) {
+      graduateName = `${wd.groomName} ${wd.brideName}`;
+    } else {
+      graduateName = wd.brideName || wd.groomName || "Lê Hoàng Oanh";
+    }
+
     const title =
-      wd.seo?.title || `Thiệp Cưới: ${groomName} ❤️ ${brideName}`;
+      wd.seo?.title ||
+      (isGraduation
+        ? `Thiệp Mời Lễ Tốt Nghiệp: Tân Cử Nhân ${graduateName}`
+        : `Thiệp Cưới: ${groomName} ❤️ ${brideName}`);
 
     let dateStr = "";
     if (wd.weddingDate) {
@@ -72,7 +89,9 @@ export async function generateMetadata({
 
     const description =
       wd.seo?.description ||
-      `Trân trọng kính mời quý khách tham dự lễ thành hôn của ${groomName} & ${brideName}${dateStr}. Bấm để xem thiệp mời chi tiết và gửi lời chúc!`;
+      (isGraduation
+        ? `Trân trọng kính mời quý khách đến tham dự Lễ tốt nghiệp của Tân Cử Nhân ${graduateName}${dateStr}. Bấm để xem thiệp mời chi tiết!`
+        : `Trân trọng kính mời quý khách tham dự lễ thành hôn của ${groomName} & ${brideName}${dateStr}. Bấm để xem thiệp mời chi tiết và gửi lời chúc!`);
 
     let rawOgImage =
       wd.seo?.ogImage ||
@@ -150,14 +169,24 @@ export async function generateMetadata({
     };
   }
 
+  const isGraduationFallback =
+    weddingSlug.includes("tot-nghiep") ||
+    weddingSlug.includes("le-hoangoanh") ||
+    weddingSlug.includes("temp_14");
+
+  const defaultTitle = isGraduationFallback
+    ? "Thiệp Mời Lễ Tốt Nghiệp: Tân Cử Nhân Lê Hoàng Oanh 🎓"
+    : "Thiệp Cưới Trực Tuyến - Viora Studio";
+  const defaultDesc = isGraduationFallback
+    ? "Trân trọng kính mời quý khách đến tham dự Lễ tốt nghiệp của Tân Cử Nhân Lê Hoàng Oanh. Bấm để xem thiệp mời chi tiết!"
+    : "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!";
+
   return {
-    title: "Thiệp Cưới Trực Tuyến - Viora Studio",
-    description:
-      "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!",
+    title: defaultTitle,
+    description: defaultDesc,
     openGraph: {
-      title: "Thiệp Cưới Trực Tuyến - Viora Studio",
-      description:
-        "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!",
+      title: defaultTitle,
+      description: defaultDesc,
       url: `${baseUrl}/w/${weddingSlug}`,
       images: [
         {
@@ -165,7 +194,7 @@ export async function generateMetadata({
           secureUrl: defaultOgImage,
           width: 1200,
           height: 630,
-          alt: "Thiệp Cưới Trực Tuyến - Viora Studio",
+          alt: defaultTitle,
         },
       ],
     },
