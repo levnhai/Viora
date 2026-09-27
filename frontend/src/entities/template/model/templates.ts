@@ -528,7 +528,7 @@ export const TEMPLATES: TemplateConfig[] = [
     isNew: true,
     isHot: true,
     preview:
-      "https://static.ladipage.net/69b247cf4f6ddc0012f0ce55/1784774420884_3379540865962086579_g2668429489759155549_fd36d587f191f01454f7c7ef8dba84a8-20260724163024-ilyzg.jpg",
+      "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
     themeClass: "theme-dusty-rose",
     tier: "standard",
     price: 149000,

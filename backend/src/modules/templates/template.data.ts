@@ -125,4 +125,16 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 14,
+    code: 'temp_14',
+    name: 'Lễ Tốt Nghiệp - Mai Trang',
+    thumbnail:
+      'https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];

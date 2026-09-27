@@ -11,7 +11,11 @@ import { getTemplatePackage } from "@/widgets/invitation-renderer";
 import { API_URL } from "@/shared/lib/config";
 import { getDemoWeddingData } from "@/entities/invitation/model/mockData";
 
-export function WeddingInvitationPage() {
+interface WeddingInvitationPageProps {
+  initialData?: WeddingData | null;
+}
+
+export function WeddingInvitationPage({ initialData }: WeddingInvitationPageProps) {
   const params = useParams();
   const weddingSlug = params?.weddingSlug as string;
   const searchParams = useSearchParams();
@@ -20,11 +24,28 @@ export function WeddingInvitationPage() {
   const customGroom = searchParams?.get("groom");
   const customBride = searchParams?.get("bride");
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
-  const [weddingData, setWeddingData] = useState<WeddingData | null>(null);
+  const [weddingData, setWeddingData] = useState<WeddingData | null>(() => {
+    if (initialData) {
+      const wd = { ...initialData };
+      if (customGroom) wd.groomName = customGroom;
+      if (customBride) wd.brideName = customBride;
+      return wd;
+    }
+    return null;
+  });
 
   useEffect(() => {
+    if (initialData) {
+      const wd = { ...initialData };
+      if (customGroom) wd.groomName = customGroom;
+      if (customBride) wd.brideName = customBride;
+      setWeddingData(wd);
+      setLoading(false);
+      return;
+    }
+
     if (!weddingSlug) return;
 
     setLoading(true);
@@ -54,8 +75,8 @@ export function WeddingInvitationPage() {
       })
       .catch((err) => {
         // Nếu ở chế độ embed hoặc slug demo mà DB 404, fallback sang mock data chứ không hiện lỗi hỏng
-        if (isEmbed || weddingSlug.includes("demo") || weddingSlug.includes("vanan") || weddingSlug.includes("leminhhai")) {
-          const fallbackData = getDemoWeddingData("temp_1");
+        if (isEmbed || weddingSlug.includes("demo") || weddingSlug.includes("vanan") || weddingSlug.includes("leminhhai") || weddingSlug.includes("haianh") || weddingSlug.includes("le-hoangoanh")) {
+          const fallbackData = getDemoWeddingData("temp_14");
           if (customGroom) fallbackData.groomName = customGroom;
           if (customBride) fallbackData.brideName = customBride;
           setWeddingData(fallbackData);
@@ -66,7 +87,7 @@ export function WeddingInvitationPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [weddingSlug, isEmbed, customGroom, customBride]);
+  }, [weddingSlug, isEmbed, customGroom, customBride, initialData]);
 
   if (loading) {
     return (

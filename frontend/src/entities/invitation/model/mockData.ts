@@ -89,11 +89,11 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   musicUrl:
     "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
   coverImage:
-    "https://static.ladipage.net/69b247cf4f6ddc0012f0ce55/1784774420884_3379540865962086579_g2668429489759155549_fd36d587f191f01454f7c7ef8dba84a8-20260724163024-ilyzg.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
   events: [
     {
       title: "Lễ Tốt Nghiệp",
-      time: "09:00 AM",
+      time: "11:00 AM",
       date: "26/09/2026",
       locationName: "Học viện Báo chí và Tuyên truyền",
       address: "36 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội",
@@ -109,21 +109,15 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
         "Tập trung tại Hội trường Lớn, tiến hành các nghi thức nhận bằng cử nhân.",
     },
     {
-      time: "08:30",
+      time: "11:00",
       title: "Chụp Ảnh Kỷ Niệm",
       description:
         "Chụp ảnh lưu niệm cùng Gia đình, Thầy cô & Bạn bè tại khuôn viên trường.",
     },
-    {
-      time: "11:30",
-      title: "Tiệc Liên Hoan Thân Mật",
-      description:
-        "Bữa tiệc ấm cúng cùng người thân và bạn bè chúc mừng dấu mốc mới.",
-    },
   ],
   galleryImages: [
-    "https://static.ladipage.net/69b247cf4f6ddc0012f0ce55/1784774420884_3379540865962086579_g2668429489759155549_fd36d587f191f01454f7c7ef8dba84a8-20260724163024-ilyzg.jpg",
-    "https://w.ladicdn.com/s750x950/69b247cf4f6ddc0012f0ce55/1784774421244_3379540865962086579_g2668429489759155549_bd3bf0e9785e52879b42599a3e903bf0-20260723163235-ckaby.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438074/6821c23c-ba0d-4cee-b1a8-e611b01bce71_j0yepk.jpg",
     "https://w.ladicdn.com/s500x500/69b247cf4f6ddc0012f0ce55/1784774421170_3379540865962086579_g2668429489759155549_987364ad977145acecd0b9ccee916950-20260723163343-c0hna.jpg",
     "https://w.ladicdn.com/s500x500/69b247cf4f6ddc0012f0ce55/1784774421188_3379540865962086579_g2668429489759155549_fe35cc6df98c1db7d8bc02d16a94ec2b-20260723163344-wkfcw.jpg",
     "https://w.ladicdn.com/s600x700/69b247cf4f6ddc0012f0ce55/1784774421207_3379540865962086579_g2668429489759155549_71b2b5cc2bcacd5f768e5326672dd240-20260723164950-hh5qm.jpg",

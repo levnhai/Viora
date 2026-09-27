@@ -1,3 +1,5 @@
+import { getDirectionsMapUrl } from "@/shared/lib/utils/string";
+
 interface GraduationTimelineProps {
   locationName?: string;
   address?: string;
@@ -12,11 +14,13 @@ export function GraduationTimeline({
   locationName = "học viện báo chí và tuyên truyền",
   address = "36 Xuân Thủy, Cầu Giấy, Hà Nội",
   mapUrl = "https://maps.google.com/?q=Học+viện+Báo+chí+và+Tuyên+truyền+36+Xuân+Thủy+Cầu+Giấy+Hà+Nội",
-  timeStr = "09:00, chủ nhật",
+  timeStr = "11:00, chủ nhật",
   day = "26",
   month = "tháng 7",
   year = "năm 2026",
 }: GraduationTimelineProps) {
+  const directionsLink = getDirectionsMapUrl(mapUrl, address, locationName);
+
   return (
     <div id="SECTION23" className="ladi-section" suppressHydrationWarning>
       <div className="ladi-section-background"></div>
@@ -49,7 +53,7 @@ export function GraduationTimeline({
             <div id="HEADLINE280" className="ladi-element"><h3 className="ladi-headline">{locationName}</h3></div>
             <div id="HEADLINE281" className="ladi-element"><h3 className="ladi-headline">{address}</h3></div>
             <a
-              href={mapUrl}
+              href={directionsLink}
               target="_blank"
               rel="noopener noreferrer"
               id="GROUP162"

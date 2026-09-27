@@ -1,9 +1,46 @@
 import { Metadata } from "next";
 import { WeddingInvitationPage } from "@/views/live-preview";
+import { WeddingData } from "@/entities/invitation/model/types";
+import { getDemoWeddingData } from "@/entities/invitation/model/mockData";
 
 type PageProps = {
   params: Promise<{ weddingSlug: string }> | { weddingSlug: string };
 };
+
+async function fetchWeddingDataServer(weddingSlug: string): Promise<WeddingData | null> {
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  try {
+    const res = await fetch(`${apiBase}/api/weddings/${weddingSlug}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        const wd = { ...json.data };
+        if (wd.themeSettings?.musicUrl) {
+          wd.musicUrl = wd.themeSettings.musicUrl;
+        }
+        return wd;
+      }
+    }
+  } catch (err) {
+    console.error("Lỗi khi tải dữ liệu thiệp cưới trên Server:", err);
+  }
+
+  // Fallback sang mock data cho slug demo / xem thử
+  if (
+    weddingSlug.includes("demo") ||
+    weddingSlug.includes("vanan") ||
+    weddingSlug.includes("leminhhai") ||
+    weddingSlug.includes("haianh") ||
+    weddingSlug.includes("le-hoangoanh")
+  ) {
+    return getDemoWeddingData("temp_14");
+  }
+
+  return null;
+}
 
 export async function generateMetadata({
   params,
@@ -13,117 +50,104 @@ export async function generateMetadata({
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     "https://thiepcuoionline-nine.vercel.app";
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
   const defaultOgImage = `${baseUrl}/og-banner.png`;
 
-  try {
-    const res = await fetch(`${apiBase}/api/weddings/${weddingSlug}`, {
-      next: { revalidate: 60 },
-    });
+  const wd = await fetchWeddingDataServer(weddingSlug);
 
-    if (res.ok) {
-      const json = await res.json();
-      if (json.success && json.data) {
-        const wd = json.data;
+  if (wd) {
+    const groomName = wd.groomName || "Chú Rể";
+    const brideName = wd.brideName || "Cô Dâu";
+    const title =
+      wd.seo?.title || `Thiệp Cưới: ${groomName} ❤️ ${brideName}`;
 
-        const groomName = wd.groomName || "Chú Rể";
-        const brideName = wd.brideName || "Cô Dâu";
-        const title =
-          wd.seo?.title || `Thiệp Cưới: ${groomName} ❤️ ${brideName}`;
-
-        let dateStr = "";
-        if (wd.weddingDate) {
-          try {
-            const d = new Date(wd.weddingDate);
-            if (!isNaN(d.getTime())) {
-              dateStr = ` ngày ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-            }
-          } catch (_) {}
+    let dateStr = "";
+    if (wd.weddingDate) {
+      try {
+        const d = new Date(wd.weddingDate);
+        if (!isNaN(d.getTime())) {
+          dateStr = ` ngày ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
         }
+      } catch (_) {}
+    }
 
-        const description =
-          wd.seo?.description ||
-          `Trân trọng kính mời quý khách tham dự lễ thành hôn của ${groomName} & ${brideName}${dateStr}. Bấm để xem thiệp mời chi tiết và gửi lời chúc!`;
+    const description =
+      wd.seo?.description ||
+      `Trân trọng kính mời quý khách tham dự lễ thành hôn của ${groomName} & ${brideName}${dateStr}. Bấm để xem thiệp mời chi tiết và gửi lời chúc!`;
 
-        let rawOgImage =
-          wd.seo?.ogImage ||
-          wd.coverImage ||
-          wd.heroImage ||
-          wd.groomAvatarUrl ||
-          wd.brideAvatarUrl ||
-          (Array.isArray(wd.galleryImages) && wd.galleryImages.length > 0
-            ? wd.galleryImages[0]
-            : null);
+    let rawOgImage =
+      wd.seo?.ogImage ||
+      wd.coverImage ||
+      wd.heroImage ||
+      wd.groomAvatarUrl ||
+      wd.brideAvatarUrl ||
+      (Array.isArray(wd.galleryImages) && wd.galleryImages.length > 0
+        ? wd.galleryImages[0]
+        : null);
 
-        let ogImage = defaultOgImage;
-        if (rawOgImage) {
-          if (
-            !rawOgImage.startsWith("http://") &&
-            !rawOgImage.startsWith("https://")
-          ) {
-            ogImage = rawOgImage.startsWith("/")
-              ? `${baseUrl}${rawOgImage}`
-              : `${baseUrl}/${rawOgImage}`;
-          } else {
-            ogImage = rawOgImage;
-          }
+    let ogImage = defaultOgImage;
+    if (rawOgImage) {
+      if (
+        !rawOgImage.startsWith("http://") &&
+        !rawOgImage.startsWith("https://")
+      ) {
+        ogImage = rawOgImage.startsWith("/")
+          ? `${baseUrl}${rawOgImage}`
+          : `${baseUrl}/${rawOgImage}`;
+      } else {
+        ogImage = rawOgImage;
+      }
 
-          // Tự động cắt cúp chuẩn 1200x630 cho Zalo/Facebook nếu là ảnh Cloudinary (tránh lỗi ảnh dọc không hiện card)
-          if (
-            ogImage.includes("res.cloudinary.com") &&
-            ogImage.includes("/upload/")
-          ) {
-            if (!ogImage.includes("/c_fill") && !ogImage.includes("/w_1200")) {
-              ogImage = ogImage.replace(
-                "/upload/",
-                "/upload/c_fill,g_auto,w_1200,h_630/",
-              );
-            }
-          }
+      if (
+        ogImage.includes("res.cloudinary.com") &&
+        ogImage.includes("/upload/")
+      ) {
+        if (!ogImage.includes("/c_fill") && !ogImage.includes("/w_1200")) {
+          ogImage = ogImage.replace(
+            "/upload/",
+            "/upload/f_auto,q_auto,c_fill,g_auto,w_1200,h_630/",
+          );
         }
-
-        const pageUrl = `${baseUrl}/w/${weddingSlug}`;
-
-        return {
-          title,
-          description,
-          robots: {
-            index: true,
-            follow: true,
-          },
-          openGraph: {
-            title,
-            description,
-            url: pageUrl,
-            siteName: "Viora Studio",
-            images: [
-              {
-                url: ogImage,
-                secureUrl: ogImage,
-                width: 1200,
-                height: 630,
-                alt: title,
-                type: ogImage.endsWith(".png") ? "image/png" : "image/jpeg",
-              },
-            ],
-            type: "website",
-            locale: "vi_VN",
-          },
-          twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [ogImage],
-          },
-          other: {
-            "og:image:secure_url": ogImage,
-            "zalo:image": ogImage,
-          },
-        };
       }
     }
-  } catch (error) {
-    console.error("Lỗi khi tải metadata thiệp cưới:", error);
+
+    const pageUrl = `${baseUrl}/w/${weddingSlug}`;
+
+    return {
+      title,
+      description,
+      robots: {
+        index: true,
+        follow: true,
+      },
+      openGraph: {
+        title,
+        description,
+        url: pageUrl,
+        siteName: "Viora Studio",
+        images: [
+          {
+            url: ogImage,
+            secureUrl: ogImage,
+            width: 1200,
+            height: 630,
+            alt: title,
+            type: ogImage.endsWith(".png") ? "image/png" : "image/jpeg",
+          },
+        ],
+        type: "website",
+        locale: "vi_VN",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogImage],
+      },
+      other: {
+        "og:image:secure_url": ogImage,
+        "zalo:image": ogImage,
+      },
+    };
   }
 
   return {
@@ -152,6 +176,21 @@ export async function generateMetadata({
   };
 }
 
-export default function WeddingInvitationRoute() {
-  return <WeddingInvitationPage />;
+export default async function WeddingInvitationRoute({
+  params,
+}: PageProps) {
+  const resolvedParams = await params;
+  const weddingSlug = resolvedParams.weddingSlug;
+  const initialData = await fetchWeddingDataServer(weddingSlug);
+
+  return (
+    <>
+      <link rel="preconnect" href="https://w.ladicdn.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://w.ladicdn.com" />
+      <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      <WeddingInvitationPage initialData={initialData} />
+    </>
+  );
 }
+

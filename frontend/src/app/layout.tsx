@@ -60,6 +60,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/fonts/graduation/hastegi.otf" as="font" type="font/otf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/daytonica.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/uvnhoatay.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/morgina.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/lora.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/ecatherina.otf" as="font" type="font/otf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/ergisa.otf" as="font" type="font/otf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/nvnerotique.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/graduation/ralsihten.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+      </head>
       <body style={{ height: "100%", margin: 0 }} suppressHydrationWarning>
         <div id="root" style={{ height: "100%" }} suppressHydrationWarning>
           <GoogleOAuthProviderWrapper>

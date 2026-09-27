@@ -94,7 +94,7 @@ export function GraduationHero({
         <div id="IMAGE261" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
         
         {/* Ngôi sao lấp lánh trên trái */}
-        <div id="IMAGE264" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
+        <div id="IMAGE264" className="ladi-element animate-sparkle-glow"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
 
         {/* Nhóm Thẻ Lịch Tháng */}
         <div id="GROUP205" className="ladi-element">
@@ -149,7 +149,7 @@ export function GraduationHero({
             {/* Trái tim khoanh đúng ngày được chọn */}
             <div
               id="SHAPE1"
-              className="ladi-element"
+              className="ladi-element animate-calendar-heart"
               style={{
                 position: "absolute",
                 width: "32.4px",
@@ -170,29 +170,32 @@ export function GraduationHero({
           </div>
         </div>
 
-        {/* Tên Tân Cử Nhân: ĐẶNG + Mai Trang */}
-        <div id="HEADLINE347" className="ladi-element"><h3 className="ladi-headline">{firstName}</h3></div>
-        <div id="HEADLINE348" className="ladi-element"><h3 className="ladi-headline">{lastName}</h3></div>
+        {/* Tên Tân Cử Nhân: ĐẶNG + Mai Trang (Chạy từ DƯỚI lên) */}
+        <div id="HEADLINE347" className="ladi-element anim-from-bottom"><h3 className="ladi-headline">{firstName}</h3></div>
+        <div id="HEADLINE348" className="ladi-element anim-from-bottom"><h3 className="ladi-headline">{lastName}</h3></div>
 
-        {/* Tiêu đề mời */}
+        {/* Tiêu đề mời với hiệu ứng xuất hiện từng chữ theo hướng */}
         <div id="GROUP203" className="ladi-element">
           <div className="ladi-group">
-            <div id="HEADLINE345" className="ladi-element"><h3 className="ladi-headline">Thân mời</h3></div>
-            <div id="HEADLINE276" className="ladi-element"><h3 className="ladi-headline">{recipient}</h3></div>
-            <div id="HEADLINE277" className="ladi-element"><h3 className="ladi-headline">đến tham dự lễ tốt nghiệp của tân cử nhân</h3></div>
+            {/* 1. "Thân mời" - Chạy từ TRÊN xuống */}
+            <div id="HEADLINE345" className="ladi-element anim-from-top"><h3 className="ladi-headline">Thân mời</h3></div>
+            {/* 2. "Cả nhà iu" / Tên người nhận - Chạy từ TRÁI sang */}
+            <div id="HEADLINE276" className="ladi-element anim-from-left"><h3 className="ladi-headline">{recipient}</h3></div>
+            {/* 3. "đến tham dự..." - Chạy từ PHẢI sang */}
+            <div id="HEADLINE277" className="ladi-element anim-from-right"><h3 className="ladi-headline">đến tham dự lễ tốt nghiệp của tân cử nhân</h3></div>
           </div>
         </div>
 
         {/* Mây góc */}
         <div id="IMAGE268" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
-        <div id="IMAGE236" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
+        <div id="IMAGE236" className="ladi-element animate-sparkle-glow"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
         <div id="IMAGE269" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
         
         {/* Con dấu sáp đỏ */}
-        <div id="IMAGE231" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
+        <div id="IMAGE231" className="ladi-element animate-float-breathe"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
 
         {/* Film Strip 4 ảnh */}
-        <div id="GROUP180" className="ladi-element">
+        <div id="GROUP180" className="ladi-element filmstrip-interactive">
           <div className="ladi-group">
             <div id="BOX74" className="ladi-element"><div className="ladi-box"></div></div>
             <div id="BOX75" className="ladi-element"><div className="ladi-box"></div></div>
@@ -203,7 +206,7 @@ export function GraduationHero({
         </div>
 
         {/* Nơ ruy băng hồng */}
-        <div id="IMAGE230" className="ladi-element"><div id="ruybang" className="ladi-image"><div className="ladi-image-background"></div></div></div>
+        <div id="IMAGE230" className="ladi-element animate-float-breathe"><div id="ruybang" className="ladi-image"><div className="ladi-image-background"></div></div></div>
         <div id="IMAGE270" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
       </div>
     </div>

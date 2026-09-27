@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 interface GraduationCountdownProps {
   weddingDate?: string;
   weddingTime?: string;
+  timeline?: Array<{ time: string; title: string; description?: string }>;
 }
 
 function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
@@ -68,9 +69,22 @@ function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
   return isNaN(ts) ? defaultTs : ts;
 }
 
+const isWeddingKeyword = (text?: string) => {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  return (
+    lower.includes("đón khách") ||
+    lower.includes("lễ cưới") ||
+    lower.includes("thành hôn") ||
+    lower.includes("tiệc cưới") ||
+    lower.includes("rước dâu")
+  );
+};
+
 export function GraduationCountdown({
   weddingDate = "2026-07-26",
   weddingTime = "09:00",
+  timeline,
 }: GraduationCountdownProps) {
   const [countdown, setCountdown] = useState({
     days: "16",
@@ -78,6 +92,17 @@ export function GraduationCountdown({
     minutes: "14",
     seconds: "48",
   });
+
+  const hasGenericWeddingTimeline =
+    isWeddingKeyword(timeline?.[0]?.title) ||
+    isWeddingKeyword(timeline?.[1]?.title);
+
+  const activeTimeline = hasGenericWeddingTimeline ? undefined : timeline;
+
+  const event1Time = activeTimeline?.[0]?.time || "08:00";
+  const event1Title = activeTimeline?.[0]?.title || "Làm lễ tốt nghiệp";
+  const event2Time = activeTimeline?.[1]?.time || "11:00";
+  const event2Title = activeTimeline?.[1]?.title || "Chụp ảnh kỷ niệm";
 
   useEffect(() => {
     const target = parseTargetTimestamp(weddingDate, weddingTime);
@@ -139,8 +164,8 @@ export function GraduationCountdown({
                     <div id="IMAGE126" className="ladi-element"><div className="ladi-image"><div className="ladi-image-background"></div></div></div>
                     <div id="GROUP115" className="ladi-element">
                       <div className="ladi-group">
-                        <div id="HEADLINE220" className="ladi-element"><h3 className="ladi-headline">08:00</h3></div>
-                        <div id="HEADLINE221" className="ladi-element"><h3 className="ladi-headline">Làm lễ tốt nghiệp</h3></div>
+                        <div id="HEADLINE220" className="ladi-element"><h3 className="ladi-headline">{event1Time}</h3></div>
+                        <div id="HEADLINE221" className="ladi-element"><h3 className="ladi-headline">{event1Title}</h3></div>
                       </div>
                     </div>
                   </div>
@@ -151,8 +176,8 @@ export function GraduationCountdown({
                     <div id="BOX43" className="ladi-element"><div className="ladi-box"></div></div>
                     <div id="GROUP117" className="ladi-element">
                       <div className="ladi-group">
-                        <div id="HEADLINE222" className="ladi-element"><h3 className="ladi-headline">08:30</h3></div>
-                        <div id="HEADLINE223" className="ladi-element"><h3 className="ladi-headline">Chụp ảnh kỷ niệm</h3></div>
+                        <div id="HEADLINE222" className="ladi-element"><h3 className="ladi-headline">{event2Time}</h3></div>
+                        <div id="HEADLINE223" className="ladi-element"><h3 className="ladi-headline">{event2Title}</h3></div>
                       </div>
                     </div>
                   </div>

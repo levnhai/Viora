@@ -14,15 +14,46 @@ export const getInitials = (name: string) => {
 };
 
 export const extractIframeSrc = (input: string) => {
-  if (!input) return input;
-  // If the user pasted the entire <iframe> tag, extract just the src attribute
-  if (input.includes("<iframe") && input.includes('src="')) {
-    const match = input.match(/src="([^"]+)"/);
+  if (!input) return "";
+  const trimmed = input.trim();
+  if (trimmed.includes("<iframe") && (trimmed.includes('src="') || trimmed.includes("src='"))) {
+    const match = trimmed.match(/src=["']([^"']+)["']/i);
     if (match && match[1]) {
       return match[1];
     }
   }
-  return input;
+  return trimmed;
+};
+
+export const getDirectionsMapUrl = (
+  mapUrl?: string,
+  address?: string,
+  locationName?: string
+) => {
+  const cleanUrl = extractIframeSrc(mapUrl || "");
+
+  if (
+    !cleanUrl ||
+    cleanUrl.includes("google.com/maps/embed") ||
+    cleanUrl.includes("/maps/embed")
+  ) {
+    const query = `${locationName || ""} ${address || ""}`.trim();
+    if (query) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    }
+    return cleanUrl || "https://maps.google.com";
+  }
+
+  if (cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://")) {
+    return cleanUrl;
+  }
+
+  const query = `${locationName || ""} ${address || ""}`.trim();
+  if (query) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  }
+
+  return "https://maps.google.com";
 };
 
 // lấy chữ cái đầu tiên của tên
