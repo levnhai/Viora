@@ -112,7 +112,7 @@ export function LiveView({
     }
   }, [previewMode]);
 
-  // Tự động bật nhạc khi vừa mở trang hoặc khi có tương tác đầu tiên (click, chạm, cuộn)
+  // Tự động bật nhạc khi vừa mở trang hoặc khi có tương tác đầu tiên (click, chạm, rê chuột, cuộn)
   useEffect(() => {
     const playAudio = () => {
       if (audioRef.current) {
@@ -122,7 +122,7 @@ export function LiveView({
             setPlaying(true);
           })
           .catch(() => {
-            // Trình duyệt chưa cho phép autoplay không có tương tác - sẽ kích hoạt ở lần chạm tiếp theo
+            // Trình duyệt chưa cho phép autoplay không có tương tác
           });
       }
     };
@@ -134,16 +134,15 @@ export function LiveView({
       playAudio();
     };
 
-    window.addEventListener("click", handleFirstInteraction, { capture: true, once: true });
-    window.addEventListener("touchstart", handleFirstInteraction, { capture: true, once: true });
-    window.addEventListener("pointerdown", handleFirstInteraction, { capture: true, once: true });
-    window.addEventListener("scroll", handleFirstInteraction, { capture: true, once: true });
+    const events = ["click", "touchstart", "touchend", "pointerdown", "mousemove", "scroll", "keydown"];
+    events.forEach((ev) =>
+      window.addEventListener(ev, handleFirstInteraction, { capture: true, once: true })
+    );
 
     return () => {
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
-      window.removeEventListener("pointerdown", handleFirstInteraction);
-      window.removeEventListener("scroll", handleFirstInteraction);
+      events.forEach((ev) =>
+        window.removeEventListener(ev, handleFirstInteraction)
+      );
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [musicSource]);
@@ -177,7 +176,7 @@ export function LiveView({
   const { monthText, day: timelineDay, month: timelineMonth, year: timelineYear, timeStr: timelineTimeStr } =
     useMemo(() => {
       const dateStr = weddingData.weddingDate;
-      let d = new Date(2026, 8, 26);
+      let d = new Date(2026, 9, 3);
       if (dateStr) {
         if (typeof dateStr === "string") {
           if (dateStr.includes("-")) {
@@ -308,7 +307,7 @@ export function LiveView({
 
       {/* Audio Element */}
       {musicSource && (
-        <audio ref={audioRef} loop preload="auto">
+        <audio ref={audioRef} autoPlay loop playsInline preload="auto">
           <source src={musicSource} type="audio/mpeg" />
         </audio>
       )}

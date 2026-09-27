@@ -17,7 +17,7 @@ export function GraduationHero({
   eventDate,
 }: GraduationHeroProps) {
   const getCalendarData = () => {
-    let d = new Date(2026, 8, 26);
+    let d = new Date(2026, 9, 3);
     if (eventDate) {
       if (typeof eventDate === "string") {
         if (eventDate.includes("-")) {

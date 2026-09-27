@@ -11,12 +11,12 @@ interface GraduationTimelineProps {
 }
 
 export function GraduationTimeline({
-  locationName = "học viện báo chí và tuyên truyền",
-  address = "36 Xuân Thủy, Cầu Giấy, Hà Nội",
-  mapUrl = "https://maps.google.com/?q=Học+viện+Báo+chí+và+Tuyên+truyền+36+Xuân+Thủy+Cầu+Giấy+Hà+Nội",
-  timeStr = "11:00, chủ nhật",
-  day = "26",
-  month = "tháng 7",
+  locationName = "DONG NAI TECHNOLOGY UNIVERSITY",
+  address = "Nguyen Khuyen Street, Quarter 5, Trang Dai, Dong Nai",
+  mapUrl = "https://maps.app.goo.gl/VR2KpPRHeqJvYrt37",
+  timeStr = "11:00, thứ bảy",
+  day = "03",
+  month = "tháng 10",
   year = "năm 2026",
 }: GraduationTimelineProps) {
   const directionsLink = getDirectionsMapUrl(mapUrl, address, locationName);

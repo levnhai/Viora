@@ -7,7 +7,7 @@ interface GraduationCountdownProps {
 }
 
 function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
-  const defaultTs = new Date(2026, 8, 26, 9, 0, 0).getTime();
+  const defaultTs = new Date(2026, 9, 3, 11, 0, 0).getTime();
   if (!dateStr || !dateStr.trim()) return defaultTs;
 
   let cleanDate = dateStr.trim();
@@ -15,7 +15,7 @@ function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
     cleanDate = cleanDate.split("T")[0];
   }
 
-  let hours = 9;
+  let hours = 11;
   let minutes = 0;
 
   if (timeStr && timeStr.trim()) {
@@ -33,8 +33,8 @@ function parseTargetTimestamp(dateStr?: string, timeStr?: string): number {
   }
 
   let year = 2026;
-  let month = 9;
-  let day = 26;
+  let month = 10;
+  let day = 3;
 
   if (cleanDate.includes("-")) {
     const parts = cleanDate.split("-").map((p) => parseInt(p, 10));
