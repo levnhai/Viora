@@ -1127,6 +1127,17 @@ body.lazyload .ladi-overlay, body.lazyload .ladi-box, body.lazyload .ladi-button
   -webkit-backface-visibility: hidden;
 }
 
+/* Sửa lỗi font bị dính chữ trên tên trường học (DONG NAI TECHNOLOGY UNIVERSITY) */
+#HEADLINE280 > .ladi-headline {
+  font-family: 'LoraCustom', serif !important;
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+  color: rgb(155, 52, 61) !important;
+}
+
 
 
 

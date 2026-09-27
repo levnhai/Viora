@@ -112,7 +112,7 @@ export function LiveView({
     }
   }, [previewMode]);
 
-  // Tự động bật nhạc khi vừa mở trang hoặc khi có tương tác đầu tiên (click, chạm, rê chuột, cuộn)
+  // Tự động bật nhạc khi DOM mounted hoặc khi có tương tác đầu tiên (click, chạm, rê chuột, cuộn)
   useEffect(() => {
     const playAudio = () => {
       if (audioRef.current) {
@@ -127,19 +127,23 @@ export function LiveView({
       }
     };
 
-    // Thử phát ngay lập tức
+    // Thử phát ngay lập tức khi DOM mounted
     playAudio();
+
+    // Thử lại sau 300ms đề phòng audio element vừa nạp xong buffer
+    const timer = setTimeout(playAudio, 300);
 
     const handleFirstInteraction = () => {
       playAudio();
     };
 
-    const events = ["click", "touchstart", "touchend", "pointerdown", "mousemove", "scroll", "keydown"];
+    const events = ["click", "touchstart", "touchend", "pointerdown", "mousemove", "scroll", "keydown", "mouseenter"];
     events.forEach((ev) =>
       window.addEventListener(ev, handleFirstInteraction, { capture: true, once: true })
     );
 
     return () => {
+      clearTimeout(timer);
       events.forEach((ev) =>
         window.removeEventListener(ev, handleFirstInteraction)
       );
@@ -307,7 +311,18 @@ export function LiveView({
 
       {/* Audio Element */}
       {musicSource && (
-        <audio ref={audioRef} autoPlay loop playsInline preload="auto">
+        <audio
+          ref={audioRef}
+          autoPlay
+          loop
+          playsInline
+          preload="auto"
+          onCanPlay={() => {
+            if (audioRef.current && audioRef.current.paused) {
+              audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+            }
+          }}
+        >
           <source src={musicSource} type="audio/mpeg" />
         </audio>
       )}
