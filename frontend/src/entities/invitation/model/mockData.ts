@@ -118,6 +118,11 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   galleryImages: [
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438074/6821c23c-ba0d-4cee-b1a8-e611b01bce71_j0yepk.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790440270/423da089-11dc-4713-9038-96d658461368_urzzj7.jpg",
+    '"https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438591/a8b5a448-f13d-4aeb-8755-1af4f35ddc7d_i7avh9.jpg',
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438583/348b25eb-d88c-4ba0-9336-6c7cb105d987_m0lyfk.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438582/ad294fb9-613c-4d33-a2fd-ddae72523e7f_unos5e.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438581/6bbbe3d9-ca16-4207-b2c6-d1f613aeb21e_gqnn4k.jpg"
   ],
   giftInfo: {
     groomBankName: "Techcombank",
