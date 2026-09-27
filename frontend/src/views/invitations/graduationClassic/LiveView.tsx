@@ -222,8 +222,7 @@ export function LiveView({
         year: `năm ${d.getFullYear()}`,
         timeStr: `${rawTime}, ${dayOfWeek}`,
       };
-    }, [weddingData.weddingDate, weddingData.weddingTime, weddingData.events]);xt, day: timelineDay, month: timelineMonth, year: timelineYear, timeStr: timelineTimeStr } =
-    getEventDateParts(weddingData.weddingDate);
+    }, [weddingData.weddingDate, weddingData.weddingTime, weddingData.events]);
 
   return (
     <div
