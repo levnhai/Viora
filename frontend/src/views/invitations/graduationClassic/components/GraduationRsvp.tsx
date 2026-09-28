@@ -49,7 +49,7 @@ export function GraduationRsvp({
           <div id="BOX87" className="ladi-element"><div className="ladi-box"></div></div>
           <div id="HEADLINE93" className="ladi-element">
             <h3 className="ladi-headline">
-              <span>Rất mong mọi người đến chung vui cùng mình!</span>
+              <span>Rất mong mọi người đến chung vui cùng mình nha!</span>
               <br />
               <span>Xin vui lòng xác nhận sự có mặt của bạn để mình chuẩn bị đón tiếp một cách chu đáo nhất.</span>
               <br />
