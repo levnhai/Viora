@@ -93,7 +93,6 @@ export function LiveView({
         "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/d3f009c4-dc2b-4936-9b07-699a15cc32a4_mjciqn.jpg",
         "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790470052/47683b85-039b-49ff-a554-1a3f129bb0a7_talmmy.jpg",
         "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558929/c2e847c4-0a1d-428f-974b-096611d84cf4_ltucuy.jpg",
-        "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558929/9129a233-81e7-4074-ad09-c3104f706eb0_yvityd.jpg",
         "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558930/7ae22457-3822-49c7-98cc-c36c16e03976_rftlyr.jpg"
       ];
 
