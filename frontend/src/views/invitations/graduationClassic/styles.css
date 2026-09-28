@@ -1138,6 +1138,11 @@ body.lazyload .ladi-overlay, body.lazyload .ladi-box, body.lazyload .ladi-button
   color: rgb(155, 52, 61) !important;
 }
 
+/* Canh giữa khung ảnh Polaroid Countdown và canh giữa chủ thể bức ảnh */
+#GROUP192 {
+  left: 43.85px !important;
+}
 
-
-
+#BOX83 > .ladi-box {
+  background-position: center 46% !important;
+}
