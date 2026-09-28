@@ -112,41 +112,92 @@ export function LiveView({
     }
   }, [previewMode]);
 
-  // Tự động bật nhạc khi DOM mounted hoặc khi có tương tác đầu tiên (click, chạm, rê chuột, cuộn)
+  // Tối ưu tự động phát nhạc cho In-App Browser (Zalo, Facebook Messenger, WebView)
   useEffect(() => {
-    const playAudio = () => {
-      if (audioRef.current) {
-        audioRef.current
-          .play()
+    let cleanedUp = false;
+
+    const tryPlay = () => {
+      if (cleanedUp || !audioRef.current) return;
+      const audio = audioRef.current;
+      audio.muted = false;
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
           .then(() => {
             setPlaying(true);
+            cleanupListeners();
           })
           .catch(() => {
-            // Trình duyệt chưa cho phép autoplay không có tương tác
+            // Trình duyệt đang chờ cử chỉ tương tác đầu tiên
           });
       }
     };
 
-    // Thử phát ngay lập tức khi DOM mounted
-    playAudio();
+    // 1. Kích hoạt trực tiếp ngay khi nạp component
+    tryPlay();
+    const timer1 = setTimeout(tryPlay, 100);
+    const timer2 = setTimeout(tryPlay, 500);
 
-    // Thử lại sau 300ms đề phòng audio element vừa nạp xong buffer
-    const timer = setTimeout(playAudio, 300);
-
-    const handleFirstInteraction = () => {
-      playAudio();
+    // 2. Kích hoạt qua WebView Bridge của Zalo / WeChat (WeixinJSBridgeReady)
+    const handleWeixinBridge = () => {
+      try {
+        if (typeof (window as any).WeixinJSBridge !== "undefined") {
+          (window as any).WeixinJSBridge.invoke("getNetworkType", {}, () => {
+            tryPlay();
+          });
+        }
+      } catch (_) {}
+      tryPlay();
     };
 
-    const events = ["click", "touchstart", "touchend", "pointerdown", "mousemove", "scroll", "keydown", "mouseenter"];
-    events.forEach((ev) =>
-      window.addEventListener(ev, handleFirstInteraction, { capture: true, once: true })
-    );
+    if (typeof (window as any).WeixinJSBridge !== "undefined") {
+      handleWeixinBridge();
+    } else {
+      document.addEventListener("WeixinJSBridgeReady", handleWeixinBridge, { once: true });
+    }
+
+    // 3. Tối ưu cho Facebook / Messenger / Instagram In-App Browser khi Webview active
+    const handleVisibilityOrFocus = () => {
+      if (document.visibilityState === "visible") {
+        tryPlay();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+    window.addEventListener("pageshow", handleVisibilityOrFocus);
+    window.addEventListener("focus", handleVisibilityOrFocus);
+
+    // 4. Bắt cú chạm / vuốt đầu tiên trên màn hình điện thoại (User Gesture)
+    const handleGesture = () => {
+      tryPlay();
+    };
+
+    const gestureEvents = [
+      "touchstart",
+      "touchend",
+      "pointerdown",
+      "click",
+      "keydown"
+    ];
+
+    gestureEvents.forEach((evt) => {
+      window.addEventListener(evt, handleGesture, { capture: true, passive: true });
+    });
+
+    const cleanupListeners = () => {
+      cleanedUp = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      document.removeEventListener("WeixinJSBridgeReady", handleWeixinBridge);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+      window.removeEventListener("pageshow", handleVisibilityOrFocus);
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, handleGesture, { capture: true });
+      });
+    };
 
     return () => {
-      clearTimeout(timer);
-      events.forEach((ev) =>
-        window.removeEventListener(ev, handleFirstInteraction)
-      );
+      cleanupListeners();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [musicSource]);
@@ -309,22 +360,20 @@ export function LiveView({
         )}
       </button>
 
-      {/* Audio Element */}
+      {/* Audio Element tối ưu cho In-App Browser & iOS */}
       {musicSource && (
         <audio
           ref={audioRef}
+          src={musicSource}
           autoPlay
           loop
           playsInline
+          // @ts-ignore
+          webkit-playsinline="true"
           preload="auto"
-          onCanPlay={() => {
-            if (audioRef.current && audioRef.current.paused) {
-              audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-            }
-          }}
-        >
-          <source src={musicSource} type="audio/mpeg" />
-        </audio>
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+        />
       )}
     </div>
   );

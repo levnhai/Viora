@@ -14,7 +14,7 @@ export const DEFAULT_DEMO_WEDDING_DATA: WeddingData = {
   weddingDate: "2026-12-31",
   weddingTime: "11:00",
   musicUrl:
-    "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
+    "/audio/RiverFlowsInYou.mp3",
   coverImage:
     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
   events: [
@@ -87,7 +87,7 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   weddingDate: "2026-10-03",
   weddingTime: "11:00",
   musicUrl:
-    "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-200.mp3",
+    "https://lamiwedding.io.vn/storage/music-1/a-little-dream-of-me-lyrics-video-cam-on-nguoi-da-thuc-cung-toi-ost-mp3cutnet.mp3",
   coverImage:
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
   events: [
