@@ -12,7 +12,7 @@ export function GraduationRsvp({
   onSendMessage,
 }: GraduationRsvpProps) {
   const [rsvpName, setRsvpName] = useState(guestName);
-  const [rsvpAttend, setRsvpAttend] = useState("Tôi chắc chắn sẽ đến");
+  const [rsvpAttend, setRsvpAttend] = useState("Đương nhiên sẽ đến rồi !");
   const [rsvpMsg, setRsvpMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -38,7 +38,7 @@ export function GraduationRsvp({
     triggerConfetti();
     setRsvpName("");
     setRsvpMsg("");
-    setRsvpAttend("Tôi chắc chắn sẽ đến");
+    setRsvpAttend("Đương nhiên sẽ đến rồi !");
   };
 
   return (
@@ -101,7 +101,7 @@ export function GraduationRsvp({
                     <textarea
                       name="message"
                       className="ladi-form-control"
-                      placeholder="Gửi lời chúc đến tân cử nhân"
+                      placeholder="Gửi lời chúc đến bé"
                       value={rsvpMsg}
                       onChange={(e) => setRsvpMsg(e.target.value)}
                     ></textarea>
@@ -120,8 +120,8 @@ export function GraduationRsvp({
                       value={rsvpAttend}
                       onChange={(e) => setRsvpAttend(e.target.value)}
                     >
-                      <option value="Tôi chắc chắn sẽ đến">Tôi chắc chắn sẽ đến</option>
-                      <option value="Xin lỗi tôi bận rồi">Xin lỗi tôi bận rồi</option>
+                      <option value="Đương nhiên sẽ đến rồi !">Đương nhiên sẽ đến rồi !</option>
+                      <option value="Xin lỗi mình có việc bận rồi">Xin lỗi mình có việc bận rồi</option>
                     </select>
                   </div>
                 </div>
