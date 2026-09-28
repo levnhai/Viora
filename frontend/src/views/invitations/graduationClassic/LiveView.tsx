@@ -336,6 +336,7 @@ export function LiveView({
 
         {/* Section 11: RSVP Form xác nhận tham dự & Popup cảm ơn */}
         <GraduationRsvp
+          weddingSlug={weddingData.slug}
           guestName={guestName}
           onSendMessage={handleSendMessage}
         />

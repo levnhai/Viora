@@ -76,7 +76,7 @@ export function WeddingInvitationPage({ initialData }: WeddingInvitationPageProp
       .catch((err) => {
         // Nếu ở chế độ embed hoặc slug demo mà DB 404, fallback sang mock data chứ không hiện lỗi hỏng
         if (isEmbed || weddingSlug.includes("demo") || weddingSlug.includes("vanan") || weddingSlug.includes("leminhhai") || weddingSlug.includes("haianh") || weddingSlug.includes("le-hoangoanh")) {
-          const fallbackData = getDemoWeddingData("temp_14");
+          const fallbackData = { ...getDemoWeddingData("temp_14"), slug: weddingSlug };
           if (customGroom) fallbackData.groomName = customGroom;
           if (customBride) fallbackData.brideName = customBride;
           setWeddingData(fallbackData);

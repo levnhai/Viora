@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Check, X, Sparkles, HeartHandshake } from "lucide-react";
 import confetti from "canvas-confetti";
+import { API_URL } from "@/shared/lib/config";
+import { toast } from "sonner";
 
 interface GraduationRsvpProps {
+  weddingSlug?: string;
   guestName?: string;
   onSendMessage: (name: string, message: string) => Promise<any>;
 }
 
 export function GraduationRsvp({
+  weddingSlug = "",
   guestName = "",
   onSendMessage,
 }: GraduationRsvpProps) {
@@ -30,15 +34,48 @@ export function GraduationRsvp({
 
   const handleSubmitRsvp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rsvpName.trim()) return;
+    const trimmedName = rsvpName.trim();
+    if (!trimmedName) {
+      toast.error("Vui lòng nhập tên của bạn nhé!");
+      return;
+    }
     setSubmitting(true);
-    await onSendMessage(rsvpName, `[Xác nhận: ${rsvpAttend}] ${rsvpMsg}`);
-    setSubmitting(false);
-    setShowPopup(true);
-    triggerConfetti();
-    setRsvpName("");
-    setRsvpMsg("");
-    setRsvpAttend("Đương nhiên sẽ đến rồi !");
+
+    const attendStatus = rsvpAttend.includes("Đương nhiên") ? "yes" : "no";
+    const cleanMsg = rsvpMsg.trim();
+
+    try {
+      // 1. Gửi phản hồi RSVP tham dự vào Backend để cập nhật danh sách Khách mời & Dashboard
+      if (weddingSlug) {
+        await fetch(`${API_URL}/api/weddings/${weddingSlug}/rsvp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: trimmedName,
+            attend: attendStatus,
+            guests: attendStatus === "yes" ? 1 : 0,
+            message: cleanMsg,
+          }),
+        });
+      }
+
+      // 2. Gửi lời chúc vào Sổ lưu bút (Guestbook)
+      const guestbookMessage = cleanMsg || `[Xác nhận: ${rsvpAttend}]`;
+      await onSendMessage(trimmedName, guestbookMessage);
+
+      setShowPopup(true);
+      triggerConfetti();
+      setRsvpName("");
+      setRsvpMsg("");
+      setRsvpAttend("Đương nhiên sẽ đến rồi !");
+    } catch (err) {
+      console.error("Lỗi khi gửi RSVP và lời chúc:", err);
+      toast.error("Có lỗi xảy ra khi gửi, vui lòng thử lại!");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

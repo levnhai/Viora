@@ -56,7 +56,7 @@ export class GuestbooksService {
       .sort({ createdAt: -1 })
       .exec();
 
-    await this.cacheService.set(cacheKey, result, 60000);
+    await this.cacheService.set(cacheKey, result, 5000);
     return result;
   }
 

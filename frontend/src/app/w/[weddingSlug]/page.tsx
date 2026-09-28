@@ -36,7 +36,8 @@ async function fetchWeddingDataServer(weddingSlug: string): Promise<WeddingData 
     weddingSlug.includes("haianh") ||
     weddingSlug.includes("le-hoangoanh")
   ) {
-    return getDemoWeddingData("temp_14");
+    const fallback = getDemoWeddingData("temp_14");
+    return { ...fallback, slug: weddingSlug };
   }
 
   return null;

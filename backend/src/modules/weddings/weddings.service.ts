@@ -934,9 +934,13 @@ export class WeddingsService {
       if (wedding) return wedding;
     }
     const wedding = await this.weddingModel
-      .findOne({ userId, deletedAt: null })
+      .findOne({
+        $or: [{ userId }, { ownerId: userId }],
+        deletedAt: null,
+      })
       .sort({ createdAt: -1 })
       .exec();
     return wedding || null;
   }
 }
+
