@@ -101,8 +101,8 @@ export function GraduationCountdown({
 
   const event1Time = activeTimeline?.[0]?.time || "08:00";
   const event1Title = activeTimeline?.[0]?.title || "Làm lễ tốt nghiệp";
-  const event2Time = activeTimeline?.[1]?.time || "11:00";
-  const event2Title = activeTimeline?.[1]?.title || "Chụp ảnh kỷ niệm";
+  const event2Time = activeTimeline?.[1]?.time || "11:30";
+  const event2Title = activeTimeline?.[1]?.title || "Chụp ảnh kỷ yếu";
 
   useEffect(() => {
     const target = parseTargetTimestamp(weddingDate, weddingTime);

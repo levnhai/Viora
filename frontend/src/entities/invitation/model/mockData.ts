@@ -85,7 +85,7 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   brideTitle: "Tân Cử Nhân • PR41",
   groomTitle: "Tân Cử Nhân • PR41",
   weddingDate: "2026-10-03",
-  weddingTime: "11:00",
+  weddingTime: "11:30",
   musicUrl:
     "https://lamiwedding.io.vn/storage/music-1/a-little-dream-of-me-lyrics-video-cam-on-nguoi-da-thuc-cung-toi-ost-mp3cutnet.mp3",
   coverImage:
@@ -93,7 +93,7 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   events: [
     {
       title: "Lễ Tốt Nghiệp",
-      time: "11:00 AM",
+      time: "11:30 AM",
       date: "03/10/2026",
       locationName: "DONG NAI TECHNOLOGY UNIVERSITY",
       address: "Nguyen Khuyen Street, Quarter 5, Trang Dai, Dong Nai",
@@ -109,8 +109,8 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
         "Tập trung tại Hội trường Lớn, tiến hành các nghi thức nhận bằng cử nhân.",
     },
     {
-      time: "11:00",
-      title: "Chụp Ảnh Kỷ Niệm",
+      time: "11:30",
+      title: "Chụp Ảnh Kỷ Yếu",
       description:
         "Chụp ảnh lưu niệm cùng Gia đình, Thầy cô & Bạn bè tại khuôn viên trường.",
     },
@@ -119,10 +119,14 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790466357/a72709f3-37bb-4e9e-8819-20b1ccc6a939_fu6wgm.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438074/6821c23c-ba0d-4cee-b1a8-e611b01bce71_j0yepk.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790440270/423da089-11dc-4713-9038-96d658461368_urzzj7.jpg",
-    '"https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438591/a8b5a448-f13d-4aeb-8755-1af4f35ddc7d_i7avh9.jpg',
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438591/a8b5a448-f13d-4aeb-8755-1af4f35ddc7d_i7avh9.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438583/348b25eb-d88c-4ba0-9336-6c7cb105d987_m0lyfk.jpg",
     "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438582/ad294fb9-613c-4d33-a2fd-ddae72523e7f_unos5e.jpg",
-    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438581/6bbbe3d9-ca16-4207-b2c6-d1f613aeb21e_gqnn4k.jpg"
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790438581/6bbbe3d9-ca16-4207-b2c6-d1f613aeb21e_gqnn4k.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790470052/47683b85-039b-49ff-a554-1a3f129bb0a7_talmmy.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558929/c2e847c4-0a1d-428f-974b-096611d84cf4_ltucuy.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558929/9129a233-81e7-4074-ad09-c3104f706eb0_yvityd.jpg",
+    "https://res.cloudinary.com/dynrs5wzt/image/upload/v1790558930/7ae22457-3822-49c7-98cc-c36c16e03976_rftlyr.jpg"
   ],
   giftInfo: {
     groomBankName: "Techcombank",

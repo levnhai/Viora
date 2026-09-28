@@ -14,7 +14,7 @@ export function GraduationTimeline({
   locationName = "DONG NAI TECHNOLOGY UNIVERSITY",
   address = "Nguyen Khuyen Street, Quarter 5, Trang Dai, Dong Nai",
   mapUrl = "https://maps.app.goo.gl/VR2KpPRHeqJvYrt37",
-  timeStr = "11:00, thứ bảy",
+  timeStr = "11:30, thứ bảy",
   day = "03",
   month = "tháng 10",
   year = "năm 2026",
