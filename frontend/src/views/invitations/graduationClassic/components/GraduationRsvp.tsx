@@ -53,7 +53,7 @@ export function GraduationRsvp({
               <br />
               <span>Xin vui lòng xác nhận sự có mặt của bạn để mình chuẩn bị đón tiếp một cách chu đáo nhất.</span>
               <br />
-              <span>Xin cảm ơn!</span>
+              <span>Cảm ơn mọi người rất nhiều❤️</span>
             </h3>
           </div>
 
