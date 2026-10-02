@@ -142,7 +142,85 @@ export const GRADUATION_DEMO_DATA: WeddingData = {
   },
 };
 
+export const HEN_UOC_DEMO_DATA: WeddingData = {
+  id: "demo-hen-uoc-15",
+  title: "Thiệp Cưới Mạnh Đức & Lan Nhi",
+  slug: "hen-uoc",
+  templateId: "temp_15",
+  groomName: "Mạnh Đức",
+  brideName: "Lan Nhi",
+  groomShortName: "Mạnh Đức",
+  brideShortName: "Lan Nhi",
+  groomFatherName: "Lê Văn Anh",
+  groomMotherName: "Lê Thị Nhung",
+  brideFatherName: "Vũ Văn Tài",
+  brideMotherName: "Trần Thị Hoà",
+  weddingDate: "2026-12-29T17:30:00",
+  coverImage: "/templates/hen-uoc/couple_hero.jpg",
+  groomImage: "/templates/hen-uoc/groom_portrait.jpg",
+  brideImage: "/templates/hen-uoc/bride_portrait.jpg",
+  galleryImages: [
+    "/templates/hen-uoc/couple_hero.jpg",
+    "/templates/hen-uoc/couple_envelope.jpg",
+    "/templates/hen-uoc/groom_portrait.jpg",
+    "/templates/hen-uoc/bride_portrait.jpg",
+    "/templates/hen-uoc/gallery_1.jpg",
+    "/templates/hen-uoc/gallery_2.jpg",
+    "/templates/hen-uoc/gallery_3.jpg",
+    "/templates/hen-uoc/gallery_4.jpg",
+    "/templates/hen-uoc/gallery_5.jpg",
+  ],
+  musicUrl: "/templates/hen-uoc/music_marry_you.mp3",
+  storyTitle: "Hẹn Ước Trăm Năm",
+  storyContent:
+    "Mỗi câu chuyện tình yêu đều có một khởi đầu thật đẹp. Câu chuyện của chúng mình cũng vậy, được viết nên từ những điều giản dị và những khoảnh khắc không thể nào quên. Hôm nay, chúng mình rất hạnh phúc khi được chia sẻ cột mốc đặc biệt này cùng gia đình, bạn bè và những người thân yêu. Cảm ơn bạn đã đến và trở thành một phần trong câu chuyện của chúng mình.",
+  events: [
+    {
+      id: "reception",
+      name: "BUỔI TIỆC CHUNG VUI",
+      time: "17:30",
+      dayOfWeek: "CHỦ NHẬT",
+      date: "2026-12-29",
+      lunarDate: "Tức ngày 18 tháng 10 năm Bính Ngọ",
+      locationName: "Tại tư gia nhà trai",
+      address: "174 Đường Trần Văn Kiểu, Phường 10, TP Hồ Chí Minh",
+      mapUrl: "https://maps.google.com/?q=174+Đường+Trần+Văn+Kiểu,+Phường+10,+Quận+6,+TP+Hồ+Chí+Minh",
+    },
+    {
+      id: "ceremony",
+      name: "LỄ THÀNH HÔN",
+      time: "09:30",
+      dayOfWeek: "THỨ BẢY",
+      date: "2026-12-29",
+      lunarDate: "Tức ngày 18 tháng 10 năm Bính Ngọ",
+      locationName: "Tại tư gia nhà trai",
+      address: "174 Đường Trần Văn Kiểu, Phường 10, TP Hồ Chí Minh",
+      mapUrl: "https://maps.google.com/?q=174+Đường+Trần+Văn+Kiểu,+Phường+10,+Quận+6,+TP+Hồ+Chí+Minh",
+    },
+  ],
+  giftInfo: {
+    groomBankName: "MB Bank",
+    groomAccountNumber: "999988882912",
+    groomAccountName: "LE MANH DUC",
+    brideBankName: "Techcombank",
+    brideAccountNumber: "190367882912",
+    brideAccountName: "VU LAN NHI",
+  },
+  contactInfo: {
+    groomPhone: "0901234567",
+    bridePhone: "0909876543",
+    email: "manhduc.lannhi@gmail.com",
+  },
+};
+
 export const getDemoWeddingData = (templateId?: string): WeddingData => {
+  if (templateId === "temp_15" || templateId === "15" || templateId === "hen-uoc" || templateId === "hen_uoc") {
+    return {
+      ...HEN_UOC_DEMO_DATA,
+      templateId: "temp_15",
+    };
+  }
+
   if (templateId === "temp_14" || templateId === "14") {
     return {
       ...GRADUATION_DEMO_DATA,

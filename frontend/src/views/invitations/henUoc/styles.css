@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* Hen Uoc Typography & Theme Tokens */
+:root {
+  --henuoc-burgundy: #7D1F2A;
+  --henuoc-dark-burgundy: #701520;
+  --henuoc-deep-bg: #1c0508;
+  --henuoc-cream: #FAF8F5;
+}
+
+.font-henuoc-serif {
+  font-family: 'Lora', 'Cormorant Garamond', Georgia, serif !important;
+}
+
+.font-henuoc-heading {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif !important;
+}
+
+.font-henuoc-script {
+  font-family: 'Great Vibes', 'Alex Brush', cursive !important;
+}
+
+.font-henuoc-sans {
+  font-family: 'Montserrat', system-ui, sans-serif !important;
+}
+
+/* ==========================================================================
+   SCROLL REVEAL ANIMATIONS (Lướt tới đâu hiệu ứng tới đó)
+   ========================================================================== */
+
+/* 1. Trượt từ dưới lên */
+.henuoc-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.henuoc-reveal.henuoc-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 2. Trượt từ bên trái sang */
+.henuoc-reveal-left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.henuoc-reveal-left.henuoc-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 3. Trượt từ bên phải sang */
+.henuoc-reveal-right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.henuoc-reveal-right.henuoc-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 4. Phóng to mờ dần (Zoom Reveal) */
+.henuoc-reveal-zoom {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.henuoc-reveal-zoom.henuoc-revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Độ trễ phân tầng (Stagger delays) */
+.henuoc-delay-1 { transition-delay: 120ms; }
+.henuoc-delay-2 { transition-delay: 240ms; }
+.henuoc-delay-3 { transition-delay: 380ms; }
+.henuoc-delay-4 { transition-delay: 520ms; }
+.henuoc-delay-5 { transition-delay: 680ms; }
+.henuoc-delay-6 { transition-delay: 840ms; }
+
+/* Hiệu ứng đung đưa êm ái cho cành hoa chuông */
+@keyframes henuocBreeze {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1.8deg) translateY(-2px); }
+}
+
+.henuoc-breeze {
+  transform-origin: top left;
+  animation: henuocBreeze 4.5s ease-in-out infinite;
+}
+
+/* Hiệu ứng bồng bềnh cho đôi thiên nga */
+@keyframes henuocFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.henuoc-float {
+  animation: henuocFloat 3.2s ease-in-out infinite;
+}
+
+/* Hiệu ứng nhịp đập nhẹ cho con dấu sáp */
+@keyframes henuocPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(125,31,42,0.35)); }
+}
+
+.henuoc-pulse {
+  animation: henuocPulse 2.8s ease-in-out infinite;
+}
+
+/* Nút bấm hover & active */
+.henuoc-btn-pill {
+  display: inline-block;
+  background-color: #7D1F2A !important;
+  color: #ffffff !important;
+  padding: 10px 32px;
+  border-radius: 9999px;
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(125, 31, 42, 0.3);
+  transition: all 0.25s ease;
+}
+
+.henuoc-btn-pill:hover {
+  background-color: #60141f !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(125, 31, 42, 0.45);
+}
+
+.henuoc-btn-pill:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   HIỆU ỨNG CHỮ CHẠY VÔ TẬN (Infinite Marquee Ticker)
+   ========================================================================== */
+@keyframes henuocMarquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.henuoc-marquee-track {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+  user-select: none;
+}
+
+.henuoc-marquee-inner {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  animation: henuocMarquee 22s linear infinite;
+  will-change: transform;
+}
+
+.henuoc-marquee-track:hover .henuoc-marquee-inner {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   HIỆU ỨNG HERO FADE IN
+   ========================================================================== */
+@keyframes henuocFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-henuoc-fade-in {
+  animation: henuocFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

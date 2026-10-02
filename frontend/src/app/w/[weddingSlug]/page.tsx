@@ -30,6 +30,15 @@ async function fetchWeddingDataServer(weddingSlug: string): Promise<WeddingData 
 
   // Fallback sang mock data cho slug demo / xem thử
   if (
+    weddingSlug.includes("hen-uoc") ||
+    weddingSlug.includes("temp_15") ||
+    weddingSlug.includes("manhduc-lannhi")
+  ) {
+    const fallback = getDemoWeddingData("temp_15");
+    return { ...fallback, slug: weddingSlug };
+  }
+
+  if (
     weddingSlug.includes("demo") ||
     weddingSlug.includes("vanan") ||
     weddingSlug.includes("leminhhai") ||
@@ -170,15 +179,25 @@ export async function generateMetadata({
     };
   }
 
+  const isHenUocFallback =
+    weddingSlug.includes("hen-uoc") ||
+    weddingSlug.includes("temp_15") ||
+    weddingSlug.includes("manhduc-lannhi");
+
   const isGraduationFallback =
     weddingSlug.includes("tot-nghiep") ||
     weddingSlug.includes("le-hoangoanh") ||
     weddingSlug.includes("temp_14");
 
-  const defaultTitle = isGraduationFallback
+  const defaultTitle = isHenUocFallback
+    ? "Hẹn Ước – Thiệp Cưới Online: Mạnh Đức ❤️ Lan Nhi"
+    : isGraduationFallback
     ? "Thiệp Mời Lễ Tốt Nghiệp: Tân Cử Nhân Lê Hoàng Oanh 🎓"
     : "Thiệp Cưới Trực Tuyến - Viora Studio";
-  const defaultDesc = isGraduationFallback
+
+  const defaultDesc = isHenUocFallback
+    ? "Mẫu thiệp cưới online thanh lịch, nhẹ nhàng với thiết kế tinh tế của cặp đôi Mạnh Đức & Lan Nhi. Bấm để xem thiệp mời chi tiết!"
+    : isGraduationFallback
     ? "Trân trọng kính mời quý khách đến tham dự Lễ tốt nghiệp của Tân Cử Nhân Lê Hoàng Oanh. Bấm để xem thiệp mời chi tiết!"
     : "Trân trọng kính mời quý khách tham dự lễ thành hôn. Bấm để xem thiệp chi tiết!";
 

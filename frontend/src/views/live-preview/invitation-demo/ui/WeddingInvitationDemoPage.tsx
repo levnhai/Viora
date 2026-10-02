@@ -53,6 +53,11 @@ export function WeddingInvitationDemoPage({
         case "temp_14":
         case "14":
           return "thiep-tot-nghiep-mai-trang";
+        case "temp_15":
+        case "15":
+        case "hen-uoc":
+        case "hen_uoc":
+          return "hen-uoc";
         default:
           return "vanan-thibinh";
       }
@@ -64,6 +69,18 @@ export function WeddingInvitationDemoPage({
     // Dữ liệu demo dùng chung
     const mockWeddingData = getDemoWeddingData(tId || "temp_1");
     mockWeddingData.slug = demoSlug;
+
+    if (tId === "temp_15" || tId === "15" || tId === "hen-uoc" || tId === "hen_uoc") {
+      setWeddingData(mockWeddingData);
+      setLoading(false);
+      return;
+    }
+
+    if (tId === "temp_14" || tId === "14") {
+      setWeddingData(mockWeddingData);
+      setLoading(false);
+      return;
+    }
 
     // Fetch wedding details with fast timeout
     const controller = new AbortController();

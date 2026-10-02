@@ -11,3 +11,4 @@ export { LiveView as SageOliveView } from "./sageOlive/LiveView";
 export { LiveView as WarmTerracottaView } from "./warmTerracotta/LiveView";
 export { LiveView as BaroqueDarkRedView } from "./baroqueDarkRed/LiveView";
 export { LiveView as GraduationClassicView } from "./graduationClassic/LiveView";
+export { LiveView as HenUocView } from "./henUoc/LiveView";

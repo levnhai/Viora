@@ -19,6 +19,7 @@ import { LiveView as SageOliveView } from "@/views/invitations/sageOlive/LiveVie
 import { LiveView as WarmTerracottaView } from "@/views/invitations/warmTerracotta/LiveView";
 import { LiveView as BaroqueDarkRedView } from "@/views/invitations/baroqueDarkRed/LiveView";
 import { LiveView as GraduationClassicView } from "@/views/invitations/graduationClassic/LiveView";
+import { LiveView as HenUocView } from "@/views/invitations/henUoc/LiveView";
 
 const LegacyMockEditView = () => null;
 
@@ -37,6 +38,8 @@ const TEMPLATE_COMPONENT_MAP: Record<string, ComponentType<TemplateProps>> = {
   temp_12: WarmTerracottaView,
   temp_13: BaroqueDarkRedView,
   temp_14: GraduationClassicView,
+  temp_15: HenUocView,
+  hen_uoc: HenUocView,
 };
 
 export const getTemplatePackage = (codeOrId: string | number): TemplatePackage => {

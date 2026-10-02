@@ -137,4 +137,15 @@ export const DEFAULT_TEMPLATES = [
     active: true,
     deletedAt: null,
   },
+  {
+    id: 15,
+    code: 'temp_15',
+    name: 'Hẹn Ước - Thiệp Cưới Online',
+    thumbnail: '/templates/hen-uoc/cover_long.webp',
+    price: 149000,
+    version: '1.0.0',
+    status: 'active',
+    active: true,
+    deletedAt: null,
+  },
 ];
