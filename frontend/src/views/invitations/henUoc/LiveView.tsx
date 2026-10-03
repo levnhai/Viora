@@ -33,7 +33,7 @@ export function LiveView({
   previewMode,
 }: LiveViewProps) {
   const [isOpened, setIsOpened] = useState(previewMode === "invitation");
-  const [showGiftModal, setShowGiftModal] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
   const [showGuestbookModal, setShowGuestbookModal] = useState(false);
 
   // Fallback demo data chuẩn mẫu Hẹn Ước
@@ -60,13 +60,24 @@ export function LiveView({
   const { playing, togglePlay, autoPlayOnce } = useWeddingMusic(musicSource);
   const { messages, handleSendMessage } = useGuestbook(enrichedWeddingData.slug || "hen-uoc");
 
+  const handleStartOpen = () => {
+    setIsOpening(true);
+    autoPlayOnce();
+  };
+
   const handleOpenInvitation = () => {
     setIsOpened(true);
-    autoPlayOnce();
   };
 
   const scrollToRsvp = () => {
     const el = document.getElementById("rsvp");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollToGiftBox = () => {
+    const el = document.getElementById("giftbox");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     }
@@ -123,13 +134,19 @@ export function LiveView({
         <InvitationCover
           weddingData={enrichedWeddingData}
           guestName={guestName}
+          onStartOpen={handleStartOpen}
           onOpen={handleOpenInvitation}
         />
       )}
 
-      {/* 2. Thân Thiệp Cưới Hẹn Ước Chuẩn Mẫu ZenLove */}
+      {/* 2. Thân Thiệp Cưới Hẹn Ước Chuẩn Mẫu ZenLove - Hiển thị dần dần khi mở phong bì */}
       <main
-        style={{ backgroundColor: "#FAF8F5" }}
+        style={{
+          backgroundColor: "#FAF8F5",
+          transition: "opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1), transform 2.2s cubic-bezier(0.25, 1, 0.5, 1)",
+          opacity: !isOpened && !isOpening ? 0.35 : 1,
+          transform: !isOpened && !isOpening ? "scale(0.96)" : "scale(1)",
+        }}
         className="w-full max-w-[480px] md:max-w-[500px] min-h-screen shadow-2xl relative z-10 flex flex-col overflow-hidden"
       >
         {/* Mục 1: Hero Cover */}
@@ -183,7 +200,10 @@ export function LiveView({
         {/* Mục 8: Đếm ngược Ngày Về Chung Nhà (4 ô đỏ rượu) */}
         <CountdownSection weddingData={enrichedWeddingData} />
 
-        {/* Mục 9: Chân trang Thank You */}
+        {/* Mục 9: Hộp Mừng Cưới Trực Tiếp */}
+        <GiftBoxModalSection weddingData={enrichedWeddingData} />
+
+        {/* Mục 10: Chân trang Thank You */}
         <ThankYouFooter weddingData={enrichedWeddingData} />
       </main>
 
@@ -210,16 +230,16 @@ export function LiveView({
           {/* Nút cuộn tới RSVP */}
           <button
             onClick={scrollToRsvp}
-            className="w-11 h-11 rounded-full bg-[#7D1F2A] hover:bg-[#621620] text-white shadow-lg flex items-center justify-center transition-all hover:scale-105"
+            className="w-11 h-11 rounded-full bg-[#7D1F2A] hover:bg-[#621620] text-white shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
             title="Xác nhận tham dự"
           >
             <CheckCircle2 className="w-5 h-5" />
           </button>
 
-          {/* Nút Mở Hộp Mừng Cưới */}
+          {/* Nút Cuộn Tới Hộp Mừng Cưới */}
           <button
-            onClick={() => setShowGiftModal(true)}
-            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105"
+            onClick={scrollToGiftBox}
+            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
             title="Mừng cưới"
           >
             <Gift className="w-5 h-5" />
@@ -228,27 +248,12 @@ export function LiveView({
           {/* Nút Mở Sổ Lời Chúc */}
           <button
             onClick={() => setShowGuestbookModal(true)}
-            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105"
+            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
             title="Sổ lời chúc"
           >
             <MessageSquareHeart className="w-5 h-5" />
           </button>
         </aside>
-      )}
-
-      {/* Modal Hộp Mừng Cưới */}
-      {showGiftModal && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-md bg-[#F5F3EF] rounded-2xl overflow-hidden shadow-2xl animate-henuoc-fade-in max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setShowGiftModal(false)}
-              className="absolute top-4 right-4 z-10 p-1.5 rounded-full bg-black/10 hover:bg-black/20 text-[#7D1F2A]"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <GiftBoxModalSection weddingData={enrichedWeddingData} />
-          </div>
-        </div>
       )}
 
       {/* Modal Sổ Lời Chúc */}

@@ -455,27 +455,45 @@ export function InvitationEditorForm() {
   return (
     <div className="flex w-full h-full">
       {/* Sidebar Menu */}
-      <div className="w-[180px] bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col py-4 shrink-0 overflow-y-auto custom-scrollbar">
+      <div className="w-[210px] bg-slate-50/80 dark:bg-slate-900/90 border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col p-3 shrink-0 overflow-y-auto custom-scrollbar space-y-1">
+        <div className="px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          Chuyên mục
+        </div>
         {visibleTabs.map((item) => {
           const Icon = item.icon;
           const isActive = editorActiveTab === item.id;
+          const badgeText =
+            item.id === "Album ảnh" && galleryImages.length > 0
+              ? `${galleryImages.length}`
+              : item.id === "Timeline sự kiện" && timeline.length > 0
+              ? `${timeline.length}`
+              : null;
+
           return (
             <button
               key={item.id}
               onClick={() => setEditorActiveTab(item.id)}
-              className={`flex items-center gap-3 px-4 py-3 text-[13px] font-medium transition-colors relative ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all relative group text-left ${
                 isActive
-                  ? "text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/40"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
+                  ? "bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-transparent text-amber-600 dark:text-amber-400 font-bold shadow-2xs border-l-3 border-amber-500"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60"
               }`}
             >
-              <Icon
-                size={16}
-                className={isActive ? "text-rose-500" : "text-slate-400 dark:text-slate-500"}
-              />
-              {item.id}
-              {isActive && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-rose-500 rounded-r"></div>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon
+                  size={15}
+                  className={`shrink-0 transition-colors ${
+                    isActive
+                      ? "text-amber-500"
+                      : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300"
+                  }`}
+                />
+                <span className="truncate">{item.id}</span>
+              </div>
+              {badgeText && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  {badgeText}
+                </span>
               )}
             </button>
           );
@@ -483,10 +501,15 @@ export function InvitationEditorForm() {
       </div>
 
       {/* Form Area */}
-      <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 overflow-y-auto custom-scrollbar p-6">
-        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6">
-          {editorActiveTab}
-        </h3>
+      <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 overflow-y-auto custom-scrollbar p-6 sm:p-7">
+        <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+            {editorActiveTab}
+          </h3>
+          <span className="text-[11px] text-slate-400 font-medium">
+            Tự động đồng bộ với màn hình xem trước
+          </span>
+        </div>
 
         {editorActiveTab === "Thông tin cơ bản" && (
           <div className="space-y-6">

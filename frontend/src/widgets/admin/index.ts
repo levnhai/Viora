@@ -19,6 +19,7 @@ export * from "./invitations-list/ui/AdminInvitationsFilter";
 export * from "./invitations-list/ui/AdminInvitationsSidebar";
 export * from "./invitations-list/ui/AdminInvitationsStats";
 export * from "./invitations-list/ui/AdminInvitationsTable";
+export * from "./invitations-list/ui/AdminInvitationsGrid";
 export * from "./layout/ui/AdminHeader";
 export * from "./layout/ui/AdminLayout";
 export * from "./layout/ui/AdminSidebar";

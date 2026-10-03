@@ -150,15 +150,15 @@ export function CustomerReviewsSection() {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    // Cuộn tới đánh giá thứ 3 ngay khi tải xong trang để 2 bên cân đối
+    // Cuộn tới đánh giá thứ 3 ngay khi tải xong trang để 2 bên cân đối mà không làm cuộn cửa sổ trang (window)
     const cards = Array.from(slider.children) as HTMLElement[];
     const initTimer = setTimeout(() => {
-      if (cards[DEFAULT_INITIAL_INDEX]) {
-        cards[DEFAULT_INITIAL_INDEX].scrollIntoView({
-          behavior: "auto",
-          block: "nearest",
-          inline: "center",
-        });
+      const targetCard = cards[DEFAULT_INITIAL_INDEX];
+      if (targetCard) {
+        const cardLeft = targetCard.offsetLeft;
+        const cardWidth = targetCard.offsetWidth;
+        const containerWidth = slider.clientWidth;
+        slider.scrollLeft = cardLeft - (containerWidth - cardWidth) / 2;
         checkActiveCard();
       }
     }, 60);
@@ -176,11 +176,14 @@ export function CustomerReviewsSection() {
     if (!sliderRef.current) return;
     const targetIdx = Math.max(0, Math.min(reviews.length - 1, index));
     const cards = Array.from(sliderRef.current.children) as HTMLElement[];
-    if (cards[targetIdx]) {
-      cards[targetIdx].scrollIntoView({
+    const targetCard = cards[targetIdx];
+    if (targetCard) {
+      const cardLeft = targetCard.offsetLeft;
+      const cardWidth = targetCard.offsetWidth;
+      const containerWidth = sliderRef.current.clientWidth;
+      sliderRef.current.scrollTo({
+        left: cardLeft - (containerWidth - cardWidth) / 2,
         behavior: "smooth",
-        block: "nearest",
-        inline: "center",
       });
       setActiveIndex(targetIdx);
       setCanScrollLeft(targetIdx > 0);

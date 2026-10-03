@@ -1,19 +1,21 @@
 "use client";
 
 import { useInvitationCreate } from "@/views/admin";
-import { Monitor, Smartphone, ChevronDown } from "lucide-react";
-
 import { getTemplatePackage } from "@/widgets/invitation-renderer";
 import { WeddingData } from "@/entities/invitation/model/types";
 
-export function InvitationPreview() {
+interface InvitationPreviewProps {
+  deviceMode?: "mobile" | "desktop";
+}
+
+export function InvitationPreview({ deviceMode = "mobile" }: InvitationPreviewProps) {
   const { basicInfo, events, activeTemplate, templateId, giftInfo, galleryImages, timeline, story } = useInvitationCreate();
 
   const resolvedTemplateCode =
     activeTemplate?.code ||
     (typeof (activeTemplate as any)?.id === "number" ? `temp_${(activeTemplate as any).id}` : "") ||
     (templateId ? (templateId.startsWith("temp_") ? templateId : `temp_${templateId}`) : "") ||
-    "temp_7";
+    "temp_15";
 
   const templatePackage = getTemplatePackage(resolvedTemplateCode);
   const SelectedLiveView = templatePackage.LiveView;
@@ -82,33 +84,65 @@ export function InvitationPreview() {
     },
   };
 
+  if (deviceMode === "desktop") {
+    return (
+      <div className="w-full h-full p-4 flex items-center justify-center">
+        <div className="w-full max-w-4xl h-full max-h-[85vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
+          {/* Desktop Browser Bar */}
+          <div className="h-9 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center px-4 gap-2 shrink-0 select-none">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-rose-400"></div>
+              <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+              <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
+            </div>
+            <div className="mx-auto px-4 py-0.5 bg-white dark:bg-slate-900 rounded-md text-[11px] text-slate-500 font-mono border border-slate-200 dark:border-slate-700 max-w-md w-full text-center truncate">
+              https://viora.wedding/invitation/{dummyWeddingData.slug}
+            </div>
+          </div>
+          {/* Browser Viewport */}
+          <div className="flex-1 overflow-y-auto bg-white">
+            <SelectedLiveView
+              weddingData={dummyWeddingData}
+              guestName="Khách mời"
+              previewMode="invitation"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden">
-      <div className="flex-1 flex items-center justify-center p-6 overflow-hidden relative">
-        {/* Responsive Scaled Wrapper */}
+    <div className="flex flex-col h-full w-full overflow-hidden items-center justify-center relative">
+      {/* Scaled Phone Mockup Container */}
+      <div
+        className="relative flex items-center justify-center overflow-visible shrink-0 transition-transform duration-300"
+        style={{
+          width: "calc(375px * var(--mockup-scale, 1))",
+          height: "calc(780px * var(--mockup-scale, 1))",
+          ["--mockup-scale" as any]: "min(1, calc((100vh - 220px) / 780))",
+        }}
+      >
+        {/* iPhone 16 Pro Titanium Frame */}
         <div
-          className="relative flex items-center justify-center overflow-visible shrink-0"
+          className="absolute w-[375px] h-[780px] bg-slate-950 rounded-[3.25rem] p-[10px] shadow-[0_30px_90px_-20px_rgba(0,0,0,0.6)] ring-1 ring-white/20 border border-slate-700/60 overflow-hidden shrink-0 flex flex-col"
           style={{
-            width: "calc(360px * var(--mockup-scale, 1))",
-            height: "calc(760px * var(--mockup-scale, 1))",
-            ["--mockup-scale" as any]: "min(1, calc((100vh - 280px) / 760))",
+            transform: "scale(var(--mockup-scale, 1))",
+            transformOrigin: "center center",
           }}
         >
-          {/* Mobile Mockup */}
-          <div
-            className="absolute w-[360px] h-[760px] bg-white rounded-[2.5rem] border-[8px] border-slate-800 shadow-xl overflow-hidden shrink-0 flex flex-col"
-            style={{
-              transform: "scale(var(--mockup-scale, 1))",
-              transformOrigin: "center center",
-            }}
-          >
-            {/* Top Notch */}
-            <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-10">
-              <div className="w-24 h-4 bg-slate-800 rounded-b-xl"></div>
+          {/* Outer Titanium Rim */}
+          <div className="relative w-full h-full rounded-[2.65rem] overflow-hidden bg-white flex flex-col">
+            {/* Dynamic Island */}
+            <div className="absolute top-2.5 inset-x-0 flex justify-center z-30 pointer-events-none">
+              <div className="w-28 h-6 bg-black rounded-full flex items-center justify-between px-2.5 shadow-sm">
+                <div className="w-2.5 h-2.5 rounded-full bg-slate-900 ring-1 ring-white/10"></div>
+                <div className="w-2 h-2 rounded-full bg-indigo-950/80 ring-1 ring-indigo-500/40"></div>
+              </div>
             </div>
 
             {/* Dynamic Content based on Template */}
-            <div className="absolute inset-0 bg-white" style={{ zoom: 0.75 }}>
+            <div className="absolute inset-0 bg-white" style={{ zoom: 0.78 }}>
               <div
                 className="h-full w-full overflow-y-auto relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 style={{ transform: "translateZ(0)" }}
@@ -119,6 +153,11 @@ export function InvitationPreview() {
                   previewMode="invitation"
                 />
               </div>
+            </div>
+
+            {/* Home Indicator Bar */}
+            <div className="absolute bottom-1.5 inset-x-0 flex justify-center z-30 pointer-events-none">
+              <div className="w-32 h-1 bg-black/40 rounded-full"></div>
             </div>
           </div>
         </div>
