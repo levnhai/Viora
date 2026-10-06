@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { API_URL } from "./config";
 import { formatTimeAgo } from "./utils/date";
 
