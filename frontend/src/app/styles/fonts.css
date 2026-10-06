@@ -219,3 +219,17 @@
 .font-lora {
   font-family: "Lora", Georgia, serif;
 }
+
+/* NextFont Shim Utility Classes */
+.font-great-vibes { font-family: "Great Vibes", cursive !important; }
+.font-cinzel { font-family: "Cinzel", Georgia, serif !important; }
+.font-cinzel-decorative { font-family: "Cinzel Decorative", serif !important; }
+.font-pinyon-script { font-family: "Pinyon Script", cursive !important; }
+.font-monsieur-la-doulaise { font-family: "Monsieur La Doulaise", cursive !important; }
+.font-alex-brush { font-family: "Alex Brush", cursive !important; }
+.font-eb-garamond { font-family: "EB Garamond", Georgia, serif !important; }
+.font-montserrat { font-family: "Montserrat", sans-serif !important; }
+.font-playfair-display { font-family: "Playfair Display", Georgia, serif !important; }
+.font-dancing-script { font-family: "Dancing Script", cursive !important; }
+.font-cormorant-garamond { font-family: "Cormorant Garamond", Georgia, serif !important; }
+

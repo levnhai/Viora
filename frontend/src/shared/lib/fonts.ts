@@ -1,81 +1,35 @@
-import {
-  Cinzel,
-  Cinzel_Decorative,
-  Great_Vibes,
-  Alex_Brush,
-  Pinyon_Script,
-  Monsieur_La_Doulaise,
-  EB_Garamond,
-  Montserrat,
-  Playfair_Display,
-  Dancing_Script,
-  Cormorant_Garamond,
-} from "next/font/google";
+// Các font Google đã được nạp toàn cục qua CSS tại fonts.css.
+// Định nghĩa font helper an toàn tương thích 100% với next/font object schema
+// mà không cần tải font qua internet trong quá trình build của Vercel (ngăn chặn lỗi TypeError / AbortError khi build).
 
-export const pinyonScript = Pinyon_Script({
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
+interface NextFontShim {
+  className: string;
+  variable: string;
+  style: { fontFamily: string };
+}
 
-export const monsieurLaDoulaise = Monsieur_La_Doulaise({
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
+function createFontShim(fontFamily: string, fallback: string = "sans-serif"): NextFontShim {
+  const safeClass = `font-${fontFamily.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+  return {
+    className: safeClass,
+    variable: `--${safeClass}`,
+    style: {
+      fontFamily: `'${fontFamily}', ${fallback}`,
+    },
+  };
+}
 
-export const cinzel = Cinzel({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  display: "swap",
-});
+export const pinyonScript = createFontShim("Pinyon Script", "cursive");
+export const monsieurLaDoulaise = createFontShim("Monsieur La Doulaise", "cursive");
+export const cinzel = createFontShim("Cinzel", "serif");
+export const cinzelDecorative = createFontShim("Cinzel Decorative", "serif");
+export const alexBrush = createFontShim("Alex Brush", "cursive");
+export const greatVibes = createFontShim("Great Vibes", "cursive");
+export const ebGaramond = createFontShim("EB Garamond", "serif");
+export const montserrat = createFontShim("Montserrat", "sans-serif");
+export const playfairDisplay = createFontShim("Playfair Display", "serif");
+export const dancingScript = createFontShim("Dancing Script", "cursive");
+export const cormorantGaramond = createFontShim("Cormorant Garamond", "serif");
 
-export const cinzelDecorative = Cinzel_Decorative({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-});
-
-export const alexBrush = Alex_Brush({
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
-
-export const greatVibes = Great_Vibes({
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
-
-export const ebGaramond = EB_Garamond({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-export const montserrat = Montserrat({
-  subsets: ["latin", "vietnamese"],
-  weight: ["200", "300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-export const playfairDisplay = Playfair_Display({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-export const dancingScript = Dancing_Script({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-export const cormorantGaramond = Cormorant_Garamond({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
 
 
