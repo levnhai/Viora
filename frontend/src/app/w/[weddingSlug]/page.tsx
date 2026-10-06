@@ -18,9 +18,7 @@ async function fetchWeddingDataServer(weddingSlug: string): Promise<WeddingData 
       const json = await res.json();
       if (json.success && json.data) {
         const wd = { ...json.data };
-        if (wd.themeSettings?.musicUrl) {
-          wd.musicUrl = wd.themeSettings.musicUrl;
-        }
+        wd.musicUrl = wd.musicUrl || wd.themeSettings?.musicUrl || "";
         return wd;
       }
     }

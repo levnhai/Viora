@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { WeddingData } from "@/entities/invitation/model/types";
 
 interface InvitationCoverProps {
@@ -12,29 +12,44 @@ interface InvitationCoverProps {
 
 export function InvitationCover({ onStartOpen, onOpen }: InvitationCoverProps) {
   const [opening, setOpening] = useState(false);
+  const isTriggeredRef = useRef(false);
+  const onStartOpenRef = useRef(onStartOpen);
+  const onOpenRef = useRef(onOpen);
+
+  // Cập nhật tham chiếu callback mới nhất mà không gây re-run effect
+  useEffect(() => {
+    onStartOpenRef.current = onStartOpen;
+    onOpenRef.current = onOpen;
+  });
 
   const startOpen = useCallback(() => {
-    if (opening) return;
+    if (isTriggeredRef.current) return;
+    isTriggeredRef.current = true;
     setOpening(true);
-    if (onStartOpen) {
-      onStartOpen();
-    }
-    setTimeout(() => {
-      onOpen();
-    }, 2200);
-  }, [opening, onStartOpen, onOpen]);
 
-  // Tự động mở sau 1s (1000ms) khi DOM được mount
+    if (onStartOpenRef.current) {
+      onStartOpenRef.current();
+    }
+
+    setTimeout(() => {
+      if (onOpenRef.current) {
+        onOpenRef.current();
+      }
+    }, 1200);
+  }, []);
+
+  // Tự động chạy mở thiệp ngay khi trang sẵn sàng (150ms sau khi mount, deps rỗng đảm bảo không bị reset)
   useEffect(() => {
     const timer = setTimeout(() => {
       startOpen();
-    }, 1000);
+    }, 150);
+
     return () => clearTimeout(timer);
   }, [startOpen]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center select-none overflow-hidden transition-all duration-[2000ms] ${
+      className={`fixed inset-0 z-50 flex items-center justify-center select-none overflow-hidden transition-all duration-[1200ms] ${
         opening
           ? "bg-black/0 backdrop-blur-none pointer-events-none"
           : "bg-black/75 backdrop-blur-xs"
@@ -60,7 +75,7 @@ export function InvitationCover({ onStartOpen, onOpen }: InvitationCoverProps) {
         title="Chạm vào phong bì để mở thiệp"
       >
         {/* ==============================================================
-            1. HAI CÁNH CỬA PHONG BÌ (SPLIT DOORS) 50% / 50% - MỞ CHẬM RÃI SANG 2 BÊN
+            1. HAI CÁNH CỬA PHONG BÌ (SPLIT DOORS) 50% / 50% - MỞ SANG 2 BÊN
             ============================================================== */}
         <div className="absolute inset-0 w-full h-full flex pointer-events-none z-10 overflow-hidden">
           {/* Cánh trái (Left Flap): bóng đổ tràn sang cánh phải dọc theo rãnh giữa */}
@@ -68,7 +83,7 @@ export function InvitationCover({ onStartOpen, onOpen }: InvitationCoverProps) {
             style={{
               width: "50%",
               height: "100%",
-              transition: "transform 2.2s cubic-bezier(0.25, 1, 0.5, 1)",
+              transition: "transform 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
               transform: opening ? "translateX(-105%)" : "translateX(0%)",
             }}
             className="henuoc-linen-texture relative border-r border-black/25 shadow-[6px_0_20px_rgba(0,0,0,0.4)]"
@@ -79,7 +94,7 @@ export function InvitationCover({ onStartOpen, onOpen }: InvitationCoverProps) {
             style={{
               width: "50%",
               height: "100%",
-              transition: "transform 2.2s cubic-bezier(0.25, 1, 0.5, 1)",
+              transition: "transform 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
               transform: opening ? "translateX(105%)" : "translateX(0%)",
             }}
             className="henuoc-linen-texture relative border-l border-white/10 shadow-[-6px_0_20px_rgba(0,0,0,0.3)]"
@@ -98,7 +113,7 @@ export function InvitationCover({ onStartOpen, onOpen }: InvitationCoverProps) {
             height: "280px",
             zIndex: 15,
             pointerEvents: "none",
-            transition: "opacity 1.6s ease, transform 2.2s cubic-bezier(0.25, 1, 0.5, 1)",
+            transition: "opacity 0.9s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
             opacity: opening ? 0 : 1,
             transform: opening ? "translateX(-50px) scale(0.95)" : "translateX(0) scale(1)",
           }}

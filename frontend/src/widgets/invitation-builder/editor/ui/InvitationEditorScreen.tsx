@@ -111,6 +111,7 @@ export function InvitationEditorScreen() {
         brideAddress: basicInfo.brideAddress,
         weddingDate: basicInfo.weddingDate,
         weddingTime: basicInfo.weddingTime,
+        musicUrl: basicInfo.musicUrl,
         giftInfo: giftInfo,
         galleryImages: galleryImages,
         deletedGalleryImages: deletedGalleryImages,

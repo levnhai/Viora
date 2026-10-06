@@ -195,3 +195,29 @@
 .animate-henuoc-fade-in {
   animation: henuocFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ==========================================================================
+   EQUALIZER MUSIC WAVE ANIMATION (Nút nhạc sóng âm nổi màu đỏ)
+   ========================================================================== */
+@keyframes henuocWave1 {
+  0%, 100% { height: 16px; }
+  50% { height: 6px; }
+}
+@keyframes henuocWave2 {
+  0%, 100% { height: 6px; }
+  50% { height: 14px; }
+}
+@keyframes henuocWave3 {
+  0%, 100% { height: 6px; }
+  50% { height: 13px; }
+}
+@keyframes henuocWave4 {
+  0%, 100% { height: 16px; }
+  50% { height: 7px; }
+}
+
+.henuoc-wave-bar-1 { animation: henuocWave1 1.15s ease-in-out infinite; }
+.henuoc-wave-bar-2 { animation: henuocWave2 1.35s ease-in-out infinite 0.12s; }
+.henuoc-wave-bar-3 { animation: henuocWave3 1.1s ease-in-out infinite 0.25s; }
+.henuoc-wave-bar-4 { animation: henuocWave4 1.25s ease-in-out infinite 0.08s; }
+

@@ -10,10 +10,13 @@ const nextConfig = {
   allowedDevOrigins: [
     '10.20.13.65',
     '10.20.13.65:3000',
+    '10.20.13.65:3001',
     'localhost',
     'localhost:3000',
+    'localhost:3001',
     '127.0.0.1',
     '127.0.0.1:3000',
+    '127.0.0.1:3001',
   ],
   eslint: {
     ignoreDuringBuilds: true,

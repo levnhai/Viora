@@ -13,14 +13,34 @@ export function EditorialGallerySection({
 }: EditorialGallerySectionProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  const userImages = (weddingData.galleryImages || []).filter(Boolean);
+  const defaultImages = [
+    "/templates/hen-uoc/gallery_1.jpg",
+    "/templates/hen-uoc/gallery_2.jpg",
+    "/templates/hen-uoc/gallery_3.jpg",
+    "/templates/hen-uoc/gallery_4.jpg",
+    "/templates/hen-uoc/gallery_5.jpg",
+    "/templates/hen-uoc/couple_hero.jpg",
+    "/templates/hen-uoc/couple_envelope.jpg",
+    "/templates/hen-uoc/gallery_2.jpg",
+  ];
+
+  const getImage = (index: number) => {
+    if (userImages.length > 0) {
+      return userImages[index % userImages.length];
+    }
+    return defaultImages[index % defaultImages.length];
+  };
+
   const images = {
-    hero: "/templates/hen-uoc/gallery_1.jpg",
-    couple1: "/templates/hen-uoc/gallery_2.jpg",
-    couple2: "/templates/hen-uoc/gallery_3.jpg",
-    couple3: "/templates/hen-uoc/gallery_4.jpg",
-    couple4: "/templates/hen-uoc/gallery_5.jpg",
-    couple5: "/templates/hen-uoc/couple_hero.jpg",
-    couple6: "/templates/hen-uoc/couple_envelope.jpg",
+    hero: getImage(0),
+    couple1: getImage(1),
+    couple2: getImage(2),
+    couple3: getImage(3),
+    couple4: getImage(4),
+    couple5: getImage(5),
+    couple6: getImage(6),
+    couple7: getImage(7),
   };
 
   return (
@@ -244,7 +264,7 @@ export function EditorialGallerySection({
               />
             </div>
             <div
-              onClick={() => setSelectedImage(images.couple1)}
+              onClick={() => setSelectedImage(images.couple7)}
               style={{
                 position: "relative",
                 height: "100%",
@@ -255,7 +275,7 @@ export function EditorialGallerySection({
               className="henuoc-reveal-right henuoc-delay-2"
             >
               <img
-                src={images.couple1}
+                src={images.couple7}
                 alt="Couple Grid 4"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 loading="eager"

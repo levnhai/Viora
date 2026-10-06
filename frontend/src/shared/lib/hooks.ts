@@ -78,31 +78,95 @@ export interface GuestMessage {
 // quản lý nhạc nền đám cưới
 export function useWeddingMusic(musicUrl?: string) {
   const [playing, setPlaying] = useState(false);
-  const userInteractedRef = useRef(false);
+  const userMutedRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Đồng bộ trạng thái từ thẻ audio thực tế
   useEffect(() => {
-    if (audioRef.current) {
-      if (playing) {
-        audioRef.current.play().catch(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+    };
+  }, []);
+
+  // Tự động phát khi tải trang và vượt qua chính sách Autoplay Policy của trình duyệt
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // 1. Thử tự động phát ngay lập tức
+    const tryAutoplay = () => {
+      if (userMutedRef.current || !audio.paused) return;
+      audio.play().catch(() => {
+        // Trình duyệt chặn autoplay khi chưa có tương tác người dùng
+      });
+    };
+
+    tryAutoplay();
+
+    // 2. Kích hoạt ngay khi người dùng chạm/click/cuộn bất kỳ đâu trên màn hình lần đầu
+    const handleFirstUserGesture = () => {
+      if (userMutedRef.current) return;
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    };
+
+    window.addEventListener("click", handleFirstUserGesture, { once: true, passive: true });
+    window.addEventListener("touchstart", handleFirstUserGesture, { once: true, passive: true });
+    window.addEventListener("scroll", handleFirstUserGesture, { once: true, passive: true });
+    window.addEventListener("pointerdown", handleFirstUserGesture, { once: true, passive: true });
+    window.addEventListener("wheel", handleFirstUserGesture, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("click", handleFirstUserGesture);
+      window.removeEventListener("touchstart", handleFirstUserGesture);
+      window.removeEventListener("scroll", handleFirstUserGesture);
+      window.removeEventListener("pointerdown", handleFirstUserGesture);
+      window.removeEventListener("wheel", handleFirstUserGesture);
+    };
+  }, [musicUrl]);
+
+  const togglePlay = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) {
+      setPlaying((prev) => !prev);
+      return;
+    }
+
+    if (audio.paused) {
+      userMutedRef.current = false;
+      audio
+        .play()
+        .then(() => setPlaying(true))
+        .catch((err) => {
+          console.warn("Lỗi phát audio:", err);
           setPlaying(false);
         });
-      } else {
-        audioRef.current.pause();
-      }
+    } else {
+      userMutedRef.current = true;
+      audio.pause();
+      setPlaying(false);
     }
-  }, [playing]);
+  }, []);
 
-  const togglePlay = () => {
-    userInteractedRef.current = true;
-    setPlaying((prev) => !prev);
-  };
-
-  const autoPlayOnce = () => {
-    if (!userInteractedRef.current) {
-      setPlaying(true);
+  const autoPlayOnce = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio && !userMutedRef.current && audio.paused) {
+      audio.play().catch((err) => {
+        console.warn("Autoplay bị trình duyệt hạn chế trước khi tương tác:", err);
+      });
     }
-  };
+  }, []);
 
   return { playing, setPlaying, togglePlay, autoPlayOnce, audioRef };
 }

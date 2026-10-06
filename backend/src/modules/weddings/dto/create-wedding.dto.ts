@@ -12,6 +12,10 @@ import { Type } from 'class-transformer';
 class WeddingEventDto {
   @IsOptional()
   @IsString()
+  id?: string;
+
+  @IsOptional()
+  @IsString()
   title?: string;
 
   @IsOptional()
@@ -36,6 +40,10 @@ class WeddingEventDto {
 }
 
 class LoveStoryTimelineDto {
+  @IsOptional()
+  @IsString()
+  id?: string;
+
   @IsOptional()
   @IsString()
   year?: string;
@@ -208,4 +216,7 @@ export class CreateWeddingDto {
   @IsOptional()
   @IsString()
   source?: string;
+
+  @IsOptional()
+  templateConfig?: Record<string, any>;
 }

@@ -15,7 +15,7 @@ export function GatefoldCurtainOverlay({
   accentColor = "#5D733F",
   gradientTop = "#6F884E",
   gradientBottom = "#4A5D32",
-  autoOpenDelay = 400,
+  autoOpenDelay = 200,
 }: GatefoldCurtainOverlayProps) {
   const [opened, setOpened] = useState(false);
   const [hidden, setHidden] = useState(false);

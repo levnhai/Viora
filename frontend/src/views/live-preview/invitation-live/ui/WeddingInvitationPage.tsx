@@ -39,6 +39,7 @@ export function WeddingInvitationPage({ initialData }: WeddingInvitationPageProp
   useEffect(() => {
     if (initialData) {
       const wd = { ...initialData };
+      wd.musicUrl = wd.musicUrl || wd.themeSettings?.musicUrl || "";
       if (customGroom) wd.groomName = customGroom;
       if (customBride) wd.brideName = customBride;
       setWeddingData(wd);
@@ -63,9 +64,7 @@ export function WeddingInvitationPage({ initialData }: WeddingInvitationPageProp
         if (data.success && data.data) {
           const wd = { ...data.data };
           // Ensure musicUrl is at the root level for templates to consume
-          if (wd.themeSettings?.musicUrl) {
-            wd.musicUrl = wd.themeSettings.musicUrl;
-          }
+          wd.musicUrl = wd.musicUrl || wd.themeSettings?.musicUrl || "";
           if (customGroom) wd.groomName = customGroom;
           if (customBride) wd.brideName = customBride;
           setWeddingData(wd);

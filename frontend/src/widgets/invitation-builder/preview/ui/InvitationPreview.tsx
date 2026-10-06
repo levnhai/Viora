@@ -79,6 +79,8 @@ export function InvitationPreview({ deviceMode = "mobile" }: InvitationPreviewPr
       { year: "11:00", title: "Tiệc Cưới", description: "Khai tiệc mừng hạnh phúc" },
     ],
     coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : mockCoverImage),
+    groomImage: galleryImages.length > 2 ? galleryImages[1] : (galleryImages.length > 0 ? galleryImages[0] : undefined),
+    brideImage: galleryImages.length > 2 ? galleryImages[2] : (galleryImages.length > 1 ? galleryImages[1] : (galleryImages.length > 0 ? galleryImages[0] : undefined)),
     templateConfig: {
       coverImage: basicInfo.coverImage || (galleryImages.length > 0 ? galleryImages[0] : mockCoverImage),
     },

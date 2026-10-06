@@ -10,10 +10,32 @@ export function PortraitSection({ weddingData }: PortraitSectionProps) {
   const groom = (weddingData.groomShortName || weddingData.groomName || "Mạnh Đức").toUpperCase();
   const bride = (weddingData.brideShortName || weddingData.brideName || "Lan Nhi").toUpperCase();
 
+  const userImages = (weddingData.galleryImages || []).filter(Boolean);
+
+  let fallbackGroom = "/templates/hen-uoc/groom_portrait.jpg";
+  let fallbackBride = "/templates/hen-uoc/bride_portrait.jpg";
+
+  if (userImages.length === 1) {
+    fallbackGroom = userImages[0];
+    fallbackBride = userImages[0];
+  } else if (userImages.length === 2) {
+    fallbackGroom = userImages[0];
+    fallbackBride = userImages[1];
+  } else if (userImages.length >= 3) {
+    // Nếu có từ 3 ảnh trở lên: ảnh 1 cho chú rể, ảnh 2 cho cô dâu (ảnh 0 thường là cover/hero)
+    fallbackGroom = userImages[1];
+    fallbackBride = userImages[2];
+  }
+
   const groomImage =
-    weddingData.groomImage || "/templates/hen-uoc/groom_portrait.jpg";
+    weddingData.groomImage && weddingData.groomImage !== "/templates/hen-uoc/groom_portrait.jpg"
+      ? weddingData.groomImage
+      : fallbackGroom;
+
   const brideImage =
-    weddingData.brideImage || "/templates/hen-uoc/bride_portrait.jpg";
+    weddingData.brideImage && weddingData.brideImage !== "/templates/hen-uoc/bride_portrait.jpg"
+      ? weddingData.brideImage
+      : fallbackBride;
 
   const storyContent =
     weddingData.storyContent ||

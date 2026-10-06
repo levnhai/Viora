@@ -143,6 +143,9 @@ export class Wedding {
   @Prop({ type: WeddingSEO, default: () => ({}) })
   seo?: WeddingSEO;
 
+  @Prop()
+  musicUrl?: string;
+
   @Prop({ required: true, default: 'draft', index: true })
   status: string; // 'draft' | 'published' | 'hidden'
 

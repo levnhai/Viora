@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX, Gift, MessageSquareHeart, CheckCircle2, X } from "lucide-react";
 import { WeddingData } from "@/entities/invitation/model/types";
 import { useWeddingMusic, useGuestbook } from "@/shared/lib/hooks";
@@ -48,26 +48,55 @@ export function LiveView({
     brideFatherName: weddingData.brideFatherName || "Vũ Văn Tài",
     brideMotherName: weddingData.brideMotherName || "Trần Thị Hoà",
     weddingDate: weddingData.weddingDate || "2026-12-29T17:30:00",
-    coverImage: weddingData.coverImage || "/templates/hen-uoc/couple_hero.jpg",
-    groomImage: weddingData.groomImage || "/templates/hen-uoc/groom_portrait.jpg",
-    brideImage: weddingData.brideImage || "/templates/hen-uoc/bride_portrait.jpg",
+    coverImage:
+      weddingData.coverImage ||
+      weddingData.galleryImages?.[0] ||
+      "/templates/hen-uoc/couple_hero.jpg",
+    groomImage:
+      weddingData.groomImage ||
+      (weddingData.galleryImages && weddingData.galleryImages.length > 1
+        ? weddingData.galleryImages[1]
+        : weddingData.galleryImages?.[0]) ||
+      "/templates/hen-uoc/groom_portrait.jpg",
+    brideImage:
+      weddingData.brideImage ||
+      (weddingData.galleryImages && weddingData.galleryImages.length > 2
+        ? weddingData.galleryImages[2]
+        : weddingData.galleryImages?.[1] || weddingData.galleryImages?.[0]) ||
+      "/templates/hen-uoc/bride_portrait.jpg",
   };
 
-  const musicSource =
+function normalizeAudioUrl(url?: string): string {
+  if (!url) return "/templates/hen-uoc/music_marry_you.mp3";
+  const trimmed = url.trim();
+  if (!trimmed) return "/templates/hen-uoc/music_marry_you.mp3";
+  try {
+    return encodeURI(decodeURI(trimmed));
+  } catch {
+    return encodeURI(trimmed);
+  }
+}
+
+  const rawMusicSource =
     enrichedWeddingData.musicUrl?.trim() ||
+    (enrichedWeddingData as any).themeSettings?.musicUrl?.trim() ||
+    (weddingData as any).musicUrl?.trim() ||
+    (weddingData as any).themeSettings?.musicUrl?.trim() ||
     "/templates/hen-uoc/music_marry_you.mp3";
 
-  const { playing, togglePlay, autoPlayOnce } = useWeddingMusic(musicSource);
+  const musicSource = normalizeAudioUrl(rawMusicSource);
+
+  const { playing, togglePlay, autoPlayOnce, audioRef } = useWeddingMusic(musicSource);
   const { messages, handleSendMessage } = useGuestbook(enrichedWeddingData.slug || "hen-uoc");
 
-  const handleStartOpen = () => {
+  const handleStartOpen = useCallback(() => {
     setIsOpening(true);
     autoPlayOnce();
-  };
+  }, [autoPlayOnce]);
 
-  const handleOpenInvitation = () => {
+  const handleOpenInvitation = useCallback(() => {
     setIsOpened(true);
-  };
+  }, []);
 
   const scrollToRsvp = () => {
     const el = document.getElementById("rsvp");
@@ -143,7 +172,7 @@ export function LiveView({
       <main
         style={{
           backgroundColor: "#FAF8F5",
-          transition: "opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1), transform 2.2s cubic-bezier(0.25, 1, 0.5, 1)",
+          transition: "opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
           opacity: !isOpened && !isOpening ? 0.35 : 1,
           transform: !isOpened && !isOpening ? "scale(0.96)" : "scale(1)",
         }}
@@ -207,54 +236,57 @@ export function LiveView({
         <ThankYouFooter weddingData={enrichedWeddingData} />
       </main>
 
-      {/* 3. Nút Điều Khiển Nổi & Phím Tắt Tiện Ích */}
-      {isOpened && (
-        <aside aria-label="Nút điều khiển thiệp" className="fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col gap-2.5">
-          {/* Nút bật/tắt nhạc */}
-          <button
-            onClick={togglePlay}
-            className={`w-11 h-11 rounded-full flex items-center justify-center text-white shadow-xl backdrop-blur-md transition-all duration-300 ${
+      {/* Nút bật/tắt nhạc nổi ở góc phải màn hình chuẩn thiết kế vòng tròn đỏ & sóng âm equalizer */}
+      <aside aria-label="Điều khiển âm thanh" className="fixed bottom-6 right-4 sm:right-6 z-50">
+        <button
+          onClick={togglePlay}
+          className="group relative flex items-center justify-center w-12 h-12 rounded-full transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer select-none"
+          title={playing ? "Dừng nhạc" : "Mở nhạc"}
+          aria-label={playing ? "Dừng nhạc" : "Mở nhạc"}
+        >
+          {/* Lớp vòng tròn hào quang bên ngoài (halo ring) */}
+          <span
+            className={`absolute inset-0 rounded-full transition-all duration-500 ${
               playing
-                ? "bg-[#7D1F2A] shadow-[#7D1F2A]/50 hover:bg-[#621620]"
-                : "bg-black/70 hover:bg-black/90"
+                ? "bg-[#7D1F2A]/35 ring-2 ring-[#7D1F2A]/40 scale-100"
+                : "bg-[#7D1F2A]/20 ring-1 ring-[#7D1F2A]/30 scale-95 opacity-80"
             }`}
-            title={playing ? "Tắt nhạc" : "Bật nhạc"}
-          >
-            {playing ? (
-              <Volume2 className="w-5 h-5 animate-spin" style={{ animationDuration: "4s" }} />
-            ) : (
-              <VolumeX className="w-5 h-5 text-white/70" />
-            )}
-          </button>
+          />
 
-          {/* Nút cuộn tới RSVP */}
-          <button
-            onClick={scrollToRsvp}
-            className="w-11 h-11 rounded-full bg-[#7D1F2A] hover:bg-[#621620] text-white shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-            title="Xác nhận tham dự"
+          {/* Nút tròn màu đỏ chủ đạo bên trong */}
+          <span
+            className={`relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 border border-white/25 ${
+              playing
+                ? "bg-[#7D1F2A] shadow-[#7D1F2A]/50 group-hover:bg-[#651520]"
+                : "bg-[#7D1F2A]/90 shadow-[#7D1F2A]/30 group-hover:bg-[#7D1F2A]"
+            }`}
           >
-            <CheckCircle2 className="w-5 h-5" />
-          </button>
-
-          {/* Nút Cuộn Tới Hộp Mừng Cưới */}
-          <button
-            onClick={scrollToGiftBox}
-            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-            title="Mừng cưới"
-          >
-            <Gift className="w-5 h-5" />
-          </button>
-
-          {/* Nút Mở Sổ Lời Chúc */}
-          <button
-            onClick={() => setShowGuestbookModal(true)}
-            className="w-11 h-11 rounded-full bg-white hover:bg-[#F5F3EF] text-[#7D1F2A] border border-[#7D1F2A]/20 shadow-lg flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-            title="Sổ lời chúc"
-          >
-            <MessageSquareHeart className="w-5 h-5" />
-          </button>
-        </aside>
-      )}
+            {/* 4 thanh sóng âm equalizer | . . | */}
+            <span className="flex items-center gap-[3px] h-5 px-1 justify-center">
+              <span
+                className={`w-[2.5px] bg-white rounded-full transition-all duration-300 ${
+                  playing ? "henuoc-wave-bar-1" : "h-3.5 opacity-70"
+                }`}
+              />
+              <span
+                className={`w-[2.5px] bg-white rounded-full transition-all duration-300 ${
+                  playing ? "henuoc-wave-bar-2" : "h-1.5 opacity-70"
+                }`}
+              />
+              <span
+                className={`w-[2.5px] bg-white rounded-full transition-all duration-300 ${
+                  playing ? "henuoc-wave-bar-3" : "h-1.5 opacity-70"
+                }`}
+              />
+              <span
+                className={`w-[2.5px] bg-white rounded-full transition-all duration-300 ${
+                  playing ? "henuoc-wave-bar-4" : "h-3.5 opacity-70"
+                }`}
+              />
+            </span>
+          </span>
+        </button>
+      </aside>
 
       {/* Modal Sổ Lời Chúc */}
       {showGuestbookModal && (
@@ -267,16 +299,26 @@ export function LiveView({
               <X className="w-5 h-5" />
             </button>
             <GuestbookSection
-              messages={messages}
+              messages={messages.map((m) => ({ name: m.name, message: m.msg, createdAt: m.time }))}
               onSendMessage={async (name, msg) => {
                 const res = await handleSendMessage(name, msg);
                 if (!res.success) alert(res.error || "Gửi lời chúc thất bại!");
               }}
               guestName={guestName}
             />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+      {/* Audio phát nhạc nền */}
+      <audio
+        ref={audioRef}
+        src={musicSource}
+        loop
+        preload="auto"
+      >
+        <source src={musicSource} type="audio/mpeg" />
+      </audio>
     </div>
   );
 }

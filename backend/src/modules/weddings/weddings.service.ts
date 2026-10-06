@@ -277,6 +277,7 @@ export class WeddingsService {
 
       const created = new this.weddingModel({
         ...restDto,
+        musicUrl: createDto.musicUrl || '',
         ownerId: ownerObjectId,
         createdBy: createdByObjectId,
         templateId: targetTemplate._id,
@@ -493,6 +494,7 @@ export class WeddingsService {
       galleryImages,
       events,
       timeline,
+      musicUrl: wedding.musicUrl || themeSettings?.musicUrl || '',
     };
 
     await this.cacheService.set(cacheKey, result, 300000);
@@ -597,6 +599,8 @@ export class WeddingsService {
       await wedding.save({ session });
 
       if (musicUrl !== undefined) {
+        wedding.musicUrl = musicUrl;
+        await wedding.save({ session });
         const themeSettings = await this.weddingThemeSettingModel
           .findOne({ weddingId: wedding._id })
           .session(session)
@@ -872,6 +876,7 @@ export class WeddingsService {
       wedding: {
         ...wedding.toObject(),
         id: wedding._id,
+        musicUrl: wedding.musicUrl || themeSettings?.musicUrl || '',
         views: wedding.views + 1,
       },
       template: template

@@ -9,7 +9,11 @@ interface HeroSectionProps {
 export function HeroSection({ weddingData }: HeroSectionProps) {
   const groom = (weddingData.groomShortName || weddingData.groomName || "Mạnh Đức").toUpperCase();
   const bride = (weddingData.brideShortName || weddingData.brideName || "Lan Nhi").toUpperCase();
-  const coverImage = weddingData.coverImage || "/templates/hen-uoc/couple_hero.jpg";
+  const coverImage =
+    weddingData.coverImage ||
+    (weddingData.galleryImages && weddingData.galleryImages.length > 0
+      ? weddingData.galleryImages[0]
+      : "/templates/hen-uoc/couple_hero.jpg");
 
   return (
     <section style={{ position: "relative", width: "100%", overflow: "hidden", backgroundColor: "#1f0508" }}>

@@ -7,7 +7,11 @@ interface ThankYouFooterProps {
 }
 
 export function ThankYouFooter({ weddingData }: ThankYouFooterProps) {
-  const footerImage = "/templates/hen-uoc/gallery_3.jpg";
+  const userImages = (weddingData.galleryImages || []).filter(Boolean);
+  const footerImage =
+    userImages.length > 0
+      ? userImages[userImages.length - 1]
+      : "/templates/hen-uoc/gallery_3.jpg";
 
   return (
     <footer style={{ position: "relative", width: "100%", overflow: "hidden", backgroundColor: "#1f0508", color: "#ffffff" }}>
